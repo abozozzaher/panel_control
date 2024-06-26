@@ -43,6 +43,12 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  shared_preferences: ^2.2.3
+  cached_network_image: ^3.3.1
+  easy_localization: ^3.0.7
+  intl_utils: ^2.8.7
+
+
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +60,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+
+
+flutter_icons:
+  image_path: "assets/img/logo.png"
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -96,3 +108,15 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  assets:
+    - assets/img/
+    - assets/store/
+    - assets/sliders/
+  fonts:
+    - family: Tajawal
+      fonts:
+        - asset: assets/fonts/Tajawal-Medium.ttf
+flutter_intl:
+  enabled: true
+
+
