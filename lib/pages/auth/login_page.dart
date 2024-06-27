@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:panel_control/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../main.dart';
 import '../home_page.dart';
 import 'register_page.dart';
 
@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Login'),
+        title: Text(S().login),
         actions: [
           IconButton(
             icon: Icon(Icons.brightness_6),
@@ -42,17 +42,17 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               TextField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(labelText: S().email),
               ),
               TextField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(labelText: S().password),
                 obscureText: true,
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _login,
-                child: Text('Login'),
+                child: Text(S().login),
               ),
               if (_errorMessage != null)
                 Padding(
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               TextButton(
                 onPressed: _resetPassword,
-                child: Text('Forgot Password?'),
+                child: Text(S().forgot_password),
               ),
               TextButton(
                 onPressed: () {
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                     (Route<dynamic> route) => false,
                   );
                 },
-                child: Text('Don\'t have an account? Register'),
+                child: Text(S().no_account_register),
               ),
             ],
           ),
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _resetPassword() async {
     if (_emailController.text.isEmpty) {
       setState(() {
-        _errorMessage = "Please enter your email";
+        _errorMessage = S().please_enter_your_email;
       });
       return;
     }
@@ -125,14 +125,14 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Password Reset"),
-            content: Text("Password reset email sent"),
+            title: Text(S().password_reset),
+            content: Text(S().password_reset + S().email_sent),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text("OK"),
+                child: Text(S().ok),
               ),
             ],
           );

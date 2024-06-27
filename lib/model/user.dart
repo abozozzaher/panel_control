@@ -1,9 +1,8 @@
 class UserData {
-  final int id;
+  final String id;
   final String firstName;
   final String lastName;
   final String phone;
-  final String email;
   final String image;
 
   UserData({
@@ -11,18 +10,16 @@ class UserData {
     required this.firstName,
     required this.lastName,
     required this.phone,
-    required this.email,
     required this.image,
   });
 
-  factory UserData.fromMap(Map<String, dynamic> map) {
+  factory UserData.fromMap(Map<String, dynamic> data) {
     return UserData(
-      id: map['id'] ?? 0,
-      firstName: map['firstName'] ?? '',
-      lastName: map['lastName'] ?? '',
-      phone: map['phone'] ?? '',
-      email: map['email'] ?? '',
-      image: map['image'] ?? '',
+      id: data['id']?.toString() ?? '',
+      firstName: data['firstName']?.toString() ?? '',
+      lastName: data['lastName']?.toString() ?? '',
+      phone: data['phone']?.toString() ?? '',
+      image: data['image']?.toString() ?? 'assets/img/user.jpg',
     );
   }
 }

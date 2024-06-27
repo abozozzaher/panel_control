@@ -6,6 +6,16 @@
     "login": "Login",
     "register": "Register",
     "first_name": "First Name",
-    "last_name" : "Last Name"
+    "last_name" : "Last Name",
+    "no_account_register" : "Don't have an account? Register",
+    "email" : "Email",
+    "password" : "Password",
+    "forgot_password" : "Forgot Password",
+    "password_reset" : "Password Reset",
+    "email_sent" : "email sent",
+    "ok": "OK",
+    "please_enter_your_email" : "Please enter your email",
+    "menu" : "Menu"
+  
   }
   

@@ -23,25 +23,33 @@ class _MyHomePageState extends State<MyHomePage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  List<UserData> _users = [];
   User? _currentUser;
+  UserData? _currentUserData;
 
   @override
   void initState() {
     super.initState();
     _currentUser = _auth.currentUser;
-    _fetchUsers();
+    _fetchCurrentUser();
   }
 
-  Future<void> _fetchUsers() async {
+  Future<void> _fetchCurrentUser() async {
     if (_currentUser == null) return;
 
-    final userRef = _firestore.collection('users').doc(_currentUser!.uid);
-    final userSnapshot = await userRef.get();
-    if (userSnapshot.exists) {
-      setState(() {
-        _users = [UserData.fromMap(userSnapshot.data()!)];
-      });
+    try {
+      final userRef = _firestore.collection('users').doc(_currentUser!.uid);
+      final userSnapshot = await userRef.get();
+      if (userSnapshot.exists) {
+        final userData = userSnapshot.data();
+        print('Fetched user data: $userData');
+        setState(() {
+          _currentUserData = UserData.fromMap(userData!);
+        });
+      } else {
+        print('User document does not exist');
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
     }
   }
 
@@ -72,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.blue,
               ),
               child: Text(
-                'Menu',
+                S().menu,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -97,28 +105,38 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: _users.length,
-        itemBuilder: (context, index) {
-          final user = _users[index];
-          return ListTile(
-            title: Text('${user.firstName} ${user.lastName}'),
-            subtitle: Text(user.phone),
-            leading: user.image.startsWith('assets')
-                ? Image.asset(user.image, width: 50, height: 50)
-                : CachedNetworkImage(
-                    imageUrl: user.image,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Image.asset(
-                        'assets/img/user.jpg',
-                        width: 50,
-                        height: 50),
-                    width: 50,
-                    height: 50,
+      body: _currentUserData != null
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: _currentUserData!.image
+                            .startsWith('assets')
+                        ? AssetImage(_currentUserData!.image)
+                        : CachedNetworkImageProvider(_currentUserData!.image),
                   ),
-          );
-        },
-      ),
+                  SizedBox(height: 20),
+                  Text(
+                    '${_currentUserData!.firstName} ${_currentUserData!.lastName}',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  Text(
+                    _currentUserData!.phone,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  Text(
+                    'ID: ${_currentUserData!.id}',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+            )
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }
