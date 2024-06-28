@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddProductPage extends StatefulWidget {
   @override
@@ -9,158 +7,251 @@ class AddProductPage extends StatefulWidget {
 }
 
 class _AddProductPageState extends State<AddProductPage> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   String? selectedType;
-  String? selectedWidth;
+  String? selectedOffer;
   String? selectedWeight;
   String? selectedColor;
   String? selectedThreadNumber;
 
   List<String> types = [];
-  List<String> widths = [];
+  List<String> offers = [];
   List<String> weights = [];
   List<String> colors = [];
   List<String> threadNumbers = [];
 
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    _fetchProductInfo();
+    loadData();
   }
 
-  Future<void> _fetchProductInfo() async {
-    final productInfo = await _firestore.collection('products_info').get();
-    final data = productInfo.docs.map((doc) => doc.data()).toList();
+  Future<void> loadData() async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    setState(() {
-      types = data.map((e) => e['type'] as String).toList();
-      widths = data.map((e) => e['width'] as String).toList();
-      weights = data.map((e) => e['weight'] as String).toList();
-      colors = data.map((e) => e['color'] as String).toList();
-      threadNumbers = data.map((e) => e['thread_number'] as String).toList();
+      // Load product types
+      DocumentSnapshot typesDoc = await firestore
+          .collection('products_info')
+          .doc('product_types')
+          .get();
+      if (typesDoc.exists) {
+        Map<String, dynamic>? data = typesDoc.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('types')) {
+          types = List<String>.from(data['types']);
+        } else {
+          print('No types found');
+        }
+      }
+
+      // Load offers
+      DocumentSnapshot offersDoc =
+          await firestore.collection('products_info').doc('offers').get();
+      if (offersDoc.exists) {
+        Map<String, dynamic>? data = offersDoc.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('values')) {
+          offers = List<String>.from(data['values']);
+        } else {
+          print('No offers found');
+        }
+      }
+
+      // Load weights
+      DocumentSnapshot weightsDoc =
+          await firestore.collection('products_info').doc('weights').get();
+      if (weightsDoc.exists) {
+        Map<String, dynamic>? data = weightsDoc.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('values')) {
+          weights = List<String>.from(data['values']);
+        } else {
+          print('No weights found');
+        }
+      }
+
+      // Load colors
+      DocumentSnapshot colorsDoc =
+          await firestore.collection('products_info').doc('colors').get();
+      if (colorsDoc.exists) {
+        Map<String, dynamic>? data = colorsDoc.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('values')) {
+          colors = List<String>.from(data['values']);
+        } else {
+          print('No colors found');
+        }
+      }
+
+      // Load thread numbers
+      DocumentSnapshot threadNumbersDoc = await firestore
+          .collection('products_info')
+          .doc('thread_numbers')
+          .get();
+      if (threadNumbersDoc.exists) {
+        Map<String, dynamic>? data =
+            threadNumbersDoc.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('values')) {
+          threadNumbers = List<String>.from(data['values']);
+        } else {
+          print('No thread numbers found');
+        }
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading data: $e');
+      // يمكنك عرض رسالة خطأ للمستخدم هنا
+    }
+  }
+
+/*
+  Future<void> loadData() async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentSnapshot typesDoc = await firestore
+          .collection('products_info')
+          .doc('product_types')
+          .get();
+      DocumentSnapshot offersDoc =
+          await firestore.collection('products_info').doc('offers').get();
+      DocumentSnapshot weightsDoc =
+          await firestore.collection('products_info').doc('weights').get();
+      DocumentSnapshot colorsDoc =
+          await firestore.collection('products_info').doc('colors').get();
+      DocumentSnapshot threadNumbersDoc = 
+          await firestore.collection('products_info').doc('thread_numbers').get();
+
+      setState(() {
+        types = List<String>.from(typesDoc['types']);
+        offers = List<String>.from(offersDoc['values']);
+        weights = List<String>.from(weightsDoc['values']);
+        colors = List<String>.from(colorsDoc['values']);
+        threadNumbers = List<String>.from(threadNumbersDoc['values']);
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading data: $e');
+      // يمكنك عرض رسالة خطأ للمستخدم هنا
+    }
+  }
+
+*/
+  void addItem() {
+    String code = generateCode();
+    FirebaseFirestore.instance.collection('products').add({
+      'type': selectedType,
+      'offer': selectedOffer,
+      'weight': selectedWeight,
+      'color': selectedColor,
+      'thread_number': selectedThreadNumber,
+      'code': code,
+      'date': DateTime.now(),
+      'user': 'user.uid', // يجب تحديث هذا باسم المستخدم الفعلي
+      'shift': 1, // أو 2 أو 3 بناءً على التغيير الحالي
     });
   }
 
-  Future<void> _addProduct() async {
-    final user = _auth.currentUser;
-
-    if (user == null) return;
-
-    final now = DateTime.now();
-    final formattedDate = DateFormat('yyyyMMddHHmmss').format(now);
-    final productId = 'BLLTTLT$formattedDate';
-    final timestamp = now;
-
-    await _firestore.collection('products').doc(productId).set({
-      'type': selectedType ?? '',
-      'width': selectedWidth ?? '',
-      'weight': selectedWeight ?? '',
-      'color': selectedColor ?? '',
-      'thread_number': selectedThreadNumber ?? '',
-      'created_by': user.uid,
-      'shift': 1, // تغيير الوردية حسب الحاجة
-      'product_id': productId,
-      'timestamp': timestamp,
-    });
-
-    Navigator.pop(context);
+  String generateCode() {
+    String date = DateTime.now().toString().replaceAll(RegExp(r'[^0-9]'), '');
+    return 'BLLTTLT${date}0001'; // يجب أن يتم تحديث الرقم التسلسلي بشكل ديناميكي
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: Text('Add New Item'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            DropdownButtonFormField<String>(
-              value: selectedType,
-              items: types.map((type) {
-                return DropdownMenuItem(
-                  value: type,
-                  child: Text(type),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedType = value;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Type'),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  DropdownButton<String>(
+                    hint: Text('Select Type'),
+                    value: selectedType,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedType = newValue;
+                      });
+                    },
+                    items: types.map((type) {
+                      return DropdownMenuItem(
+                        child: Text(type),
+                        value: type,
+                      );
+                    }).toList(),
+                  ),
+                  DropdownButton<String>(
+                    hint: Text('Select Offer'),
+                    value: selectedOffer,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedOffer = newValue;
+                      });
+                    },
+                    items: offers.map((offer) {
+                      return DropdownMenuItem(
+                        child: Text(offer),
+                        value: offer,
+                      );
+                    }).toList(),
+                  ),
+                  DropdownButton<String>(
+                    hint: Text('Select Weight'),
+                    value: selectedWeight,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedWeight = newValue;
+                      });
+                    },
+                    items: weights.map((weight) {
+                      return DropdownMenuItem(
+                        child: Text(weight),
+                        value: weight,
+                      );
+                    }).toList(),
+                  ),
+                  DropdownButton<String>(
+                    hint: Text('Select Color'),
+                    value: selectedColor,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedColor = newValue;
+                      });
+                    },
+                    items: colors.map((color) {
+                      return DropdownMenuItem(
+                        child: Text(color),
+                        value: color,
+                      );
+                    }).toList(),
+                  ),
+                  DropdownButton<String>(
+                    hint: Text('Select Thread Number'),
+                    value: selectedThreadNumber,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedThreadNumber = newValue;
+                      });
+                    },
+                    items: threadNumbers.map((thread) {
+                      return DropdownMenuItem(
+                        child: Text(thread),
+                        value: thread,
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    child: Text('Add Item'),
+                    onPressed: addItem,
+                  ),
+                ],
+              ),
             ),
-            DropdownButtonFormField<String>(
-              value: selectedWidth,
-              items: widths.map((width) {
-                return DropdownMenuItem(
-                  value: width,
-                  child: Text(width),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedWidth = value;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Width'),
-            ),
-            DropdownButtonFormField<String>(
-              value: selectedWeight,
-              items: weights.map((weight) {
-                return DropdownMenuItem(
-                  value: weight,
-                  child: Text(weight),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedWeight = value;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Weight'),
-            ),
-            DropdownButtonFormField<String>(
-              value: selectedColor,
-              items: colors.map((color) {
-                return DropdownMenuItem(
-                  value: color,
-                  child: Text(color),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedColor = value;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Color'),
-            ),
-            DropdownButtonFormField<String>(
-              value: selectedThreadNumber,
-              items: threadNumbers.map((threadNumber) {
-                return DropdownMenuItem(
-                  value: threadNumber,
-                  child: Text(threadNumber),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedThreadNumber = value;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Thread Number'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _addProduct,
-              child: Text('Add Product'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

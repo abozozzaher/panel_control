@@ -22,27 +22,38 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "add": MessageLookupByLibrary.simpleMessage("Add"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
+        "color": MessageLookupByLibrary.simpleMessage("Color"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "email_sent": MessageLookupByLibrary.simpleMessage("email sent"),
         "first_name": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
+        "item": MessageLookupByLibrary.simpleMessage("Item"),
         "last_name": MessageLookupByLibrary.simpleMessage("Last Name"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
+        "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register": MessageLookupByLibrary.simpleMessage(
             "Don\'t have an account? Register"),
+        "offer": MessageLookupByLibrary.simpleMessage("Offer"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "password_reset":
             MessageLookupByLibrary.simpleMessage("Password Reset"),
+        "pick_image": MessageLookupByLibrary.simpleMessage("Pick image"),
         "please_enter_your_email":
             MessageLookupByLibrary.simpleMessage("Please enter your email"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "select": MessageLookupByLibrary.simpleMessage("Select"),
+        "shift": MessageLookupByLibrary.simpleMessage("Shift"),
         "toggle_language":
             MessageLookupByLibrary.simpleMessage("Toggle Language"),
-        "toggle_theme": MessageLookupByLibrary.simpleMessage("Toggle Theme")
+        "toggle_theme": MessageLookupByLibrary.simpleMessage("Toggle Theme"),
+        "type": MessageLookupByLibrary.simpleMessage("Type"),
+        "weight": MessageLookupByLibrary.simpleMessage("Weight"),
+        "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number")
       };
 }

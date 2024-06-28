@@ -10,6 +10,7 @@ import 'auth/login_page.dart';
 import 'package:intl/intl.dart';
 
 import 'product/AddProductPage.dart';
+import 'product/NewItem.dart';
 
 class MyHomePage extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -136,6 +137,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                     },
                     child: Icon(Icons.add),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddNewItemScreen()),
+                      );
+                    },
+                    child: Icon(Icons.abc_outlined),
                   ),
                 ],
               ),

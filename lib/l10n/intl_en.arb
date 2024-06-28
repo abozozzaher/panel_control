@@ -15,6 +15,17 @@
     "email_sent" : "email sent",
     "ok": "OK",
     "please_enter_your_email" : "Please enter your email",
+    "pick_image" : "Pick image",
+    "add" : "Add",    "item" : "Item",
+
+    "select" : "Select",
+    "yarn_number" : "Yarn number",
+    "color" : "Color",
+    "weight" : "Weight",
+    "offer" : "Offer",
+    "type" : "Type",
+    "new1" : "New",
+    "shift" : "Shift",
     "menu" : "Menu"
   
   }
