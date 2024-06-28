@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../generated/l10n.dart';
 import '../model/user.dart';
 import 'auth/login_page.dart';
+import 'package:intl/intl.dart';
+
+import 'product/AddProductPage.dart';
 
 class MyHomePage extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -120,16 +123,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    '${_currentUserData!.firstName} ${_currentUserData!.lastName}',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  Text(
-                    _currentUserData!.phone,
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  Text(
-                    'ID: ${_currentUserData!.id}',
-                    style: TextStyle(fontSize: 18),
+                      '${_currentUserData!.firstName} ${_currentUserData!.lastName}',
+                      style: TextStyle(fontSize: 24)),
+                  Text(_currentUserData!.phone),
+                  Text('ID: ${_currentUserData!.id}'),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddProductPage()),
+                      );
+                    },
+                    child: Icon(Icons.add),
                   ),
                 ],
               ),
