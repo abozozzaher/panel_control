@@ -54,11 +54,11 @@ class _AddProductPageState extends State<AddProductPage> {
     final timestamp = now;
 
     await _firestore.collection('products').doc(productId).set({
-      'type': selectedType,
-      'width': selectedWidth,
-      'weight': selectedWeight,
-      'color': selectedColor,
-      'thread_number': selectedThreadNumber,
+      'type': selectedType ?? '',
+      'width': selectedWidth ?? '',
+      'weight': selectedWeight ?? '',
+      'color': selectedColor ?? '',
+      'thread_number': selectedThreadNumber ?? '',
       'created_by': user.uid,
       'shift': 1, // تغيير الوردية حسب الحاجة
       'product_id': productId,
