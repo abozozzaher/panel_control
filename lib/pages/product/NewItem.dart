@@ -160,7 +160,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               onPressed: () async {
                 String yearMonth =
                     '${DateTime.now().year}-${DateTime.now().month}';
-                String documentPath = 'po/$yearMonth/$product_id';
+                String documentPath =
+                    'productsForAllMonthe/$yearMonth/$product_id';
                 // Save data to Firestore
                 await FirebaseFirestore.instance
                     .collection('products')
