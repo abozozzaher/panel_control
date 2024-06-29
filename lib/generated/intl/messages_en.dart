@@ -24,12 +24,20 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "color": MessageLookupByLibrary.simpleMessage("Color"),
+        "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "details": MessageLookupByLibrary.simpleMessage("Details"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "email_sent": MessageLookupByLibrary.simpleMessage("email sent"),
+        "error": MessageLookupByLibrary.simpleMessage("Error"),
+        "failed_to_upload_image":
+            MessageLookupByLibrary.simpleMessage("Failed to upload image"),
         "first_name": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
+        "image_uploaded_successfully":
+            MessageLookupByLibrary.simpleMessage("Image uploaded successfully"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
         "last_name": MessageLookupByLibrary.simpleMessage("Last Name"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
@@ -38,15 +46,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register": MessageLookupByLibrary.simpleMessage(
             "Don\'t have an account? Register"),
-        "offer": MessageLookupByLibrary.simpleMessage("Offer"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "password_reset":
             MessageLookupByLibrary.simpleMessage("Password Reset"),
+        "phone": MessageLookupByLibrary.simpleMessage("Phone"),
         "pick_image": MessageLookupByLibrary.simpleMessage("Pick image"),
         "please_enter_your_email":
             MessageLookupByLibrary.simpleMessage("Please enter your email"),
+        "please_select_a_type":
+            MessageLookupByLibrary.simpleMessage("Please select a type."),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "saved_successfully_with":
+            MessageLookupByLibrary.simpleMessage("saved successfully with"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
         "toggle_language":
@@ -54,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "toggle_theme": MessageLookupByLibrary.simpleMessage("Toggle Theme"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
+        "width": MessageLookupByLibrary.simpleMessage("Width"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number")
       };
 }

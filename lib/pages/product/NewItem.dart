@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,7 @@ import 'package:printing/printing.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:file_picker/file_picker.dart';
 
 import '../../generated/l10n.dart';
 
@@ -20,15 +22,16 @@ class AddNewItemScreen extends StatefulWidget {
 
 class _AddNewItemScreenState extends State<AddNewItemScreen> {
   String? selectedType;
-  String? selectedOffer;
+  String? selectedWidth;
   String? selectedWeight;
   String? selectedColor;
   String? selectedYarnNumber;
   String? selectedShift;
   XFile? selectedImage;
+  Uint8List? _webImage;
 
   List<String> types = [];
-  List<String> offers = [];
+  List<String> widths = [];
   List<String> weights = [];
   List<String> colors = [];
   List<String> yarnNumbers = [];
@@ -63,17 +66,18 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Future<void> loadDefaultValues() async {
     // Set default values from Firestore or local defaults if Firestore is empty
     types = await fetchData('product_types', 'types');
-    offers = await fetchData('offers', 'values');
+    widths = await fetchData('widths', 'values');
     weights = await fetchData('weights', 'values');
     colors = await fetchData('colors', 'values');
     yarnNumbers = await fetchData('yarn_numbers', 'values');
     shift = await fetchData('shift', 'values');
     setState(() {
-      selectedType = types.isNotEmpty ? types[0] : null;
-      selectedOffer = offers.isNotEmpty ? offers[0] : null;
+      //  selectedType = types.isNotEmpty ? types[0] : null;
+      selectedType = types.isNotEmpty ? null : null;
+      selectedWidth = widths.isNotEmpty ? widths[3] : null;
       selectedWeight = weights.isNotEmpty ? weights[0] : null;
       selectedColor = colors.isNotEmpty ? colors[0] : null;
-      selectedYarnNumber = yarnNumbers.isNotEmpty ? yarnNumbers[0] : null;
+      selectedYarnNumber = yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
       selectedShift = shift.isNotEmpty ? shift[0] : null;
       product_id = generateCode();
     });
@@ -117,21 +121,27 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Future<void> addItem() async {
     String? imageUrl;
 
-    // Upload image to storage if selected
-    if (selectedImage != null) {
-      try {
-        imageUrl = await uploadImageToStorage(selectedImage!);
-        // Show snackbar if image upload succeeds
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Image uploaded successfully')),
-        );
-      } catch (e) {
-        // Display error message to the user if image upload fails
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to upload image: $e')),
-        );
-        return;
-      }
+    // Check if selectedType is null
+    if (selectedType == null) {
+      // Show error message and return if selectedType is null
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(S().error),
+            content: Text(S().please_select_a_type),
+            actions: <Widget>[
+              TextButton(
+                child: Text(S().ok),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
     }
 
     // Show dialog to confirm added item details
@@ -139,37 +149,59 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Item Details'),
+          title: Text(S().confirm + S().item + S().details),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text('ID: $product_id'),
               Text('Type: $selectedType'),
-              Text('Offer: $selectedOffer'),
+              Text('Width: $selectedWidth'),
               Text('Weight: $selectedWeight'),
               Text('Color: $selectedColor'),
               Text('Yarn Number: $selectedYarnNumber'),
               Text('Shift: $selectedShift'),
-              if (imageUrl != null) Text('Image URL: $imageUrl'),
+              if (selectedImage != null || _webImage != null)
+                kIsWeb
+                    ? Image.memory(_webImage!, width: 100, height: 100)
+                    : Image.file(File(selectedImage!.path),
+                        width: 100, height: 100),
             ],
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Confirm'),
+              child: Text(S().confirm),
               onPressed: () async {
+                // Upload image to storage if selected
+                if (selectedImage != null || _webImage != null) {
+                  try {
+                    imageUrl = await uploadImageToStorage(selectedImage);
+                    // Show snackbar if image upload succeeds
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(S().image_uploaded_successfully)),
+                    );
+                  } catch (e) {
+                    // Display error message to the user if image upload fails
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text('${S().failed_to_upload_image} : $e')),
+                    );
+                    return;
+                  }
+                }
+
                 String yearMonth =
                     '${DateTime.now().year}-${DateTime.now().month}';
                 String documentPath =
-                    'productsForAllMonthe/$yearMonth/$product_id';
+                    'productsForAllMonths/$yearMonth/$product_id';
+
                 // Save data to Firestore
                 await FirebaseFirestore.instance
                     .collection('products')
                     .doc(documentPath)
-                    // .doc(product_id)
                     .set({
                   'type': selectedType,
-                  'offer': selectedOffer,
+                  'width': selectedWidth,
                   'weight': selectedWeight,
                   'color': selectedColor,
                   'yarn_number': selectedYarnNumber,
@@ -188,20 +220,22 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 // Show a snackbar with the new product ID
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content:
-                          Text('Item saved successfully with ID: $product_id')),
+                      content: Text(
+                          '${S().item + S().saved_successfully_with} ID: $product_id')),
                 );
 
                 // Reset fields and generate new product ID
                 setState(() {
-                  selectedType = types.isNotEmpty ? types[0] : null;
-                  selectedOffer = offers.isNotEmpty ? offers[0] : null;
+                  //  selectedType = types.isNotEmpty ? types[0] : null;
+                  selectedType = types.isNotEmpty ? null : null;
+                  selectedWidth = widths.isNotEmpty ? widths[3] : null;
                   selectedWeight = weights.isNotEmpty ? weights[0] : null;
                   selectedColor = colors.isNotEmpty ? colors[0] : null;
                   selectedYarnNumber =
-                      yarnNumbers.isNotEmpty ? yarnNumbers[0] : null;
+                      yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
                   selectedShift = shift.isNotEmpty ? shift[0] : null;
                   selectedImage = null;
+                  _webImage = null;
                   product_id = generateCode();
                 });
 
@@ -209,7 +243,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: Text(S().cancel),
               onPressed: () {
                 Navigator.of(context).pop(); // Close dialog
               },
@@ -220,13 +254,19 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     );
   }
 
-  Future<String> uploadImageToStorage(XFile image) async {
+  Future<String> uploadImageToStorage(XFile? image) async {
     String yearMonth = '${DateTime.now().year}-${DateTime.now().month}';
-    Reference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('products/$yearMonth/${path.basename(image.path)}');
+    String day = '${DateTime.now().month}-${DateTime.now().day}';
+    Reference storageReference = FirebaseStorage.instance.ref().child(
+        'products/$yearMonth/$day/${image != null ? path.basename(image.path) : '$product_id.jpg'}');
 
-    UploadTask uploadTask = storageReference.putFile(File(image.path));
+    UploadTask uploadTask;
+    if (image != null) {
+      uploadTask = storageReference.putFile(File(image.path));
+    } else {
+      uploadTask = storageReference.putData(_webImage!);
+    }
+
     await uploadTask;
     return await storageReference.getDownloadURL();
   }
@@ -248,7 +288,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               pw.Text('Product ID: $product_id'),
               pw.SizedBox(height: 10),
               pw.Text('Type: $selectedType'),
-              pw.Text('Offer: $selectedOffer'),
+              pw.Text('Width: $selectedWidth'),
               pw.Text('Weight: $selectedWeight'),
               pw.Text('Color: $selectedColor'),
               pw.Text('Yarn Number: $selectedYarnNumber'),
@@ -276,10 +316,21 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      selectedImage = image;
-    });
+    if (kIsWeb) {
+      // Pick image from web
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result != null) {
+        setState(() {
+          _webImage = result.files.first.bytes;
+        });
+      }
+    } else {
+      // Pick image from mobile (directly from camera)
+      final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+      setState(() {
+        selectedImage = image;
+      });
+    }
   }
 
   @override
@@ -291,66 +342,73 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
-          : Center(
+          : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('Product ID: $product_id'),
-                    SizedBox(height: 10),
-                    buildDropdown(
-                        '${S().select} ${S().type}', selectedType, types,
-                        (value) {
-                      setState(() {
-                        selectedType = value;
-                      });
-                    }, '${S().select} ${S().type}'),
-                    buildDropdown(
-                        '${S().select} ${S().offer}', selectedOffer, offers,
-                        (value) {
-                      setState(() {
-                        selectedOffer = value;
-                      });
-                    }, '${S().select} ${S().offer}'),
-                    buildDropdown(
-                        '${S().select} ${S().weight}', selectedWeight, weights,
-                        (value) {
-                      setState(() {
-                        selectedWeight = value;
-                      });
-                    }, '${S().select} ${S().weight}'),
-                    buildDropdown(
-                        '${S().select} ${S().color}', selectedColor, colors,
-                        (value) {
-                      setState(() {
-                        selectedColor = value;
-                      });
-                    }, '${S().select} ${S().color}'),
-                    buildDropdown('${S().select} ${S().yarn_number}',
-                        selectedYarnNumber, yarnNumbers, (value) {
-                      setState(() {
-                        selectedYarnNumber = value;
-                      });
-                    }, '${S().select} ${S().yarn_number}'),
-                    buildDropdown(
-                        '${S().select} ${S().shift}', selectedShift, shift,
-                        (value) {
-                      setState(() {
-                        selectedShift = value;
-                      });
-                    }, '${S().select} ${S().shift}'),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      child: Text(S().pick_image),
-                      onPressed: pickImage,
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: addItem,
-                      child: Text('${S().add} ${S().item}'),
-                    ),
-                  ],
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Product ID: $product_id'),
+                      SizedBox(height: 10),
+                      if (selectedImage != null || _webImage != null)
+                        kIsWeb
+                            ? Image.memory(_webImage!, width: 200, height: 200)
+                            : Image.file(File(selectedImage!.path),
+                                width: 200, height: 200),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        child: Text(S().pick_image),
+                        onPressed: pickImage,
+                      ),
+                      SizedBox(height: 10),
+                      buildDropdown(
+                          '${S().select} ${S().type}', selectedType, types,
+                          (value) {
+                        setState(() {
+                          selectedType = value;
+                        });
+                      }, '${S().select} ${S().type}'),
+                      buildDropdown(
+                          '${S().select} ${S().width}', selectedWidth, widths,
+                          (value) {
+                        setState(() {
+                          selectedWidth = value;
+                        });
+                      }, '${S().select} ${S().width}'),
+                      buildDropdown('${S().select} ${S().weight}',
+                          selectedWeight, weights, (value) {
+                        setState(() {
+                          selectedWeight = value;
+                        });
+                      }, '${S().select} ${S().weight}'),
+                      buildDropdown(
+                          '${S().select} ${S().color}', selectedColor, colors,
+                          (value) {
+                        setState(() {
+                          selectedColor = value;
+                        });
+                      }, '${S().select} ${S().color}'),
+                      buildDropdown('${S().select} ${S().yarn_number}',
+                          selectedYarnNumber, yarnNumbers, (value) {
+                        setState(() {
+                          selectedYarnNumber = value;
+                        });
+                      }, '${S().select} ${S().yarn_number}'),
+                      buildDropdown(
+                          '${S().select} ${S().shift}', selectedShift, shift,
+                          (value) {
+                        setState(() {
+                          selectedShift = value;
+                        });
+                      }, '${S().select} ${S().shift}'),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: addItem,
+                        child: Text('${S().add} ${S().item}'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

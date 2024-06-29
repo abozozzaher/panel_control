@@ -17,6 +17,7 @@ void main() async {
       appId: "1:905049367219:android:597318802a22c8d44b86c6",
       messagingSenderId: "Messaging sender id here",
       projectId: "panel-control-company-zaher",
+      storageBucket: "panel-control-company-zaher.appspot.com",
     ),
   );
   runApp(MyApp());

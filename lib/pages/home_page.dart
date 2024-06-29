@@ -9,7 +9,6 @@ import '../model/user.dart';
 import 'auth/login_page.dart';
 import 'package:intl/intl.dart';
 
-import 'product/AddProductPage.dart';
 import 'product/NewItem.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -17,7 +16,8 @@ class MyHomePage extends StatefulWidget {
   final VoidCallback toggleLocale;
 
   const MyHomePage(
-      {super.key, required this.toggleTheme, required this.toggleLocale});
+      {Key? key, required this.toggleTheme, required this.toggleLocale})
+      : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -70,6 +70,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool work = _currentUserData?.work ??
+        false; // Assuming work is a boolean field in UserData
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -116,38 +119,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   CircleAvatar(
-                    radius: 50,
-                    backgroundImage: _currentUserData!.image
+                    radius: 90,
+                    foregroundImage: _currentUserData!.image
                             .startsWith('assets')
                         ? AssetImage(_currentUserData!.image)
                         : CachedNetworkImageProvider(_currentUserData!.image),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   Text(
-                      '${_currentUserData!.firstName} ${_currentUserData!.lastName}',
-                      style: TextStyle(fontSize: 24)),
+                    '${_currentUserData!.firstName} ${_currentUserData!.lastName}',
+                    style: TextStyle(fontSize: 24),
+                  ),
                   Text(_currentUserData!.phone),
+                  SizedBox(height: 10),
                   Text('ID: ${_currentUserData!.id}'),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddProductPage()),
-                      );
-                    },
-                    child: Icon(Icons.add),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddNewItemScreen()),
-                      );
-                    },
-                    child: Icon(Icons.abc_outlined),
-                  ),
+                  SizedBox(height: 20),
+                  if (work)
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddNewItemScreen()),
+                        );
+                      },
+                      icon: Icon(Icons.add_sharp),
+                      label: Text('${S().add} ${S().item}'),
+                    ),
                 ],
               ),
             )

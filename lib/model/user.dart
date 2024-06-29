@@ -4,6 +4,8 @@ class UserData {
   final String lastName;
   final String phone;
   final String image;
+  final bool work;
+  final bool admin;
 
   UserData({
     required this.id,
@@ -11,6 +13,8 @@ class UserData {
     required this.lastName,
     required this.phone,
     required this.image,
+    required this.work,
+    required this.admin,
   });
 
   factory UserData.fromMap(Map<String, dynamic> data) {
@@ -20,6 +24,8 @@ class UserData {
       lastName: data['lastName']?.toString() ?? '',
       phone: data['phone']?.toString() ?? '',
       image: data['image']?.toString() ?? 'assets/img/user.jpg',
+      work: data['work']!.toString() == 'true' ? true : false,
+      admin: data['admin']!.toString() == 'true' ? true : false,
     );
   }
 }

@@ -130,6 +130,16 @@ class S {
     );
   }
 
+  /// `Phone`
+  String get phone {
+    return Intl.message(
+      'Phone',
+      name: 'phone',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Don't have an account? Register`
   String get no_account_register {
     return Intl.message(
@@ -230,16 +240,6 @@ class S {
     );
   }
 
-  /// `Item`
-  String get item {
-    return Intl.message(
-      'Item',
-      name: 'item',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Select`
   String get select {
     return Intl.message(
@@ -280,11 +280,11 @@ class S {
     );
   }
 
-  /// `Offer`
-  String get offer {
+  /// `Width`
+  String get width {
     return Intl.message(
-      'Offer',
-      name: 'offer',
+      'Width',
+      name: 'width',
       desc: '',
       args: [],
     );
@@ -315,6 +315,96 @@ class S {
     return Intl.message(
       'Shift',
       name: 'shift',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Item`
+  String get item {
+    return Intl.message(
+      'Item',
+      name: 'item',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `saved successfully with`
+  String get saved_successfully_with {
+    return Intl.message(
+      'saved successfully with',
+      name: 'saved_successfully_with',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Details`
+  String get details {
+    return Intl.message(
+      'Details',
+      name: 'details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image uploaded successfully`
+  String get image_uploaded_successfully {
+    return Intl.message(
+      'Image uploaded successfully',
+      name: 'image_uploaded_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to upload image`
+  String get failed_to_upload_image {
+    return Intl.message(
+      'Failed to upload image',
+      name: 'failed_to_upload_image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a type.`
+  String get please_select_a_type {
+    return Intl.message(
+      'Please select a type.',
+      name: 'please_select_a_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get error {
+    return Intl.message(
+      'Error',
+      name: 'error',
       desc: '',
       args: [],
     );
