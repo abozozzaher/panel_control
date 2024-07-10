@@ -2,36 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductPage extends StatelessWidget {
-  final String productId;
+  final String? documentId;
+  final String? monthFolder;
 
-  ProductPage({required this.productId});
+  const ProductPage(
+      {Key? key, required this.documentId, required this.monthFolder})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Details'),
+        title: Text('Product Details'),
       ),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance
-            .collection('products')
-            .doc(productId)
-            .get(),
-        builder: (context, snapshot) {
-          print(productId);
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(child: Text('Product not found'));
-          } else {
-            var productData = snapshot.data!.data() as Map<String, dynamic>;
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Center(
+          child: FutureBuilder<DocumentSnapshot>(
+            future: FirebaseFirestore.instance
+                .collection('products') // اسم المجموعة في Firestore
+                .doc(
+                    'productsForAllMonths') // اسم المجلد الذي يحتوي على جميع الشهور
+                .collection(monthFolder!) // اسم المجلد الشهر
+                .doc(documentId) // معرف المستند الذي نريد عرضه
+                .get(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
+              if (!snapshot.hasData || snapshot.data == null) {
+                return Text('No data found.');
+              }
+
+              var productData = snapshot.data!.data() as Map<String, dynamic>;
+              print(monthFolder);
+              print(documentId);
+
+              // استخدام البيانات المستردة لعرضها
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Text('Product ID: ${productData['productId']}'),
+                  // يمكنك استخدام مزيد من الحقول هنا لعرض المعلومات الأخرى
+
                   Text('Type: ${productData['type']}',
                       style: const TextStyle(fontSize: 18)),
                   Text('Width: ${productData['width']}',
@@ -60,10 +76,10 @@ class ProductPage extends StatelessWidget {
                   if (productData['image_url'] != '')
                     Image.network(productData['image_url']),
                 ],
-              ),
-            );
-          }
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }

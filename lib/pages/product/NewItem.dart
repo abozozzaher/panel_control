@@ -299,7 +299,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   String generateCode() {
     String date = DateTime.now().toString().replaceAll(RegExp(r'[^0-9]'), '');
-    return '${date}0099'; // Dynamic serial number should be updated
+    return date; // Dynamic serial number should be updated
 
     //  return date; // Dynamic serial number should be updated
   }

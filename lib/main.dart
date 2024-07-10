@@ -75,10 +75,17 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       GoRoute(
-        path: '/products/:productId',
+        // path: '/products/productsForAllMonths/:monthFolder/:documentId',
+        path: '/products/:monthFolder/:documentId',
         builder: (context, state) {
-          final productId = state.pathParameters['productId']!;
-          return ProductPage(productId: productId);
+          final monthFolder = state.pathParameters['monthFolder'];
+
+          final documentId = state.pathParameters['documentId'];
+
+          return ProductPage(
+            monthFolder: monthFolder,
+            documentId: documentId,
+          );
         },
       ),
       GoRoute(
@@ -92,6 +99,10 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
         path: '/login',
         builder: (context, state) => LoginPage(toggleTheme: _toggleTheme),
+      ),
+      GoRoute(
+        path: '/add',
+        builder: (context, state) => AddNewItemScreen(),
       ),
     ],
     errorPageBuilder: (context, state) => MaterialPage(

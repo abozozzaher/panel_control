@@ -158,11 +158,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (work)
                       ElevatedButton.icon(
                         onPressed: () {
+                          /*
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AddNewItemScreen()),
                           );
+                          */
+                          context.go('/add');
                         },
                         icon: Icon(Icons.add_sharp),
                         label: Text('${S().add} ${S().item}'),
