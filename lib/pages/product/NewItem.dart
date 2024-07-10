@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +12,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:file_picker/file_picker.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:image/image.dart' as img;
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
 
@@ -42,7 +46,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   String firstName = '';
   String lastName = '';
   String userId = '';
-  String product_id = '';
+  String productId = '';
 
   @override
   void initState() {
@@ -72,14 +76,13 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     yarnNumbers = await fetchData('yarn_numbers', 'values');
     shift = await fetchData('shift', 'values');
     setState(() {
-      //  selectedType = types.isNotEmpty ? types[0] : null;
       selectedType = types.isNotEmpty ? null : null;
       selectedWidth = widths.isNotEmpty ? widths[3] : null;
       selectedWeight = weights.isNotEmpty ? weights[0] : null;
       selectedColor = colors.isNotEmpty ? colors[0] : null;
       selectedYarnNumber = yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
       selectedShift = shift.isNotEmpty ? shift[0] : null;
-      product_id = generateCode();
+      productId = generateCode();
     });
   }
 
@@ -120,7 +123,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   Future<void> addItem() async {
     String? imageUrl;
-
+    bool isUploading = false;
     // Check if selectedType is null
     if (selectedType == null) {
       // Show error message and return if selectedType is null
@@ -154,7 +157,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('ID: $product_id'),
+              Text('ID: $productId'),
               Text('Type: $selectedType'),
               Text('Width: $selectedWidth'),
               Text('Weight: $selectedWeight'),
@@ -172,10 +175,22 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
             TextButton(
               child: Text(S().confirm),
               onPressed: () async {
+                if (isUploading) {
+                  return; // Exit the function if the upload is already in progress
+                }
+
+                setState(() {
+                  isUploading = true; // Set the uploading flag to true
+                });
+
                 // Upload image to storage if selected
                 if (selectedImage != null || _webImage != null) {
                   try {
                     imageUrl = await uploadImageToStorage(selectedImage);
+
+                    // تأخير لمدة 2 ثانية قبل إظهار Snackbar
+                    //     await Future.delayed(Duration(seconds: 2));
+
                     // Show snackbar if image upload succeeds
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(S().image_uploaded_successfully)),
@@ -186,6 +201,10 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       SnackBar(
                           content: Text('${S().failed_to_upload_image} : $e')),
                     );
+                    setState(() {
+                      isUploading =
+                          false; // Reset the uploading flag if the upload fails
+                    });
                     return;
                   }
                 }
@@ -193,7 +212,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 String yearMonth =
                     '${DateTime.now().year}-${DateTime.now().month}';
                 String documentPath =
-                    'productsForAllMonths/$yearMonth/$product_id';
+                    'productsForAllMonths/$yearMonth/$productId';
 
                 // Save data to Firestore
                 await FirebaseFirestore.instance
@@ -205,28 +224,32 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   'weight': selectedWeight,
                   'color': selectedColor,
                   'yarn_number': selectedYarnNumber,
-                  'product_id': product_id,
+                  'productId': productId,
                   'date': DateTime.now(),
                   'user': '$firstName $lastName',
                   'user_id': userId,
                   'shift': selectedShift,
                   'created_by': userId,
+                  'saleـstatus': false,
                   if (imageUrl != null) 'image_url': imageUrl,
+                  if (imageUrl == null) 'image_url': '',
                 });
 
                 // Generate and print PDF
-                await generateAndPrintPDF(product_id);
+                //   await generateAndPrintPDF(productId, imageUrl);
+
+                // تأخير لمدة 2 ثانية قبل إظهار Snackbar
+                //    await Future.delayed(Duration(seconds: 2));
 
                 // Show a snackbar with the new product ID
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                       content: Text(
-                          '${S().item + S().saved_successfully_with} ID: $product_id')),
+                          '${S().item} ${S().saved_successfully_with} ID: $productId')),
                 );
 
                 // Reset fields and generate new product ID
                 setState(() {
-                  //  selectedType = types.isNotEmpty ? types[0] : null;
                   selectedType = types.isNotEmpty ? null : null;
                   selectedWidth = widths.isNotEmpty ? widths[3] : null;
                   selectedWeight = weights.isNotEmpty ? weights[0] : null;
@@ -236,7 +259,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   selectedShift = shift.isNotEmpty ? shift[0] : null;
                   selectedImage = null;
                   _webImage = null;
-                  product_id = generateCode();
+                  productId = generateCode();
+                  isUploading =
+                      false; // Reset the uploading flag after the upload is complete
                 });
 
                 Navigator.of(context).pop(); // Close dialog
@@ -256,15 +281,16 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   Future<String> uploadImageToStorage(XFile? image) async {
     String yearMonth = '${DateTime.now().year}-${DateTime.now().month}';
-    String day = '${DateTime.now().month}-${DateTime.now().day}';
+    String day = '${DateTime.now().day}';
     Reference storageReference = FirebaseStorage.instance.ref().child(
-        'products/$yearMonth/$day/${image != null ? path.basename(image.path) : '$product_id.jpg'}');
+        'products/$yearMonth/$day/${image != null ? path.basename(image.path) : '$productId.jpg'}');
+    SettableMetadata metadata = SettableMetadata(contentType: 'image/jpeg');
 
     UploadTask uploadTask;
     if (image != null) {
-      uploadTask = storageReference.putFile(File(image.path));
+      uploadTask = storageReference.putFile(File(image.path), metadata);
     } else {
-      uploadTask = storageReference.putData(_webImage!);
+      uploadTask = storageReference.putData(_webImage!, metadata);
     }
 
     await uploadTask;
@@ -273,11 +299,18 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   String generateCode() {
     String date = DateTime.now().toString().replaceAll(RegExp(r'[^0-9]'), '');
-    return 'BLLTTLT${date}0001'; // Dynamic serial number should be updated
+    return '${date}0099'; // Dynamic serial number should be updated
+
+    //  return date; // Dynamic serial number should be updated
   }
 
-  Future<void> generateAndPrintPDF(String product_id) async {
+  Future<void> generateAndPrintPDF(String productId, String? imageUrl) async {
     final pdf = pw.Document();
+    String productUrl =
+        "https://panel-control-company-zaher.web.app/products/$productId"; // Replace with your product URL
+    // Generate QR code image
+    final qrCodeImage = await generateQRCodeImage(productUrl);
+
     pdf.addPage(
       pw.Page(
         build: (pw.Context context) {
@@ -285,7 +318,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               pw.Text('Product Information'),
-              pw.Text('Product ID: $product_id'),
+              pw.Text('Product ID: $productId'),
               pw.SizedBox(height: 10),
               pw.Text('Type: $selectedType'),
               pw.Text('Width: $selectedWidth'),
@@ -295,13 +328,20 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               pw.Text('Created by: $firstName $lastName'),
               pw.Text('User ID: $userId'),
               pw.Text('Shift: $selectedShift'),
+              pw.SizedBox(height: 10),
+              pw.Image(pw.MemoryImage(qrCodeImage)),
+              if (imageUrl != null)
+                pw.Image(
+                    pw.MemoryImage(
+                        File('assets/img/friend.png').readAsBytesSync()),
+                    width: 100,
+                    height: 100),
             ],
           );
         },
       ),
     );
 
-    // Layout PDF based on platform type
     if (!kIsWeb && Platform.isMacOS) {
       await Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => pdf.save(),
@@ -311,13 +351,48 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       // You can show an error message or fallback mechanism here
       print('PDF printing is not supported on this platform.');
       // Optionally, you can provide a different behavior or inform the user
+      // await launchInBrowser("https://admin.bluedukkan.com/products/$productId");
+    }
+    // Open a new tab in Google Chrome after saving data in PDF
+    final url =
+        "https://panel-control-company-zaher.web.app/products/$productId";
+    if (kIsWeb) {
+      html.window.open(url, '_blank');
+    } else {
+      if (await canLaunch(url)) {
+        await launch(url, forceSafariVC: false, forceWebView: false);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+  }
+
+  Future<Uint8List> generateQRCodeImage(String data) async {
+    final qrValidationResult = QrValidator.validate(
+      data: data,
+      version: QrVersions.auto,
+      errorCorrectionLevel: QrErrorCorrectLevel.L,
+    );
+
+    if (qrValidationResult.status == QrValidationStatus.valid) {
+      final qrCode = qrValidationResult.qrCode;
+      final painter = QrPainter.withQr(
+        qr: qrCode!,
+        color: const Color(0xFF000000),
+        emptyColor: const Color(0xFFFFFFFF),
+        gapless: true,
+      );
+
+      final image = await painter.toImageData(100);
+      return image!.buffer.asUint8List();
+    } else {
+      throw Exception('Could not generate QR code');
     }
   }
 
   Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();
     if (kIsWeb) {
-      // Pick image from web
       FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result != null) {
         setState(() {
@@ -325,7 +400,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         });
       }
     } else {
-      // Pick image from mobile (directly from camera)
       final XFile? image = await _picker.pickImage(source: ImageSource.camera);
       setState(() {
         selectedImage = image;
@@ -349,7 +423,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Product ID: $product_id'),
+                      Text('Product ID: $productId'),
                       SizedBox(height: 10),
                       if (selectedImage != null || _webImage != null)
                         kIsWeb

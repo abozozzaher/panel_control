@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../generated/l10n.dart';
@@ -10,6 +11,7 @@ import 'auth/login_page.dart';
 import 'package:intl/intl.dart';
 
 import 'product/NewItem.dart';
+import 'product/ScanItem.dart';
 
 class MyHomePage extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -33,8 +35,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _checkLoginStatusAndFetchCurrentUser();
+  }
+
+  Future<void> _checkLoginStatusAndFetchCurrentUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    if (!isLoggedIn) {
+      context.go('/login');
+      return;
+    }
+
     _currentUser = _auth.currentUser;
-    _fetchCurrentUser();
+    await _fetchCurrentUser();
   }
 
   Future<void> _fetchCurrentUser() async {
@@ -61,22 +75,27 @@ class _MyHomePageState extends State<MyHomePage> {
     await _auth.signOut();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', false);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => LoginPage(toggleTheme: widget.toggleTheme)),
-    );
+    setState(() {
+      _currentUserData = null;
+    });
+
+    context.go('/login');
   }
 
   @override
   Widget build(BuildContext context) {
-    bool work = _currentUserData?.work ??
-        false; // Assuming work is a boolean field in UserData
+    bool work = _currentUserData?.work ?? false;
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(S().blue_textiles),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.brightness_6),
+            onPressed: widget.toggleTheme,
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -113,40 +132,56 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: _currentUserData != null
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  CircleAvatar(
-                    radius: 90,
-                    foregroundImage: _currentUserData!.image
-                            .startsWith('assets')
-                        ? AssetImage(_currentUserData!.image)
-                        : CachedNetworkImageProvider(_currentUserData!.image),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '${_currentUserData!.firstName} ${_currentUserData!.lastName}',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  Text(_currentUserData!.phone),
-                  SizedBox(height: 10),
-                  Text('ID: ${_currentUserData!.id}'),
-                  SizedBox(height: 20),
-                  if (work)
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddNewItemScreen()),
-                        );
-                      },
-                      icon: Icon(Icons.add_sharp),
-                      label: Text('${S().add} ${S().item}'),
+          ? SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    CircleAvatar(
+                      radius: 90,
+                      foregroundImage: _currentUserData!.image
+                              .startsWith('assets')
+                          ? AssetImage(_currentUserData!.image)
+                          : CachedNetworkImageProvider(_currentUserData!.image)
+                              as ImageProvider,
                     ),
-                ],
+                    SizedBox(height: 10),
+                    Text(
+                      '${_currentUserData!.firstName} ${_currentUserData!.lastName}',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    Text(_currentUserData!.phone),
+                    SizedBox(height: 10),
+                    Text('ID: ${_currentUserData!.id}'),
+                    SizedBox(height: 20),
+                    if (work)
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddNewItemScreen()),
+                          );
+                        },
+                        icon: Icon(Icons.add_sharp),
+                        label: Text('${S().add} ${S().item}'),
+                      ),
+                    SizedBox(height: 20),
+                    if (work)
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ScanItemQr()),
+                          );
+                        },
+                        icon: Icon(Icons.qr_code_scanner),
+                        label: Text('${S().scan} ${S().item}'),
+                      ),
+                  ],
+                ),
               ),
             )
           : Center(

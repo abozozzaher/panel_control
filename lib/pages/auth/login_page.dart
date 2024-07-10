@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:panel_control/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,9 +51,10 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
               SizedBox(height: 20),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: _login,
-                child: Text(S().login),
+                icon: Icon(Icons.login),
+                label: Text(S().login),
               ),
               if (_errorMessage != null)
                 Padding(
@@ -62,19 +64,19 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
-              TextButton(
+              SizedBox(height: 20),
+              ElevatedButton.icon(
                 onPressed: _resetPassword,
-                child: Text(S().forgot_password),
+                icon: Icon(Icons.published_with_changes_rounded),
+                label: Text(S().forgot_password),
               ),
-              TextButton(
+              SizedBox(height: 20),
+              ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegisterPage()),
-                    (Route<dynamic> route) => false,
-                  );
+                  context.go('/register');
                 },
-                child: Text(S().no_account_register),
+                label: Text(S().register),
+                icon: Icon(Icons.account_box_outlined),
               ),
             ],
           ),
@@ -93,16 +95,11 @@ class _LoginPageState extends State<LoginPage> {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
+      setState(() {
+        _errorMessage = null;
+      });
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MyHomePage(
-                  toggleLocale: () {},
-                  toggleTheme: () {},
-                )),
-        (Route<dynamic> route) => false,
-      );
+      context.go('/');
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = e.message;

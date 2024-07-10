@@ -1,13 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:panel_control/pages/auth/register_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
 import 'generated/l10n.dart';
 
 import 'pages/auth/login_page.dart';
 import 'pages/home_page.dart';
+import 'pages/product/NewItem.dart';
+import 'pages/product/ProductPage.dart';
+import 'test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,16 +21,27 @@ void main() async {
     options: const FirebaseOptions(
       apiKey: "AIzaSyDrLjc_ax6-uQPZIJePY_48HUc-ksNwYxU",
       appId: "1:905049367219:android:597318802a22c8d44b86c6",
-      messagingSenderId: "Messaging sender id here",
+      messagingSenderId: "905049367219",
       projectId: "panel-control-company-zaher",
       storageBucket: "panel-control-company-zaher.appspot.com",
     ),
   );
-  runApp(MyApp());
+
+  final bool isLoggedIn = await _checkLoginStatus();
+  usePathUrlStrategy();
+
+  runApp(MyApp(isLoggedIn: isLoggedIn));
+}
+
+Future<bool> _checkLoginStatus() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('isLoggedIn') ?? false;
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -47,6 +64,44 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  late final GoRouter _router = GoRouter(
+    initialLocation: widget.isLoggedIn ? '/' : '/login',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => MyHomePage(
+          toggleTheme: _toggleTheme,
+          toggleLocale: _toggleLocale,
+        ),
+      ),
+      GoRoute(
+        path: '/products/:productId',
+        builder: (context, state) {
+          final productId = state.pathParameters['productId']!;
+          return ProductPage(productId: productId);
+        },
+      ),
+      GoRoute(
+        path: '/test',
+        builder: (context, state) => TestPage(),
+      ),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => RegisterPage(toggleTheme: _toggleTheme),
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => LoginPage(toggleTheme: _toggleTheme),
+      ),
+    ],
+    errorPageBuilder: (context, state) => MaterialPage(
+      child: Scaffold(
+        appBar: AppBar(title: Text('Error 404')),
+        body: Center(child: Text('Page not found')),
+      ),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -55,7 +110,7 @@ class _MyAppState extends State<MyApp> {
           create: (_) => FirebaseAuth.instance,
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: S().blue_textiles,
         theme: ThemeData(
           brightness: Brightness.light,
@@ -72,7 +127,6 @@ class _MyAppState extends State<MyApp> {
         themeMode: _themeMode,
         locale: _locale,
         supportedLocales: S.delegate.supportedLocales,
-
         localizationsDelegates: [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -91,26 +145,9 @@ class _MyAppState extends State<MyApp> {
           }
           return supportedLocales.first;
         },
-        debugShowCheckedModeBanner: false, // لإزالة شريط debug
-        home: FutureBuilder(
-          future: _checkLoginStatus(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else {
-              return snapshot.data == true
-                  ? MyHomePage(
-                      toggleTheme: _toggleTheme, toggleLocale: _toggleLocale)
-                  : LoginPage(toggleTheme: _toggleTheme);
-            }
-          },
-        ),
+        debugShowCheckedModeBanner: false,
+        routerConfig: _router,
       ),
     );
-  }
-
-  Future<bool> _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isLoggedIn') ?? false;
   }
 }

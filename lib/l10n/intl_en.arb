@@ -8,7 +8,7 @@
     "first_name": "First Name",
     "last_name" : "Last Name",
     "phone" : "Phone",
-    "no_account_register" : "Don't have an account? Register",
+    "no_account_register" : "Don't have an account?",
     "email" : "Email",
     "password" : "Password",
     "forgot_password" : "Forgot Password",
@@ -35,6 +35,8 @@
     "failed_to_upload_image" : "Failed to upload image",
     "please_select_a_type" : "Please select a type.",
     "error" : "Error",
+    "scan": "Scan",
+    "please_fill_all_fields":"Please fill all fields",
     "menu" : "Menu"
   
   }

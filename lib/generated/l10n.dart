@@ -140,10 +140,10 @@ class S {
     );
   }
 
-  /// `Don't have an account? Register`
+  /// `Don't have an account?`
   String get no_account_register {
     return Intl.message(
-      'Don\'t have an account? Register',
+      'Don\'t have an account?',
       name: 'no_account_register',
       desc: '',
       args: [],
@@ -405,6 +405,26 @@ class S {
     return Intl.message(
       'Error',
       name: 'error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan`
+  String get scan {
+    return Intl.message(
+      'Scan',
+      name: 'scan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please fill all fields`
+  String get please_fill_all_fields {
+    return Intl.message(
+      'Please fill all fields',
+      name: 'please_fill_all_fields',
       desc: '',
       args: [],
     );

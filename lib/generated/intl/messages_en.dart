@@ -44,8 +44,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
         "new1": MessageLookupByLibrary.simpleMessage("New"),
-        "no_account_register": MessageLookupByLibrary.simpleMessage(
-            "Don\'t have an account? Register"),
+        "no_account_register":
+            MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "password_reset":
@@ -54,11 +54,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "pick_image": MessageLookupByLibrary.simpleMessage("Pick image"),
         "please_enter_your_email":
             MessageLookupByLibrary.simpleMessage("Please enter your email"),
+        "please_fill_all_fields":
+            MessageLookupByLibrary.simpleMessage("Please fill all fields"),
         "please_select_a_type":
             MessageLookupByLibrary.simpleMessage("Please select a type."),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "saved_successfully_with":
             MessageLookupByLibrary.simpleMessage("saved successfully with"),
+        "scan": MessageLookupByLibrary.simpleMessage("Scan"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
         "toggle_language":
