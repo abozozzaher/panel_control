@@ -132,9 +132,8 @@ flutter:
     - assets/store/
     - assets/sliders/
   fonts:
-    - family: Tajawal
+    - family: Beiruti
       fonts:
-        - asset: assets/fonts/Tajawal-Medium.ttf
         - asset: assets/fonts/Beiruti.ttf
 flutter_intl:
   enabled: true

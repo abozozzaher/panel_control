@@ -320,13 +320,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     String productUrl =
         "https://panel-control-company-zaher.web.app/$yearMonth/$productId"; // Replace with your product URL
 
-    // Load the NotoSans font
-    //  final font = await rootBundle.load("assets/fonts/Tajawal-Medium.ttf");
-    final font = await rootBundle.load("assets/fonts/Beiruti.ttf");
-
-    final ttf = pw.Font.ttf(font);
-    final fonttr = await rootBundle.load("assets/fonts/Beiruti.ttf");
-    final ttftr = pw.Font.ttf(fonttr);
+    final ttfTr = await rootBundle.load("assets/fonts/Beiruti.ttf");
+    final fontBe = pw.Font.ttf(ttfTr);
+    final fontRo = await PdfGoogleFonts.tajawalBold();
 
     DateTime now = DateTime.now();
 
@@ -337,8 +333,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     );
     // Generate QR code image
     final qrCodeImage = await generateQRCodeImage(productUrl);
-    //  final pdf417CodeImage = await generatePdf417Image(productUrl);
-    double heighPdf = 70;
+    double heighPdf = 80;
     double widthPdf = heighPdf * 3;
 
     pdf.addPage(
@@ -371,9 +366,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       child: pw.Text(
                         S().blue_textiles,
                         style: pw.TextStyle(
-                          font: ttf,
-                          fontWeight: pw.FontWeight.bold,
-                        ),
+                            //    font: ttf,
+                            fontWeight: pw.FontWeight.bold),
                       ),
                     ),
                   ),
@@ -393,174 +387,172 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   mainAxisSize: pw.MainAxisSize.min,
                   children: [
-                    pw.Text(
-                      'Product Information',
-                      style: pw.TextStyle(
-                        font: ttf,
-                        fontSize: 18,
-                        fontWeight: pw.FontWeight.bold,
-                      ),
-                    ),
                     pw.SizedBox(height: 5),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text(
-                          'ID : ',
-                          style: pw.TextStyle(font: ttf),
-                        ),
-                        pw.Text(
-                          '$productId',
-                          style: pw.TextStyle(font: ttf),
+                          'Ürün Bilgisi',
+                          style: pw.TextStyle(
+                              font: fontBe,
+                              fontSize: 18,
+                              fontWeight: pw.FontWeight.bold),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
-                          'المنتج :',
-                          style: pw.TextStyle(font: ttf),
+                          'معلومات المنتج :',
+                          style: pw.TextStyle(
+                              font: fontBe,
+                              fontSize: 18,
+                              fontWeight: pw.FontWeight.bold),
                         ),
                       ],
                     ),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
+                        pw.Text('ID Kodu : ',
+                            style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          'Type : ',
-                          style: pw.TextStyle(font: ttf),
+                          '$productId',
+                          textDirection: pw.TextDirection.rtl,
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'كود المنتج :',
+                          style: pw.TextStyle(font: fontBe),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Tip : ', style: pw.TextStyle(font: fontBe)),
+                        pw.Text(
                           '$selectedType',
-                          style: pw.TextStyle(font: ttftr),
+                          textDirection: pw.TextDirection.rtl,
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'النوع :',
-                          style: pw.TextStyle(font: ttftr),
+                          style: pw.TextStyle(font: fontBe),
                         ),
                       ],
                     ),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
-                        pw.Text(
-                          'Width : ',
-                          style: pw.TextStyle(font: ttf),
-                        ),
+                        pw.Text('Genişlik : ',
+                            style: pw.TextStyle(font: fontBe)),
                         pw.Text(
                           '$selectedWidth',
-                          style: pw.TextStyle(font: ttf),
+                          textDirection: pw.TextDirection.rtl,
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'العرض :',
-                          style: pw.TextStyle(font: ttf),
+                          style: pw.TextStyle(font: fontBe),
                         ),
                       ],
                     ),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
-                        pw.Text(
-                          'Weight : ',
-                          style: pw.TextStyle(font: ttf),
-                        ),
+                        pw.Text('Ağırlık : ',
+                            style: pw.TextStyle(font: fontBe)),
                         pw.Text(
                           '$selectedWeight',
-                          style: pw.TextStyle(font: ttf),
+                          textDirection: pw.TextDirection.rtl,
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'الوزن :',
-                          style: pw.TextStyle(font: ttf),
+                          style: pw.TextStyle(font: fontBe),
                         ),
                       ],
                     ),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
-                        pw.Text(
-                          'Color : ',
-                          style: pw.TextStyle(font: ttf),
-                        ),
+                        pw.Text('Renk : ', style: pw.TextStyle(font: fontBe)),
                         pw.Text(
                           '$selectedColor',
-                          style: pw.TextStyle(font: ttf),
+                          textDirection: pw.TextDirection.rtl,
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'اللون :',
-                          style: pw.TextStyle(font: ttf),
+                          style: pw.TextStyle(font: fontBe),
                         ),
                       ],
                     ),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
-                        pw.Text(
-                          'Yarn Number : ',
-                          style: pw.TextStyle(font: ttf),
-                        ),
+                        pw.Text('İplik Density : ',
+                            style: pw.TextStyle(font: fontBe)),
                         pw.Text(
                           '$selectedYarnNumber',
-                          style: pw.TextStyle(font: ttf),
+                          textDirection: pw.TextDirection.rtl,
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'نمرة الخيط :',
-                          style: pw.TextStyle(font: ttf),
+                          style: pw.TextStyle(font: fontBe),
                         ),
                       ],
                     ),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
-                        pw.Text(
-                          'Length : ',
-                          style: pw.TextStyle(font: ttf),
-                        ),
+                        pw.Text('Uzunluk : ',
+                            style: pw.TextStyle(font: fontBe)),
                         pw.Text(
                           '$firstName $lastName',
-                          style: pw.TextStyle(font: ttf),
+                          textDirection: pw.TextDirection.rtl,
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'الطول :',
-                          style: pw.TextStyle(font: ttf),
+                          style: pw.TextStyle(font: fontBe),
                         ),
                       ],
                     ),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
-                        pw.Text(
-                          'Quantity : ',
-                          style: pw.TextStyle(font: ttf),
-                        ),
+                        pw.Text('Adet : ', style: pw.TextStyle(font: fontBe)),
                         pw.Text(
                           '$selectedShift',
-                          style: pw.TextStyle(font: ttf),
+                          textDirection: pw.TextDirection.rtl,
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'العدد :',
-                          style: pw.TextStyle(font: ttf),
+                          style: pw.TextStyle(font: fontBe),
                         ),
                       ],
                     ),
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
-                        pw.Text(
-                          'Date : ',
-                          style: pw.TextStyle(font: ttf),
-                        ),
+                        pw.Text('Tarih : ', style: pw.TextStyle(font: fontBe)),
                         pw.Text(
                           '$dataTime',
-                          style: pw.TextStyle(font: ttf),
+                          style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'التاريخ :',
-                          style: pw.TextStyle(font: ttf),
+                          style: pw.TextStyle(font: fontBe),
                         ),
                       ],
                     ),
@@ -576,25 +568,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         ),
                       ),
                     ),
-                    pw.SizedBox(height: 3),
-                    pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pw.Text(
-                          'Date : ',
-                          style: pw.TextStyle(font: ttftr),
-                        ),
-                        pw.Text(
-                          '$dataTime',
-                          style: pw.TextStyle(font: ttftr),
-                        ),
-                        pw.Text(
-                          textDirection: pw.TextDirection.rtl,
-                          'التاريخ :',
-                          style: pw.TextStyle(font: ttftr),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -604,10 +577,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 child: pw.Text(
                   S().company_name,
                   style: pw.TextStyle(
-                    font: ttftr,
-                    fontSize: 8,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
+                      font: fontBe,
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold),
                 ),
               ),
               pw.Center(
@@ -615,7 +587,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   S().addres,
                   style: pw.TextStyle(
                     fontSize: 6,
-                    font: ttftr,
+                    font: fontBe,
                     fontWeight: pw.FontWeight.normal,
                   ),
                 ),
