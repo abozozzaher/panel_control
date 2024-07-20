@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../generated/l10n.dart';
 import '../model/user.dart';
+import '../service/app_drawer.dart';
 import 'auth/login_page.dart';
 import 'package:intl/intl.dart';
 
@@ -97,39 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                S().menu,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.brightness_6),
-              title: Text(S().toggle_theme),
-              onTap: widget.toggleTheme,
-            ),
-            ListTile(
-              leading: Icon(Icons.language),
-              title: Text(S().toggle_language),
-              onTap: widget.toggleLocale,
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text(S().logout),
-              onTap: _logout,
-            ),
-          ],
-        ),
+      drawer: AppDrawer(
+        toggleTheme: widget.toggleTheme,
+        toggleLocale: widget.toggleLocale,
       ),
       body: _currentUserData != null
           ? SingleChildScrollView(
@@ -158,13 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (work)
                       ElevatedButton.icon(
                         onPressed: () {
-                          /*
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddNewItemScreen()),
-                          );
-                          */
                           context.go('/add');
                         },
                         icon: Icon(Icons.add_sharp),
@@ -183,6 +147,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         icon: Icon(Icons.qr_code_scanner),
                         label: Text('${S().scan} ${S().item}'),
                       ),
+                    SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context.go('/test');
+                      },
+                      icon: Icon(Icons.error_outline),
+                      label: Text('${S().scan} ${S().error}'),
+                    ),
                   ],
                 ),
               ),

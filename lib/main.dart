@@ -75,22 +75,24 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       GoRoute(
-        // path: '/products/productsForAllMonths/:monthFolder/:documentId',
-        path: '/products/:monthFolder/:documentId',
+        path: '/:monthFolder/:productId',
         builder: (context, state) {
           final monthFolder = state.pathParameters['monthFolder'];
 
-          final documentId = state.pathParameters['documentId'];
+          final productId = state.pathParameters['productId'];
 
           return ProductPage(
             monthFolder: monthFolder,
-            documentId: documentId,
+            productId: productId,
           );
         },
       ),
       GoRoute(
         path: '/test',
-        builder: (context, state) => TestPage(),
+        builder: (context, state) => TestPage(
+          toggleTheme: _toggleTheme,
+          toggleLocale: _toggleLocale,
+        ),
       ),
       GoRoute(
         path: '/register',
@@ -102,7 +104,10 @@ class _MyAppState extends State<MyApp> {
       ),
       GoRoute(
         path: '/add',
-        builder: (context, state) => AddNewItemScreen(),
+        builder: (context, state) => AddNewItemScreen(
+          toggleTheme: _toggleTheme,
+          toggleLocale: _toggleLocale,
+        ),
       ),
     ],
     errorPageBuilder: (context, state) => MaterialPage(
@@ -125,13 +130,13 @@ class _MyAppState extends State<MyApp> {
         title: S().blue_textiles,
         theme: ThemeData(
           brightness: Brightness.light,
-          fontFamily: 'Tajawal',
+          fontFamily: 'Beiruti',
           colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.blueGrey, brightness: Brightness.light),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
-          fontFamily: 'Tajawal',
+          fontFamily: 'Beiruti',
           colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.yellowAccent, brightness: Brightness.dark),
         ),

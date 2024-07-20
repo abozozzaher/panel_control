@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:panel_control/generated/l10n.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductPage extends StatelessWidget {
-  final String? documentId;
+  final String? productId;
   final String? monthFolder;
 
   const ProductPage(
-      {Key? key, required this.documentId, required this.monthFolder})
+      {Key? key, required this.productId, required this.monthFolder})
       : super(key: key);
 
   @override
@@ -14,6 +16,14 @@ class ProductPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Product Details'),
+        centerTitle: true, // توسيط العنوان
+        leading: IconButton(
+          // زر في الطرف الأيسر
+          icon: Icon(Icons.web),
+          onPressed: () {
+            _launchURL('https://textile.bluedukkan.com'); // تحديد الرابط هنا
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -23,7 +33,7 @@ class ProductPage extends StatelessWidget {
                 .doc(
                     'productsForAllMonths') // اسم المجلد الذي يحتوي على جميع الشهور
                 .collection(monthFolder!) // اسم المجلد الشهر
-                .doc(documentId) // معرف المستند الذي نريد عرضه
+                .doc(productId) // معرف المستند الذي نريد عرضه
                 .get(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,17 +48,15 @@ class ProductPage extends StatelessWidget {
 
               var productData = snapshot.data!.data() as Map<String, dynamic>;
               print(monthFolder);
-              print(documentId);
+              print(productId);
 
               // استخدام البيانات المستردة لعرضها
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Product ID: ${productData['productId']}'),
-                  // يمكنك استخدام مزيد من الحقول هنا لعرض المعلومات الأخرى
-
-                  Text('Type: ${productData['type']}',
+                  Text('Product ID: ${productData['productId'] ?? ''}'),
+                  Text('Type: ${productData['type'] ?? ''}',
                       style: const TextStyle(fontSize: 18)),
                   Text('Width: ${productData['width']}',
                       style: const TextStyle(fontSize: 18)),
@@ -71,7 +79,7 @@ class ProductPage extends StatelessWidget {
                   Text('Created By: ${productData['created_by']}',
                       style: const TextStyle(fontSize: 18)),
                   Text(
-                      'Sale Status: ${productData['saleـstatus'] ? 'Sold' : 'Available'}',
+                      'Sale Status: ${productData['saleـstatus'] ? S().sold : S().available}',
                       style: const TextStyle(fontSize: 18)),
                   if (productData['image_url'] != '')
                     Image.network(productData['image_url']),
@@ -82,5 +90,14 @@ class ProductPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // دالة لفتح رابط الويب
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

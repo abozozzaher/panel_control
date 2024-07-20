@@ -430,11 +430,51 @@ class S {
     );
   }
 
+  /// `Sold`
+  String get sold {
+    return Intl.message(
+      'Sold',
+      name: 'sold',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Available`
+  String get available {
+    return Intl.message(
+      'Available',
+      name: 'available',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Menu`
   String get menu {
     return Intl.message(
       'Menu',
       name: 'menu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ`
+  String get company_name {
+    return Intl.message(
+      'ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ',
+      name: 'company_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Türkiye Gaziantep Sanayi MAH. 60092`
+  String get addres {
+    return Intl.message(
+      'Türkiye Gaziantep Sanayi MAH. 60092',
+      name: 'addres',
       desc: '',
       args: [],
     );

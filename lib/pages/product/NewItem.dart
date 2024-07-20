@@ -1,9 +1,16 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:html' as html;
+import 'package:barcode/barcode.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -13,13 +20,16 @@ import 'package:path/path.dart' as path;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:file_picker/file_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:image/image.dart' as img;
-import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
+import '../../service/app_drawer.dart';
 
 class AddNewItemScreen extends StatefulWidget {
+  final VoidCallback toggleTheme;
+  final VoidCallback toggleLocale;
+
+  const AddNewItemScreen(
+      {super.key, required this.toggleTheme, required this.toggleLocale});
   @override
   _AddNewItemScreenState createState() => _AddNewItemScreenState();
 }
@@ -76,7 +86,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     yarnNumbers = await fetchData('yarn_numbers', 'values');
     shift = await fetchData('shift', 'values');
     setState(() {
-      selectedType = types.isNotEmpty ? null : null;
+      selectedType = types.isNotEmpty ? types[0] : null; // null : null;
       selectedWidth = widths.isNotEmpty ? widths[3] : null;
       selectedWeight = weights.isNotEmpty ? weights[0] : null;
       selectedColor = colors.isNotEmpty ? colors[0] : null;
@@ -152,7 +162,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(S().confirm + S().item + S().details),
+          title: Text('${S().confirm} ${S().item} ${S().details}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -232,11 +242,12 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   'created_by': userId,
                   'saleـstatus': false,
                   if (imageUrl != null) 'image_url': imageUrl,
+                  //444
                   if (imageUrl == null) 'image_url': '',
                 });
 
                 // Generate and print PDF
-                //   await generateAndPrintPDF(productId, imageUrl);
+                await generateAndPrintPDF(productId, imageUrl, yearMonth);
 
                 // تأخير لمدة 2 ثانية قبل إظهار Snackbar
                 //    await Future.delayed(Duration(seconds: 2));
@@ -250,7 +261,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
                 // Reset fields and generate new product ID
                 setState(() {
-                  selectedType = types.isNotEmpty ? null : null;
+                  selectedType =
+                      types.isNotEmpty ? types[0] : null; //  null : null;
                   selectedWidth = widths.isNotEmpty ? widths[3] : null;
                   selectedWeight = weights.isNotEmpty ? weights[0] : null;
                   selectedColor = colors.isNotEmpty ? colors[0] : null;
@@ -300,71 +312,322 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   String generateCode() {
     String date = DateTime.now().toString().replaceAll(RegExp(r'[^0-9]'), '');
     return date; // Dynamic serial number should be updated
-
-    //  return date; // Dynamic serial number should be updated
   }
 
-  Future<void> generateAndPrintPDF(String productId, String? imageUrl) async {
+  Future<void> generateAndPrintPDF(
+      String productId, String? imageUrl, String? yearMonth) async {
     final pdf = pw.Document();
     String productUrl =
-        "https://panel-control-company-zaher.web.app/products/$productId"; // Replace with your product URL
+        "https://panel-control-company-zaher.web.app/$yearMonth/$productId"; // Replace with your product URL
+
+    // Load the NotoSans font
+    //  final font = await rootBundle.load("assets/fonts/Tajawal-Medium.ttf");
+    final font = await rootBundle.load("assets/fonts/Beiruti.ttf");
+
+    final ttf = pw.Font.ttf(font);
+    final fonttr = await rootBundle.load("assets/fonts/Beiruti.ttf");
+    final ttftr = pw.Font.ttf(fonttr);
+
+    DateTime now = DateTime.now();
+
+    String dataTime = DateFormat('  yyyy - MM - dd  ').format(now);
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/img/logo.png')).buffer.asUint8List(),
+    );
     // Generate QR code image
     final qrCodeImage = await generateQRCodeImage(productUrl);
+    //  final pdf417CodeImage = await generatePdf417Image(productUrl);
+    double heighPdf = 70;
+    double widthPdf = heighPdf * 3;
 
     pdf.addPage(
       pw.Page(
+        pageFormat: PdfPageFormat.a6.copyWith(
+          marginBottom: 5.0,
+          marginLeft: 5.0,
+          marginTop: 5.0,
+          marginRight: 5.0,
+        ),
         build: (pw.Context context) {
           return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            //    crossAxisAlignment: pw.CrossAxisAlignment.center,
             children: [
-              pw.Text('Product Information'),
-              pw.Text('Product ID: $productId'),
-              pw.SizedBox(height: 10),
-              pw.Text('Type: $selectedType'),
-              pw.Text('Width: $selectedWidth'),
-              pw.Text('Weight: $selectedWeight'),
-              pw.Text('Color: $selectedColor'),
-              pw.Text('Yarn Number: $selectedYarnNumber'),
-              pw.Text('Created by: $firstName $lastName'),
-              pw.Text('User ID: $userId'),
-              pw.Text('Shift: $selectedShift'),
-              pw.SizedBox(height: 10),
-              pw.Image(pw.MemoryImage(qrCodeImage)),
-              if (imageUrl != null)
-                pw.Image(
-                    pw.MemoryImage(
-                        File('assets/img/friend.png').readAsBytesSync()),
-                    width: 100,
-                    height: 100),
+              pw.Row(
+                crossAxisAlignment: pw.CrossAxisAlignment.center,
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  pw.Expanded(
+                    child: pw.Container(
+                      alignment: pw.Alignment.topLeft,
+                      margin: pw.EdgeInsets.all(5.0), // 5mm margin around image
+                      child: pw.Image(profileImage),
+                    ),
+                  ),
+                  pw.Expanded(
+                    child: pw.Container(
+                      height: 50,
+                      alignment: pw.Alignment.center,
+                      child: pw.Text(
+                        S().blue_textiles,
+                        style: pw.TextStyle(
+                          font: ttf,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    child: pw.Container(
+                      alignment: pw.Alignment.topRight,
+                      margin: pw.EdgeInsets.all(5.0), // 5mm margin around image
+                      child: pw.Image(pw.MemoryImage(qrCodeImage)),
+                    ),
+                  ),
+                ],
+              ),
+              pw.Divider(thickness: 0.1),
+              pw.Padding(
+                padding: pw.EdgeInsets.all(5.0), // 5mm margin around text
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  mainAxisSize: pw.MainAxisSize.min,
+                  children: [
+                    pw.Text(
+                      'Product Information',
+                      style: pw.TextStyle(
+                        font: ttf,
+                        fontSize: 18,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                    pw.SizedBox(height: 5),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'ID : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$productId',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'المنتج :',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Type : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$selectedType',
+                          style: pw.TextStyle(font: ttftr),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'النوع :',
+                          style: pw.TextStyle(font: ttftr),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Width : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$selectedWidth',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'العرض :',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Weight : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$selectedWeight',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'الوزن :',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Color : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$selectedColor',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'اللون :',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Yarn Number : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$selectedYarnNumber',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'نمرة الخيط :',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Length : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$firstName $lastName',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'الطول :',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Quantity : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$selectedShift',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'العدد :',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Date : ',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          '$dataTime',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'التاريخ :',
+                          style: pw.TextStyle(font: ttf),
+                        ),
+                      ],
+                    ),
+                    pw.SizedBox(height: 3),
+                    pw.Center(
+                      child: pw.Container(
+                        margin: pw.EdgeInsets.all(2),
+                        child: pw.BarcodeWidget(
+                          barcode: pw.Barcode.pdf417(),
+                          data: productUrl,
+                          width: widthPdf,
+                          height: heighPdf,
+                        ),
+                      ),
+                    ),
+                    pw.SizedBox(height: 3),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Date : ',
+                          style: pw.TextStyle(font: ttftr),
+                        ),
+                        pw.Text(
+                          '$dataTime',
+                          style: pw.TextStyle(font: ttftr),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'التاريخ :',
+                          style: pw.TextStyle(font: ttftr),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 2),
+              pw.Divider(thickness: 0.2),
+              pw.Center(
+                child: pw.Text(
+                  S().company_name,
+                  style: pw.TextStyle(
+                    font: ttftr,
+                    fontSize: 8,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+              pw.Center(
+                child: pw.Text(
+                  S().addres,
+                  style: pw.TextStyle(
+                    fontSize: 6,
+                    font: ttftr,
+                    fontWeight: pw.FontWeight.normal,
+                  ),
+                ),
+              ),
             ],
           );
         },
       ),
     );
 
-    if (!kIsWeb && Platform.isMacOS) {
-      await Printing.layoutPdf(
-        onLayout: (PdfPageFormat format) async => pdf.save(),
-      );
-    } else {
-      // Handle non-macOS platforms or web
-      // You can show an error message or fallback mechanism here
-      print('PDF printing is not supported on this platform.');
-      // Optionally, you can provide a different behavior or inform the user
-      // await launchInBrowser("https://admin.bluedukkan.com/products/$productId");
-    }
-    // Open a new tab in Google Chrome after saving data in PDF
-    final url =
-        "https://panel-control-company-zaher.web.app/products/$productId";
-    if (kIsWeb) {
-      html.window.open(url, '_blank');
-    } else {
-      if (await canLaunch(url)) {
-        await launch(url, forceSafariVC: false, forceWebView: false);
-      } else {
-        throw 'Could not launch $url';
-      }
-    }
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => pdf.save());
   }
 
   Future<Uint8List> generateQRCodeImage(String data) async {
@@ -390,6 +653,16 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     }
   }
 
+/*
+  Future<Uint8List> generatePdf417Image(String data) async {
+    final pdf417 = Barcode.pdf417();
+ // Create an image
+
+    
+  }
+
+*/
+
   Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();
     if (kIsWeb) {
@@ -409,10 +682,24 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.width < 600;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${S().add} ${S().new1} ${S().item}'),
         centerTitle: true,
+        leading: isMobile
+            ? IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  context.go('/');
+                },
+              )
+            : null,
+      ),
+      drawer: AppDrawer(
+        toggleTheme: widget.toggleTheme,
+        toggleLocale: widget.toggleLocale,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())

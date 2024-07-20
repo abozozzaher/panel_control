@@ -37,7 +37,11 @@
     "error" : "Error",
     "scan": "Scan",
     "please_fill_all_fields":"Please fill all fields",
-    "menu" : "Menu"
+    "sold" : "Sold",
+    "available" : "Available",
+    "menu" : "Menu",
+    "company_name"  : "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
+    "addres" : "Türkiye Gaziantep Sanayi MAH. 60092"
   
   }
   
