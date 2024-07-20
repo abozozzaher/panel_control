@@ -219,8 +219,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   }
                 }
 
-                String yearMonth =
-                    '${DateTime.now().year}-${DateTime.now().month}';
+                // String yearMonth ='${DateTime.now().year}-${DateTime.now().month}';
+                String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
                 String documentPath =
                     'productsForAllMonths/$yearMonth/$productId';
 
@@ -292,7 +292,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   }
 
   Future<String> uploadImageToStorage(XFile? image) async {
-    String yearMonth = '${DateTime.now().year}-${DateTime.now().month}';
+    // String yearMonth = '${DateTime.now().year}-${DateTime.now().month}';
+    String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
     String day = '${DateTime.now().day}';
     Reference storageReference = FirebaseStorage.instance.ref().child(
         'products/$yearMonth/$day/${image != null ? path.basename(image.path) : '$productId.jpg'}');
@@ -624,16 +625,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       throw Exception('Could not generate QR code');
     }
   }
-
-/*
-  Future<Uint8List> generatePdf417Image(String data) async {
-    final pdf417 = Barcode.pdf417();
- // Create an image
-
-    
-  }
-
-*/
 
   Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();

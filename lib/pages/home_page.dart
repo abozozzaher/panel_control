@@ -138,11 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (work)
                       ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ScanItemQr()),
-                          );
+                          context.go('/scan');
                         },
                         icon: Icon(Icons.qr_code_scanner),
                         label: Text('${S().scan} ${S().item}'),

@@ -13,6 +13,7 @@ import 'pages/auth/login_page.dart';
 import 'pages/home_page.dart';
 import 'pages/product/NewItem.dart';
 import 'pages/product/ProductPage.dart';
+import 'pages/product/ScanItem.dart';
 import 'test.dart';
 
 void main() async {
@@ -105,6 +106,13 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
         path: '/add',
         builder: (context, state) => AddNewItemScreen(
+          toggleTheme: _toggleTheme,
+          toggleLocale: _toggleLocale,
+        ),
+      ),
+      GoRoute(
+        path: '/scan',
+        builder: (context, state) => ScanItemQr(
           toggleTheme: _toggleTheme,
           toggleLocale: _toggleLocale,
         ),
