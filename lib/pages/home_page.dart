@@ -151,6 +151,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       icon: Icon(Icons.error_outline),
                       label: Text('${S().scan} ${S().error}'),
                     ),
+                    SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context.go('/test');
+                      },
+                      icon: Icon(Icons.error_outline),
+                      label: Text('${S().scan} ${S().error}'),
+                    ),
                   ],
                 ),
               ),

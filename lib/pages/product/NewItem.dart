@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
-import 'dart:html' as html;
+import 'dart:ui' as ui;
 import 'package:barcode/barcode.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -603,7 +602,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         onLayout: (PdfPageFormat format) async => pdf.save());
   }
 
-  Future<Uint8List> generateQRCodeImage(String data) async {
+  Future<Uint8List> generateQRCodeImage(String data, {int size = 400}) async {
     final qrValidationResult = QrValidator.validate(
       data: data,
       version: QrVersions.auto,
@@ -619,12 +618,17 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         gapless: true,
       );
 
-      final image = await painter.toImageData(100);
-      return image!.buffer.asUint8List();
+      // Create an image with the specified size (default is 400)
+      final ui.Image image = await painter.toImage(size as double);
+      final ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      return byteData!.buffer.asUint8List();
     } else {
       throw Exception('Could not generate QR code');
     }
   }
+
+
 
   Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();

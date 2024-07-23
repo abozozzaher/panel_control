@@ -106,21 +106,13 @@ packages:
     source: hosted
     version: "4.0.0"
   barcode:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: barcode
       sha256: ab180ce22c6555d77d45f0178a523669db67f95856e3378259ef2ffeb43e6003
       url: "https://pub.dev"
     source: hosted
     version: "2.2.8"
-  barcode_scan2:
-    dependency: "direct main"
-    description:
-      name: barcode_scan2
-      sha256: a2ab566027cd57b2795ea42aa26835dbaa8fe70bcc1aff54942a14d3705dff97
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.3.3"
   bidi:
     dependency: transitive
     description:
@@ -161,6 +153,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  camera:
+    dependency: "direct main"
+    description:
+      name: camera
+      sha256: "2170a943dcb67be2af2c6bcda8775e74b41d4c02d6a4eb10bdc832ee185c4eea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.11.0+1"
+  camera_android_camerax:
+    dependency: transitive
+    description:
+      name: camera_android_camerax
+      sha256: "7c03940cb8c92eb5b184952674a07cc4a73c6ba2b3568aad70255ad4cb913660"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.7+1"
+  camera_avfoundation:
+    dependency: transitive
+    description:
+      name: camera_avfoundation
+      sha256: b5093a82537b64bb88d4244f8e00b5ba69e822a5994f47b31d11400e1db975e5
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.17+1"
+  camera_platform_interface:
+    dependency: transitive
+    description:
+      name: camera_platform_interface
+      sha256: b3ede1f171532e0d83111fe0980b46d17f1aa9788a07a2fbed07366bbdbb9061
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.8.0"
+  camera_web:
+    dependency: "direct main"
+    description:
+      name: camera_web
+      sha256: b9235ec0a2ce949daec546f1f3d86f05c3921ed31c7d9ab6b7c03214d152fc2d
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4"
   characters:
     dependency: transitive
     description:
@@ -233,14 +265,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  csslib:
-    dependency: transitive
-    description:
-      name: csslib
-      sha256: "706b5707578e0c1b4b7550f64078f0a0f19dec3f50a178ffae7006b0a9ca58fb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -438,14 +462,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_barcode_scanner:
-    dependency: "direct main"
-    description:
-      name: flutter_barcode_scanner
-      sha256: a4ba37daf9933f451a5e812c753ddd045d6354e4a3280342d895b07fecaab3fa
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -499,14 +515,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.1"
-  flutter_svg:
-    dependency: "direct main"
-    description:
-      name: flutter_svg
-      sha256: "7b4ca6cf3304575fe9c8ec64813c8d02ee41d2afe60bcfe0678bcb5375d596a2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.10+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -525,6 +533,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttertoast:
+    dependency: "direct main"
+    description:
+      name: fluttertoast
+      sha256: "7eae679e596a44fdf761853a706f74979f8dd3cd92cf4e23cae161fda091b847"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.2.6"
   glob:
     dependency: transitive
     description:
@@ -541,16 +557,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.2.1"
-  google_ml_kit:
-    dependency: "direct main"
-    description:
-      name: google_ml_kit
-      sha256: e99c8436b81a670dc37dfc4df616637b95b0dbff4896fa8586421497fce1eb98
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.18.0"
   google_mlkit_barcode_scanning:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_mlkit_barcode_scanning
       sha256: f1a2a39cf1730b9a5e2784a07efa1ca5bfdfdde6aa00b193b3f8cd1953c638ec
@@ -565,110 +573,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.1"
-  google_mlkit_digital_ink_recognition:
-    dependency: transitive
-    description:
-      name: google_mlkit_digital_ink_recognition
-      sha256: "06488a331c4fd2801c2753b801f2d6169ba9593447242828fbfa5960a0ca29a4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.12.0"
-  google_mlkit_entity_extraction:
-    dependency: transitive
-    description:
-      name: google_mlkit_entity_extraction
-      sha256: "38f5ccc38a93a3be45383a13bf45b42c14f88fe45be6ce1e051fdc820345684d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.13.0"
-  google_mlkit_face_detection:
-    dependency: transitive
-    description:
-      name: google_mlkit_face_detection
-      sha256: "5b597061cafe4dfa70f66adddadd19381eb88bd3312b074528c62b246392304b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.11.0"
-  google_mlkit_face_mesh_detection:
-    dependency: transitive
-    description:
-      name: google_mlkit_face_mesh_detection
-      sha256: "6720ca4ff80b56776aff9c454734b7fb09355736467acc34104f5c310675d65c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  google_mlkit_image_labeling:
-    dependency: transitive
-    description:
-      name: google_mlkit_image_labeling
-      sha256: a312f55199ae4550694326018d81b24158a54c2a831bec2ef0ba0b9611edcde8
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.12.0"
-  google_mlkit_language_id:
-    dependency: transitive
-    description:
-      name: google_mlkit_language_id
-      sha256: "37fa373d722b4f712216c4c70313d13add07df196427cfaa3f3d6f9f34b4bf9b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.11.0"
-  google_mlkit_object_detection:
-    dependency: transitive
-    description:
-      name: google_mlkit_object_detection
-      sha256: "8e1d936c81bf33e1c5658a21487af1a6ce0a86d1a21b610b888a4578f8e7c9d1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.13.0"
-  google_mlkit_pose_detection:
-    dependency: transitive
-    description:
-      name: google_mlkit_pose_detection
-      sha256: "9fd037c53f1122127659ea0bcf73e6ed67f1d10d8072a631a629b82d8c4be260"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.12.0"
-  google_mlkit_selfie_segmentation:
-    dependency: transitive
-    description:
-      name: google_mlkit_selfie_segmentation
-      sha256: b7ab1088ed84e7870ffc246fdb49a9f508ea38e4c438b0e27b3222d6441df62b
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.0"
-  google_mlkit_smart_reply:
-    dependency: transitive
-    description:
-      name: google_mlkit_smart_reply
-      sha256: c11aa3caa0031ccdafe80388816f7d9f7c6ab1a07733c6ff725d498a69185d35
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.11.0"
-  google_mlkit_text_recognition:
-    dependency: transitive
-    description:
-      name: google_mlkit_text_recognition
-      sha256: "89c848329355f165ff17ca8645cab5998770e9e25e431fe6dd8261ed9cf7bdc4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.13.0"
-  google_mlkit_translation:
-    dependency: transitive
-    description:
-      name: google_mlkit_translation
-      sha256: "6e346ed299d9c49d1228d2c6773e335a2de5680bd1b0f267c0b024c1d68743b5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.11.0"
-  html:
-    dependency: "direct main"
-    description:
-      name: html
-      sha256: "3a7812d5bcd2894edf53dfaf8cd640876cf6cef50a8f238745c8b8120ea74d3a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.15.4"
   http:
     dependency: "direct main"
     description:
@@ -857,10 +761,10 @@ packages:
     dependency: "direct main"
     description:
       name: mobile_scanner
-      sha256: b8c0e9afcfd52534f85ec666f3d52156f560b5e6c25b1e3d4fe2087763607926
+      sha256: "531725451c7506f4c57b4720da1fe33a1394cdf9d4a5075a3a2dd51e21113928"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "2.1.0"
   nested:
     dependency: transitive
     description:
@@ -1005,14 +909,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.1"
-  protobuf:
-    dependency: transitive
-    description:
-      name: protobuf
-      sha256: "68645b24e0716782e58948f8467fd42a880f255096a821f9e7d0ec625b00c84d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   provider:
     dependency: "direct main"
     description:
@@ -1037,14 +933,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
-  qr_code_scanner:
-    dependency: "direct main"
-    description:
-      name: qr_code_scanner
-      sha256: f23b68d893505a424f0bd2e324ebea71ed88465d572d26bb8d2e78a4749591fd
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   qr_flutter:
     dependency: "direct main"
     description:
@@ -1170,6 +1058,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  stream_transform:
+    dependency: transitive
+    description:
+      name: stream_transform
+      sha256: "14a00e794c7c11aa145a170587321aedce29769c08d7f58b1d141da75e3b1c6f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   string_scanner:
     dependency: transitive
     description:
@@ -1282,30 +1178,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.4.2"
-  vector_graphics:
-    dependency: transitive
-    description:
-      name: vector_graphics
-      sha256: "32c3c684e02f9bc0afb0ae0aa653337a2fe022e8ab064bcd7ffda27a74e288e3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.11+1"
-  vector_graphics_codec:
-    dependency: transitive
-    description:
-      name: vector_graphics_codec
-      sha256: c86987475f162fadff579e7320c7ddda04cd2fdeffbe1129227a85d9ac9e03da
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.11+1"
-  vector_graphics_compiler:
-    dependency: transitive
-    description:
-      name: vector_graphics_compiler
-      sha256: "12faff3f73b1741a36ca7e31b292ddeb629af819ca9efe9953b70bd63fc8cd81"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.11+1"
   vector_math:
     dependency: transitive
     description:

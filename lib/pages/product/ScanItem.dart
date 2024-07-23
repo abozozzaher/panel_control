@@ -1,9 +1,21 @@
-import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pdf_image_renderer/pdf_image_renderer.dart'; // Import the library for handling PDFs
 import '../../generated/l10n.dart';
 import '../../service/app_drawer.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:image/image.dart' as img;
+import 'package:camera/camera.dart';
+import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ScanItemQr extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -17,25 +29,91 @@ class ScanItemQr extends StatefulWidget {
 }
 
 class _ScanItemQrState extends State<ScanItemQr> {
-  final AudioPlayer player = AudioPlayer();
+  final MobileScannerController _cameraController = MobileScannerController();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeCamera();
+  }
+
+  Future<void> _initializeCamera() async {
+    // Ensure the camera is initialized (if needed)
+    await _cameraController.start();
+  }
+
+  void _playSound() async {
+    await _audioPlayer.play(AssetSource('sound/beep.mp3'));
+  }
+
+  void _handleScan(String code) {
+    // Display snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('تم قراءة الكود بنجاح: $code'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+    // Play alert sound
+    _playSound();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('${S().scan} ${S().new1} ${S().item}'),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              context.go('/');
-            },
-          )),
+        title: Text('${S().scan} ${S().new1} ${S().item}'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/');
+          },
+        ),
+      ),
       drawer: AppDrawer(
         toggleTheme: widget.toggleTheme,
         toggleLocale: widget.toggleLocale,
       ),
-      body: Container(),
+      /*    body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            
+            ElevatedButton(
+              onPressed: scanWithCamera,
+              child: Text('Scan QR Code / PDF417'),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: uploadFile,
+              child: Text('Upload Image/PDF'),
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: scannedCodes.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                   // title: Text(scannedCodes[index]),
+                  );
+                },
+              ),
+            ),
+            
+          ],
+        ),
+      ),
+   */
+
+      body: MobileScanner(
+        controller: _cameraController,
+        onDetect: (barcode, args) {
+          final String code = barcode.rawValue ?? 'Unknown';
+          _handleScan(code);
+        },
+      ),
     );
   }
 }
