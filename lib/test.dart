@@ -5,6 +5,14 @@
 // flutter build web --web-renderer html
 // firebase deploy
 // لرفع التطبيق علي اعادة تشغيل الكمبيوتر لتفريغ الكاش
+
+/*
+export ANDROID_HOME=/home/Library/Android/Sdk 
+export PATH=/home/Library/Android/Sdk/platform-tools:$PATH
+export PATH=/home/Library/Android/Sdk/tools:$PATH
+export PATH=/home/Library/Android/ndk-build:$PATH
+export PATH=/Users/zaher-lap-mac/FlutterAll/SDKFlutter/flutter/bin:$PATH
+*/
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pdf/pdf.dart';
