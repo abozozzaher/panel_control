@@ -41,7 +41,7 @@ class _TestPageState extends State<TestPage> {
         centerTitle: true,
         title: Text(S().add),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             context.go('/');
           },
@@ -55,7 +55,7 @@ class _TestPageState extends State<TestPage> {
         child: Center(
           child: ElevatedButton(
             onPressed: _printDocument,
-            child: Text('Print Document'),
+            child: const Text('Print Document'),
           ),
         ),
       ),
@@ -68,14 +68,14 @@ class _TestPageState extends State<TestPage> {
     doc.addPage(
       pw.Page(
         pageFormat:
-            PdfPageFormat(100 * PdfPageFormat.mm, 100 * PdfPageFormat.mm),
+            const PdfPageFormat(100 * PdfPageFormat.mm, 100 * PdfPageFormat.mm),
         build: (pw.Context context) {
           return pw.Container(
             color: PdfColors.red,
             child: pw.Center(
               child: pw.Text(
                 'Hello World',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                   color: PdfColors.white,
                 ),
               ),

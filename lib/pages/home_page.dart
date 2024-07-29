@@ -8,19 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../generated/l10n.dart';
 import '../model/user.dart';
 import '../service/app_drawer.dart';
-import 'auth/login_page.dart';
-import 'package:intl/intl.dart';
 
-import 'product/NewItem.dart';
-import 'product/ScanItem.dart';
 
 class MyHomePage extends StatefulWidget {
   final VoidCallback toggleTheme;
   final VoidCallback toggleLocale;
 
   const MyHomePage(
-      {Key? key, required this.toggleTheme, required this.toggleLocale})
-      : super(key: key);
+      {super.key, required this.toggleTheme, required this.toggleLocale});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -93,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(S().blue_textiles),
         actions: [
           IconButton(
-            icon: Icon(Icons.brightness_6),
+            icon: const Icon(Icons.brightness_6),
             onPressed: widget.toggleTheme,
           ),
         ],
@@ -117,53 +112,53 @@ class _MyHomePageState extends State<MyHomePage> {
                           : CachedNetworkImageProvider(_currentUserData!.image)
                               as ImageProvider,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       '${_currentUserData!.firstName} ${_currentUserData!.lastName}',
-                      style: TextStyle(fontSize: 24),
+                      style: const TextStyle(fontSize: 24),
                     ),
                     Text(_currentUserData!.phone),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text('ID: ${_currentUserData!.id}'),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     if (work)
                       ElevatedButton.icon(
                         onPressed: () {
                           context.go('/add');
                         },
-                        icon: Icon(Icons.add_sharp),
+                        icon: const Icon(Icons.add_sharp),
                         label: Text('${S().add} ${S().item}'),
                       ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     if (work)
                       ElevatedButton.icon(
                         onPressed: () {
                           context.go('/scan');
                         },
-                        icon: Icon(Icons.qr_code_scanner),
+                        icon: const Icon(Icons.qr_code_scanner),
                         label: Text('${S().scan} ${S().item}'),
                       ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton.icon(
                       onPressed: () {
                         context.go('/test');
                       },
-                      icon: Icon(Icons.error_outline),
+                      icon: const Icon(Icons.error_outline),
                       label: Text('${S().scan} ${S().error}'),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton.icon(
                       onPressed: () {
                         context.go('/test');
                       },
-                      icon: Icon(Icons.error_outline),
+                      icon: const Icon(Icons.error_outline),
                       label: Text('${S().scan} ${S().error}'),
                     ),
                   ],
                 ),
               ),
             )
-          : Center(
+          : const Center(
               child: CircularProgressIndicator(),
             ),
     );

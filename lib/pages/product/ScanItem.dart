@@ -1,21 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:pdf_image_renderer/pdf_image_renderer.dart'; // Import the library for handling PDFs
+
 import '../../generated/l10n.dart';
 import '../../service/app_drawer.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:image/image.dart' as img;
-import 'package:camera/camera.dart';
-import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ScanItemQr extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -29,7 +17,7 @@ class ScanItemQr extends StatefulWidget {
 }
 
 class _ScanItemQrState extends State<ScanItemQr> {
-  final MobileScannerController _cameraController = MobileScannerController();
+  // final MobileScannerController _cameraController = MobileScannerController();
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
@@ -40,7 +28,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
   Future<void> _initializeCamera() async {
     // Ensure the camera is initialized (if needed)
-    await _cameraController.start();
+    //  await _cameraController.start();
   }
 
   void _playSound() async {
@@ -52,7 +40,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('تم قراءة الكود بنجاح: $code'),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ),
     );
     // Play alert sound
@@ -66,7 +54,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
         title: Text('${S().scan} ${S().new1} ${S().item}'),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             context.go('/');
           },
@@ -107,13 +95,17 @@ class _ScanItemQrState extends State<ScanItemQr> {
       ),
    */
 
-      body: MobileScanner(
+      body: Container(),
+
+      /*
+      MobileScanner(
         controller: _cameraController,
         onDetect: (barcode, args) {
           final String code = barcode.rawValue ?? 'Unknown';
           _handleScan(code);
         },
       ),
+      */
     );
   }
 }

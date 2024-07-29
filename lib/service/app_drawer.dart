@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../generated/l10n.dart';
 import 'auth_service.dart';
 
@@ -8,8 +7,7 @@ class AppDrawer extends StatelessWidget {
   final VoidCallback toggleLocale;
 
   const AppDrawer(
-      {Key? key, required this.toggleTheme, required this.toggleLocale})
-      : super(key: key);
+      {super.key, required this.toggleTheme, required this.toggleLocale});
 
   @override
   Widget build(BuildContext context) {
@@ -18,29 +16,29 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
             ),
             child: Text(
               S().menu,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
               ),
             ),
           ),
           ListTile(
-            leading: Icon(Icons.brightness_6),
+            leading: const Icon(Icons.brightness_6),
             title: Text(S().toggle_theme),
             onTap: toggleTheme,
           ),
           ListTile(
-            leading: Icon(Icons.language),
+            leading: const Icon(Icons.language),
             title: Text(S().toggle_language),
             onTap: toggleLocale,
           ),
           ListTile(
-            leading: Icon(Icons.logout),
+            leading: const Icon(Icons.logout),
             title: Text(S().logout),
             onTap: () async {
               await AuthService().logout(context);

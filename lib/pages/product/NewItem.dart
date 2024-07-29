@@ -1,16 +1,12 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:barcode/barcode.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -355,7 +351,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   pw.Expanded(
                     child: pw.Container(
                       alignment: pw.Alignment.topLeft,
-                      margin: pw.EdgeInsets.all(5.0), // 5mm margin around image
+                      margin: const pw.EdgeInsets.all(
+                          5.0), // 5mm margin around image
                       child: pw.Image(profileImage),
                     ),
                   ),
@@ -374,7 +371,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   pw.Expanded(
                     child: pw.Container(
                       alignment: pw.Alignment.topRight,
-                      margin: pw.EdgeInsets.all(5.0), // 5mm margin around image
+                      margin: const pw.EdgeInsets.all(
+                          5.0), // 5mm margin around image
                       child: pw.Image(pw.MemoryImage(qrCodeImage)),
                     ),
                   ),
@@ -382,7 +380,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               ),
               pw.Divider(thickness: 0.1),
               pw.Padding(
-                padding: pw.EdgeInsets.all(5.0), // 5mm margin around text
+                padding: const pw.EdgeInsets.all(5.0), // 5mm margin around text
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   mainAxisSize: pw.MainAxisSize.min,
@@ -414,7 +412,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text('ID Kodu : ',
                             style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$productId',
+                          productId,
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
@@ -546,7 +544,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       children: [
                         pw.Text('Tarih : ', style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$dataTime',
+                          dataTime,
                           style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
@@ -559,7 +557,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     pw.SizedBox(height: 3),
                     pw.Center(
                       child: pw.Container(
-                        margin: pw.EdgeInsets.all(2),
+                        margin: const pw.EdgeInsets.all(2),
                         child: pw.BarcodeWidget(
                           barcode: pw.Barcode.pdf417(),
                           data: productUrl,
@@ -628,10 +626,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     }
   }
 
-
-
   Future<void> pickImage() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     if (kIsWeb) {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result != null) {
@@ -640,7 +636,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         });
       }
     } else {
-      final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+      final XFile? image = await picker.pickImage(source: ImageSource.camera);
       setState(() {
         selectedImage = image;
       });
@@ -657,7 +653,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         centerTitle: true,
         leading: isMobile
             ? IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   context.go('/');
                 },
@@ -669,7 +665,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         toggleLocale: widget.toggleLocale,
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -678,18 +674,18 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text('Product ID: $productId'),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       if (selectedImage != null || _webImage != null)
                         kIsWeb
                             ? Image.memory(_webImage!, width: 200, height: 200)
                             : Image.file(File(selectedImage!.path),
                                 width: 200, height: 200),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       ElevatedButton(
-                        child: Text(S().pick_image),
                         onPressed: pickImage,
+                        child: Text(S().pick_image),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildDropdown(
                           '${S().select} ${S().type}', selectedType, types,
                           (value) {
@@ -730,7 +726,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           selectedShift = value;
                         });
                       }, '${S().select} ${S().shift}'),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: addItem,
                         child: Text('${S().add} ${S().item}'),
@@ -748,15 +744,15 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(hintText, style: TextStyle(color: Colors.grey)),
+        Text(hintText, style: const TextStyle(color: Colors.grey)),
         DropdownButton<String>(
           hint: Text(hint),
           value: selectedValue,
           onChanged: onChanged,
           items: items.map((item) {
             return DropdownMenuItem(
-              child: Text(item),
               value: item,
+              child: Text(item),
             );
           }).toList(),
         ),

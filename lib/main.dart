@@ -31,7 +31,7 @@ void main() async {
   final bool isLoggedIn = await _checkLoginStatus();
   usePathUrlStrategy();
 
-  runApp(MyApp(isLoggedIn: isLoggedIn));
+  runApp(MyApp());
 }
 
 Future<bool> _checkLoginStatus() async {
@@ -40,17 +40,20 @@ Future<bool> _checkLoginStatus() async {
 }
 
 class MyApp extends StatefulWidget {
-  final bool isLoggedIn;
+//  final bool isLoggedIn;
 
-  const MyApp({super.key, required this.isLoggedIn});
+//  const MyApp({super.key, required this.isLoggedIn});
+
+
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+
   ThemeMode _themeMode = ThemeMode.light;
-  Locale _locale = Locale('en');
+  Locale _locale = const Locale('en');
 
   void _toggleTheme() {
     setState(() {
@@ -61,12 +64,12 @@ class _MyAppState extends State<MyApp> {
 
   void _toggleLocale() {
     setState(() {
-      _locale = _locale.languageCode == 'en' ? Locale('ar') : Locale('en');
+      _locale = _locale.languageCode == 'en' ? const Locale('ar') : const Locale('en');
     });
   }
 
   late final GoRouter _router = GoRouter(
-    initialLocation: widget.isLoggedIn ? '/' : '/login',
+  //  initialLocation: widget.isLoggedIn ? '/' : '/login',
     routes: [
       GoRoute(
         path: '/',
@@ -120,8 +123,8 @@ class _MyAppState extends State<MyApp> {
     ],
     errorPageBuilder: (context, state) => MaterialPage(
       child: Scaffold(
-        appBar: AppBar(title: Text('Error 404')),
-        body: Center(child: Text('Page not found')),
+        appBar: AppBar(title: const Text('Error 404')),
+        body: const Center(child: Text('Page not found')),
       ),
     ),
   );
@@ -151,7 +154,7 @@ class _MyAppState extends State<MyApp> {
         themeMode: _themeMode,
         locale: _locale,
         supportedLocales: S.delegate.supportedLocales,
-        localizationsDelegates: [
+        localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

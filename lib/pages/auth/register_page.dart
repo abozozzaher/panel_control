@@ -139,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
         title: Text(S().register),
         actions: [
           IconButton(
-            icon: Icon(Icons.brightness_6),
+            icon: const Icon(Icons.brightness_6),
             onPressed: widget.toggleTheme,
           ),
         ],
@@ -148,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Center(
           child: Container(
             width: 500,
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
@@ -157,11 +157,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   Image.file(_image!, width: 200, height: 200),
                 if (_webImage != null)
                   Image.memory(_webImage!, width: 200, height: 200),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: _pickImage,
-                  icon: Icon(Icons.image_search_outlined),
-                  label: Text(S().select + ' ' + S().pick_image),
+                  icon: const Icon(Icons.image_search_outlined),
+                  label: Text('${S().select} ${S().pick_image}'),
                 ),
                 /*
                 ElevatedButton.icon(
@@ -178,7 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       : Text(S().select + ' ' + S().pick_image),
                 ),
                 */
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   controller: _firstNameController,
                   decoration: InputDecoration(labelText: S().first_name),
@@ -200,26 +200,26 @@ class _RegisterPageState extends State<RegisterPage> {
                   decoration: InputDecoration(labelText: S().password),
                   obscureText: true,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: _loading
                       ? null
                       : _register, // تعيين الوظيفة غير متاحة أثناء التحميل
-                  icon: Icon(Icons.account_box_outlined),
+                  icon: const Icon(Icons.account_box_outlined),
                   label: _loading
-                      ? SizedBox(
+                      ? const SizedBox(
                           width: 24,
                           height: 24,
                           child: CircularProgressIndicator(),
                         )
                       : Text(S().register),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: () {
                     context.go('/login');
                   },
-                  icon: Icon(Icons.login),
+                  icon: const Icon(Icons.login),
                   label: Text(S().login),
                 ),
                 if (_errorMessage != null)
@@ -227,7 +227,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
               ],

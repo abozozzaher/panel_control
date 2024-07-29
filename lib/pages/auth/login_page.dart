@@ -4,13 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:panel_control/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../home_page.dart';
-import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback toggleTheme;
 
-  const LoginPage({required this.toggleTheme});
+  const LoginPage({super.key, required this.toggleTheme});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -29,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         title: Text(S().login),
         actions: [
           IconButton(
-            icon: Icon(Icons.brightness_6),
+            icon: const Icon(Icons.brightness_6),
             onPressed: widget.toggleTheme,
           ),
         ],
@@ -37,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: Container(
           width: 500,
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -50,10 +48,10 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(labelText: S().password),
                 obscureText: true,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: _login,
-                icon: Icon(Icons.login),
+                icon: const Icon(Icons.login),
                 label: Text(S().login),
               ),
               if (_errorMessage != null)
@@ -61,22 +59,22 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     _errorMessage!,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: _resetPassword,
-                icon: Icon(Icons.published_with_changes_rounded),
+                icon: const Icon(Icons.published_with_changes_rounded),
                 label: Text(S().forgot_password),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () {
                   context.go('/register');
                 },
                 label: Text(S().register),
-                icon: Icon(Icons.account_box_outlined),
+                icon: const Icon(Icons.account_box_outlined),
               ),
             ],
           ),

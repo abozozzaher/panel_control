@@ -8,18 +8,17 @@ class ProductPage extends StatelessWidget {
   final String? monthFolder;
 
   const ProductPage(
-      {Key? key, required this.productId, required this.monthFolder})
-      : super(key: key);
+      {super.key, required this.productId, required this.monthFolder});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Details'),
+        title: const Text('Product Details'),
         centerTitle: true, // توسيط العنوان
         leading: IconButton(
           // زر في الطرف الأيسر
-          icon: Icon(Icons.web),
+          icon: const Icon(Icons.web),
           onPressed: () {
             _launchURL('https://textile.bluedukkan.com'); // تحديد الرابط هنا
           },
@@ -37,13 +36,13 @@ class ProductPage extends StatelessWidget {
                 .get(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               }
               if (!snapshot.hasData || snapshot.data == null) {
-                return Text('No data found.');
+                return const Text('No data found.');
               }
 
               var productData = snapshot.data!.data() as Map<String, dynamic>;
