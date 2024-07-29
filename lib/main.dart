@@ -44,14 +44,11 @@ class MyApp extends StatefulWidget {
 
 //  const MyApp({super.key, required this.isLoggedIn});
 
-
-
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
   ThemeMode _themeMode = ThemeMode.light;
   Locale _locale = const Locale('en');
 
@@ -64,12 +61,14 @@ class _MyAppState extends State<MyApp> {
 
   void _toggleLocale() {
     setState(() {
-      _locale = _locale.languageCode == 'en' ? const Locale('ar') : const Locale('en');
+      _locale = _locale.languageCode == 'en'
+          ? const Locale('ar')
+          : const Locale('en');
     });
   }
 
   late final GoRouter _router = GoRouter(
-  //  initialLocation: widget.isLoggedIn ? '/' : '/login',
+    //  initialLocation: widget.isLoggedIn ? '/' : '/login',
     routes: [
       GoRoute(
         path: '/',
@@ -109,16 +108,12 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
         path: '/add',
         builder: (context, state) => AddNewItemScreen(
-          toggleTheme: _toggleTheme,
-          toggleLocale: _toggleLocale,
-        ),
+            toggleTheme: _toggleTheme, toggleLocale: _toggleLocale),
       ),
       GoRoute(
         path: '/scan',
-        builder: (context, state) => ScanItemQr(
-          toggleTheme: _toggleTheme,
-          toggleLocale: _toggleLocale,
-        ),
+        builder: (context, state) =>
+            ScanItemQr(toggleTheme: _toggleTheme, toggleLocale: _toggleLocale),
       ),
     ],
     errorPageBuilder: (context, state) => MaterialPage(

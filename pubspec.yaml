@@ -71,6 +71,8 @@ dependencies:
   go_router: ^14.2.0
 #  flutter_easyloading: ^3.0.5
   audioplayers: ^6.0.0
+  permission_handler: ^11.3.1
+
  # fluttertoast: ^8.2.6
 
 

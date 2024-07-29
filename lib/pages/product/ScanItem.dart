@@ -1,6 +1,12 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 import '../../generated/l10n.dart';
 import '../../service/app_drawer.dart';
@@ -11,40 +17,177 @@ class ScanItemQr extends StatefulWidget {
 
   const ScanItemQr(
       {super.key, required this.toggleTheme, required this.toggleLocale});
-
   @override
-  _ScanItemQrState createState() => _ScanItemQrState();
+  State<StatefulWidget> createState() => _ScanItemQrState();
 }
 
 class _ScanItemQrState extends State<ScanItemQr> {
-  // final MobileScannerController _cameraController = MobileScannerController();
-  final AudioPlayer _audioPlayer = AudioPlayer();
-
+  MobileScannerController controller = MobileScannerController();
+  List<String> scannedData = [];
+  final AudioPlayer audioPlayer = AudioPlayer();
+  bool _isDialogShowing = false;
+  Timer? _timer;
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
+    _requestCameraPermission();
+    _startTimer();
   }
 
-  Future<void> _initializeCamera() async {
-    // Ensure the camera is initialized (if needed)
-    //  await _cameraController.start();
+  Future<void> _requestCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (status.isDenied) {
+      if (await Permission.camera.request().isGranted) {
+        print('Camera permission granted');
+      }
+    }
+    if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
   }
 
-  void _playSound() async {
-    await _audioPlayer.play(AssetSource('sound/beep.mp3'));
+  void _startTimer() {
+    _timer = Timer(Duration(hours: 1), () {
+      setState(() {
+        scannedData.clear();
+      });
+    });
   }
 
-  void _handleScan(String code) {
-    // Display snackbar
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('تم قراءة الكود بنجاح: $code'),
-        duration: const Duration(seconds: 2),
-      ),
+  Future<void> _playSound(String path) async {
+    await audioPlayer.play(AssetSource(path));
+  }
+
+  void _showDuplicateDialog(String code) {
+    if (_isDialogShowing) return; // التحقق من عدم إظهار مربع الحوار مسبقًا
+    _isDialogShowing = true; // ضبط المتغير إلى true لإظهار مربع الحوار
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Duplicate Code'),
+          content: Text('The code "$code" has already been scanned.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _isDialogShowing =
+                    false; // إعادة ضبط المتغير إلى false عند إغلاق مربع الحوار
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
-    // Play alert sound
-    _playSound();
+  }
+
+  Future<Map<String, dynamic>?> _fetchDataFromFirebase(String url) async {
+    try {
+      // استخراج الجزء المهم من الرابط
+      String baseUrl = 'https://panel-control-company-zaher.web.app/';
+      if (!url.startsWith(baseUrl)) {
+        throw FormatException('Invalid URL format');
+      }
+
+      // إزالة الجزء الأول من الرابط
+      String remainingPath = url.substring(baseUrl.length);
+
+      // استخراج المجلد الشهري ومعرف المنتج من المسار المتبقي
+      String monthFolder = remainingPath.substring(0, 7); // السبع خانات الأولى
+      String productId = remainingPath.substring(8); // ما تبقى هو معرف المنتج
+      print('monthFolder');
+      print(monthFolder);
+      print('productId');
+      print(productId);
+      // استعلام البيانات من Firestore
+      DocumentSnapshot document = await FirebaseFirestore.instance
+          .collection('products') // اسم المجموعة في Firestore
+          .doc('productsForAllMonths') // اسم المجلد الذي يحتوي على جميع الشهور
+          .collection(monthFolder) // اسم المجلد الشهر
+          .doc(productId) // معرف المستند الذي نريد عرضه
+          .get();
+      print('monthFolder');
+      print(monthFolder);
+      print('productId');
+      print(productId);
+      return document.exists ? document.data() as Map<String, dynamic>? : null;
+    } catch (e) {
+      print('Error fetching data: $e');
+
+      return null;
+    }
+  }
+
+  void _showDetailsDialog(String code, Map<String, dynamic>? data) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Details for $code'),
+          content: data != null
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: data.entries.map((entry) {
+                    return ListTile(
+                      title: Text('${entry.key}: ${entry.value}'),
+                      // title: Text(data['color']),
+                    );
+                  }).toList(),
+                )
+              : Text('No data found for this code.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showAddCodeDialog() async {
+    TextEditingController codeController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Code'),
+          content: TextField(
+            controller: codeController,
+            decoration: InputDecoration(hintText: 'Enter code here'),
+            keyboardType: TextInputType.number,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            ValueListenableBuilder(
+                valueListenable: codeController,
+                builder: (context, value, child) {
+                  return TextButton(
+                    onPressed: value.text.length == 17 && value.text.isNotEmpty
+                        ? () {
+                            setState(() {
+                              scannedData.add(value.text);
+                            });
+                            Navigator.of(context).pop();
+                          }
+                        : null,
+                    child: Text('Add'),
+                  );
+                }),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -59,53 +202,111 @@ class _ScanItemQrState extends State<ScanItemQr> {
             context.go('/');
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: _showAddCodeDialog,
+          ),
+        ],
       ),
       drawer: AppDrawer(
         toggleTheme: widget.toggleTheme,
         toggleLocale: widget.toggleLocale,
       ),
-      /*    body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            
-            ElevatedButton(
-              onPressed: scanWithCamera,
-              child: Text('Scan QR Code / PDF417'),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: MobileScanner(
+              controller: controller,
+              allowDuplicates: true,
+              onDetect: (barcode, args) async {
+                if (barcode.rawValue == null) {
+                  return;
+                }
+                final String code = barcode.rawValue!;
+                final BarcodeType type = barcode.type;
+
+                if (!scannedData.contains(code)) {
+                  if (code.contains(
+                      'https://panel-control-company-zaher.web.app/')) {
+                    setState(() {
+                      scannedData.add(code);
+                    });
+                    _playSound('assets/sound/scanner-beep.mp3');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Scanned: $code'),
+                        backgroundColor: type == BarcodeFormat.qrCode
+                            ? Colors.blueGrey
+                            : Colors.green,
+                      ),
+                    );
+                  } else {
+                    await _playSound('assets/sound/beep.mp3');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'Invalid code scanned and removed. رمز غير صالح تم مسحه ضوئيًا وإزالته.'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    await Future.delayed(
+                        Duration(seconds: 2)); // إضافة تأخير لمدة ٢ ثانية
+                  }
+                } else {
+                  _playSound('assets/sound/beep.mp3');
+                  await Future.delayed(
+                      Duration(seconds: 5)); // إضافة تأخير لمدة ٢ ثانية
+                  _showDuplicateDialog(code);
+                }
+              },
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: uploadFile,
-              child: Text('Upload Image/PDF'),
-            ),
-            SizedBox(height: 10),
-            Expanded(
+          ),
+          Expanded(
+            flex: 1,
+            child: SingleChildScrollView(
               child: ListView.builder(
-                itemCount: scannedCodes.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: scannedData.length,
                 itemBuilder: (context, index) {
+                  final code = scannedData[index];
+
+                  final displayCode = code.substring(
+                      'https://panel-control-company-zaher.web.app/'.length +
+                          8); // إزالة الرابط والسبع خانات الأولى
+
                   return ListTile(
-                   // title: Text(scannedCodes[index]),
+                    //   title: Text(code),
+                    title: Text(displayCode),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          scannedData.removeAt(index);
+                        });
+                      },
+                    ),
+                    onTap: () async {
+                      final data = await _fetchDataFromFirebase(code);
+                      _showDetailsDialog(code, data);
+                    },
                   );
                 },
               ),
             ),
-            
-          ],
-        ),
+          ),
+        ],
       ),
-   */
-
-      body: Container(),
-
-      /*
-      MobileScanner(
-        controller: _cameraController,
-        onDetect: (barcode, args) {
-          final String code = barcode.rawValue ?? 'Unknown';
-          _handleScan(code);
-        },
-      ),
-      */
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    audioPlayer.dispose();
+    _timer?.cancel();
+    super.dispose();
   }
 }
