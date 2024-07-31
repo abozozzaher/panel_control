@@ -26,6 +26,7 @@
     "type" : "Type",
     "new1" : "New",
     "shift" : "Shift",
+    "quantity" : "Quantity",
     "confirm" : "Confirm",
     "cancel" : "Cancel",
     "item" : "Item",

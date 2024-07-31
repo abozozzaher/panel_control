@@ -36,6 +36,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   String? selectedColor;
   String? selectedYarnNumber;
   String? selectedShift;
+  String? selectedQuantity;
   XFile? selectedImage;
   Uint8List? _webImage;
 
@@ -45,6 +46,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   List<String> colors = [];
   List<String> yarnNumbers = [];
   List<String> shift = [];
+  List<String> quantity = [];
   late String image;
 
   bool isLoading = true;
@@ -80,6 +82,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     colors = await fetchData('colors', 'values');
     yarnNumbers = await fetchData('yarn_numbers', 'values');
     shift = await fetchData('shift', 'values');
+    quantity = await fetchData('quantity', 'values');
     setState(() {
       selectedType = types.isNotEmpty ? types[0] : null; // null : null;
       selectedWidth = widths.isNotEmpty ? widths[3] : null;
@@ -87,6 +90,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       selectedColor = colors.isNotEmpty ? colors[0] : null;
       selectedYarnNumber = yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
       selectedShift = shift.isNotEmpty ? shift[0] : null;
+      selectedQuantity = quantity.isNotEmpty ? quantity[0] : null;
       productId = generateCode();
     });
   }
@@ -169,6 +173,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               Text('Color: $selectedColor'),
               Text('Yarn Number: $selectedYarnNumber'),
               Text('Shift: $selectedShift'),
+              Text('Quantity: $selectedQuantity'),
               if (selectedImage != null || _webImage != null)
                 kIsWeb
                     ? Image.memory(_webImage!, width: 100, height: 100)
@@ -234,6 +239,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   'user': '$firstName $lastName',
                   'user_id': userId,
                   'shift': selectedShift,
+                  'quantity': selectedQuantity,
                   'created_by': userId,
                   'saleـstatus': false,
                   if (imageUrl != null) 'image_url': imageUrl,
@@ -264,6 +270,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   selectedYarnNumber =
                       yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
                   selectedShift = shift.isNotEmpty ? shift[0] : null;
+                  selectedQuantity = quantity.isNotEmpty ? quantity[0] : null;
+
                   selectedImage = null;
                   _webImage = null;
                   productId = generateCode();
@@ -287,7 +295,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   }
 
   Future<String> uploadImageToStorage(XFile? image) async {
-    // String yearMonth = '${DateTime.now().year}-${DateTime.now().month}';
     String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
     String day = '${DateTime.now().day}';
     Reference storageReference = FirebaseStorage.instance.ref().child(
@@ -306,18 +313,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   }
 
   String generateCode() {
-    //  String date = DateTime.now().toString().replaceAll(RegExp(r'[^0-9]'), '');
     DateTime now = DateTime.now();
     var formatter = DateFormat('yyyyMMddHHmmssssssss');
-
-    String formatted = formatter.format(now);
-
-    // أضف أربع خانات للترتيب تبدأ من 2020
-    const int sequenceStart = 2020;
-    String sequence = sequenceStart.toString().padLeft(5, '0');
-
-    // دمج الوقت المنسق مع تسلسل الأرقام
-    String date = formatted; //+ sequence;
+    String date = formatter.format(now);
     return date; // Dynamic serial number should be updated
   }
 
@@ -537,7 +535,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       children: [
                         pw.Text('Adet : ', style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedShift',
+                          '$selectedQuantity',
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
@@ -735,6 +733,12 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           selectedShift = value;
                         });
                       }, '${S().select} ${S().shift}'),
+                      buildDropdown('${S().select} ${S().quantity}',
+                          selectedQuantity, quantity, (value) {
+                        setState(() {
+                          selectedQuantity = value;
+                        });
+                      }, '${S().select} ${S().quantity}'),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: addItem,
