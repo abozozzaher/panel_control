@@ -1,13 +1,10 @@
 import 'dart:async';
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:go_router/go_router.dart';
 import '../../generated/l10n.dart';
 import '../../service/app_drawer.dart';
 
@@ -17,16 +14,21 @@ class ScanItemQr extends StatefulWidget {
 
   const ScanItemQr(
       {super.key, required this.toggleTheme, required this.toggleLocale});
+
   @override
   State<StatefulWidget> createState() => _ScanItemQrState();
 }
 
 class _ScanItemQrState extends State<ScanItemQr> {
-  MobileScannerController controller = MobileScannerController();
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? controller;
   List<String> scannedData = [];
   final AudioPlayer audioPlayer = AudioPlayer();
+
   bool _isDialogShowing = false;
+  bool _isProcessing = false; // متغير لمتابعة حالة المعالجة
   Timer? _timer;
+
   @override
   void initState() {
     super.initState();
@@ -55,13 +57,18 @@ class _ScanItemQrState extends State<ScanItemQr> {
   }
 
   Future<void> _playSound(String path) async {
-    await audioPlayer.play(AssetSource(path));
+    try {
+      await audioPlayer.setAsset(path);
+      await audioPlayer.play();
+    } catch (e) {
+      print('Error playing sound: $e');
+    }
   }
 
   void _showDuplicateDialog(String code) {
     if (_isDialogShowing) return; // التحقق من عدم إظهار مربع الحوار مسبقًا
     _isDialogShowing = true; // ضبط المتغير إلى true لإظهار مربع الحوار
-
+    _playSound('assets/sound/ripiito.mp3');
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -83,39 +90,53 @@ class _ScanItemQrState extends State<ScanItemQr> {
     );
   }
 
+  void _showErorrDialog(String code) {
+    if (_isDialogShowing) return; // التحقق من عدم إظهار مربع الحوار مسبقًا
+    _isDialogShowing = true; // ضبط المتغير إلى true لإظهار مربع الحوار
+    _playSound('assets/sound/error-404.mp3');
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error Code'),
+          content: Text(
+              'Invalid code scanned and removed. رمز غير صالح تم مسحه ضوئيًا وإزالته.'),
+          backgroundColor: Colors.redAccent,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _isDialogShowing =
+                    false; // إعادة ضبط المتغير إلى false عند إغلاق مربع الحوار
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<Map<String, dynamic>?> _fetchDataFromFirebase(String url) async {
     try {
-      // استخراج الجزء المهم من الرابط
       String baseUrl = 'https://panel-control-company-zaher.web.app/';
       if (!url.startsWith(baseUrl)) {
         throw FormatException('Invalid URL format');
       }
-
-      // إزالة الجزء الأول من الرابط
       String remainingPath = url.substring(baseUrl.length);
+      String monthFolder = remainingPath.substring(0, 7);
+      String productId = remainingPath.substring(8);
 
-      // استخراج المجلد الشهري ومعرف المنتج من المسار المتبقي
-      String monthFolder = remainingPath.substring(0, 7); // السبع خانات الأولى
-      String productId = remainingPath.substring(8); // ما تبقى هو معرف المنتج
-      print('monthFolder');
-      print(monthFolder);
-      print('productId');
-      print(productId);
-      // استعلام البيانات من Firestore
       DocumentSnapshot document = await FirebaseFirestore.instance
-          .collection('products') // اسم المجموعة في Firestore
-          .doc('productsForAllMonths') // اسم المجلد الذي يحتوي على جميع الشهور
-          .collection(monthFolder) // اسم المجلد الشهر
-          .doc(productId) // معرف المستند الذي نريد عرضه
+          .collection('products')
+          .doc('productsForAllMonths')
+          .collection(monthFolder)
+          .doc(productId)
           .get();
-      print('monthFolder');
-      print(monthFolder);
-      print('productId');
-      print(productId);
       return document.exists ? document.data() as Map<String, dynamic>? : null;
     } catch (e) {
       print('Error fetching data: $e');
-
       return null;
     }
   }
@@ -126,17 +147,19 @@ class _ScanItemQrState extends State<ScanItemQr> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Details for $code'),
-          content: data != null
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: data.entries.map((entry) {
-                    return ListTile(
-                      title: Text('${entry.key}: ${entry.value}'),
-                      // title: Text(data['color']),
-                    );
-                  }).toList(),
-                )
-              : Text('No data found for this code.'),
+          content: SingleChildScrollView(
+            // إضافة SingleChildScrollView هنا
+            child: data != null
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: data.entries.map((entry) {
+                      return ListTile(
+                        title: Text('${entry.key}: ${entry.value}'),
+                      );
+                    }).toList(),
+                  )
+                : Text('No data found for this code.'),
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -167,13 +190,13 @@ class _ScanItemQrState extends State<ScanItemQr> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(S().cancel),
             ),
             ValueListenableBuilder(
                 valueListenable: codeController,
                 builder: (context, value, child) {
                   return TextButton(
-                    onPressed: value.text.length == 17 && value.text.isNotEmpty
+                    onPressed: value.text.length == 20 && value.text.isNotEmpty
                         ? () {
                             setState(() {
                               scannedData.add(value.text);
@@ -181,13 +204,65 @@ class _ScanItemQrState extends State<ScanItemQr> {
                             Navigator.of(context).pop();
                           }
                         : null,
-                    child: Text('Add'),
+                    child: Text(S().add),
                   );
                 }),
           ],
         );
       },
     );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+
+    controller.scannedDataStream.listen((scanData) {
+      if (_isProcessing) return; // تجنب معالجة عدة أكواد في نفس الوقت
+
+      setState(() {
+        _isProcessing = true; // تعيين حالة المعالجة
+      });
+
+      final String code = scanData.code!;
+      if (!scannedData.contains(code)) {
+        if (code.contains('https://panel-control-company-zaher.web.app/')) {
+          setState(() {
+            scannedData.add(code);
+          });
+          _playSound('assets/sound/beep.mp3');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Scanned: $code'),
+              backgroundColor: scanData.format == BarcodeFormat.qrcode
+                  ? Colors.green
+                  : Colors.yellowAccent,
+            ),
+          );
+        } else {
+          _showErorrDialog(code);
+          /*
+          await _playSound('assets/sound/error-404.mp3');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Invalid code scanned and removed. رمز غير صالح تم مسحه ضوئيًا وإزالته.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          */
+        }
+        //  await Future.delayed(  Duration(seconds: 2)); // تأخير قبل السماح بالمسح التالي
+      } else {
+        //  await _playSound('assets/sound/ripiito.mp3');
+        //   await Future.delayed(Duration(seconds: 2)); // تأخير قبل السماح بالمسح التالي
+        _showDuplicateDialog(code);
+      }
+      setState(() {
+        _isProcessing = false; // إعادة تعيين حالة المعالجة
+      });
+    });
   }
 
   @override
@@ -217,50 +292,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
         children: <Widget>[
           Expanded(
             flex: 1,
-            child: MobileScanner(
-              controller: controller,
-              allowDuplicates: true,
-              onDetect: (barcode, args) async {
-                if (barcode.rawValue == null) {
-                  return;
-                }
-                final String code = barcode.rawValue!;
-                final BarcodeType type = barcode.type;
-
-                if (!scannedData.contains(code)) {
-                  if (code.contains(
-                      'https://panel-control-company-zaher.web.app/')) {
-                    setState(() {
-                      scannedData.add(code);
-                    });
-                    _playSound('assets/sound/scanner-beep.mp3');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Scanned: $code'),
-                        backgroundColor: type == BarcodeFormat.qrCode
-                            ? Colors.blueGrey
-                            : Colors.green,
-                      ),
-                    );
-                  } else {
-                    await _playSound('assets/sound/beep.mp3');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                            'Invalid code scanned and removed. رمز غير صالح تم مسحه ضوئيًا وإزالته.'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    await Future.delayed(
-                        Duration(seconds: 2)); // إضافة تأخير لمدة ٢ ثانية
-                  }
-                } else {
-                  _playSound('assets/sound/beep.mp3');
-                  await Future.delayed(
-                      Duration(seconds: 5)); // إضافة تأخير لمدة ٢ ثانية
-                  _showDuplicateDialog(code);
-                }
-              },
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
             ),
           ),
           Expanded(
@@ -272,13 +306,12 @@ class _ScanItemQrState extends State<ScanItemQr> {
                 itemCount: scannedData.length,
                 itemBuilder: (context, index) {
                   final code = scannedData[index];
-
-                  final displayCode = code.substring(
-                      'https://panel-control-company-zaher.web.app/'.length +
-                          8); // إزالة الرابط والسبع خانات الأولى
-
+                  var urlLength =
+                      'https://panel-control-company-zaher.web.app/'.length;
+                  final displayCode = code.length > urlLength + 8
+                      ? code.substring(urlLength + 8)
+                      : code;
                   return ListTile(
-                    //   title: Text(code),
                     title: Text(displayCode),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
@@ -304,7 +337,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     audioPlayer.dispose();
     _timer?.cancel();
     super.dispose();

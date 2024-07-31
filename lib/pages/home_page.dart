@@ -9,7 +9,6 @@ import '../generated/l10n.dart';
 import '../model/user.dart';
 import '../service/app_drawer.dart';
 
-
 class MyHomePage extends StatefulWidget {
   final VoidCallback toggleTheme;
   final VoidCallback toggleLocale;
@@ -149,9 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     const SizedBox(height: 10),
                     ElevatedButton.icon(
                       onPressed: () {
-                        context.go('/test');
+                        context.go('/test2');
                       },
-                      icon: const Icon(Icons.error_outline),
+                      icon: const Icon(Icons.safety_check),
                       label: Text('${S().scan} ${S().error}'),
                     ),
                   ],

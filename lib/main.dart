@@ -15,6 +15,7 @@ import 'pages/product/NewItem.dart';
 import 'pages/product/ProductPage.dart';
 import 'pages/product/ScanItem.dart';
 import 'test.dart';
+import 'test2.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +32,9 @@ void main() async {
   final bool isLoggedIn = await _checkLoginStatus();
   usePathUrlStrategy();
 
-  runApp(MyApp());
+  runApp(MyApp(
+    isLoggedIn: isLoggedIn,
+  ));
 }
 
 Future<bool> _checkLoginStatus() async {
@@ -40,9 +43,9 @@ Future<bool> _checkLoginStatus() async {
 }
 
 class MyApp extends StatefulWidget {
-//  final bool isLoggedIn;
+  final bool isLoggedIn;
 
-//  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -68,7 +71,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   late final GoRouter _router = GoRouter(
-    //  initialLocation: widget.isLoggedIn ? '/' : '/login',
+    initialLocation: widget.isLoggedIn ? '/' : '/login',
     routes: [
       GoRoute(
         path: '/',
@@ -96,6 +99,10 @@ class _MyAppState extends State<MyApp> {
           toggleTheme: _toggleTheme,
           toggleLocale: _toggleLocale,
         ),
+      ),
+      GoRoute(
+        path: '/test2',
+        builder: (context, state) => QRViewExample(),
       ),
       GoRoute(
         path: '/register',

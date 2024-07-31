@@ -306,7 +306,18 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   }
 
   String generateCode() {
-    String date = DateTime.now().toString().replaceAll(RegExp(r'[^0-9]'), '');
+    //  String date = DateTime.now().toString().replaceAll(RegExp(r'[^0-9]'), '');
+    DateTime now = DateTime.now();
+    var formatter = DateFormat('yyyyMMddHHmmssssssss');
+
+    String formatted = formatter.format(now);
+
+    // أضف أربع خانات للترتيب تبدأ من 2020
+    const int sequenceStart = 2020;
+    String sequence = sequenceStart.toString().padLeft(5, '0');
+
+    // دمج الوقت المنسق مع تسلسل الأرقام
+    String date = formatted; //+ sequence;
     return date; // Dynamic serial number should be updated
   }
 
@@ -362,9 +373,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       alignment: pw.Alignment.center,
                       child: pw.Text(
                         S().blue_textiles,
-                        style: pw.TextStyle(
-                            //    font: ttf,
-                            fontWeight: pw.FontWeight.bold),
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                       ),
                     ),
                   ),
@@ -383,7 +392,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 padding: const pw.EdgeInsets.all(5.0), // 5mm margin around text
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  mainAxisSize: pw.MainAxisSize.min,
+                  mainAxisSize: pw.MainAxisSize.max,
                   children: [
                     pw.SizedBox(height: 5),
                     pw.Row(
@@ -617,7 +626,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       );
 
       // Create an image with the specified size (default is 400)
-      final ui.Image image = await painter.toImage(size as double);
+      final ui.Image image = await painter.toImage(size.toDouble());
       final ByteData? byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
       return byteData!.buffer.asUint8List();
