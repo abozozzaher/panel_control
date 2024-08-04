@@ -23,10 +23,11 @@ class _ScanItemQrState extends State<ScanItemQr> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   List<String> scannedData = [];
+  Map<String, Map<String, dynamic>> codeDetails = {}; // لتخزين تفاصيل كل كود
   final AudioPlayer audioPlayer = AudioPlayer();
 
   bool _isDialogShowing = false;
-  bool _isProcessing = false; // متغير لمتابعة حالة المعالجة
+  bool _isProcessing = false;
   Timer? _timer;
 
   @override
@@ -52,6 +53,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
     _timer = Timer(Duration(hours: 1), () {
       setState(() {
         scannedData.clear();
+        codeDetails.clear();
       });
     });
   }
@@ -66,8 +68,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
   }
 
   void _showDuplicateDialog(String code) {
-    if (_isDialogShowing) return; // التحقق من عدم إظهار مربع الحوار مسبقًا
-    _isDialogShowing = true; // ضبط المتغير إلى true لإظهار مربع الحوار
+    if (_isDialogShowing) return;
+    _isDialogShowing = true;
     _playSound('assets/sound/ripiito.mp3');
     showDialog(
       context: context,
@@ -79,8 +81,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                _isDialogShowing =
-                    false; // إعادة ضبط المتغير إلى false عند إغلاق مربع الحوار
+                _isDialogShowing = false;
               },
               child: Text('OK'),
             ),
@@ -91,8 +92,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
   }
 
   void _showErorrDialog(String code) {
-    if (_isDialogShowing) return; // التحقق من عدم إظهار مربع الحوار مسبقًا
-    _isDialogShowing = true; // ضبط المتغير إلى true لإظهار مربع الحوار
+    if (_isDialogShowing) return;
+    _isDialogShowing = true;
     _playSound('assets/sound/error-404.mp3');
 
     showDialog(
@@ -107,8 +108,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                _isDialogShowing =
-                    false; // إعادة ضبط المتغير إلى false عند إغلاق مربع الحوار
+                _isDialogShowing = false;
               },
               child: Text('OK'),
             ),
@@ -148,7 +148,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
         return AlertDialog(
           title: Text('Details for $code'),
           content: SingleChildScrollView(
-            // إضافة SingleChildScrollView هنا
             child: data != null
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
@@ -199,7 +198,20 @@ class _ScanItemQrState extends State<ScanItemQr> {
                     onPressed: value.text.length == 20 && value.text.isNotEmpty
                         ? () {
                             setState(() {
-                              scannedData.add(value.text);
+                              String baseUrl =
+                                  'https://panel-control-company-zaher.web.app/';
+                              String formattedData =
+                                  '${baseUrl}${value.text.substring(0, 4)}-${value.text.substring(4, 6)}/${value.text}';
+
+                              scannedData.add(formattedData);
+                              _fetchDataFromFirebase(formattedData)
+                                  .then((data) {
+                                if (data != null) {
+                                  setState(() {
+                                    codeDetails[formattedData] = data;
+                                  });
+                                }
+                              });
                             });
                             Navigator.of(context).pop();
                           }
@@ -219,10 +231,10 @@ class _ScanItemQrState extends State<ScanItemQr> {
     });
 
     controller.scannedDataStream.listen((scanData) {
-      if (_isProcessing) return; // تجنب معالجة عدة أكواد في نفس الوقت
+      if (_isProcessing) return;
 
       setState(() {
-        _isProcessing = true; // تعيين حالة المعالجة
+        _isProcessing = true;
       });
 
       final String code = scanData.code!;
@@ -232,6 +244,13 @@ class _ScanItemQrState extends State<ScanItemQr> {
             scannedData.add(code);
           });
           _playSound('assets/sound/beep.mp3');
+          _fetchDataFromFirebase(code).then((data) {
+            if (data != null) {
+              setState(() {
+                codeDetails[code] = data;
+              });
+            }
+          });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Scanned: $code'),
@@ -242,31 +261,114 @@ class _ScanItemQrState extends State<ScanItemQr> {
           );
         } else {
           _showErorrDialog(code);
-          /*
-          await _playSound('assets/sound/error-404.mp3');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  'Invalid code scanned and removed. رمز غير صالح تم مسحه ضوئيًا وإزالته.'),
-              backgroundColor: Colors.red,
-            ),
-          );
-          */
         }
-        //  await Future.delayed(  Duration(seconds: 2)); // تأخير قبل السماح بالمسح التالي
       } else {
-        //  await _playSound('assets/sound/ripiito.mp3');
-        //   await Future.delayed(Duration(seconds: 2)); // تأخير قبل السماح بالمسح التالي
         _showDuplicateDialog(code);
       }
       setState(() {
-        _isProcessing = false; // إعادة تعيين حالة المعالجة
+        _isProcessing = false;
       });
     });
   }
 
+  List<DataRow> _buildRows() {
+    Map<String, Map<String, dynamic>> aggregatedData = {};
+
+    for (var entry in codeDetails.entries) {
+      var code = entry.key;
+      var data = entry.value;
+
+      String key =
+          '${data['yarn_number']}-${data['type']}-${data['color']}-${data['width']}';
+
+      if (!aggregatedData.containsKey(key)) {
+        aggregatedData[key] = {
+          'yarn_number': data['yarn_number'],
+          'type': data['type'],
+          'color': data['color'],
+          'width': data['width'],
+          'total_weight': 0,
+          'quantity': 0,
+          'length': 0,
+          'scanned_data': 0,
+        };
+      }
+      aggregatedData[key]!['total_weight'] += data['total_weight'] is int
+          ? data['total_weight']
+          : int.tryParse(data['total_weight'].toString()) ?? 0;
+      aggregatedData[key]!['quantity'] += data['quantity'] is int
+          ? data['quantity']
+          : int.tryParse(data['quantity'].toString()) ?? 0;
+      aggregatedData[key]!['length'] += data['length'] is int
+          ? data['length']
+          : int.tryParse(data['length'].toString()) ?? 0;
+      aggregatedData[key]!['scanned_data'] += 1;
+    }
+
+    return aggregatedData.entries.map((entry) {
+      var data = entry.value;
+      return DataRow(cells: [
+        DataCell(Text(data['type'].toString(),
+            style: TextStyle(color: Colors.redAccent))),
+        DataCell(Text(data['color'].toString(),
+            style: TextStyle(color: Colors.redAccent))),
+        DataCell(Text('${data['width']} mm',
+            style: TextStyle(color: Colors.redAccent))),
+        DataCell(Text('${data['yarn_number']} D',
+            style: TextStyle(color: Colors.redAccent))),
+        DataCell(Text('${data['quantity']} Pcs',
+            style: TextStyle(color: Colors.redAccent))),
+        DataCell(Text('${data['length']} MT',
+            style: TextStyle(color: Colors.redAccent))),
+        DataCell(Text('${data['total_weight']} kg',
+            style: TextStyle(color: Colors.redAccent))),
+        DataCell(Text(data['scanned_data'].toString(),
+            style: TextStyle(color: Colors.greenAccent))),
+      ]);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    int totalQuantity = 0;
+    int totalLength = 0;
+    int totalWeight = 0;
+
+// حساب إجمالي الكميات
+    for (var data in codeDetails.values) {
+      if (data.containsKey('quantity')) {
+        var quantity = data['quantity'];
+        if (quantity is int) {
+          totalQuantity += quantity;
+        } else if (quantity is String) {
+          totalQuantity += int.tryParse(quantity) ?? 0;
+        }
+      }
+    }
+    // حساب إجمالي الامتار
+    for (var data in codeDetails.values) {
+      if (data.containsKey('length')) {
+        var length = data['length'];
+        if (length is int) {
+          totalLength += length;
+        } else if (length is String) {
+          totalLength += int.tryParse(length) ?? 0;
+        }
+      }
+    }
+
+    // حساب إجمالي الوزن
+    for (var data in codeDetails.values) {
+      if (data.containsKey('total_weight')) {
+        var weight = data['total_weight'];
+        if (weight is int) {
+          totalWeight += weight;
+        } else if (weight is String) {
+          totalWeight += int.tryParse(weight) ?? 0;
+        }
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${S().scan} ${S().new1} ${S().item}'),
@@ -289,16 +391,73 @@ class _ScanItemQrState extends State<ScanItemQr> {
         toggleLocale: widget.toggleLocale,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: 6,
             child: QRView(
               key: qrKey,
               onQRViewCreated: _onQRViewCreated,
             ),
           ),
+          Container(
+            color: Colors.red,
+            height: 100, // لتحديد ارتفاع ثابت
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    // القسم الأول
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Total Codes Scanned: ${scannedData.length}',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          Text(
+                            'Total Quantity: $totalQuantity Pcs',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // القسم الثاني
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Total Length: $totalLength MT',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          Text(
+                            'Total Weight: $totalWeight kg',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                // القسم الثالث
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // ضع هنا الكود المطلوب لتنفيذ الزر
+                      },
+                      child: Text('Button'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
           Expanded(
-            flex: 1,
+            flex: 3,
             child: SingleChildScrollView(
               child: ListView.builder(
                 shrinkWrap: true,
@@ -318,6 +477,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       onPressed: () {
                         setState(() {
                           scannedData.removeAt(index);
+                          codeDetails.remove(code);
                         });
                       },
                     ),
@@ -327,6 +487,44 @@ class _ScanItemQrState extends State<ScanItemQr> {
                     },
                   );
                 },
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 6,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columns: [
+                    DataColumn(
+                        label: Text('Type',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('Color',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('Width',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('Yarn Number',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('Quantity',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('Length',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('total_weight',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('Scanned Data',
+                            style: TextStyle(color: Colors.greenAccent))),
+                  ],
+                  rows: _buildRows(),
+                ),
               ),
             ),
           ),

@@ -330,6 +330,16 @@ class S {
     );
   }
 
+  /// `Length`
+  String get length {
+    return Intl.message(
+      'Length',
+      name: 'length',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm`
   String get confirm {
     return Intl.message(

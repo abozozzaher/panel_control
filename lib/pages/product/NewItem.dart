@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,6 +38,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   String? selectedYarnNumber;
   String? selectedShift;
   String? selectedQuantity;
+  String? selectedLength;
+
   XFile? selectedImage;
   Uint8List? _webImage;
 
@@ -47,6 +50,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   List<String> yarnNumbers = [];
   List<String> shift = [];
   List<String> quantity = [];
+  List<String> length = [];
   late String image;
 
   bool isLoading = true;
@@ -83,14 +87,17 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     yarnNumbers = await fetchData('yarn_numbers', 'values');
     shift = await fetchData('shift', 'values');
     quantity = await fetchData('quantity', 'values');
+    length = await fetchData('length', 'values');
+
     setState(() {
       selectedType = types.isNotEmpty ? types[0] : null; // null : null;
-      selectedWidth = widths.isNotEmpty ? widths[3] : null;
+      selectedWidth = widths.isNotEmpty ? widths[6] : null;
       selectedWeight = weights.isNotEmpty ? weights[0] : null;
       selectedColor = colors.isNotEmpty ? colors[0] : null;
       selectedYarnNumber = yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
       selectedShift = shift.isNotEmpty ? shift[0] : null;
       selectedQuantity = quantity.isNotEmpty ? quantity[0] : null;
+      selectedLength = length.isNotEmpty ? length[2] : null;
       productId = generateCode();
     });
   }
@@ -168,12 +175,13 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
             children: [
               Text('ID: $productId'),
               Text('Type: $selectedType'),
-              Text('Width: $selectedWidth'),
-              Text('Weight: $selectedWeight'),
+              Text('Width: $selectedWidth' 'mm'),
+              Text('Weight: $selectedWeight' 'g'),
               Text('Color: $selectedColor'),
-              Text('Yarn Number: $selectedYarnNumber'),
+              Text('Yarn Number: $selectedYarnNumber' 'D'),
               Text('Shift: $selectedShift'),
-              Text('Quantity: $selectedQuantity'),
+              Text('Quantity: $selectedQuantity' 'Pcs'),
+              Text('Length: $selectedLength' 'MT'),
               if (selectedImage != null || _webImage != null)
                 kIsWeb
                     ? Image.memory(_webImage!, width: 100, height: 100)
@@ -224,6 +232,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 String documentPath =
                     'productsForAllMonths/$yearMonth/$productId';
 
+                ///      int weight = int.tryParse(selectedWeight ?? '0') ?? 0;
+                //   int quantity = int.tryParse(selectedQuantity ?? '0') ?? 0;
+
                 // Save data to Firestore
                 await FirebaseFirestore.instance
                     .collection('products')
@@ -232,14 +243,16 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   'type': selectedType,
                   'width': selectedWidth,
                   'weight': selectedWeight,
+                  'total_weight': (double.parse(selectedWeight.toString()) *
+                          double.parse(selectedQuantity.toString())) /
+                      1000,
                   'color': selectedColor,
                   'yarn_number': selectedYarnNumber,
                   'productId': productId,
                   'date': DateTime.now(),
-                  'user': '$firstName $lastName',
-                  'user_id': userId,
                   'shift': selectedShift,
                   'quantity': selectedQuantity,
+                  'length': selectedLength,
                   'created_by': userId,
                   'saleـstatus': false,
                   if (imageUrl != null) 'image_url': imageUrl,
@@ -264,13 +277,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 setState(() {
                   selectedType =
                       types.isNotEmpty ? types[0] : null; //  null : null;
-                  selectedWidth = widths.isNotEmpty ? widths[3] : null;
+                  selectedWidth = widths.isNotEmpty ? widths[6] : null;
                   selectedWeight = weights.isNotEmpty ? weights[0] : null;
                   selectedColor = colors.isNotEmpty ? colors[0] : null;
                   selectedYarnNumber =
                       yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
                   selectedShift = shift.isNotEmpty ? shift[0] : null;
                   selectedQuantity = quantity.isNotEmpty ? quantity[0] : null;
+                  selectedLength = length.isNotEmpty ? length[2] : null;
 
                   selectedImage = null;
                   _webImage = null;
@@ -421,7 +435,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text(
                           productId,
                           textDirection: pw.TextDirection.rtl,
-                          style: pw.TextStyle(font: fontRo),
+                          style: pw.TextStyle(
+                              font: fontRo, fontWeight: pw.FontWeight.bold),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
@@ -452,7 +467,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text('Genişlik : ',
                             style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedWidth',
+                          '$selectedWidth' 'mm',
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
@@ -469,7 +484,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text('Ağırlık : ',
                             style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedWeight',
+                          '$selectedWeight'
+                          'g'
+                          '/'
+                          '${(double.parse(selectedWeight.toString()) * double.parse(selectedQuantity.toString())) / 1000}'
+                          'Kg',
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
@@ -502,7 +521,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text('İplik Density : ',
                             style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedYarnNumber',
+                          '$selectedYarnNumber' 'D',
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
@@ -519,7 +538,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text('Uzunluk : ',
                             style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$firstName $lastName',
+                          '$selectedLength' 'MT',
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
@@ -535,7 +554,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       children: [
                         pw.Text('Adet : ', style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedQuantity',
+                          '$selectedQuantity' 'Pcs',
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
@@ -701,18 +720,27 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         });
                       }, '${S().select} ${S().type}'),
                       buildDropdown(
-                          '${S().select} ${S().width}', selectedWidth, widths,
-                          (value) {
-                        setState(() {
-                          selectedWidth = value;
-                        });
-                      }, '${S().select} ${S().width}'),
-                      buildDropdown('${S().select} ${S().weight}',
-                          selectedWeight, weights, (value) {
-                        setState(() {
-                          selectedWeight = value;
-                        });
-                      }, '${S().select} ${S().weight}'),
+                        '${S().select} ${S().width}', selectedWidth, widths,
+                        (value) {
+                          setState(() {
+                            selectedWidth = value;
+                          });
+                        },
+                        '${S().select} ${S().width}',
+                        suffixText: 'mm', // يمكنك إضافة النص الذي تريده هنا
+                      ),
+                      buildDropdown(
+                        '${S().select} ${S().weight}',
+                        selectedWeight,
+                        weights,
+                        (value) {
+                          setState(() {
+                            selectedWeight = value;
+                          });
+                        },
+                        '${S().select} ${S().weight}',
+                        suffixText: 'g', // يمكنك إضافة النص الذي تريده هنا
+                      ),
                       buildDropdown(
                           '${S().select} ${S().color}', selectedColor, colors,
                           (value) {
@@ -720,12 +748,18 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           selectedColor = value;
                         });
                       }, '${S().select} ${S().color}'),
-                      buildDropdown('${S().select} ${S().yarn_number}',
-                          selectedYarnNumber, yarnNumbers, (value) {
-                        setState(() {
-                          selectedYarnNumber = value;
-                        });
-                      }, '${S().select} ${S().yarn_number}'),
+                      buildDropdown(
+                        '${S().select} ${S().yarn_number}',
+                        selectedYarnNumber,
+                        yarnNumbers,
+                        (value) {
+                          setState(() {
+                            selectedYarnNumber = value;
+                          });
+                        },
+                        '${S().select} ${S().yarn_number}',
+                        suffixText: 'D', // يمكنك إضافة النص الذي تريده هنا
+                      ),
                       buildDropdown(
                           '${S().select} ${S().shift}', selectedShift, shift,
                           (value) {
@@ -733,12 +767,28 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           selectedShift = value;
                         });
                       }, '${S().select} ${S().shift}'),
-                      buildDropdown('${S().select} ${S().quantity}',
-                          selectedQuantity, quantity, (value) {
-                        setState(() {
-                          selectedQuantity = value;
-                        });
-                      }, '${S().select} ${S().quantity}'),
+                      buildDropdown(
+                        '${S().select} ${S().length}', selectedLength, length,
+                        (value) {
+                          setState(() {
+                            selectedLength = value;
+                          });
+                        },
+                        '${S().select} ${S().length}',
+                        suffixText: 'MT', // يمكنك إضافة النص الذي تريده هنا
+                      ),
+                      buildDropdown(
+                        '${S().select} ${S().quantity}',
+                        selectedQuantity,
+                        quantity,
+                        (value) {
+                          setState(() {
+                            selectedQuantity = value;
+                          });
+                        },
+                        '${S().select} ${S().quantity}',
+                        suffixText: 'Pcs', // يمكنك إضافة النص الذي تريده هنا
+                      ),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: addItem,
@@ -753,9 +803,10 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   }
 
   Widget buildDropdown(String hint, String? selectedValue, List<String> items,
-      ValueChanged<String?> onChanged, String hintText) {
+      ValueChanged<String?> onChanged, String hintText,
+      {String suffixText = ''}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(hintText, style: const TextStyle(color: Colors.grey)),
         DropdownButton<String>(
@@ -765,7 +816,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
           items: items.map((item) {
             return DropdownMenuItem(
               value: item,
-              child: Text(item),
+              child: Text('$item $suffixText'), // إضافة النص الإضافي هنا
             );
           }).toList(),
         ),

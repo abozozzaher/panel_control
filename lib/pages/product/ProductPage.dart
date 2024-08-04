@@ -65,8 +65,6 @@ class ProductPage extends StatelessWidget {
                       style: const TextStyle(fontSize: 18)),
                   Text('Yarn Number: ${productData['yarn_number']}',
                       style: const TextStyle(fontSize: 18)),
-                  Text('Product ID: ${productData['productId']}',
-                      style: const TextStyle(fontSize: 18)),
                   Text('Date: ${productData['date'].toDate()}',
                       style: const TextStyle(fontSize: 18)),
                   Text('User: ${productData['user']}',

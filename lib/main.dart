@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,21 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<bool> checkUserRole() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return false;
+
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+    if (userDoc.exists && userDoc.data() != null) {
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+      return userData['work'] == true;
+    }
+    return false;
+  }
+
   late final GoRouter _router = GoRouter(
     initialLocation: widget.isLoggedIn ? '/' : '/login',
     routes: [
@@ -84,9 +100,7 @@ class _MyAppState extends State<MyApp> {
         path: '/:monthFolder/:productId',
         builder: (context, state) {
           final monthFolder = state.pathParameters['monthFolder'];
-
           final productId = state.pathParameters['productId'];
-
           return ProductPage(
             monthFolder: monthFolder,
             productId: productId,
@@ -114,13 +128,75 @@ class _MyAppState extends State<MyApp> {
       ),
       GoRoute(
         path: '/add',
-        builder: (context, state) => AddNewItemScreen(
-            toggleTheme: _toggleTheme, toggleLocale: _toggleLocale),
+        builder: (context, state) => FutureBuilder<bool>(
+          future: checkUserRole(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            }
+            if (snapshot.data == true) {
+              return AddNewItemScreen(
+                toggleTheme: _toggleTheme,
+                toggleLocale: _toggleLocale,
+              );
+            } else {
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Access Denied. You do not have the required role.'),
+                      SizedBox(height: 20), // لإضافة مسافة بين النص والزر
+                      ElevatedButton(
+                        onPressed: () {
+                          // الانتقال إلى الصفحة الرئيسية
+                          context.go('/');
+                        },
+                        child: Text('انتقل للصفحة الرئيسة'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+        ),
       ),
       GoRoute(
         path: '/scan',
-        builder: (context, state) =>
-            ScanItemQr(toggleTheme: _toggleTheme, toggleLocale: _toggleLocale),
+        builder: (context, state) => FutureBuilder<bool>(
+          future: checkUserRole(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            }
+            if (snapshot.data == true) {
+              return ScanItemQr(
+                toggleTheme: _toggleTheme,
+                toggleLocale: _toggleLocale,
+              );
+            } else {
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Access Denied. You do not have the required role.'),
+                      SizedBox(height: 20), // لإضافة مسافة بين النص والزر
+                      ElevatedButton(
+                        onPressed: () {
+                          // الانتقال إلى الصفحة الرئيسية
+                          context.go('/');
+                        },
+                        child: Text('انتقل للصفحة الرئيسة'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+        ),
       ),
     ],
     errorPageBuilder: (context, state) => MaterialPage(
