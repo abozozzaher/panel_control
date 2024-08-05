@@ -330,16 +330,6 @@ class S {
     );
   }
 
-  /// `Length`
-  String get length {
-    return Intl.message(
-      'Length',
-      name: 'length',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Confirm`
   String get confirm {
     return Intl.message(
@@ -480,6 +470,16 @@ class S {
     );
   }
 
+  /// `Length`
+  String get length {
+    return Intl.message(
+      'Length',
+      name: 'length',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ`
   String get company_name {
     return Intl.message(
@@ -495,6 +495,146 @@ class S {
     return Intl.message(
       'Türkiye Gaziantep Sanayi MAH. 60092',
       name: 'addres',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan a code`
+  String get scan_a_code {
+    return Intl.message(
+      'Scan a code',
+      name: 'scan_a_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Access Denied. You do not have the required role.`
+  String get access_denied_you_do_not_have_the_required_role {
+    return Intl.message(
+      'Access Denied. You do not have the required role.',
+      name: 'access_denied_you_do_not_have_the_required_role',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to the main page`
+  String get go_to_page {
+    return Intl.message(
+      'Go to the main page',
+      name: 'go_to_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error 404`
+  String get error_404 {
+    return Intl.message(
+      'Error 404',
+      name: 'error_404',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Page not found`
+  String get page_not_found {
+    return Intl.message(
+      'Page not found',
+      name: 'page_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Play Beep Sound`
+  String get play_beep_sound {
+    return Intl.message(
+      'Play Beep Sound',
+      name: 'play_beep_sound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Play Scan Sound`
+  String get play_scan_sound {
+    return Intl.message(
+      'Play Scan Sound',
+      name: 'play_scan_sound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Product Details`
+  String get product_details {
+    return Intl.message(
+      'Product Details',
+      name: 'product_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data found.`
+  String get no_data_found {
+    return Intl.message(
+      'No data found.',
+      name: 'no_data_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Duplicate Code`
+  String get duplicate_code {
+    return Intl.message(
+      'Duplicate Code',
+      name: 'duplicate_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error Code`
+  String get error_code {
+    return Intl.message(
+      'Error Code',
+      name: 'error_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data found for this code.`
+  String get no_data_found_for_this_code {
+    return Intl.message(
+      'No data found for this code.',
+      name: 'no_data_found_for_this_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Code`
+  String get enter_code {
+    return Intl.message(
+      'Enter Code',
+      name: 'enter_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Button`
+  String get button {
+    return Intl.message(
+      'Button',
+      name: 'button',
       desc: '',
       args: [],
     );

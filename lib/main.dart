@@ -177,14 +177,14 @@ class _MyAppState extends State<MyApp> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Access Denied. You do not have the required role.'),
+                      Text(S().access_denied_you_do_not_have_the_required_role),
                       SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       ElevatedButton(
                         onPressed: () {
                           // الانتقال إلى الصفحة الرئيسية
                           context.go('/');
                         },
-                        child: Text('انتقل للصفحة الرئيسة'),
+                        child: Text(S().go_to_page),
                       ),
                     ],
                   ),
@@ -213,14 +213,14 @@ class _MyAppState extends State<MyApp> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Access Denied. You do not have the required role.'),
+                      Text(S().access_denied_you_do_not_have_the_required_role),
                       SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       ElevatedButton(
                         onPressed: () {
                           // الانتقال إلى الصفحة الرئيسية
                           context.go('/');
                         },
-                        child: Text('انتقل للصفحة الرئيسة'),
+                        child: Text(S().go_to_page),
                       ),
                     ],
                   ),
@@ -233,8 +233,8 @@ class _MyAppState extends State<MyApp> {
     ],
     errorPageBuilder: (context, state) => MaterialPage(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Error 404')),
-        body: const Center(child: Text('Page not found')),
+        appBar: AppBar(title: Text(S().error_404)),
+        body: Center(child: Text(S().page_not_found)),
       ),
     ),
   );

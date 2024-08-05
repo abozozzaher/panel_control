@@ -46,6 +46,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  intl_utils: ^2.8.7
+  intl_translation: ^0.20.0
   shared_preferences: ^2.2.3
   cached_network_image: ^3.3.1
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:panel_control/generated/l10n.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../generated/l10n.dart';
 
 class ProductPage extends StatelessWidget {
   final String? productId;
@@ -14,7 +15,7 @@ class ProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Details'),
+        title: Text(S().product_details),
         centerTitle: true, // توسيط العنوان
         leading: IconButton(
           // زر في الطرف الأيسر
@@ -42,7 +43,7 @@ class ProductPage extends StatelessWidget {
                 return Text('Error: ${snapshot.error}');
               }
               if (!snapshot.hasData || snapshot.data == null) {
-                return const Text('No data found.');
+                return Text(S().no_data_found);
               }
 
               var productData = snapshot.data!.data() as Map<String, dynamic>;

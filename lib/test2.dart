@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import 'generated/l10n.dart';
+
 class QRViewExample extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _QRViewExampleState();
@@ -40,7 +42,7 @@ class _QRViewExampleState extends State<QRViewExample> {
               child: (result != null)
                   ? Text(
                       'Barcode Type: ${result!.format}   Data: ${result!.code}')
-                  : Text('Scan a code'),
+                  : Text(S().scan_a_code),
             ),
           )
         ],

@@ -40,13 +40,13 @@ class _TestPageState extends State<TestPage> {
               onPressed: () {
                 //   _playSound('assets/sound/scanner-beep.mp3');
               },
-              child: Text('Play Beep Sound'),
+              child: Text(S().play_beep_sound),
             ),
             ElevatedButton(
               onPressed: () {
                 //   _playSound('assets/sound/beep.mp3');
               },
-              child: Text('Play Scan Sound'),
+              child: Text(S().play_scan_sound),
             ),
           ],
         ),

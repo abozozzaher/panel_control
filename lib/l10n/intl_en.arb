@@ -41,8 +41,21 @@
     "sold" : "Sold",
     "available" : "Available",
     "menu" : "Menu",
+    "length":"Length",
     "company_name"  : "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ",
-    "addres" : "Türkiye Gaziantep Sanayi MAH. 60092"
-  
-  }
-  
+    "addres" : "Türkiye Gaziantep Sanayi MAH. 60092",
+    "scan_a_code" : "Scan a code",
+    "access_denied_you_do_not_have_the_required_role" : "Access Denied. You do not have the required role.",
+    "go_to_page" : "Go to the main page",
+    "error_404" : "Error 404",
+    "page_not_found" : "Page not found",
+    "play_beep_sound" : "Play Beep Sound",
+    "play_scan_sound" : "Play Scan Sound",
+    "product_details" : "Product Details",
+    "no_data_found" : "No data found.",
+    "duplicate_code" : "Duplicate Code",
+    "error_code" : "Error Code",
+    "no_data_found_for_this_code" : "No data found for this code.",
+    "enter_code" : "Enter Code",
+    "button" : "Button"
+}

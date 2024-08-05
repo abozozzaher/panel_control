@@ -39,5 +39,19 @@
   "please_fill_all_fields": "Please fill all fields",
   "sold": "مباع",
   "available": "متاح",
-  "menu": "Menu"
+  "menu": "Menu",
+"scan_a_code" : "Scan a code",
+"access_denied._you_do_not_have_the_required_role." : "Access Denied. You do not have the required role.",
+"go_to_page" : "انتقل للصفحة الرئيسة",
+"error_404" : "Error 404",
+"page_not_found" : "Page not found",
+"play_beep_sound" : "Play Beep Sound",
+"play_scan_sound" : "Play Scan Sound",
+"product_details" : "Product Details",
+"no_data_found." : "No data found.",
+"duplicate_code" : "Duplicate Code",
+"error_code" : "Error Code",
+"no_data_found_for_this_code." : "No data found for this code.",
+"enter_code" : "Enter Code",
+"button" : "Button"
 }

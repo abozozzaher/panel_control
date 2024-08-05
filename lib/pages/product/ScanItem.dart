@@ -75,7 +75,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Duplicate Code'),
+          title: Text(S().duplicate_code),
           content: Text('The code "$code" has already been scanned.'),
           actions: [
             TextButton(
@@ -83,7 +83,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                 Navigator.of(context).pop();
                 _isDialogShowing = false;
               },
-              child: Text('OK'),
+              child: Text(S().ok),
             ),
           ],
         );
@@ -100,7 +100,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error Code'),
+          title: Text(S().error_code),
           content: Text(
               'Invalid code scanned and removed. رمز غير صالح تم مسحه ضوئيًا وإزالته.'),
           backgroundColor: Colors.redAccent,
@@ -110,7 +110,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                 Navigator.of(context).pop();
                 _isDialogShowing = false;
               },
-              child: Text('OK'),
+              child: Text(S().ok),
             ),
           ],
         );
@@ -157,14 +157,14 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       );
                     }).toList(),
                   )
-                : Text('No data found for this code.'),
+                : Text(S().no_data_found_for_this_code),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: Text(S().ok),
             ),
           ],
         );
@@ -178,7 +178,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Enter Code'),
+          title: Text(S().enter_code),
           content: TextField(
             controller: codeController,
             decoration: InputDecoration(hintText: 'Enter code here'),
@@ -449,7 +449,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       onPressed: () {
                         // ضع هنا الكود المطلوب لتنفيذ الزر
                       },
-                      child: Text('Button'),
+                      child: Text(S().button),
                     ),
                   ],
                 ),
