@@ -16,9 +16,8 @@
     "email_sent": "E-posta gönderildi",
     "ok": "TAMAM",
     "id": "İD",
-    "product": "Ürün",
-    "for2": "İçin",
-    "data": "Veri",
+    "product_id": "Ürün Id",
+    "data": "Tarih",
     "sale_status": "Satış durumu",
     "please_enter_your_email": "Lütfen E-postanızı girin",
     "pick_image": "Resim Seçin",
@@ -66,5 +65,10 @@
     "error_code": "Hata kodu",
     "no_data_found_for_this_code": "Bu kod için veri bulunamadı.",
     "enter_code": "Kodu girin",
-    "button": "Düğme"
+    "button": "Düğme",
+    "total_codes_scanned": "Taranan Toplam Kodlar",
+    "total_quantity": "Toplam miktar",
+    "total_length": "Toplam uzunluk",
+    "total_weight": "Toplam ağırlık",
+    "enter_code_here": "Kodu buraya girin"
 }

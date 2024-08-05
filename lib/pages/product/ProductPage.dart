@@ -55,8 +55,7 @@ class ProductPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                      '${S().product}${S().id} : ${productData['productId'] ?? ''}'),
+                  Text('${S().product_id} : ${productData['productId'] ?? ''}'),
                   Text('${S().type} : ${productData['type'] ?? ''}',
                       style: const TextStyle(fontSize: 18)),
                   Text('${S().width} : ${productData['width']}',

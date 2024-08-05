@@ -36,20 +36,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "company_name": MessageLookupByLibrary.simpleMessage(
             "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ"),
         "confirm": MessageLookupByLibrary.simpleMessage("Onaylamak"),
-        "data": MessageLookupByLibrary.simpleMessage("Veri"),
+        "data": MessageLookupByLibrary.simpleMessage("Tarih"),
         "details": MessageLookupByLibrary.simpleMessage("Detaylar"),
         "duplicate_code": MessageLookupByLibrary.simpleMessage("Yinelenen kod"),
         "email": MessageLookupByLibrary.simpleMessage("E -posta"),
         "email_sent":
             MessageLookupByLibrary.simpleMessage("E-posta gönderildi"),
         "enter_code": MessageLookupByLibrary.simpleMessage("Kodu girin"),
+        "enter_code_here":
+            MessageLookupByLibrary.simpleMessage("Kodu buraya girin"),
         "error": MessageLookupByLibrary.simpleMessage("Hata"),
         "error_404": MessageLookupByLibrary.simpleMessage("Hata 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("Hata kodu"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Görüntü yükleyemedi"),
         "first_name": MessageLookupByLibrary.simpleMessage("İlk adı"),
-        "for2": MessageLookupByLibrary.simpleMessage("İçin"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Parolanızı mı unuttunuz"),
         "go_to_page": MessageLookupByLibrary.simpleMessage("Ana sayfaya git"),
@@ -88,9 +89,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Lütfen tüm alanları doldurun"),
         "please_select_a_type":
             MessageLookupByLibrary.simpleMessage("Lütfen bir tür seçin."),
-        "product": MessageLookupByLibrary.simpleMessage("Ürün"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("Ürün Detayları"),
+        "product_id": MessageLookupByLibrary.simpleMessage("Ürün Id"),
         "quantity": MessageLookupByLibrary.simpleMessage("Miktar"),
         "register": MessageLookupByLibrary.simpleMessage("Kayıt olmak"),
         "sale_status": MessageLookupByLibrary.simpleMessage("Satış durumu"),
@@ -106,6 +107,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "toggle_language": MessageLookupByLibrary.simpleMessage("Dili geçiş"),
         "toggle_theme": MessageLookupByLibrary.simpleMessage("Toggle teması"),
         "total": MessageLookupByLibrary.simpleMessage("Toplam"),
+        "total_codes_scanned":
+            MessageLookupByLibrary.simpleMessage("Taranan Toplam Kodlar"),
+        "total_length": MessageLookupByLibrary.simpleMessage("Toplam uzunluk"),
+        "total_quantity": MessageLookupByLibrary.simpleMessage("Toplam miktar"),
+        "total_weight": MessageLookupByLibrary.simpleMessage("Toplam ağırlık"),
         "type": MessageLookupByLibrary.simpleMessage("Tip"),
         "weight": MessageLookupByLibrary.simpleMessage("Ağırlık"),
         "width": MessageLookupByLibrary.simpleMessage("Genişlik"),

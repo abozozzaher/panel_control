@@ -220,21 +220,11 @@ class S {
     );
   }
 
-  /// `Product`
-  String get product {
+  /// `Product ID`
+  String get product_id {
     return Intl.message(
-      'Product',
-      name: 'product',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `For`
-  String get for2 {
-    return Intl.message(
-      'For',
-      name: 'for2',
+      'Product ID',
+      name: 'product_id',
       desc: '',
       args: [],
     );
@@ -410,10 +400,10 @@ class S {
     );
   }
 
-  /// `saved successfully with`
+  /// `item saved successfully with ID :`
   String get saved_successfully_with {
     return Intl.message(
-      'saved successfully with',
+      'item saved successfully with ID :',
       name: 'saved_successfully_with',
       desc: '',
       args: [],
@@ -725,6 +715,56 @@ class S {
     return Intl.message(
       'Button',
       name: 'button',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Codes Scanned`
+  String get total_codes_scanned {
+    return Intl.message(
+      'Total Codes Scanned',
+      name: 'total_codes_scanned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Quantity`
+  String get total_quantity {
+    return Intl.message(
+      'Total Quantity',
+      name: 'total_quantity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Length`
+  String get total_length {
+    return Intl.message(
+      'Total Length',
+      name: 'total_length',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Weight`
+  String get total_weight {
+    return Intl.message(
+      'Total Weight',
+      name: 'total_weight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter code here`
+  String get enter_code_here {
+    return Intl.message(
+      'Enter code here',
+      name: 'enter_code_here',
       desc: '',
       args: [],
     );

@@ -16,8 +16,7 @@
     "email_sent" : "email sent",
     "ok": "OK",
     "id":"ID",
-    "product":"Product",
-    "for2": "For",
+    "product_id":"Product ID",
     "data":"Data",
     "sale_status":"Sale Status",
     "please_enter_your_email" : "Please enter your email",
@@ -35,7 +34,7 @@
     "confirm" : "Confirm",
     "cancel" : "Cancel",
     "item" : "Item",
-    "saved_successfully_with" :"saved successfully with",
+    "saved_successfully_with" :"item saved successfully with ID :",
     "details" : "Details",
     "image_uploaded_successfully" : "Image uploaded successfully",
     "failed_to_upload_image" : "Failed to upload image",
@@ -66,5 +65,11 @@
     "error_code" : "Error Code",
     "no_data_found_for_this_code" : "No data found for this code.",
     "enter_code" : "Enter Code",
-    "button" : "Button"
+    "button" : "Button",
+    "total_codes_scanned":"Total Codes Scanned",
+    "total_quantity":"Total Quantity",
+    "total_length":"Total Length",
+    "total_weight":"Total Weight",
+    "enter_code_here" : "Enter code here",
+    "saveـand_send_data" : "Save and send data"
 }

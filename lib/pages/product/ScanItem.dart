@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../generated/l10n.dart';
 import '../../service/app_drawer.dart';
 
@@ -34,7 +35,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
   void initState() {
     super.initState();
     _requestCameraPermission();
-    _startTimer();
   }
 
   Future<void> _requestCameraPermission() async {
@@ -47,15 +47,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
     if (status.isPermanentlyDenied) {
       openAppSettings();
     }
-  }
-
-  void _startTimer() {
-    _timer = Timer(const Duration(hours: 1), () {
-      setState(() {
-        scannedData.clear();
-        codeDetails.clear();
-      });
-    });
   }
 
   Future<void> _playSound(String path) async {
@@ -147,7 +138,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${S().details + S().for2} $code'),
+          title: Text('${S().details} $code'),
           content: SingleChildScrollView(
             child: data != null
                 ? Column(
@@ -182,7 +173,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
           title: Text(S().enter_code),
           content: TextField(
             controller: codeController,
-            decoration: const InputDecoration(hintText: 'Enter code here'),
+            decoration: InputDecoration(hintText: S().enter_code_here),
             keyboardType: TextInputType.number,
           ),
           actions: [
@@ -329,6 +320,66 @@ class _ScanItemQrState extends State<ScanItemQr> {
     }).toList();
   }
 
+  Future<void> _showConfirmDialog() async {
+/*
+    final int totalQuantity = codeDetails.values
+        .map((data) => data['quantity'] is int
+            ? data['quantity']
+            : (int.tryParse(data['quantity'].toString()) ?? 0))
+        .fold(0, (sum, item) => sum + item.toInt()); // تحويل item إلى int
+
+    final int totalLength = codeDetails.values
+        .map((data) => data['length'] is int
+            ? data['length']
+            : int.tryParse(data['length'].toString()) ?? 0)
+        .fold(0, (sum, item) => sum + item);
+
+    final int totalWeight = codeDetails.values
+        .map((data) => data['total_weight'] is int
+            ? data['total_weight']
+            : int.tryParse(data['total_weight'].toString()) ?? 0)
+        .fold(0, (sum, item) => sum + item);
+*/
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Data'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Text('Total Weight: $totalWeight Kg'),
+              //  Text('Total Length: $totalLength MT'),
+              //   Text('Total Quantity: $totalQuantity Pcs'),
+              Text('Scanned Data Length: ${scannedData.length}'),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Send'),
+              onPressed: () async {
+                // إرسال البيانات إلى Firebase
+                await FirebaseFirestore.instance.collection('seles').doc().set({
+                  // 'totalWeight': totalWeight,
+                  // 'totalLength': totalLength,
+                  //  'totalQuantity': totalQuantity,
+                  'scannedDataLength': scannedData.length,
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     int totalQuantity = 0;
@@ -414,15 +465,12 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Total Codes Scanned: ${scannedData.length}',
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          ),
-                          Text(
-                            'Total Quantity: $totalQuantity Pcs',
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          ),
+                              '${S().total_codes_scanned} : ${scannedData.length} PPcs',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 13)),
+                          Text('${S().total_quantity} : $totalQuantity Pcs',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 13)),
                         ],
                       ),
                     ),
@@ -431,30 +479,39 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Total Length: $totalLength MT',
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          ),
-                          Text(
-                            'Total Weight: $totalWeight kg',
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          ),
+                          Text('${S().total_length} : $totalLength MT',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 13)),
+                          Text('${S().total_weight} :  $totalWeight Kg',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 13)),
                         ],
                       ),
                     ),
                   ],
                 ),
                 // القسم الثالث
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // ضع هنا الكود المطلوب لتنفيذ الزر
-                      },
-                      child: Text(S().button),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Center(
+                                    child: Text(
+                                        'Long press to activate the button')),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          },
+                          child: Text('Save and send data'),
+                          onLongPress: _showConfirmDialog,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -522,10 +579,10 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         label: Text(S().length,
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('${S().total} ${S().weight}',
+                        label: Text('${S().weight} ${S().total}',
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('${S().scanned} ${S().data}',
+                        label: Text('${S().scanned}',
                             style: TextStyle(color: Colors.greenAccent))),
                   ],
                   rows: _buildRows(),

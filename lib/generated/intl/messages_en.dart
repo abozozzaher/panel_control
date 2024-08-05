@@ -43,13 +43,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "email_sent": MessageLookupByLibrary.simpleMessage("email sent"),
         "enter_code": MessageLookupByLibrary.simpleMessage("Enter Code"),
+        "enter_code_here":
+            MessageLookupByLibrary.simpleMessage("Enter code here"),
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "error_404": MessageLookupByLibrary.simpleMessage("Error 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("Error Code"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Failed to upload image"),
         "first_name": MessageLookupByLibrary.simpleMessage("First Name"),
-        "for2": MessageLookupByLibrary.simpleMessage("For"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
         "go_to_page":
@@ -89,14 +90,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please fill all fields"),
         "please_select_a_type":
             MessageLookupByLibrary.simpleMessage("Please select a type."),
-        "product": MessageLookupByLibrary.simpleMessage("Product"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("Product Details"),
+        "product_id": MessageLookupByLibrary.simpleMessage("Product ID"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "sale_status": MessageLookupByLibrary.simpleMessage("Sale Status"),
-        "saved_successfully_with":
-            MessageLookupByLibrary.simpleMessage("saved successfully with"),
+        "saved_successfully_with": MessageLookupByLibrary.simpleMessage(
+            "item saved successfully with ID :"),
         "scan": MessageLookupByLibrary.simpleMessage("Scan"),
         "scan_a_code": MessageLookupByLibrary.simpleMessage("Scan a code"),
         "scanned": MessageLookupByLibrary.simpleMessage("Scanned"),
@@ -108,6 +109,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Toggle Language"),
         "toggle_theme": MessageLookupByLibrary.simpleMessage("Toggle Theme"),
         "total": MessageLookupByLibrary.simpleMessage("Total"),
+        "total_codes_scanned":
+            MessageLookupByLibrary.simpleMessage("Total Codes Scanned"),
+        "total_length": MessageLookupByLibrary.simpleMessage("Total Length"),
+        "total_quantity":
+            MessageLookupByLibrary.simpleMessage("Total Quantity"),
+        "total_weight": MessageLookupByLibrary.simpleMessage("Total Weight"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),

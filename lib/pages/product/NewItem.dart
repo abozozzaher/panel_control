@@ -139,6 +139,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Future<void> addItem() async {
     String? imageUrl;
     bool isUploading = false;
+    String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
+        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
     // Check if selectedType is null
     if (selectedType == null) {
       // Show error message and return if selectedType is null
@@ -167,12 +169,19 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${S().confirm} ${S().item} ${S().details}'),
+          title: Text(
+            '${S().confirm} ${S().details} ${S().item}',
+            textAlign: TextAlign.center,
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('${S().id} : $productId'),
+              Text('${S().product_id}'),
+              Text(
+                '$englishProductId',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Text('${S().type} : $selectedType'),
               Text('${S().width} : $selectedWidth' 'mm'),
               Text('${S().weight} : $selectedWeight' 'g'),
@@ -188,118 +197,148 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         width: 100, height: 100),
             ],
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(S().confirm),
-              onPressed: () async {
-                if (isUploading) {
-                  return; // Exit the function if the upload is already in progress
-                }
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    child: Text(
+                      S().confirm,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.greenAccent),
+                    onPressed: () async {
+                      if (isUploading) {
+                        return; // Exit the function if the upload is already in progress
+                      }
 
-                setState(() {
-                  isUploading = true; // Set the uploading flag to true
-                });
+                      setState(() {
+                        isUploading = true; // Set the uploading flag to true
+                      });
 
-                // Upload image to storage if selected
-                if (selectedImage != null || _webImage != null) {
-                  try {
-                    imageUrl = await uploadImageToStorage(selectedImage);
+                      // Upload image to storage if selected
+                      if (selectedImage != null || _webImage != null) {
+                        try {
+                          imageUrl = await uploadImageToStorage(selectedImage);
 
-                    // تأخير لمدة 2 ثانية قبل إظهار Snackbar
-                    //     await Future.delayed(Duration(seconds: 2));
+                          // تأخير لمدة 2 ثانية قبل إظهار Snackbar
+                          //     await Future.delayed(Duration(seconds: 2));
 
-                    // Show snackbar if image upload succeeds
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(S().image_uploaded_successfully)),
-                    );
-                  } catch (e) {
-                    // Display error message to the user if image upload fails
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text('${S().failed_to_upload_image} : $e')),
-                    );
-                    setState(() {
-                      isUploading =
-                          false; // Reset the uploading flag if the upload fails
-                    });
-                    return;
-                  }
-                }
+                          // Show snackbar if image upload succeeds
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Center(
+                                    child:
+                                        Text(S().image_uploaded_successfully))),
+                          );
+                        } catch (e) {
+                          // Display error message to the user if image upload fails
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Center(
+                                    child: Text(
+                                        '${S().failed_to_upload_image} : $e'))),
+                          );
+                          setState(() {
+                            isUploading =
+                                false; // Reset the uploading flag if the upload fails
+                          });
+                          return;
+                        }
+                      }
 
-                // String yearMonth ='${DateTime.now().year}-${DateTime.now().month}';
-                String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
-                String documentPath =
-                    'productsForAllMonths/$yearMonth/$productId';
+                      // String yearMonth ='${DateTime.now().year}-${DateTime.now().month}';
+                      String yearMonth =
+                          DateFormat('yyyy-MM').format(DateTime.now());
+                      String documentPath =
+                          'productsForAllMonths/$yearMonth/$productId';
 
-                ///      int weight = int.tryParse(selectedWeight ?? '0') ?? 0;
-                //   int quantity = int.tryParse(selectedQuantity ?? '0') ?? 0;
+                      ///      int weight = int.tryParse(selectedWeight ?? '0') ?? 0;
+                      //   int quantity = int.tryParse(selectedQuantity ?? '0') ?? 0;
 
-                // Save data to Firestore
-                await FirebaseFirestore.instance
-                    .collection('products')
-                    .doc(documentPath)
-                    .set({
-                  'type': selectedType,
-                  'width': selectedWidth,
-                  'weight': selectedWeight,
-                  'total_weight': (double.parse(selectedWeight.toString()) *
-                          double.parse(selectedQuantity.toString())) /
-                      1000,
-                  'color': selectedColor,
-                  'yarn_number': selectedYarnNumber,
-                  'productId': productId,
-                  'date': DateTime.now(),
-                  'shift': selectedShift,
-                  'quantity': selectedQuantity,
-                  'length': selectedLength,
-                  'created_by': userId,
-                  'saleـstatus': false,
-                  if (imageUrl != null) 'image_url': imageUrl,
-                  //444
-                  if (imageUrl == null) 'image_url': '',
-                });
+                      // Save data to Firestore
+                      await FirebaseFirestore.instance
+                          .collection('products')
+                          .doc(documentPath)
+                          .set({
+                        'type': selectedType,
+                        'width': selectedWidth,
+                        'weight': selectedWeight,
+                        'total_weight':
+                            (double.parse(selectedWeight.toString()) *
+                                    double.parse(selectedQuantity.toString())) /
+                                1000,
+                        'color': selectedColor,
+                        'yarn_number': selectedYarnNumber,
+                        'productId': productId,
+                        'date': DateTime.now(),
+                        'shift': selectedShift,
+                        'quantity': selectedQuantity,
+                        'length': selectedLength,
+                        'created_by': userId,
+                        'saleـstatus': false,
+                        if (imageUrl != null) 'image_url': imageUrl,
+                        //444
+                        if (imageUrl == null) 'image_url': '',
+                      });
 
-                // Generate and print PDF
-                await generateAndPrintPDF(productId, imageUrl, yearMonth);
+                      // Generate and print PDF
+                      await generateAndPrintPDF(productId, imageUrl, yearMonth);
 
-                // تأخير لمدة 2 ثانية قبل إظهار Snackbar
-                //    await Future.delayed(Duration(seconds: 2));
+                      // تأخير لمدة 2 ثانية قبل إظهار Snackbar
+                      //    await Future.delayed(Duration(seconds: 2));
 
-                // Show a snackbar with the new product ID
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          '${S().item} ${S().saved_successfully_with} ID: $productId')),
-                );
+                      // Show a snackbar with the new product ID
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Center(
+                        child: Text(
+                            '${S().saved_successfully_with} $englishProductId'),
+                      )));
 
-                // Reset fields and generate new product ID
-                setState(() {
-                  selectedType =
-                      types.isNotEmpty ? types[0] : null; //  null : null;
-                  selectedWidth = widths.isNotEmpty ? widths[6] : null;
-                  selectedWeight = weights.isNotEmpty ? weights[0] : null;
-                  selectedColor = colors.isNotEmpty ? colors[0] : null;
-                  selectedYarnNumber =
-                      yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
-                  selectedShift = shift.isNotEmpty ? shift[0] : null;
-                  selectedQuantity = quantity.isNotEmpty ? quantity[0] : null;
-                  selectedLength = length.isNotEmpty ? length[2] : null;
+                      // Reset fields and generate new product ID
+                      setState(() {
+                        selectedType =
+                            types.isNotEmpty ? types[0] : null; //  null : null;
+                        selectedWidth = widths.isNotEmpty ? widths[6] : null;
+                        selectedWeight = weights.isNotEmpty ? weights[0] : null;
+                        selectedColor = colors.isNotEmpty ? colors[0] : null;
+                        selectedYarnNumber =
+                            yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
+                        selectedShift = shift.isNotEmpty ? shift[0] : null;
+                        selectedQuantity =
+                            quantity.isNotEmpty ? quantity[0] : null;
+                        selectedLength = length.isNotEmpty ? length[2] : null;
 
-                  selectedImage = null;
-                  _webImage = null;
-                  productId = generateCode();
-                  isUploading =
-                      false; // Reset the uploading flag after the upload is complete
-                });
+                        selectedImage = null;
+                        _webImage = null;
+                        productId = generateCode();
+                        isUploading =
+                            false; // Reset the uploading flag after the upload is complete
+                      });
 
-                Navigator.of(context).pop(); // Close dialog
-              },
-            ),
-            TextButton(
-              child: Text(S().cancel),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
-              },
+                      Navigator.of(context).pop(); // Close dialog
+                    },
+                  ),
+                ),
+                SizedBox(height: 5, width: 5),
+                Expanded(
+                  child: TextButton(
+                    child: Text(
+                      S().cancel,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                    style:
+                        TextButton.styleFrom(backgroundColor: Colors.redAccent),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close dialog
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -334,9 +373,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   Future<void> generateAndPrintPDF(
       String productId, String? imageUrl, String? yearMonth) async {
+    String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
+        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
     final pdf = pw.Document();
     String productUrl =
-        "https://panel-control-company-zaher.web.app/$yearMonth/$productId"; // Replace with your product URL
+        "https://panel-control-company-zaher.web.app/$yearMonth/$englishProductId"; // Replace with your product URL
 
     final ttfTr = await rootBundle.load("assets/fonts/Beiruti.ttf");
     final fontBe = pw.Font.ttf(ttfTr);
@@ -344,8 +385,12 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
     DateTime now = DateTime.now();
 
-    String dataTime = DateFormat('  yyyy - MM - dd  ').format(now);
-
+    //   String dataTime = DateFormat('  yyyy - MM - dd  ').format(now);
+    String englishDataTime = now.year.toString() +
+        ' - ' +
+        now.month.toString().padLeft(2, '0') +
+        ' - ' +
+        now.day.toString().padLeft(2, '0');
     final profileImage = pw.MemoryImage(
       (await rootBundle.load('assets/img/logo.png')).buffer.asUint8List(),
     );
@@ -382,10 +427,26 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     child: pw.Container(
                       height: 50,
                       alignment: pw.Alignment.center,
-                      child: pw.Text(
-                        S().blue_textiles,
-                        textDirection: pw.TextDirection.rtl,
-                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                      child: pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                            'Blue textiles',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                            ),
+                          ),
+                          pw.SizedBox(height: 4), // إضافة مساحة بين النصين
+                          pw.Text(
+                            'المنسوجات الزرقاء',
+                            textDirection: pw.TextDirection.rtl,
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.normal,
+                              font: fontBe,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -433,7 +494,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text('ID Kodu : ',
                             style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          productId,
+                          englishProductId,
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(
                               font: fontRo, fontWeight: pw.FontWeight.bold),
@@ -572,7 +633,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text('Tarih : ', style: pw.TextStyle(font: fontBe)),
-                        pw.Text(dataTime,
+                        pw.Text(englishDataTime,
                             textDirection: pw.TextDirection.rtl,
                             style: pw.TextStyle(font: fontRo)),
                         pw.Text(
@@ -674,10 +735,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   @override
   Widget build(BuildContext context) {
     bool isMobile = MediaQuery.of(context).size.width < 600;
-
+    String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
+        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text('${S().add} ${S().new1} ${S().item}'),
+        title: Text('${S().add} ${S().item} ${S().new1}'),
         centerTitle: true,
         leading: isMobile
             ? IconButton(
@@ -701,8 +763,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('${S().product}${S().id}  :  $productId'),
-                      // Text('Product ID: ${int.parse(productId).toString()}'),
+                      Text('${S().product_id}  :  $englishProductId',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textDirection: ui.TextDirection.rtl),
                       const SizedBox(height: 10),
                       if (selectedImage != null || _webImage != null)
                         kIsWeb
@@ -710,9 +773,10 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                             : Image.file(File(selectedImage!.path),
                                 width: 200, height: 200),
                       const SizedBox(height: 10),
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.camera_alt_outlined),
                         onPressed: pickImage,
-                        child: Text(S().pick_image),
+                        label: Text(S().pick_image),
                       ),
                       const SizedBox(height: 10),
                       buildDropdown(
@@ -793,9 +857,10 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         suffixText: 'Pcs', // يمكنك إضافة النص الذي تريده هنا
                       ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        icon: const Icon(Icons.save_as_outlined),
                         onPressed: addItem,
-                        child: Text('${S().add} ${S().item}'),
+                        label: Text('${S().add} ${S().item}'),
                       ),
                     ],
                   ),
@@ -808,8 +873,10 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Widget buildDropdown(String hint, String? selectedValue, List<String> items,
       ValueChanged<String?> onChanged, String hintText,
       {String suffixText = ''}) {
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Text(hintText, style: const TextStyle(color: Colors.grey)),
         DropdownButton<String>(
@@ -819,7 +886,10 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
           items: items.map((item) {
             return DropdownMenuItem(
               value: item,
-              child: Text('$item $suffixText'), // إضافة النص الإضافي هنا
+              child: Center(
+                child: Text('$item $suffixText',
+                    textDirection: ui.TextDirection.ltr),
+              ), // إضافة النص الإضافي هنا
             );
           }).toList(),
         ),

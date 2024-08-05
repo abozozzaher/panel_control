@@ -50,6 +50,7 @@ dependencies:
   intl_translation: ^0.20.0
   shared_preferences: ^2.2.3
   cached_network_image: ^3.3.1
+  double_back_to_close_app: ^2.1.0
 
 
   pdf: ^3.11.0
