@@ -53,14 +53,34 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode _themeMode = ThemeMode.system;
   Locale _locale = const Locale('en');
+
+  @override
+  void initState() {
+    super.initState();
+    _initThemeAndLocale();
+  }
+
+  void _initThemeAndLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final themeMode = prefs.getString('themeMode');
+    final locale = prefs.getString('locale');
+
+    setState(() {
+      _themeMode = themeMode == 'dark' ? ThemeMode.dark : ThemeMode.light;
+      if (locale != null) {
+        _locale = Locale(locale);
+      }
+    });
+  }
 
   void _toggleTheme() {
     setState(() {
       _themeMode =
           _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     });
+    _saveThemeMode();
   }
 
   void _toggleLocale() {
@@ -69,6 +89,18 @@ class _MyAppState extends State<MyApp> {
           ? const Locale('ar')
           : const Locale('en');
     });
+    _saveLocale();
+  }
+
+  void _saveThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        'themeMode', _themeMode == ThemeMode.dark ? 'dark' : 'light');
+  }
+
+  void _saveLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('locale', _locale.languageCode);
   }
 
   Future<bool> checkUserRole() async {
@@ -248,7 +280,7 @@ class _MyAppState extends State<MyApp> {
               return supportedLocale;
             }
           }
-          return supportedLocales.first;
+          return const Locale('en');
         },
         debugShowCheckedModeBanner: false,
         routerConfig: _router,

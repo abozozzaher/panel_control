@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -385,6 +384,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       alignment: pw.Alignment.center,
                       child: pw.Text(
                         S().blue_textiles,
+                        textDirection: pw.TextDirection.rtl,
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                       ),
                     ),
@@ -489,7 +489,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           '/'
                           '${(double.parse(selectedWeight.toString()) * double.parse(selectedQuantity.toString())) / 1000}'
                           'Kg',
-                          textDirection: pw.TextDirection.rtl,
+                          //  textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
@@ -521,8 +521,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text('İplik Density : ',
                             style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedYarnNumber' 'D',
-                          textDirection: pw.TextDirection.rtl,
+                          '$selectedYarnNumber'
+                          'D',
+                          //   textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
@@ -538,8 +539,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text('Uzunluk : ',
                             style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedLength' 'MT',
-                          textDirection: pw.TextDirection.rtl,
+                          '$selectedLength'
+                          'MT',
+                          //  textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
@@ -554,8 +556,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       children: [
                         pw.Text('Adet : ', style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedQuantity' 'Pcs',
-                          textDirection: pw.TextDirection.rtl,
+                          '$selectedQuantity'
+                          'Pcs',
+                          //    textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
@@ -569,10 +572,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text('Tarih : ', style: pw.TextStyle(font: fontBe)),
-                        pw.Text(
-                          dataTime,
-                          style: pw.TextStyle(font: fontRo),
-                        ),
+                        pw.Text(dataTime,
+                            textDirection: pw.TextDirection.rtl,
+                            style: pw.TextStyle(font: fontRo)),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'التاريخ :',
@@ -700,6 +702,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text('Product ID: $productId'),
+                      // Text('Product ID: ${int.parse(productId).toString()}'),
                       const SizedBox(height: 10),
                       if (selectedImage != null || _webImage != null)
                         kIsWeb
