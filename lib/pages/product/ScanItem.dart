@@ -50,7 +50,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
   }
 
   void _startTimer() {
-    _timer = Timer(Duration(hours: 1), () {
+    _timer = Timer(const Duration(hours: 1), () {
       setState(() {
         scannedData.clear();
         codeDetails.clear();
@@ -76,7 +76,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(S().duplicate_code),
-          content: Text('The code "$code" has already been scanned.'),
+          content:
+              Text('${S().the_code} "$code" ${S().has_already_been_scanned}'),
           actions: [
             TextButton(
               onPressed: () {
@@ -101,7 +102,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(S().error_code),
-          content: Text(
+          content: const Text(
               'Invalid code scanned and removed. رمز غير صالح تم مسحه ضوئيًا وإزالته.'),
           backgroundColor: Colors.redAccent,
           actions: [
@@ -122,7 +123,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
     try {
       String baseUrl = 'https://panel-control-company-zaher.web.app/';
       if (!url.startsWith(baseUrl)) {
-        throw FormatException('Invalid URL format');
+        throw const FormatException('Invalid URL format');
       }
       String remainingPath = url.substring(baseUrl.length);
       String monthFolder = remainingPath.substring(0, 7);
@@ -146,7 +147,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Details for $code'),
+          title: Text('${S().details + S().for2} $code'),
           content: SingleChildScrollView(
             child: data != null
                 ? Column(
@@ -181,7 +182,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
           title: Text(S().enter_code),
           content: TextField(
             controller: codeController,
-            decoration: InputDecoration(hintText: 'Enter code here'),
+            decoration: const InputDecoration(hintText: 'Enter code here'),
             keyboardType: TextInputType.number,
           ),
           actions: [
@@ -253,7 +254,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
           });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Scanned: $code'),
+              content: Text('${S().scanned} $code'),
               backgroundColor: scanData.format == BarcodeFormat.qrcode
                   ? Colors.green
                   : Colors.yellowAccent,
@@ -275,7 +276,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
     Map<String, Map<String, dynamic>> aggregatedData = {};
 
     for (var entry in codeDetails.entries) {
-      var code = entry.key;
+      //   var code = entry.key;
       var data = entry.value;
 
       String key =
@@ -309,21 +310,21 @@ class _ScanItemQrState extends State<ScanItemQr> {
       var data = entry.value;
       return DataRow(cells: [
         DataCell(Text(data['type'].toString(),
-            style: TextStyle(color: Colors.redAccent))),
+            style: const TextStyle(color: Colors.redAccent))),
         DataCell(Text(data['color'].toString(),
-            style: TextStyle(color: Colors.redAccent))),
+            style: const TextStyle(color: Colors.redAccent))),
         DataCell(Text('${data['width']} mm',
-            style: TextStyle(color: Colors.redAccent))),
+            style: const TextStyle(color: Colors.redAccent))),
         DataCell(Text('${data['yarn_number']} D',
-            style: TextStyle(color: Colors.redAccent))),
+            style: const TextStyle(color: Colors.redAccent))),
         DataCell(Text('${data['quantity']} Pcs',
-            style: TextStyle(color: Colors.redAccent))),
-        DataCell(Text('${data['length']} MT',
-            style: TextStyle(color: Colors.redAccent))),
-        DataCell(Text('${data['total_weight']} kg',
-            style: TextStyle(color: Colors.redAccent))),
+            style: const TextStyle(color: Colors.redAccent))),
+        DataCell(Text('${data['length']} Mt',
+            style: const TextStyle(color: Colors.redAccent))),
+        DataCell(Text('${data['total_weight']} Kg',
+            style: const TextStyle(color: Colors.redAccent))),
         DataCell(Text(data['scanned_data'].toString(),
-            style: TextStyle(color: Colors.greenAccent))),
+            style: const TextStyle(color: Colors.greenAccent))),
       ]);
     }).toList();
   }
@@ -381,7 +382,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: _showAddCodeDialog,
           ),
         ],
@@ -414,11 +415,13 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         children: [
                           Text(
                             'Total Codes Scanned: ${scannedData.length}',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
                           ),
                           Text(
                             'Total Quantity: $totalQuantity Pcs',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
                           ),
                         ],
                       ),
@@ -430,11 +433,13 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         children: [
                           Text(
                             'Total Length: $totalLength MT',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
                           ),
                           Text(
                             'Total Weight: $totalWeight kg',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
                           ),
                         ],
                       ),
@@ -461,7 +466,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
             child: SingleChildScrollView(
               child: ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: scannedData.length,
                 itemBuilder: (context, index) {
                   final code = scannedData[index];
@@ -473,7 +478,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                   return ListTile(
                     title: Text(displayCode),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
                         setState(() {
                           scannedData.removeAt(index);
@@ -499,28 +504,28 @@ class _ScanItemQrState extends State<ScanItemQr> {
                 child: DataTable(
                   columns: [
                     DataColumn(
-                        label: Text('Type',
+                        label: Text(S().type,
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('Color',
+                        label: Text(S().color,
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('Width',
+                        label: Text(S().width,
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('Yarn Number',
+                        label: Text(S().yarn_number,
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('Quantity',
+                        label: Text(S().quantity,
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('Length',
+                        label: Text(S().length,
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('total_weight',
+                        label: Text('${S().total} ${S().weight}',
                             style: TextStyle(color: Colors.greenAccent))),
                     DataColumn(
-                        label: Text('Scanned Data',
+                        label: Text('${S().scanned} ${S().data}',
                             style: TextStyle(color: Colors.greenAccent))),
                   ],
                   rows: _buildRows(),

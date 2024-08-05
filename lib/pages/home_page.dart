@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Text(_currentUserData!.phone),
                     const SizedBox(height: 10),
-                    Text('ID: ${_currentUserData!.id}'),
+                    Text('${S().id}: ${_currentUserData!.id}'),
                     const SizedBox(height: 20),
                     if (work)
                       ElevatedButton.icon(

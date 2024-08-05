@@ -40,7 +40,7 @@ class ProductPage extends StatelessWidget {
                 return const CircularProgressIndicator();
               }
               if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return Text('${S().error} : ${snapshot.error}');
               }
               if (!snapshot.hasData || snapshot.data == null) {
                 return Text(S().no_data_found);
@@ -55,29 +55,24 @@ class ProductPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Product ID: ${productData['productId'] ?? ''}'),
-                  Text('Type: ${productData['type'] ?? ''}',
+                  Text(
+                      '${S().product}${S().id} : ${productData['productId'] ?? ''}'),
+                  Text('${S().type} : ${productData['type'] ?? ''}',
                       style: const TextStyle(fontSize: 18)),
-                  Text('Width: ${productData['width']}',
+                  Text('${S().width} : ${productData['width']}',
                       style: const TextStyle(fontSize: 18)),
-                  Text('Weight: ${productData['weight']}',
+                  Text('${S().weight} : ${productData['weight']}',
                       style: const TextStyle(fontSize: 18)),
-                  Text('Color: ${productData['color']}',
+                  Text('${S().color} : ${productData['color']}',
                       style: const TextStyle(fontSize: 18)),
-                  Text('Yarn Number: ${productData['yarn_number']}',
+                  Text('${S().yarn_number} : ${productData['yarn_number']}',
                       style: const TextStyle(fontSize: 18)),
-                  Text('Date: ${productData['date'].toDate()}',
+                  Text('${S().data} : ${productData['date'].toDate()}',
                       style: const TextStyle(fontSize: 18)),
-                  Text('User: ${productData['user']}',
-                      style: const TextStyle(fontSize: 18)),
-                  Text('User ID: ${productData['user_id']}',
-                      style: const TextStyle(fontSize: 18)),
-                  Text('Shift: ${productData['shift']}',
-                      style: const TextStyle(fontSize: 18)),
-                  Text('Created By: ${productData['created_by']}',
+                  Text('${S().shift} : ${productData['shift']}',
                       style: const TextStyle(fontSize: 18)),
                   Text(
-                      'Sale Status: ${productData['saleـstatus'] ? S().sold : S().available}',
+                      '${S().sale_status} : ${productData['saleـstatus'] ? S().sold : S().available}',
                       style: const TextStyle(fontSize: 18)),
                   if (productData['image_url'] != '')
                     Image.network(productData['image_url']),

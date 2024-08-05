@@ -36,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "company_name": MessageLookupByLibrary.simpleMessage(
             "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "data": MessageLookupByLibrary.simpleMessage("Data"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
         "duplicate_code":
             MessageLookupByLibrary.simpleMessage("Duplicate Code"),
@@ -48,10 +49,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Failed to upload image"),
         "first_name": MessageLookupByLibrary.simpleMessage("First Name"),
+        "for2": MessageLookupByLibrary.simpleMessage("For"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
         "go_to_page":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
+        "has_already_been_scanned":
+            MessageLookupByLibrary.simpleMessage("has already been scanned."),
+        "id": MessageLookupByLibrary.simpleMessage("ID"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("Image uploaded successfully"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
@@ -84,20 +89,25 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please fill all fields"),
         "please_select_a_type":
             MessageLookupByLibrary.simpleMessage("Please select a type."),
+        "product": MessageLookupByLibrary.simpleMessage("Product"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("Product Details"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "sale_status": MessageLookupByLibrary.simpleMessage("Sale Status"),
         "saved_successfully_with":
             MessageLookupByLibrary.simpleMessage("saved successfully with"),
         "scan": MessageLookupByLibrary.simpleMessage("Scan"),
         "scan_a_code": MessageLookupByLibrary.simpleMessage("Scan a code"),
+        "scanned": MessageLookupByLibrary.simpleMessage("Scanned"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
+        "the_code": MessageLookupByLibrary.simpleMessage("The Code"),
         "toggle_language":
             MessageLookupByLibrary.simpleMessage("Toggle Language"),
         "toggle_theme": MessageLookupByLibrary.simpleMessage("Toggle Theme"),
+        "total": MessageLookupByLibrary.simpleMessage("Total"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),

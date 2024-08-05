@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:panel_control/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class LoginPage extends StatefulWidget {
   final VoidCallback toggleTheme;
 
@@ -85,11 +84,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
+      // UserCredential userCredential = await FirebaseAuth.instance    .signInWithEmailAndPassword( email: _emailController.text, password: _passwordController.text);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);

@@ -172,15 +172,15 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('ID: $productId'),
-              Text('Type: $selectedType'),
-              Text('Width: $selectedWidth' 'mm'),
-              Text('Weight: $selectedWeight' 'g'),
-              Text('Color: $selectedColor'),
-              Text('Yarn Number: $selectedYarnNumber' 'D'),
-              Text('Shift: $selectedShift'),
-              Text('Quantity: $selectedQuantity' 'Pcs'),
-              Text('Length: $selectedLength' 'MT'),
+              Text('${S().id} : $productId'),
+              Text('${S().type} : $selectedType'),
+              Text('${S().width} : $selectedWidth' 'mm'),
+              Text('${S().weight} : $selectedWeight' 'g'),
+              Text('${S().color} : $selectedColor'),
+              Text('${S().yarn_number} : $selectedYarnNumber' 'D'),
+              Text('${S().shift} : $selectedShift'),
+              Text('${S().quantity} : $selectedQuantity' 'Pcs'),
+              Text('${S().length} : $selectedLength' 'Mt'),
               if (selectedImage != null || _webImage != null)
                 kIsWeb
                     ? Image.memory(_webImage!, width: 100, height: 100)
@@ -701,7 +701,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Product ID: $productId'),
+                      Text('${S().product}${S().id}  :  $productId'),
                       // Text('Product ID: ${int.parse(productId).toString()}'),
                       const SizedBox(height: 10),
                       if (selectedImage != null || _webImage != null)
@@ -778,7 +778,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           });
                         },
                         '${S().select} ${S().length}',
-                        suffixText: 'MT', // يمكنك إضافة النص الذي تريده هنا
+                        suffixText: 'Mt', // يمكنك إضافة النص الذي تريده هنا
                       ),
                       buildDropdown(
                         '${S().select} ${S().quantity}',

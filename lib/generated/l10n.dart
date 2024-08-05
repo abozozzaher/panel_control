@@ -210,6 +210,56 @@ class S {
     );
   }
 
+  /// `ID`
+  String get id {
+    return Intl.message(
+      'ID',
+      name: 'id',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Product`
+  String get product {
+    return Intl.message(
+      'Product',
+      name: 'product',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For`
+  String get for2 {
+    return Intl.message(
+      'For',
+      name: 'for2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data`
+  String get data {
+    return Intl.message(
+      'Data',
+      name: 'data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sale Status`
+  String get sale_status {
+    return Intl.message(
+      'Sale Status',
+      name: 'sale_status',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please enter your email`
   String get please_enter_your_email {
     return Intl.message(
@@ -425,6 +475,46 @@ class S {
     return Intl.message(
       'Scan',
       name: 'scan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scanned`
+  String get scanned {
+    return Intl.message(
+      'Scanned',
+      name: 'scanned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get total {
+    return Intl.message(
+      'Total',
+      name: 'total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The Code`
+  String get the_code {
+    return Intl.message(
+      'The Code',
+      name: 'the_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `has already been scanned.`
+  String get has_already_been_scanned {
+    return Intl.message(
+      'has already been scanned.',
+      name: 'has_already_been_scanned',
       desc: '',
       args: [],
     );
@@ -648,6 +738,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
       Locale.fromSubtags(languageCode: 'ar'),
+      Locale.fromSubtags(languageCode: 'tr'),
     ];
   }
 
