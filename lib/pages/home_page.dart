@@ -66,21 +66,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<void> _logout() async {
-    await _auth.signOut();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', false);
-    setState(() {
-      _currentUserData = null;
-    });
-
-    context.go('/login');
-  }
-
   @override
   Widget build(BuildContext context) {
     bool work = _currentUserData?.work ?? false;
-
+    print('zaher 1');
+    print(_currentUserData);
+    print('zaher 2');
+    print(_currentUser);
+    print('zaher 3');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -132,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (work)
                       ElevatedButton.icon(
                         onPressed: () {
-                          context.go('/scan');
+                          context.go('/scan', extra: _currentUser);
                         },
                         icon: const Icon(Icons.qr_code_scanner),
                         label: Text('${S().scan} ${S().item}'),

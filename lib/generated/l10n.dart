@@ -769,6 +769,8 @@ class S {
       args: [],
     );
   }
+
+  // skipped getter for the 'saveـand_send_data' key
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

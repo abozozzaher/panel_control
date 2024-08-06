@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../generated/l10n.dart';
+import '../../model/user.dart';
 import '../../service/app_drawer.dart';
 
 class ScanItemQr extends StatefulWidget {
@@ -35,6 +39,15 @@ class _ScanItemQrState extends State<ScanItemQr> {
   void initState() {
     super.initState();
     _requestCameraPermission();
+  }
+
+  String generateCodeSales() {
+    DateTime now = DateTime.now();
+    var formatter = DateFormat('yyyyMMddHHmm');
+    String date = formatter.format(now);
+    String serialNumber = date.replaceAllMapped(RegExp(r'[٠-٩]'),
+        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
+    return serialNumber;
   }
 
   Future<void> _requestCameraPermission() async {
@@ -321,58 +334,96 @@ class _ScanItemQrState extends State<ScanItemQr> {
   }
 
   Future<void> _showConfirmDialog() async {
-/*
+    String codeSales = generateCodeSales();
+
     final int totalQuantity = codeDetails.values
         .map((data) => data['quantity'] is int
             ? data['quantity']
-            : (int.tryParse(data['quantity'].toString()) ?? 0))
-        .fold(0, (sum, item) => sum + item.toInt()); // تحويل item إلى int
+            : ((int.tryParse(data['quantity'].toString()) ?? 0) as int))
+        .fold(0, (sum, item) => sum + (item as int));
 
     final int totalLength = codeDetails.values
         .map((data) => data['length'] is int
             ? data['length']
-            : int.tryParse(data['length'].toString()) ?? 0)
-        .fold(0, (sum, item) => sum + item);
+            : ((int.tryParse(data['length'].toString()) ?? 0) as int))
+        .fold(0, (sum, item) => sum + (item as int));
 
     final int totalWeight = codeDetails.values
         .map((data) => data['total_weight'] is int
             ? data['total_weight']
-            : int.tryParse(data['total_weight'].toString()) ?? 0)
-        .fold(0, (sum, item) => sum + item);
-*/
+            : ((int.tryParse(data['total_weight'].toString()) ?? 0) as int))
+        .fold(0, (sum, item) => sum + (item as int));
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Data'),
+          title: const Text(
+            'Confirm Data',
+            textAlign: TextAlign.center,
+          ),
           content: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Text('Total Weight: $totalWeight Kg'),
-              //  Text('Total Length: $totalLength MT'),
-              //   Text('Total Quantity: $totalQuantity Pcs'),
+              Text('Total Weight: $totalWeight Kg'),
+              Text('Total Length: $totalLength MT'),
+              Text('Total Quantity: $totalQuantity Pcs'),
               Text('Scanned Data Length: ${scannedData.length}'),
             ],
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Send'),
-              onPressed: () async {
-                // إرسال البيانات إلى Firebase
-                await FirebaseFirestore.instance.collection('seles').doc().set({
-                  // 'totalWeight': totalWeight,
-                  // 'totalLength': totalLength,
-                  //  'totalQuantity': totalQuantity,
-                  'scannedDataLength': scannedData.length,
-                });
-                Navigator.of(context).pop();
-              },
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.greenAccent),
+                      onPressed: () async {
+                        // إرسال البيانات إلى Firebase
+                        await FirebaseFirestore.instance
+                            .collection('seles')
+                            .doc(codeSales)
+                            .set({
+                          'date': DateTime.now(),
+                          'codeSales': codeSales,
+                          'totalWeight': totalWeight,
+                          'totalLength': totalLength,
+                          'totalQuantity': totalQuantity,
+                          'scannedData': scannedData,
+                          'scannedDataLength': scannedData.length,
+                          'payـstatus': false,
+                          //   'created_by': UserData.fromMap(  {'uid': FirebaseAuth.instance.currentUser!.uid})
+                        });
+                        setState(() {
+                          scannedData.clear();
+                          codeDetails.clear();
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'Send',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black),
+                      )),
+                ),
+                const SizedBox(height: 5, width: 5),
+                Expanded(
+                  child: TextButton(
+                    style:
+                        TextButton.styleFrom(backgroundColor: Colors.redAccent),
+                    child: Text(
+                      S().cancel,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -382,6 +433,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
   @override
   Widget build(BuildContext context) {
+    var userData = Provider.of<UserData>(context);
+
     int totalQuantity = 0;
     int totalLength = 0;
     int totalWeight = 0;
@@ -509,7 +562,17 @@ class _ScanItemQrState extends State<ScanItemQr> {
                             );
                           },
                           child: Text('Save and send data'),
-                          onLongPress: _showConfirmDialog,
+                          onLongPress: scannedData.isNotEmpty
+                              ? _showConfirmDialog
+                              : () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Center(
+                                          child: Text('No data to send')),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                },
                         ),
                       ),
                     ),

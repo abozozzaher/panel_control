@@ -177,10 +177,10 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('${S().product_id}'),
+              Text(S().product_id),
               Text(
-                '$englishProductId',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                englishProductId,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               Text('${S().type} : $selectedType'),
               Text('${S().width} : $selectedWidth' 'mm'),
@@ -203,11 +203,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               children: [
                 Expanded(
                   child: TextButton(
-                    child: Text(
-                      S().confirm,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
                     style: TextButton.styleFrom(
                         backgroundColor: Colors.greenAccent),
                     onPressed: () async {
@@ -253,8 +248,12 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       // String yearMonth ='${DateTime.now().year}-${DateTime.now().month}';
                       String yearMonth =
                           DateFormat('yyyy-MM').format(DateTime.now());
+                      String englishYearMonth = yearMonth.replaceAllMapped(
+                          RegExp(r'[٠-٩]'),
+                          (match) => String.fromCharCode(
+                              match.group(0)!.codeUnitAt(0) - 1632 + 48));
                       String documentPath =
-                          'productsForAllMonths/$yearMonth/$productId';
+                          'productsForAllMonths/$englishYearMonth/$englishProductId';
 
                       ///      int weight = int.tryParse(selectedWeight ?? '0') ?? 0;
                       //   int quantity = int.tryParse(selectedQuantity ?? '0') ?? 0;
@@ -273,7 +272,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                                 1000,
                         'color': selectedColor,
                         'yarn_number': selectedYarnNumber,
-                        'productId': productId,
+                        'productId': englishProductId,
                         'date': DateTime.now(),
                         'shift': selectedShift,
                         'quantity': selectedQuantity,
@@ -286,7 +285,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       });
 
                       // Generate and print PDF
-                      await generateAndPrintPDF(productId, imageUrl, yearMonth);
+                      await generateAndPrintPDF(
+                          englishProductId, imageUrl, englishYearMonth);
 
                       // تأخير لمدة 2 ثانية قبل إظهار Snackbar
                       //    await Future.delayed(Duration(seconds: 2));
@@ -321,21 +321,26 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
                       Navigator.of(context).pop(); // Close dialog
                     },
-                  ),
-                ),
-                SizedBox(height: 5, width: 5),
-                Expanded(
-                  child: TextButton(
                     child: Text(
-                      S().cancel,
-                      style: TextStyle(
+                      S().confirm,
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 5, width: 5),
+                Expanded(
+                  child: TextButton(
                     style:
                         TextButton.styleFrom(backgroundColor: Colors.redAccent),
                     onPressed: () {
                       Navigator.of(context).pop(); // Close dialog
                     },
+                    child: Text(
+                      S().cancel,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
                   ),
                 ),
               ],
@@ -348,9 +353,17 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   Future<String> uploadImageToStorage(XFile? image) async {
     String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
+    String englishYearMonth = yearMonth.replaceAllMapped(
+        RegExp(r'[٠-٩]'),
+        (match) =>
+            String.fromCharCode(match.group(0)!.codeUnitAt(0) - 1632 + 48));
+    String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
+        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
+
     String day = '${DateTime.now().day}';
+
     Reference storageReference = FirebaseStorage.instance.ref().child(
-        'products/$yearMonth/$day/${image != null ? path.basename(image.path) : '$productId.jpg'}');
+        'products/$englishYearMonth/$day/${image != null ? path.basename(image.path) : '$englishProductId.jpg'}');
     SettableMetadata metadata = SettableMetadata(contentType: 'image/jpeg');
 
     UploadTask uploadTask;
@@ -372,12 +385,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   }
 
   Future<void> generateAndPrintPDF(
-      String productId, String? imageUrl, String? yearMonth) async {
-    String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
-        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
+      //   String productId,
+      String englishProductId,
+      String? imageUrl,
+      String? englishYearMonth) async {
+    //  String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'), (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
     final pdf = pw.Document();
     String productUrl =
-        "https://panel-control-company-zaher.web.app/$yearMonth/$englishProductId"; // Replace with your product URL
+        "https://panel-control-company-zaher.web.app/$englishYearMonth/$englishProductId"; // Replace with your product URL
 
     final ttfTr = await rootBundle.load("assets/fonts/Beiruti.ttf");
     final fontBe = pw.Font.ttf(ttfTr);

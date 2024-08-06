@@ -97,7 +97,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "register": MessageLookupByLibrary.simpleMessage("يسجل"),
         "sale_status": MessageLookupByLibrary.simpleMessage("حالة البيع"),
         "saved_successfully_with": MessageLookupByLibrary.simpleMessage(
-            "تم حفظ العنصر بنجاح مع رمز ID :"),
+            "تم حفظ العنصر بنجاح مع رمز :"),
         "scan": MessageLookupByLibrary.simpleMessage("امسح"),
         "scan_a_code": MessageLookupByLibrary.simpleMessage("مسح الرمز"),
         "scanned": MessageLookupByLibrary.simpleMessage("مسح ضوئي"),
