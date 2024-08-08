@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,9 +13,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../generated/l10n.dart';
+import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
 
 class AddNewItemScreen extends StatefulWidget {
@@ -52,10 +53,10 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   List<String> length = [];
   late String image;
 
-  bool isLoading = true;
+//  bool isLoading = false;
   String firstName = '';
   String lastName = '';
-  String userId = '';
+  // String userId = '';
   String productId = '';
 
   @override
@@ -67,14 +68,15 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Future<void> loadDefaults() async {
     // Load default values
     await loadDefaultValues();
-
+/*
     // Load data from Firestore
     try {
-      await loadData();
+      //   await loadData();
     } catch (e) {
       print('Error loading data: $e');
       // Display error message to the user
     }
+    */
   }
 
   Future<void> loadDefaultValues() async {
@@ -115,6 +117,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     return [];
   }
 
+/*
   Future<void> loadData() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -135,12 +138,15 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       isLoading = false;
     });
   }
-
-  Future<void> addItem() async {
+*/
+  Future<void> addItem(UserPr? userData) async {
+    // final userProvider = Provider.of<UserProvider>(context);
+    //  final userData = userProvider.user;
     String? imageUrl;
     bool isUploading = false;
     String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
         (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
+
     // Check if selectedType is null
     if (selectedType == null) {
       // Show error message and return if selectedType is null
@@ -277,7 +283,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         'shift': selectedShift,
                         'quantity': selectedQuantity,
                         'length': selectedLength,
-                        'created_by': userId,
+                        'created_by': userData!.id,
                         'saleـstatus': false,
                         if (imageUrl != null) 'image_url': imageUrl,
                         //444
@@ -749,9 +755,13 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final userData = userProvider.user;
+    print(userData);
     bool isMobile = MediaQuery.of(context).size.width < 600;
     String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
         (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${S().add} ${S().item} ${S().new1}'),
@@ -769,119 +779,120 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         toggleTheme: widget.toggleTheme,
         toggleLocale: widget.toggleLocale,
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('${S().product_id}  :  $englishProductId',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          textDirection: ui.TextDirection.rtl),
-                      const SizedBox(height: 10),
-                      if (selectedImage != null || _webImage != null)
-                        kIsWeb
-                            ? Image.memory(_webImage!, width: 200, height: 200)
-                            : Image.file(File(selectedImage!.path),
-                                width: 200, height: 200),
-                      const SizedBox(height: 10),
-                      ElevatedButton.icon(
-                        icon: Icon(Icons.camera_alt_outlined),
-                        onPressed: pickImage,
-                        label: Text(S().pick_image),
-                      ),
-                      const SizedBox(height: 10),
-                      buildDropdown(
-                          '${S().select} ${S().type}', selectedType, types,
-                          (value) {
-                        setState(() {
-                          selectedType = value;
-                        });
-                      }, '${S().select} ${S().type}'),
-                      buildDropdown(
-                        '${S().select} ${S().width}', selectedWidth, widths,
-                        (value) {
-                          setState(() {
-                            selectedWidth = value;
-                          });
-                        },
-                        '${S().select} ${S().width}',
-                        suffixText: 'mm', // يمكنك إضافة النص الذي تريده هنا
-                      ),
-                      buildDropdown(
-                        '${S().select} ${S().weight}',
-                        selectedWeight,
-                        weights,
-                        (value) {
-                          setState(() {
-                            selectedWeight = value;
-                          });
-                        },
-                        '${S().select} ${S().weight}',
-                        suffixText: 'g', // يمكنك إضافة النص الذي تريده هنا
-                      ),
-                      buildDropdown(
-                          '${S().select} ${S().color}', selectedColor, colors,
-                          (value) {
-                        setState(() {
-                          selectedColor = value;
-                        });
-                      }, '${S().select} ${S().color}'),
-                      buildDropdown(
-                        '${S().select} ${S().yarn_number}',
-                        selectedYarnNumber,
-                        yarnNumbers,
-                        (value) {
-                          setState(() {
-                            selectedYarnNumber = value;
-                          });
-                        },
-                        '${S().select} ${S().yarn_number}',
-                        suffixText: 'D', // يمكنك إضافة النص الذي تريده هنا
-                      ),
-                      buildDropdown(
-                          '${S().select} ${S().shift}', selectedShift, shift,
-                          (value) {
-                        setState(() {
-                          selectedShift = value;
-                        });
-                      }, '${S().select} ${S().shift}'),
-                      buildDropdown(
-                        '${S().select} ${S().length}', selectedLength, length,
-                        (value) {
-                          setState(() {
-                            selectedLength = value;
-                          });
-                        },
-                        '${S().select} ${S().length}',
-                        suffixText: 'Mt', // يمكنك إضافة النص الذي تريده هنا
-                      ),
-                      buildDropdown(
-                        '${S().select} ${S().quantity}',
-                        selectedQuantity,
-                        quantity,
-                        (value) {
-                          setState(() {
-                            selectedQuantity = value;
-                          });
-                        },
-                        '${S().select} ${S().quantity}',
-                        suffixText: 'Pcs', // يمكنك إضافة النص الذي تريده هنا
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton.icon(
-                        icon: const Icon(Icons.save_as_outlined),
-                        onPressed: addItem,
-                        label: Text('${S().add} ${S().item}'),
-                      ),
-                    ],
-                  ),
+      body: //isLoading  ? const Center(child: CircularProgressIndicator())   :
+
+          SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('${S().product_id}  :  $englishProductId',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textDirection: ui.TextDirection.rtl),
+                const SizedBox(height: 10),
+                if (selectedImage != null || _webImage != null)
+                  kIsWeb
+                      ? Image.memory(_webImage!, width: 200, height: 200)
+                      : Image.file(File(selectedImage!.path),
+                          width: 200, height: 200),
+                const SizedBox(height: 10),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.camera_alt_outlined),
+                  onPressed: pickImage,
+                  label: Text(S().pick_image),
                 ),
-              ),
+                const SizedBox(height: 10),
+                buildDropdown('${S().select} ${S().type}', selectedType, types,
+                    (value) {
+                  setState(() {
+                    selectedType = value;
+                  });
+                }, '${S().select} ${S().type}'),
+                buildDropdown(
+                  '${S().select} ${S().width}', selectedWidth, widths,
+                  (value) {
+                    setState(() {
+                      selectedWidth = value;
+                    });
+                  },
+                  '${S().select} ${S().width}',
+                  suffixText: 'mm', // يمكنك إضافة النص الذي تريده هنا
+                ),
+                buildDropdown(
+                  '${S().select} ${S().weight}',
+                  selectedWeight,
+                  weights,
+                  (value) {
+                    setState(() {
+                      selectedWeight = value;
+                    });
+                  },
+                  '${S().select} ${S().weight}',
+                  suffixText: 'g', // يمكنك إضافة النص الذي تريده هنا
+                ),
+                buildDropdown(
+                    '${S().select} ${S().color}', selectedColor, colors,
+                    (value) {
+                  setState(() {
+                    selectedColor = value;
+                  });
+                }, '${S().select} ${S().color}'),
+                buildDropdown(
+                  '${S().select} ${S().yarn_number}',
+                  selectedYarnNumber,
+                  yarnNumbers,
+                  (value) {
+                    setState(() {
+                      selectedYarnNumber = value;
+                    });
+                  },
+                  '${S().select} ${S().yarn_number}',
+                  suffixText: 'D', // يمكنك إضافة النص الذي تريده هنا
+                ),
+                buildDropdown(
+                    '${S().select} ${S().shift}', selectedShift, shift,
+                    (value) {
+                  setState(() {
+                    selectedShift = value;
+                  });
+                }, '${S().select} ${S().shift}'),
+                buildDropdown(
+                  '${S().select} ${S().length}', selectedLength, length,
+                  (value) {
+                    setState(() {
+                      selectedLength = value;
+                    });
+                  },
+                  '${S().select} ${S().length}',
+                  suffixText: 'Mt', // يمكنك إضافة النص الذي تريده هنا
+                ),
+                buildDropdown(
+                  '${S().select} ${S().quantity}',
+                  selectedQuantity,
+                  quantity,
+                  (value) {
+                    setState(() {
+                      selectedQuantity = value;
+                    });
+                  },
+                  '${S().select} ${S().quantity}',
+                  suffixText: 'Pcs', // يمكنك إضافة النص الذي تريده هنا
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.save_as_outlined),
+                  onPressed: () async {
+                    await addItem(userData);
+                  },
+                  label: Text('${S().add} ${S().item}'),
+                ),
+              ],
             ),
+          ),
+        ),
+      ),
     );
   }
 

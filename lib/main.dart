@@ -15,6 +15,7 @@ import 'pages/home_page.dart';
 import 'pages/product/NewItem.dart';
 import 'pages/product/ProductPage.dart';
 import 'pages/product/ScanItem.dart';
+import 'provider/user_provider.dart';
 import 'test.dart';
 import 'test2.dart';
 
@@ -33,9 +34,9 @@ void main() async {
   final bool isLoggedIn = await _checkLoginStatus();
   usePathUrlStrategy();
 
-  runApp(MyApp(
-    isLoggedIn: isLoggedIn,
-  ));
+  // runApp(MyApp(isLoggedIn: isLoggedIn));
+  runApp(ChangeNotifierProvider(
+      create: (_) => UserProvider(), child: MyApp(isLoggedIn: isLoggedIn)));
 }
 
 Future<bool> _checkLoginStatus() async {
@@ -243,6 +244,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        //     ChangeNotifierProvider(create: (_) => UserProvider()),
         Provider<FirebaseAuth>(
           create: (_) => FirebaseAuth.instance,
         ),

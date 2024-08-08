@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
@@ -8,9 +7,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../generated/l10n.dart';
 import '../../model/user.dart';
+import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
 
 class ScanItemQr extends StatefulWidget {
@@ -30,7 +29,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
   List<String> scannedData = [];
   Map<String, Map<String, dynamic>> codeDetails = {}; // لتخزين تفاصيل كل كود
   final AudioPlayer audioPlayer = AudioPlayer();
-
   bool _isDialogShowing = false;
   bool _isProcessing = false;
   Timer? _timer;
@@ -313,28 +311,39 @@ class _ScanItemQrState extends State<ScanItemQr> {
     return aggregatedData.entries.map((entry) {
       var data = entry.value;
       return DataRow(cells: [
-        DataCell(Text(data['type'].toString(),
-            style: const TextStyle(color: Colors.redAccent))),
-        DataCell(Text(data['color'].toString(),
-            style: const TextStyle(color: Colors.redAccent))),
-        DataCell(Text('${data['width']} mm',
-            style: const TextStyle(color: Colors.redAccent))),
-        DataCell(Text('${data['yarn_number']} D',
-            style: const TextStyle(color: Colors.redAccent))),
-        DataCell(Text('${data['quantity']} Pcs',
-            style: const TextStyle(color: Colors.redAccent))),
-        DataCell(Text('${data['length']} Mt',
-            style: const TextStyle(color: Colors.redAccent))),
-        DataCell(Text('${data['total_weight']} Kg',
-            style: const TextStyle(color: Colors.redAccent))),
-        DataCell(Text(data['scanned_data'].toString(),
-            style: const TextStyle(color: Colors.greenAccent))),
+        DataCell(Center(
+          child: Text(data['type'].toString(),
+              style: const TextStyle(color: Colors.redAccent)),
+        )),
+        DataCell(Center(
+          child: Text(data['color'].toString(),
+              style: const TextStyle(color: Colors.redAccent)),
+        )),
+        DataCell(Center(
+            child: Text('${data['width']} mm',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text('${data['yarn_number']} D',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text('${data['quantity']} Pcs',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text('${data['length']} Mt',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text('${data['total_weight']} Kg',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text(data['scanned_data'].toString(),
+                style: const TextStyle(color: Colors.black)))),
       ]);
     }).toList();
   }
 
-  Future<void> _showConfirmDialog() async {
+  Future<void> showConfirmDialog() async {
     String codeSales = generateCodeSales();
+    // print(userData);
 
     final int totalQuantity = codeDetails.values
         .map((data) => data['quantity'] is int
@@ -353,7 +362,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
             ? data['total_weight']
             : ((int.tryParse(data['total_weight'].toString()) ?? 0) as int))
         .fold(0, (sum, item) => sum + (item as int));
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -394,7 +402,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
                           'scannedData': scannedData,
                           'scannedDataLength': scannedData.length,
                           'payـstatus': false,
-                          //   'created_by': UserData.fromMap(  {'uid': FirebaseAuth.instance.currentUser!.uid})
+                          //  'created_by': userData.id,
+                          // 'name': userData.firstName
                         });
                         setState(() {
                           scannedData.clear();
@@ -433,8 +442,14 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
   @override
   Widget build(BuildContext context) {
-    var userData = Provider.of<UserData>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+    final userData = userProvider.user;
+    //  final UserData22 = userData222.userData!.work;
+    print('userData1');
+    print(userData!.email);
+    // print(userDataProvider.userData);
 
+    print('userData2');
     int totalQuantity = 0;
     int totalLength = 0;
     int totalWeight = 0;
@@ -552,6 +567,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: ElevatedButton(
                           onPressed: () {
+                            //   print(userData);
+
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Center(
@@ -563,7 +580,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
                           },
                           child: Text('Save and send data'),
                           onLongPress: scannedData.isNotEmpty
-                              ? _showConfirmDialog
+                              // &&   userData != null
+                              //    ? () => showConfirmDialog(userData22)
+                              ? () => showConfirmDialog
                               : () {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -617,38 +636,40 @@ class _ScanItemQrState extends State<ScanItemQr> {
           ),
           Expanded(
             flex: 6,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+            child: Center(
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: [
-                    DataColumn(
-                        label: Text(S().type,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().color,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().width,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().yarn_number,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().quantity,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().length,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text('${S().weight} ${S().total}',
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text('${S().scanned}',
-                            style: TextStyle(color: Colors.greenAccent))),
-                  ],
-                  rows: _buildRows(),
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columns: [
+                      DataColumn(
+                          label: Text(S().type,
+                              style: TextStyle(color: Colors.greenAccent))),
+                      DataColumn(
+                          label: Text(S().color,
+                              style: TextStyle(color: Colors.greenAccent))),
+                      DataColumn(
+                          label: Text(S().width,
+                              style: TextStyle(color: Colors.greenAccent))),
+                      DataColumn(
+                          label: Text(S().yarn_number,
+                              style: TextStyle(color: Colors.greenAccent))),
+                      DataColumn(
+                          label: Text(S().quantity,
+                              style: TextStyle(color: Colors.greenAccent))),
+                      DataColumn(
+                          label: Text(S().length,
+                              style: TextStyle(color: Colors.greenAccent))),
+                      DataColumn(
+                          label: Text('${S().weight} ${S().total}',
+                              style: TextStyle(color: Colors.greenAccent))),
+                      DataColumn(
+                          label: Text('${S().scanned}',
+                              style: TextStyle(color: Colors.greenAccent))),
+                    ],
+                    rows: _buildRows(),
+                  ),
                 ),
               ),
             ),

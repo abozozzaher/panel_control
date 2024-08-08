@@ -2,7 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:panel_control/generated/l10n.dart';
+import 'package:panel_control/model/user.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../provider/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -84,14 +88,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     try {
-      // UserCredential userCredential = await FirebaseAuth.instance    .signInWithEmailAndPassword( email: _emailController.text, password: _passwordController.text);
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       setState(() {
         _errorMessage = null;
       });
-
+      // استدعاء البروفيدر وتحديث البيانات
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      await userProvider.saveUserData();
       context.go('/');
     } on FirebaseAuthException catch (e) {
       setState(() {

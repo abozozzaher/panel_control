@@ -17,6 +17,11 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
+    //  final userData222 = Provider.of<UserProvider>(context);
+    //print(userData222.userData?.id);
+
+    //  print(userData!.admin);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

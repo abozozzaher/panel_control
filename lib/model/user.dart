@@ -1,11 +1,11 @@
 class UserData {
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String phone;
-  final String image;
-  final bool work;
-  final bool admin;
+  String id;
+  String firstName;
+  String lastName;
+  String phone;
+  String image;
+  bool work;
+  bool admin;
 
   UserData({
     required this.id,
@@ -16,6 +16,17 @@ class UserData {
     required this.work,
     required this.admin,
   });
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phone': phone,
+      'image': image,
+      'work': work,
+      'admin': admin,
+    };
+  }
 
   factory UserData.fromMap(Map<String, dynamic> data) {
     return UserData(

@@ -6,10 +6,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../generated/l10n.dart';
+import '../../provider/user_provider.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -31,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Uint8List? _webImage;
   String? _errorMessage;
   bool _loading = false; // تعيين متغير للتحقق من تحميل الصورة
-  bool work = false;
+  bool work = true;
   bool admin = false;
 
   Future<void> _pickImage() async {
@@ -75,6 +77,8 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     setState(() {
+      print('ss222ss');
+
       _loading = true; // تعيين قيمة لمؤشر التحميل عند بدء التسجيل
     });
 
@@ -119,12 +123,26 @@ class _RegisterPageState extends State<RegisterPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       setState(() {
+        print('sss333333s');
+
         _loading = false; // تعيين قيمة لمؤشر التحميل عند انتهاء التسجيل
       });
+
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      await userProvider.saveUserData(
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        phone: _phoneController.text,
+        email: _emailController.text,
+        image: imageUrl,
+        work: work,
+        admin: admin,
+      );
 
       context.go('/');
     } on FirebaseAuthException catch (e) {
       setState(() {
+        print('sssswww');
         _errorMessage = e.message;
         _loading = false; // تعيين قيمة لمؤشر التحميل عند حدوث خطأ
       });
