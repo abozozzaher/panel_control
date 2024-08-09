@@ -139,7 +139,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     });
   }
 */
-  Future<void> addItem(UserPr? userData) async {
+  Future<void> addItem() async {
     // final userProvider = Provider.of<UserProvider>(context);
     //  final userData = userProvider.user;
     String? imageUrl;
@@ -283,7 +283,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         'shift': selectedShift,
                         'quantity': selectedQuantity,
                         'length': selectedLength,
-                        'created_by': userData!.id,
+                        //      'created_by': userData!.id,
                         'saleـstatus': false,
                         if (imageUrl != null) 'image_url': imageUrl,
                         //444
@@ -756,8 +756,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final userData = userProvider.user;
-    print(userData);
+    //  final userData = userProvider.id;
+    //  print(userData);
     bool isMobile = MediaQuery.of(context).size.width < 600;
     String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
         (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
@@ -884,7 +884,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.save_as_outlined),
                   onPressed: () async {
-                    await addItem(userData);
+                    await addItem();
                   },
                   label: Text('${S().add} ${S().item}'),
                 ),

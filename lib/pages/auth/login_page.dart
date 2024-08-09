@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:panel_control/generated/l10n.dart';
-import 'package:panel_control/model/user.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../generated/l10n.dart';
+import '../../model/user.dart';
 import '../../provider/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -88,18 +89,57 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     try {
+      // تسجيل الدخول باستخدام Firebase Authentication
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      // جلب بيانات المستخدم من Firestore
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      if (!userDoc.exists) {
+        throw Exception('user_data_not_found');
+      }
+
+      // تحويل البيانات إلى كائن UserData
+      UserData userData =
+          UserData.fromMap(userDoc.data() as Map<String, dynamic>);
+
+      // حفظ بيانات المستخدم في UserProvider
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.setUser(userData);
+      await userProvider.saveUserData(userData);
+
+      // حفظ بيانات المستخدم في SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('id', userData.id);
+      await prefs.setString('firstName', userData.firstName);
+      await prefs.setString('lastName', userData.lastName);
+      await prefs.setString('phone', userData.phone);
+      await prefs.setString('image', userData.image);
+      await prefs.setBool('work', userData.work);
+      await prefs.setBool('admin', userData.admin);
       await prefs.setBool('isLoggedIn', true);
+      print('Saving user data: ${userData.toJson()}');
+
       setState(() {
         _errorMessage = null;
       });
-      // استدعاء البروفيدر وتحديث البيانات
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      await userProvider.saveUserData();
+
+      // التوجه إلى الصفحة الرئيسية بعد تسجيل الدخول
       context.go('/');
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = e.message;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'error_occurred';
       });
     }
   }

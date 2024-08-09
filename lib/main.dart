@@ -31,12 +31,28 @@ void main() async {
     ),
   );
 
+//  final prefs = await SharedPreferences.getInstance();
+
+  final userProvider = UserProvider();
+  await userProvider.loadUserData(); // تحميل بيانات المستخدم عند بدء التطبيق
+
   final bool isLoggedIn = await _checkLoginStatus();
   usePathUrlStrategy();
 
-  // runApp(MyApp(isLoggedIn: isLoggedIn));
-  runApp(ChangeNotifierProvider(
-      create: (_) => UserProvider(), child: MyApp(isLoggedIn: isLoggedIn)));
+  /* runApp(MyApp(isLoggedIn: isLoggedIn));
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => UserProvider()),
+    ], child: MyApp(isLoggedIn: isLoggedIn)),
+  );
+  */
+
+  runApp(
+    ChangeNotifierProvider<UserProvider>(
+      create: (_) => userProvider,
+      child: MyApp(isLoggedIn: isLoggedIn),
+    ),
+  );
 }
 
 Future<bool> _checkLoginStatus() async {
@@ -120,7 +136,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   late final GoRouter _router = GoRouter(
-    initialLocation: widget.isLoggedIn ? '/' : '/login',
+    initialLocation: widget.isLoggedIn ? '/' : '/register',
     routes: [
       GoRoute(
         path: '/',

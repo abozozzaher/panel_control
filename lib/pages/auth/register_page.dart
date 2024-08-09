@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../generated/l10n.dart';
+import '../../model/user.dart';
 import '../../provider/user_provider.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -64,7 +65,8 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  Future<void> _register() async {
+  Future<void> _register(UserProvider userProviderTest) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (_firstNameController.text.isEmpty ||
         _lastNameController.text.isEmpty ||
         _phoneController.text.isEmpty ||
@@ -105,39 +107,39 @@ class _RegisterPageState extends State<RegisterPage> {
 
         imageUrl = await storageRef.getDownloadURL();
       }
+      // حفظ بيانات المستخدم في Firebase Firestore
+      UserData userData = UserData(
+        id: userCredential.user!.uid,
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        phone: _phoneController.text,
+        image: imageUrl,
+        work: work,
+        admin: admin,
+      );
 
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
-          .set({
-        'id': userCredential.user!.uid,
-        'firstName': _firstNameController.text,
-        'lastName': _lastNameController.text,
-        'phone': _phoneController.text,
-        'email': _emailController.text,
-        'image': imageUrl,
-        'work': work,
-        'admin': admin,
-      });
+          .set(userData.toJson());
+      userProvider.setUser(userData);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('id', userData.id);
+      await prefs.setString('firstName', userData.firstName);
+      await prefs.setString('lastName', userData.lastName);
+      await prefs.setString('phone', userData.phone);
+      await prefs.setString('image', userData.image);
+      await prefs.setBool('work', userData.work);
+      await prefs.setBool('admin', userData.admin);
       await prefs.setBool('isLoggedIn', true);
       setState(() {
         print('sss333333s');
 
         _loading = false; // تعيين قيمة لمؤشر التحميل عند انتهاء التسجيل
+        print('sss333333s2');
       });
-
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      await userProvider.saveUserData(
-        firstName: _firstNameController.text,
-        lastName: _lastNameController.text,
-        phone: _phoneController.text,
-        email: _emailController.text,
-        image: imageUrl,
-        work: work,
-        admin: admin,
-      );
+      print('sss333333s3');
 
       context.go('/');
     } on FirebaseAuthException catch (e) {
@@ -151,6 +153,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProviderTest = Provider.of<UserProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -181,21 +185,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   icon: const Icon(Icons.image_search_outlined),
                   label: Text('${S().select} ${S().pick_image}'),
                 ),
-                /*
-                ElevatedButton.icon(
-                  onPressed: _loading
-                      ? null
-                      : _pickImage, // تعيين الوظيفة غير متاحة أثناء التحميل
-                  icon: Icon(Icons.image_search_outlined),
-                  label: _loading
-                      ? SizedBox(
-                          child: CircularProgressIndicator(
-                              //    valueColor:  AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-                        )
-                      : Text(S().select + ' ' + S().pick_image),
-                ),
-                */
                 const SizedBox(height: 20),
                 TextField(
                   controller: _firstNameController,
@@ -222,7 +211,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ElevatedButton.icon(
                   onPressed: _loading
                       ? null
-                      : _register, // تعيين الوظيفة غير متاحة أثناء التحميل
+                      : () => _register(
+                          userProviderTest), // تعيين الوظيفة غير متاحة أثناء التحميل
                   icon: const Icon(Icons.account_box_outlined),
                   label: _loading
                       ? const SizedBox(

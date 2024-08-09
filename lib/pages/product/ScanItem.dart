@@ -443,10 +443,10 @@ class _ScanItemQrState extends State<ScanItemQr> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final userData = userProvider.user;
+    //   final userData = userProvider.id;
     //  final UserData22 = userData222.userData!.work;
     print('userData1');
-    print(userData!.email);
+    //  print(userData);
     // print(userDataProvider.userData);
 
     print('userData2');
