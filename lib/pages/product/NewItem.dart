@@ -52,12 +52,25 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   List<String> quantity = [];
   List<String> length = [];
   late String image;
-
-//  bool isLoading = false;
-  String firstName = '';
-  String lastName = '';
-  // String userId = '';
   String productId = '';
+
+  String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
+
+  /// تحويل الأرقام العربية إلى أرقام إنجليزية
+  String convertArabicToEnglish(String text) {
+    return text.replaceAllMapped(
+      RegExp(r'[٠-٩]'),
+      (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString(),
+    );
+  }
+
+  ///  تحويل الأرقام العربية إلى أرقام إنجليزية للشهر
+  String convertArabicToEnglishForMonth(String text) {
+    return text.replaceAllMapped(
+        RegExp(r'[٠-٩]'),
+        (match) =>
+            String.fromCharCode(match.group(0)!.codeUnitAt(0) - 1632 + 48));
+  }
 
   @override
   void initState() {
@@ -68,15 +81,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Future<void> loadDefaults() async {
     // Load default values
     await loadDefaultValues();
-/*
-    // Load data from Firestore
-    try {
-      //   await loadData();
-    } catch (e) {
-      print('Error loading data: $e');
-      // Display error message to the user
-    }
-    */
   }
 
   Future<void> loadDefaultValues() async {
@@ -117,37 +121,15 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     return [];
   }
 
-/*
-  Future<void> loadData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      userId = user.uid;
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      if (userDoc.exists) {
-        Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
-        if (data != null) {
-          firstName = data['firstName'] ?? '';
-          lastName = data['lastName'] ?? '';
-        }
-      }
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-*/
   Future<void> addItem() async {
-    // final userProvider = Provider.of<UserProvider>(context);
-    //  final userData = userProvider.user;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userData = userProvider.user;
+    print(userData!.id);
+    print('3333');
     String? imageUrl;
     bool isUploading = false;
-    String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
-        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
-
     // Check if selectedType is null
+    String englishProductId = convertArabicToEnglish(productId);
     if (selectedType == null) {
       // Show error message and return if selectedType is null
       showDialog(
@@ -251,18 +233,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         }
                       }
 
-                      // String yearMonth ='${DateTime.now().year}-${DateTime.now().month}';
-                      String yearMonth =
-                          DateFormat('yyyy-MM').format(DateTime.now());
-                      String englishYearMonth = yearMonth.replaceAllMapped(
-                          RegExp(r'[٠-٩]'),
-                          (match) => String.fromCharCode(
-                              match.group(0)!.codeUnitAt(0) - 1632 + 48));
+                      String englishYearMonth =
+                          convertArabicToEnglishForMonth(yearMonth);
+
                       String documentPath =
                           'productsForAllMonths/$englishYearMonth/$englishProductId';
-
-                      ///      int weight = int.tryParse(selectedWeight ?? '0') ?? 0;
-                      //   int quantity = int.tryParse(selectedQuantity ?? '0') ?? 0;
 
                       // Save data to Firestore
                       await FirebaseFirestore.instance
@@ -283,7 +258,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         'shift': selectedShift,
                         'quantity': selectedQuantity,
                         'length': selectedLength,
-                        //      'created_by': userData!.id,
+                        'created_by': userData.id,
                         'saleـstatus': false,
                         if (imageUrl != null) 'image_url': imageUrl,
                         //444
@@ -337,16 +312,16 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 const SizedBox(height: 5, width: 5),
                 Expanded(
                   child: TextButton(
+                    child: Text(
+                      S().cancel,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
                     style:
                         TextButton.styleFrom(backgroundColor: Colors.redAccent),
                     onPressed: () {
                       Navigator.of(context).pop(); // Close dialog
                     },
-                    child: Text(
-                      S().cancel,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
                   ),
                 ),
               ],
@@ -358,14 +333,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   }
 
   Future<String> uploadImageToStorage(XFile? image) async {
-    String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
-    String englishYearMonth = yearMonth.replaceAllMapped(
-        RegExp(r'[٠-٩]'),
-        (match) =>
-            String.fromCharCode(match.group(0)!.codeUnitAt(0) - 1632 + 48));
-    String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
-        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
+    String englishYearMonth = convertArabicToEnglishForMonth(yearMonth);
 
+    String englishProductId = convertArabicToEnglish(productId);
     String day = '${DateTime.now().day}';
 
     Reference storageReference = FirebaseStorage.instance.ref().child(
@@ -391,11 +361,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   }
 
   Future<void> generateAndPrintPDF(
-      //   String productId,
-      String englishProductId,
-      String? imageUrl,
-      String? englishYearMonth) async {
-    //  String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'), (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
+      String productId, String? imageUrl, String? englishYearMonth) async {
+    String englishProductId = convertArabicToEnglish(productId);
     final pdf = pw.Document();
     String productUrl =
         "https://panel-control-company-zaher.web.app/$englishYearMonth/$englishProductId"; // Replace with your product URL
@@ -406,7 +373,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
     DateTime now = DateTime.now();
 
-    //   String dataTime = DateFormat('  yyyy - MM - dd  ').format(now);
     String englishDataTime = now.year.toString() +
         ' - ' +
         now.month.toString().padLeft(2, '0') +
@@ -700,6 +666,16 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   ),
                 ),
               ),
+              pw.Center(
+                child: pw.Text(
+                  'Made in Türkiye ❤️',
+                  style: pw.TextStyle(
+                    fontSize: 6,
+                    font: fontBe,
+                    fontWeight: pw.FontWeight.normal,
+                  ),
+                ),
+              ),
             ],
           );
         },
@@ -755,13 +731,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    //  final userData = userProvider.id;
-    //  print(userData);
     bool isMobile = MediaQuery.of(context).size.width < 600;
-    String englishProductId = productId.replaceAllMapped(RegExp(r'[٠-٩]'),
-        (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString());
-
+    String englishProductId = convertArabicToEnglish(productId);
     return Scaffold(
       appBar: AppBar(
         title: Text('${S().add} ${S().item} ${S().new1}'),
@@ -779,9 +750,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         toggleTheme: widget.toggleTheme,
         toggleLocale: widget.toggleLocale,
       ),
-      body: //isLoading  ? const Center(child: CircularProgressIndicator())   :
-
-          SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
@@ -883,9 +852,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.save_as_outlined),
-                  onPressed: () async {
-                    await addItem();
-                  },
+                  onPressed: addItem,
                   label: Text('${S().add} ${S().item}'),
                 ),
               ],

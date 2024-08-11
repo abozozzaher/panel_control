@@ -15,6 +15,7 @@ import 'pages/home_page.dart';
 import 'pages/product/NewItem.dart';
 import 'pages/product/ProductPage.dart';
 import 'pages/product/ScanItem.dart';
+import 'provider/scan_item_provider.dart';
 import 'provider/user_provider.dart';
 import 'test.dart';
 import 'test2.dart';
@@ -31,25 +32,18 @@ void main() async {
     ),
   );
 
-//  final prefs = await SharedPreferences.getInstance();
-
   final userProvider = UserProvider();
   await userProvider.loadUserData(); // تحميل بيانات المستخدم عند بدء التطبيق
 
   final bool isLoggedIn = await _checkLoginStatus();
   usePathUrlStrategy();
-
-  /* runApp(MyApp(isLoggedIn: isLoggedIn));
   runApp(
-    MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => UserProvider()),
-    ], child: MyApp(isLoggedIn: isLoggedIn)),
-  );
-  */
-
-  runApp(
-    ChangeNotifierProvider<UserProvider>(
-      create: (_) => userProvider,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserProvider>(create: (_) => userProvider),
+        ChangeNotifierProvider<ScanItemProvider>(
+            create: (_) => ScanItemProvider()),
+      ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),
   );
@@ -260,7 +254,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        //     ChangeNotifierProvider(create: (_) => UserProvider()),
         Provider<FirebaseAuth>(
           create: (_) => FirebaseAuth.instance,
         ),
@@ -271,13 +264,13 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.light,
           fontFamily: 'Beiruti',
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.blueGrey, brightness: Brightness.light),
+              seedColor: Colors.black, brightness: Brightness.light),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: 'Beiruti',
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.yellowAccent, brightness: Brightness.dark),
+              seedColor: Colors.white, brightness: Brightness.dark),
         ),
         themeMode: _themeMode,
         locale: _locale,

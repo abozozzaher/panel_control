@@ -73,8 +73,10 @@ class ProductPage extends StatelessWidget {
                   Text(
                       '${S().sale_status} : ${productData['saleـstatus'] ? S().sold : S().available}',
                       style: const TextStyle(fontSize: 18)),
-                  if (productData['image_url'] != '')
-                    Image.network(productData['image_url']),
+                  //    if (productData['image_url'] != '') Image.network(productData['image_url']),
+                  // productData['image_url'] != ''   ? Image.network(productData['image_url'])  : Image.asset('/assets/img/loading.gif'),
+                  Image.network(
+                      productData['image_url'] ?? 'assets/img/loading.gif'),
                 ],
               );
             },

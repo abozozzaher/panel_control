@@ -24,10 +24,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     print('zaher 1');
     final userProvider = Provider.of<UserProvider>(context);
-    final UserData? currentUserData =
-        userProvider.user != null ? userProvider.user : null;
-
+    // final UserData? currentUserData =  userProvider.user != null ? userProvider.user : null;
+    final UserData? currentUserData = userProvider.user;
     print(userProvider.user!.id);
+    print(userProvider.user!.work);
     bool work = currentUserData!.work;
 
     print('zaher 1');

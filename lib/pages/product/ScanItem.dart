@@ -1,14 +1,14 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:panel_control/model/user.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:go_router/go_router.dart';
 import '../../generated/l10n.dart';
-import '../../model/user.dart';
 import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
 
@@ -31,13 +31,521 @@ class _ScanItemQrState extends State<ScanItemQr> {
   final AudioPlayer audioPlayer = AudioPlayer();
   bool _isDialogShowing = false;
   bool _isProcessing = false;
-  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _requestCameraPermission();
   }
+
+  Future<void> _showAddCodeDialog() async {
+    TextEditingController codeController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(S().enter_code),
+          content: TextField(
+              controller: codeController,
+              decoration: InputDecoration(hintText: S().enter_code_here),
+              keyboardType: TextInputType.number),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(S().cancel),
+            ),
+            ValueListenableBuilder(
+                valueListenable: codeController,
+                builder: (context, value, child) {
+                  return TextButton(
+                    onPressed: value.text.length == 20 && value.text.isNotEmpty
+                        ? () {
+                            setState(() {
+                              String baseUrl =
+                                  'https://panel-control-company-zaher.web.app/';
+                              String formattedData =
+                                  '${baseUrl}${value.text.substring(0, 4)}-${value.text.substring(4, 6)}/${value.text}';
+
+                              scannedData.add(formattedData);
+                              _fetchDataFromFirebase(formattedData)
+                                  .then((data) {
+                                if (data != null) {
+                                  setState(() {
+                                    codeDetails[formattedData] = data;
+                                  });
+                                } else {
+                                  _showDuplicateDialog(value.text);
+                                }
+                              });
+                            });
+                            Navigator.of(context).pop();
+                          }
+                        : null,
+                    child: Text(S().add),
+                  );
+                }),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+
+    controller.scannedDataStream.listen((scanData) {
+      if (_isProcessing) return;
+
+      setState(() {
+        _isProcessing = true;
+      });
+
+      final String code = scanData.code!;
+      if (!scannedData.contains(code)) {
+        if (code.contains('https://panel-control-company-zaher.web.app/')) {
+          setState(() {
+            scannedData.add(code);
+          });
+          _playSound('assets/sound/beep.mp3');
+          _fetchDataFromFirebase(code).then((data) {
+            if (data != null) {
+              setState(() {
+                codeDetails[code] = data;
+              });
+            }
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${S().scanned} $code'),
+              backgroundColor: scanData.format == BarcodeFormat.qrcode
+                  ? Colors.green
+                  : Colors.blue,
+            ),
+          );
+        } else {
+          _showErorrDialog(code);
+        }
+      } else {
+        _showDuplicateDialog(code);
+      }
+      setState(() {
+        _isProcessing = false;
+      });
+    });
+  }
+
+  List<DataRow> _buildRows() {
+    Map<String, Map<String, dynamic>> aggregatedData = {};
+
+    for (var entry in codeDetails.entries) {
+      var data = entry.value;
+
+      String key =
+          '${data['yarn_number']}-${data['type']}-${data['color']}-${data['width']}';
+
+      if (!aggregatedData.containsKey(key)) {
+        aggregatedData[key] = {
+          'yarn_number': data['yarn_number'],
+          'type': data['type'],
+          'color': data['color'],
+          'width': data['width'],
+          'total_weight': 0,
+          'quantity': 0,
+          'length': 0,
+          'scanned_data': 0,
+        };
+      }
+      aggregatedData[key]!['total_weight'] += data['total_weight'] is int
+          ? data['total_weight']
+          : int.tryParse(data['total_weight'].toString()) ?? 0;
+      aggregatedData[key]!['quantity'] += data['quantity'] is int
+          ? data['quantity']
+          : int.tryParse(data['quantity'].toString()) ?? 0;
+      aggregatedData[key]!['length'] += data['length'] is int
+          ? data['length']
+          : int.tryParse(data['length'].toString()) ?? 0;
+      aggregatedData[key]!['scanned_data'] += 1;
+    }
+
+    return aggregatedData.entries.map((entry) {
+      var data = entry.value;
+      return DataRow(cells: [
+        DataCell(Center(
+          child: Text(data['type'].toString(),
+              style: const TextStyle(color: Colors.redAccent)),
+        )),
+        DataCell(Center(
+          child: Text(data['color'].toString(),
+              style: const TextStyle(color: Colors.redAccent)),
+        )),
+        DataCell(Center(
+            child: Text('${data['width']} mm',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text('${data['yarn_number']} D',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text('${data['quantity']} Pcs',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text('${data['length']} Mt',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text('${data['total_weight']} Kg',
+                style: const TextStyle(color: Colors.redAccent)))),
+        DataCell(Center(
+            child: Text(data['scanned_data'].toString(),
+                style: const TextStyle(color: Colors.black)))),
+      ]);
+    }).toList();
+  }
+
+  Future<void> _showConfirmDialog(UserData? userData) async {
+    String codeSales = generateCodeSales();
+
+    final int totalQuantity = codeDetails.values
+        .map((data) => data['quantity'] is int
+            ? data['quantity']
+            : ((int.tryParse(data['quantity'].toString()) ?? 0) as int))
+        .fold(0, (sum, item) => sum + (item as int));
+
+    final int totalLength = codeDetails.values
+        .map((data) => data['length'] is int
+            ? data['length']
+            : ((int.tryParse(data['length'].toString()) ?? 0) as int))
+        .fold(0, (sum, item) => sum + (item as int));
+
+    final int totalWeight = codeDetails.values
+        .map((data) => data['total_weight'] is int
+            ? data['total_weight']
+            : ((int.tryParse(data['total_weight'].toString()) ?? 0) as int))
+        .fold(0, (sum, item) => sum + (item as int));
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Confirm Data',
+            textAlign: TextAlign.center,
+          ),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Total Weight: $totalWeight Kg'),
+              Text('Total Length: $totalLength MT'),
+              Text('Total Quantity: $totalQuantity Pcs'),
+              Text('Scanned Data Length: ${scannedData.length}'),
+            ],
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.greenAccent),
+                      onPressed: () async {
+                        // إرسال البيانات إلى Firebase
+                        await FirebaseFirestore.instance
+                            .collection('seles')
+                            .doc(codeSales)
+                            .set({
+                          'date': DateTime.now(),
+                          'codeSales': codeSales,
+                          'totalWeight': totalWeight,
+                          'totalLength': totalLength,
+                          'totalQuantity': totalQuantity,
+                          'scannedData': scannedData,
+                          'scannedDataLength': scannedData.length,
+                          'payـstatus': false,
+                          'created_by': userData!.id,
+                        });
+                        setState(() {
+                          scannedData.clear();
+                          codeDetails.clear();
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'Send',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black),
+                      )),
+                ),
+                const SizedBox(height: 5, width: 5),
+                Expanded(
+                  child: TextButton(
+                    style:
+                        TextButton.styleFrom(backgroundColor: Colors.redAccent),
+                    child: Text(
+                      S().cancel,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userData = userProvider.user;
+
+    int totalQuantity = 0;
+    int totalLength = 0;
+    int totalWeight = 0;
+
+// حساب إجمالي الكميات
+    for (var data in codeDetails.values) {
+      if (data.containsKey('quantity')) {
+        var quantity = data['quantity'];
+        if (quantity is int) {
+          totalQuantity += quantity;
+        } else if (quantity is String) {
+          totalQuantity += int.tryParse(quantity) ?? 0;
+        }
+      }
+    }
+    // حساب إجمالي الامتار
+    for (var data in codeDetails.values) {
+      if (data.containsKey('length')) {
+        var length = data['length'];
+        if (length is int) {
+          totalLength += length;
+        } else if (length is String) {
+          totalLength += int.tryParse(length) ?? 0;
+        }
+      }
+    }
+
+    // حساب إجمالي الوزن
+    for (var data in codeDetails.values) {
+      if (data.containsKey('total_weight')) {
+        var weight = data['total_weight'];
+        if (weight is int) {
+          totalWeight += weight;
+        } else if (weight is String) {
+          totalWeight += int.tryParse(weight) ?? 0;
+        }
+      }
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${S().scan} ${S().new1} ${S().item}'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/');
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: _showAddCodeDialog,
+          ),
+        ],
+      ),
+      drawer: AppDrawer(
+        toggleTheme: widget.toggleTheme,
+        toggleLocale: widget.toggleLocale,
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          kIsWeb
+              ? Container()
+              : Container(
+                  color: Colors.blue,
+                  height: 300,
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                  ),
+                ),
+          Container(
+            color: Colors.red,
+            height: 100, // لتحديد ارتفاع ثابت
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    // القسم الأول
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              '${S().total_codes_scanned} : ${scannedData.length} PPcs',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 13)),
+                          Text('${S().total_quantity} : $totalQuantity Pcs',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                    // القسم الثاني
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${S().total_length} : $totalLength MT',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 13)),
+                          Text('${S().total_weight} :  $totalWeight Kg',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                // القسم الثالث
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ElevatedButton(
+                          child: Text('Save and send data'),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Center(
+                                        child: Text(
+                                            'Long press to activate the button')),
+                                    duration: Duration(seconds: 2)));
+                          },
+                          onLongPress: scannedData.isNotEmpty &&
+                                  userData!.work == true
+                              ? () => _showConfirmDialog(userData)
+                              : () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Center(
+                                          child: Text('No data to send')),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 150,
+            color: Colors.green,
+            child: SingleChildScrollView(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: scannedData.length,
+                itemBuilder: (context, index) {
+                  final code = scannedData[index];
+
+                  var urlLength =
+                      'https://panel-control-company-zaher.web.app/'.length;
+                  final displayCode = code.length > urlLength + 8
+                      ? code.substring(urlLength + 8)
+                      : code;
+                  return ListTile(
+                    title: Text(displayCode),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          scannedData.removeAt(index);
+                          codeDetails.remove(code);
+                        });
+                      },
+                    ),
+                    onTap: () async {
+                      final data = await _fetchDataFromFirebase(code);
+                      _showDetailsDialog(code, data);
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+          Container(
+            //  height: 400,
+            color: Colors.grey,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columns: [
+                    DataColumn(
+                        label: Text(S().type,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().color,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().width,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().yarn_number,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().quantity,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().length,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('${S().weight} ${S().total}',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('${S().scanned}',
+                            style: TextStyle(color: Colors.greenAccent))),
+                  ],
+                  rows: _buildRows(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+////
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
 
   String generateCodeSales() {
     DateTime now = DateTime.now();
@@ -175,515 +683,10 @@ class _ScanItemQrState extends State<ScanItemQr> {
     );
   }
 
-  Future<void> _showAddCodeDialog() async {
-    TextEditingController codeController = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(S().enter_code),
-          content: TextField(
-            controller: codeController,
-            decoration: InputDecoration(hintText: S().enter_code_here),
-            keyboardType: TextInputType.number,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(S().cancel),
-            ),
-            ValueListenableBuilder(
-                valueListenable: codeController,
-                builder: (context, value, child) {
-                  return TextButton(
-                    onPressed: value.text.length == 20 && value.text.isNotEmpty
-                        ? () {
-                            setState(() {
-                              String baseUrl =
-                                  'https://panel-control-company-zaher.web.app/';
-                              String formattedData =
-                                  '${baseUrl}${value.text.substring(0, 4)}-${value.text.substring(4, 6)}/${value.text}';
-
-                              scannedData.add(formattedData);
-                              _fetchDataFromFirebase(formattedData)
-                                  .then((data) {
-                                if (data != null) {
-                                  setState(() {
-                                    codeDetails[formattedData] = data;
-                                  });
-                                }
-                              });
-                            });
-                            Navigator.of(context).pop();
-                          }
-                        : null,
-                    child: Text(S().add),
-                  );
-                }),
-          ],
-        );
-      },
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-
-    controller.scannedDataStream.listen((scanData) {
-      if (_isProcessing) return;
-
-      setState(() {
-        _isProcessing = true;
-      });
-
-      final String code = scanData.code!;
-      if (!scannedData.contains(code)) {
-        if (code.contains('https://panel-control-company-zaher.web.app/')) {
-          setState(() {
-            scannedData.add(code);
-          });
-          _playSound('assets/sound/beep.mp3');
-          _fetchDataFromFirebase(code).then((data) {
-            if (data != null) {
-              setState(() {
-                codeDetails[code] = data;
-              });
-            }
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${S().scanned} $code'),
-              backgroundColor: scanData.format == BarcodeFormat.qrcode
-                  ? Colors.green
-                  : Colors.yellowAccent,
-            ),
-          );
-        } else {
-          _showErorrDialog(code);
-        }
-      } else {
-        _showDuplicateDialog(code);
-      }
-      setState(() {
-        _isProcessing = false;
-      });
-    });
-  }
-
-  List<DataRow> _buildRows() {
-    Map<String, Map<String, dynamic>> aggregatedData = {};
-
-    for (var entry in codeDetails.entries) {
-      //   var code = entry.key;
-      var data = entry.value;
-
-      String key =
-          '${data['yarn_number']}-${data['type']}-${data['color']}-${data['width']}';
-
-      if (!aggregatedData.containsKey(key)) {
-        aggregatedData[key] = {
-          'yarn_number': data['yarn_number'],
-          'type': data['type'],
-          'color': data['color'],
-          'width': data['width'],
-          'total_weight': 0,
-          'quantity': 0,
-          'length': 0,
-          'scanned_data': 0,
-        };
-      }
-      aggregatedData[key]!['total_weight'] += data['total_weight'] is int
-          ? data['total_weight']
-          : int.tryParse(data['total_weight'].toString()) ?? 0;
-      aggregatedData[key]!['quantity'] += data['quantity'] is int
-          ? data['quantity']
-          : int.tryParse(data['quantity'].toString()) ?? 0;
-      aggregatedData[key]!['length'] += data['length'] is int
-          ? data['length']
-          : int.tryParse(data['length'].toString()) ?? 0;
-      aggregatedData[key]!['scanned_data'] += 1;
-    }
-
-    return aggregatedData.entries.map((entry) {
-      var data = entry.value;
-      return DataRow(cells: [
-        DataCell(Center(
-          child: Text(data['type'].toString(),
-              style: const TextStyle(color: Colors.redAccent)),
-        )),
-        DataCell(Center(
-          child: Text(data['color'].toString(),
-              style: const TextStyle(color: Colors.redAccent)),
-        )),
-        DataCell(Center(
-            child: Text('${data['width']} mm',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text('${data['yarn_number']} D',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text('${data['quantity']} Pcs',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text('${data['length']} Mt',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text('${data['total_weight']} Kg',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text(data['scanned_data'].toString(),
-                style: const TextStyle(color: Colors.black)))),
-      ]);
-    }).toList();
-  }
-
-  Future<void> showConfirmDialog() async {
-    String codeSales = generateCodeSales();
-    // print(userData);
-
-    final int totalQuantity = codeDetails.values
-        .map((data) => data['quantity'] is int
-            ? data['quantity']
-            : ((int.tryParse(data['quantity'].toString()) ?? 0) as int))
-        .fold(0, (sum, item) => sum + (item as int));
-
-    final int totalLength = codeDetails.values
-        .map((data) => data['length'] is int
-            ? data['length']
-            : ((int.tryParse(data['length'].toString()) ?? 0) as int))
-        .fold(0, (sum, item) => sum + (item as int));
-
-    final int totalWeight = codeDetails.values
-        .map((data) => data['total_weight'] is int
-            ? data['total_weight']
-            : ((int.tryParse(data['total_weight'].toString()) ?? 0) as int))
-        .fold(0, (sum, item) => sum + (item as int));
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Confirm Data',
-            textAlign: TextAlign.center,
-          ),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Total Weight: $totalWeight Kg'),
-              Text('Total Length: $totalLength MT'),
-              Text('Total Quantity: $totalQuantity Pcs'),
-              Text('Scanned Data Length: ${scannedData.length}'),
-            ],
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.greenAccent),
-                      onPressed: () async {
-                        // إرسال البيانات إلى Firebase
-                        await FirebaseFirestore.instance
-                            .collection('seles')
-                            .doc(codeSales)
-                            .set({
-                          'date': DateTime.now(),
-                          'codeSales': codeSales,
-                          'totalWeight': totalWeight,
-                          'totalLength': totalLength,
-                          'totalQuantity': totalQuantity,
-                          'scannedData': scannedData,
-                          'scannedDataLength': scannedData.length,
-                          'payـstatus': false,
-                          //  'created_by': userData.id,
-                          // 'name': userData.firstName
-                        });
-                        setState(() {
-                          scannedData.clear();
-                          codeDetails.clear();
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        'Send',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black),
-                      )),
-                ),
-                const SizedBox(height: 5, width: 5),
-                Expanded(
-                  child: TextButton(
-                    style:
-                        TextButton.styleFrom(backgroundColor: Colors.redAccent),
-                    child: Text(
-                      S().cancel,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    //   final userData = userProvider.id;
-    //  final UserData22 = userData222.userData!.work;
-    print('userData1');
-    //  print(userData);
-    // print(userDataProvider.userData);
-
-    print('userData2');
-    int totalQuantity = 0;
-    int totalLength = 0;
-    int totalWeight = 0;
-
-// حساب إجمالي الكميات
-    for (var data in codeDetails.values) {
-      if (data.containsKey('quantity')) {
-        var quantity = data['quantity'];
-        if (quantity is int) {
-          totalQuantity += quantity;
-        } else if (quantity is String) {
-          totalQuantity += int.tryParse(quantity) ?? 0;
-        }
-      }
-    }
-    // حساب إجمالي الامتار
-    for (var data in codeDetails.values) {
-      if (data.containsKey('length')) {
-        var length = data['length'];
-        if (length is int) {
-          totalLength += length;
-        } else if (length is String) {
-          totalLength += int.tryParse(length) ?? 0;
-        }
-      }
-    }
-
-    // حساب إجمالي الوزن
-    for (var data in codeDetails.values) {
-      if (data.containsKey('total_weight')) {
-        var weight = data['total_weight'];
-        if (weight is int) {
-          totalWeight += weight;
-        } else if (weight is String) {
-          totalWeight += int.tryParse(weight) ?? 0;
-        }
-      }
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${S().scan} ${S().new1} ${S().item}'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.go('/');
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _showAddCodeDialog,
-          ),
-        ],
-      ),
-      drawer: AppDrawer(
-        toggleTheme: widget.toggleTheme,
-        toggleLocale: widget.toggleLocale,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            flex: 6,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
-          Container(
-            color: Colors.red,
-            height: 100, // لتحديد ارتفاع ثابت
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    // القسم الأول
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                              '${S().total_codes_scanned} : ${scannedData.length} PPcs',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 13)),
-                          Text('${S().total_quantity} : $totalQuantity Pcs',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 13)),
-                        ],
-                      ),
-                    ),
-                    // القسم الثاني
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('${S().total_length} : $totalLength MT',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 13)),
-                          Text('${S().total_weight} :  $totalWeight Kg',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 13)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                // القسم الثالث
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //   print(userData);
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Center(
-                                    child: Text(
-                                        'Long press to activate the button')),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          },
-                          child: Text('Save and send data'),
-                          onLongPress: scannedData.isNotEmpty
-                              // &&   userData != null
-                              //    ? () => showConfirmDialog(userData22)
-                              ? () => showConfirmDialog
-                              : () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Center(
-                                          child: Text('No data to send')),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: SingleChildScrollView(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: scannedData.length,
-                itemBuilder: (context, index) {
-                  final code = scannedData[index];
-                  var urlLength =
-                      'https://panel-control-company-zaher.web.app/'.length;
-                  final displayCode = code.length > urlLength + 8
-                      ? code.substring(urlLength + 8)
-                      : code;
-                  return ListTile(
-                    title: Text(displayCode),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          scannedData.removeAt(index);
-                          codeDetails.remove(code);
-                        });
-                      },
-                    ),
-                    onTap: () async {
-                      final data = await _fetchDataFromFirebase(code);
-                      _showDetailsDialog(code, data);
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 6,
-            child: Center(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columns: [
-                      DataColumn(
-                          label: Text(S().type,
-                              style: TextStyle(color: Colors.greenAccent))),
-                      DataColumn(
-                          label: Text(S().color,
-                              style: TextStyle(color: Colors.greenAccent))),
-                      DataColumn(
-                          label: Text(S().width,
-                              style: TextStyle(color: Colors.greenAccent))),
-                      DataColumn(
-                          label: Text(S().yarn_number,
-                              style: TextStyle(color: Colors.greenAccent))),
-                      DataColumn(
-                          label: Text(S().quantity,
-                              style: TextStyle(color: Colors.greenAccent))),
-                      DataColumn(
-                          label: Text(S().length,
-                              style: TextStyle(color: Colors.greenAccent))),
-                      DataColumn(
-                          label: Text('${S().weight} ${S().total}',
-                              style: TextStyle(color: Colors.greenAccent))),
-                      DataColumn(
-                          label: Text('${S().scanned}',
-                              style: TextStyle(color: Colors.greenAccent))),
-                    ],
-                    rows: _buildRows(),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   void dispose() {
     controller?.dispose();
     audioPlayer.dispose();
-    _timer?.cancel();
     super.dispose();
   }
 }
