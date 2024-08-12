@@ -1,8 +1,70 @@
-import 'dart:convert'; // لتشفير وفك تشفير JSON
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ScanItemProvider with ChangeNotifier {
+  List<String> scannedData = [];
+  Map<String, Map<String, dynamic>> codeDetails = {};
+//  Map<String, Map<String, dynamic>> get codeDetails => _codeDetails;
+
+  DateTime? lastSaved;
+  // وظيفة لتحديث البيانات
+  void updateCodeDetails(Map<String, Map<String, dynamic>> newCodeDetails) {
+    codeDetails = newCodeDetails;
+    notifyListeners();
+  }
+
+  Future<void> loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    scannedData = prefs.getStringList('scannedData') ?? [];
+    lastSaved = DateTime.tryParse(prefs.getString('lastSaved') ?? '');
+
+    if (lastSaved != null &&
+        DateTime.now().difference(lastSaved!).inHours >= 1) {
+      scannedData.clear();
+      codeDetails.clear();
+      await prefs.remove('scannedData');
+      await prefs.remove('codeDetails');
+      await prefs.remove('lastSaved');
+    } else {
+      final codeDetailsStr = prefs.getString('codeDetails');
+      if (codeDetailsStr != null) {
+        codeDetails = Map<String, Map<String, dynamic>>.from(
+          (await jsonDecode(codeDetailsStr)) as Map<String, dynamic>,
+        );
+        print('Loaded Code Details: $codeDetails');
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> saveData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('scannedData', scannedData);
+    await prefs.setString('codeDetails', jsonEncode(codeDetails));
+
+    await prefs.setString('lastSaved', DateTime.now().toIso8601String());
+    notifyListeners();
+  }
+
+  void addScanData(String data, Map<String, dynamic> details) {
+    scannedData.add(data);
+    codeDetails[data] = details;
+    saveData();
+  }
+
+  void removeScanData(String data) {
+    scannedData.remove(data);
+    codeDetails.remove(data);
+    saveData();
+  }
+
+  Future<void> reloadData() async {
+    await loadData();
+  }
+
+  /*
   List<String> _scannedData = [];
   List<String> get scannedData => _scannedData;
 
@@ -66,4 +128,5 @@ class ScanItemProvider with ChangeNotifier {
     await prefs.remove('expirationTime');
     notifyListeners();
   }
+*/
 }

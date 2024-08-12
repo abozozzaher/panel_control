@@ -14,7 +14,7 @@ import 'pages/auth/login_page.dart';
 import 'pages/home_page.dart';
 import 'pages/product/NewItem.dart';
 import 'pages/product/ProductPage.dart';
-import 'pages/product/ScanItem.dart';
+import 'pages/scan/ScanItem.dart';
 import 'provider/scan_item_provider.dart';
 import 'provider/user_provider.dart';
 import 'test.dart';
@@ -42,7 +42,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider<UserProvider>(create: (_) => userProvider),
         ChangeNotifierProvider<ScanItemProvider>(
-            create: (_) => ScanItemProvider()),
+            create: (_) => ScanItemProvider()..reloadData()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),
