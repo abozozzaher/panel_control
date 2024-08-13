@@ -71,7 +71,7 @@
     "total_quantity": "الكمية الإجمالية",
     "total_length": "الطول الاجمالي",
     "total_weight": "الوزن الكلي",
-    "morning":"Morning","afternoon":"Afternoon","evening":"Evening",
+    "morning":"صباحي","afternoon":"عصري","evening":"ليلي",
     "test_page" : "Test Page",
 "select_an_option" : "Select an option",
 "enter_custom_value" : "Enter Custom Value",

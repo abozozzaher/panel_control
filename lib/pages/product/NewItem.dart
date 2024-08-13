@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -20,6 +19,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../generated/l10n.dart';
 import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
+import '../../service/data_lists.dart';
 
 class AddNewItemScreen extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -44,14 +44,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   XFile? selectedImage;
   Uint8List? _webImage;
 
-  List<String> types = [];
-  List<String> widths = [];
-  List<String> weights = [];
-  List<String> colors = [];
-  List<String> yarnNumbers = [];
-  List<String> shift = [];
-  List<String> quantity = [];
-  List<String> length = [];
+  List<String>? types;
+  List<String>? widths;
+  List<String>? weights;
+  List<String>? colors;
+  List<String>? yarnNumbers;
+  List<String>? shift;
+  List<String>? quantity;
+  List<String>? length;
   late String image;
   String productId = '';
 
@@ -86,45 +86,26 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   Future<void> loadDefaultValues() async {
     // Set default values from Firestore or local defaults if Firestore is empty
-    types = await fetchData('product_types', 'types');
-    widths = await fetchData('widths', 'values');
-    weights = await fetchData('weights', 'values');
-    colors = await fetchData('colors', 'values');
-    yarnNumbers = await fetchData('yarn_numbers', 'values');
-    shift = await fetchData('shift', 'values');
-    quantity = await fetchData('quantity', 'values');
-    length = await fetchData('length', 'values');
-    print(types);
-    print(
-        [types, widths, weights, colors, yarnNumbers, shift, quantity, length]);
-
+    // Load default values from data_lists.dart
+    types = DataLists().types;
+    widths = DataLists().widths;
+    weights = DataLists().weights;
+    colors = DataLists().colors;
+    yarnNumbers = DataLists().yarnNumbers;
+    shift = DataLists().shift;
+    quantity = DataLists().quantity;
+    length = DataLists().length;
     setState(() {
-      selectedType = types.isNotEmpty ? types[0] : null; // null : null;
-      selectedWidth = widths.isNotEmpty ? widths[6] : null;
-      selectedWeight = weights.isNotEmpty ? weights[0] : null;
-      selectedColor = colors.isNotEmpty ? colors[0] : null;
-      selectedYarnNumber = yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
-      selectedShift = shift.isNotEmpty ? shift[0] : null;
-      selectedQuantity = quantity.isNotEmpty ? quantity[0] : null;
-      selectedLength = length.isNotEmpty ? length[2] : null;
+      selectedType = types!.isNotEmpty ? types![0] : null; // null : null;
+      selectedWidth = widths!.isNotEmpty ? widths![6] : null;
+      selectedWeight = weights!.isNotEmpty ? weights![0] : null;
+      selectedColor = colors!.isNotEmpty ? colors![0] : null;
+      selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1] : null;
+      selectedShift = shift!.isNotEmpty ? shift![0] : null;
+      selectedQuantity = quantity!.isNotEmpty ? quantity![0] : null;
+      selectedLength = length!.isNotEmpty ? length![2] : null;
       productId = generateCode();
     });
-  }
-
-  Future<List<String>> fetchData(String docName, String fieldName) async {
-    DocumentSnapshot doc = await FirebaseFirestore.instance
-        .collection('products_info')
-        .doc(docName)
-        .get();
-    if (doc.exists) {
-      Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey(fieldName)) {
-        return List<String>.from(data[fieldName]);
-      }
-    }
-    print('ssss');
-    print(docName.toString());
-    return [];
   }
 
   Future<void> addItem() async {
@@ -287,17 +268,19 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
                       // Reset fields and generate new product ID
                       setState(() {
-                        selectedType =
-                            types.isNotEmpty ? types[0] : null; //  null : null;
-                        selectedWidth = widths.isNotEmpty ? widths[6] : null;
-                        selectedWeight = weights.isNotEmpty ? weights[0] : null;
-                        selectedColor = colors.isNotEmpty ? colors[0] : null;
+                        selectedType = types!.isNotEmpty
+                            ? types![0]
+                            : null; //  null : null;
+                        selectedWidth = widths!.isNotEmpty ? widths![6] : null;
+                        selectedWeight =
+                            weights!.isNotEmpty ? weights![0] : null;
+                        selectedColor = colors!.isNotEmpty ? colors![0] : null;
                         selectedYarnNumber =
-                            yarnNumbers.isNotEmpty ? yarnNumbers[1] : null;
-                        selectedShift = shift.isNotEmpty ? shift[0] : null;
+                            yarnNumbers!.isNotEmpty ? yarnNumbers![1] : null;
+                        selectedShift = shift!.isNotEmpty ? shift![0] : null;
                         selectedQuantity =
-                            quantity.isNotEmpty ? quantity[0] : null;
-                        selectedLength = length.isNotEmpty ? length[2] : null;
+                            quantity!.isNotEmpty ? quantity![0] : null;
+                        selectedLength = length!.isNotEmpty ? length![2] : null;
 
                         selectedImage = null;
                         _webImage = null;
@@ -739,6 +722,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Widget build(BuildContext context) {
     bool isMobile = MediaQuery.of(context).size.width < 600;
     String englishProductId = convertArabicToEnglish(productId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${S().add} ${S().item} ${S().new1}'),
@@ -779,14 +763,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   label: Text(S().pick_image),
                 ),
                 const SizedBox(height: 10),
-                buildDropdown('${S().select} ${S().type}', selectedType, types,
+                buildDropdown('${S().select} ${S().type}', selectedType, types!,
                     (value) {
                   setState(() {
                     selectedType = value;
                   });
                 }, '${S().select} ${S().type}'),
                 buildDropdown(
-                  '${S().select} ${S().width}', selectedWidth, widths,
+                  '${S().select} ${S().width}', selectedWidth, widths!,
                   (value) {
                     setState(() {
                       selectedWidth = value;
@@ -798,7 +782,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 buildDropdown(
                   '${S().select} ${S().weight}',
                   selectedWeight,
-                  weights,
+                  weights!,
                   (value) {
                     setState(() {
                       selectedWeight = value;
@@ -808,7 +792,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   suffixText: 'g', // يمكنك إضافة النص الذي تريده هنا
                 ),
                 buildDropdown(
-                    '${S().select} ${S().color}', selectedColor, colors,
+                    '${S().select} ${S().color}', selectedColor, colors!,
                     (value) {
                   setState(() {
                     selectedColor = value;
@@ -817,7 +801,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 buildDropdown(
                   '${S().select} ${S().yarn_number}',
                   selectedYarnNumber,
-                  yarnNumbers,
+                  yarnNumbers!,
                   (value) {
                     setState(() {
                       selectedYarnNumber = value;
@@ -827,14 +811,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   suffixText: 'D', // يمكنك إضافة النص الذي تريده هنا
                 ),
                 buildDropdown(
-                    '${S().select} ${S().shift}', selectedShift, shift,
+                    '${S().select} ${S().shift}', selectedShift, shift!,
                     (value) {
                   setState(() {
                     selectedShift = value;
                   });
                 }, '${S().select} ${S().shift}'),
                 buildDropdown(
-                  '${S().select} ${S().length}', selectedLength, length,
+                  '${S().select} ${S().length}', selectedLength, length!,
                   (value) {
                     setState(() {
                       selectedLength = value;
@@ -846,7 +830,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 buildDropdown(
                   '${S().select} ${S().quantity}',
                   selectedQuantity,
-                  quantity,
+                  quantity!,
                   (value) {
                     setState(() {
                       selectedQuantity = value;
