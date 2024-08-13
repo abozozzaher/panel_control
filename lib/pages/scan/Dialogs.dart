@@ -45,8 +45,7 @@ class ScanItemDialogs {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(S().error_code),
-          content: const Text(
-              'Invalid code scanned and removed. رمز غير صالح تم مسحه ضوئيًا وإزالته.'),
+          content: Text(S().invalid_code_scanned_and_removed),
           backgroundColor: Colors.redAccent,
           actions: [
             TextButton(

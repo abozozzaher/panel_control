@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -93,6 +94,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     shift = await fetchData('shift', 'values');
     quantity = await fetchData('quantity', 'values');
     length = await fetchData('length', 'values');
+    print(types);
+    print(
+        [types, widths, weights, colors, yarnNumbers, shift, quantity, length]);
 
     setState(() {
       selectedType = types.isNotEmpty ? types[0] : null; // null : null;
@@ -118,6 +122,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         return List<String>.from(data[fieldName]);
       }
     }
+    print('ssss');
+    print(docName.toString());
     return [];
   }
 
@@ -668,7 +674,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               ),
               pw.Center(
                 child: pw.Text(
-                  'Made in Türkiye ❤️',
+                  'Made in Türkiye',
                   style: pw.TextStyle(
                     fontSize: 6,
                     font: fontBe,

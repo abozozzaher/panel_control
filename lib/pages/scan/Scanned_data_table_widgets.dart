@@ -10,11 +10,11 @@ class ScanDataTableWidgets {
 
   Container scrollViewScannedDataTableWidget(BuildContext context) {
     final provider = Provider.of<ScanItemProvider>(context);
-    final codeDetails = provider.codeDetails;
+    final codeDetailes = provider.codeDetails;
 
-    print(codeDetails); // تأكد من أن البيانات تصل هنا بشكل صحيح
-    print(22222);
-    print('Code Details: $codeDetails'); // التحقق من البيانات هنا
+    print(codeDetailes); // تأكد من أن البيانات تصل هنا بشكل صحيح
+    print(22223422);
+    print('Code Details: $codeDetailes'); // التحقق من البيانات هنا
 
     print('Current Time: ${DateTime.now()}');
     // print('Last Saved Time: ${lastSaved}');
@@ -51,17 +51,17 @@ class ScanDataTableWidgets {
                   label: Text('${S().scanned}',
                       style: TextStyle(color: Colors.greenAccent))),
             ],
-            rows: buildRows(codeDetails),
+            rows: buildRows(codeDetailes),
           ),
         ),
       ),
     );
   }
 
-  List<DataRow> buildRows(Map<String, Map<String, dynamic>> codeDetails) {
+  List<DataRow> buildRows(Map<String, Map<String, dynamic>> codeDetailes) {
     Map<String, Map<String, dynamic>> aggregatedData = {};
 
-    for (var entry in codeDetails.entries) {
+    for (var entry in codeDetailes.entries) {
       var data = entry.value;
 
       String key =
@@ -96,27 +96,27 @@ class ScanDataTableWidgets {
       return DataRow(cells: [
         DataCell(Center(
           child: Text(data['type'].toString(),
-              style: const TextStyle(color: Colors.redAccent)),
+              style: const TextStyle(color: Colors.black)),
         )),
         DataCell(Center(
           child: Text(data['color'].toString(),
-              style: const TextStyle(color: Colors.redAccent)),
+              style: const TextStyle(color: Colors.black)),
         )),
         DataCell(Center(
             child: Text('${data['width']} mm',
-                style: const TextStyle(color: Colors.redAccent)))),
+                style: const TextStyle(color: Colors.black)))),
         DataCell(Center(
             child: Text('${data['yarn_number']} D',
-                style: const TextStyle(color: Colors.redAccent)))),
+                style: const TextStyle(color: Colors.black)))),
         DataCell(Center(
             child: Text('${data['quantity']} Pcs',
-                style: const TextStyle(color: Colors.redAccent)))),
+                style: const TextStyle(color: Colors.black)))),
         DataCell(Center(
             child: Text('${data['length']} Mt',
-                style: const TextStyle(color: Colors.redAccent)))),
+                style: const TextStyle(color: Colors.black)))),
         DataCell(Center(
             child: Text('${data['total_weight']} Kg',
-                style: const TextStyle(color: Colors.redAccent)))),
+                style: const TextStyle(color: Colors.black)))),
         DataCell(Center(
             child: Text(data['scanned_data'].toString(),
                 style: const TextStyle(color: Colors.black)))),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,44 +16,97 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+  String? selectedOption;
+  TextEditingController customController = TextEditingController();
+  List<String> options = ['Option 1', 'Option 2', 'Option 3'];
+
+  Future<void> saveCustomOption(String option) async {
+    await FirebaseFirestore.instance.collection('customOptions').add({
+      'option': option,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> fetchFirestoreData() async {
+    // الحصول على مرجع إلى مجموعة
+    CollectionReference collection =
+        FirebaseFirestore.instance.collection('products_info');
+
+    // جلب كل الوثائق في المجموعة
+    QuerySnapshot querySnapshot = await collection.get();
+
+    // تحويل الوثائق إلى قائمة من الخرائط
+    List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+    List<Map<String, dynamic>> dataList =
+        documents.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+    // استخدام البيانات كما تحتاج
+    print(dataList);
+  }
+
   @override
   Widget build(BuildContext context) {
-    //  final userData222 = Provider.of<UserProvider>(context);
-    //print(userData222.userData?.id);
-
-    //  print(userData!.admin);
-
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(S().add),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.go('/');
-          },
-        ),
+        title: Text(S().test_page),
       ),
-      drawer: AppDrawer(
-        toggleTheme: widget.toggleTheme,
-        toggleLocale: widget.toggleLocale,
-      ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                //   _playSound('assets/sound/scanner-beep.mp3');
-              },
-              child: Text(S().play_beep_sound),
+            Material(
+              child: DropdownButton<String>(
+                value: selectedOption,
+                hint: Text(S().select_an_option),
+                onChanged: (String? newValue) {
+                  if (newValue == 'Custom') {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(S().enter_custom_value),
+                          content: TextField(
+                            controller: customController,
+                            decoration:
+                                InputDecoration(hintText: "Enter your value"),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: Text(S().ok),
+                              onPressed: () {
+                                setState(() {
+                                  selectedOption = customController.text;
+                                  options.add(customController.text);
+                                });
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    setState(() {
+                      selectedOption = newValue;
+                    });
+                  }
+                },
+                items: [
+                  ...options.map((String option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
+                  DropdownMenuItem<String>(
+                    value: 'Custom',
+                    child: Text(S().custom),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                //   _playSound('assets/sound/beep.mp3');
-              },
-              child: Text(S().play_scan_sound),
-            ),
+            if (selectedOption != null)
+              Text('Selected option: $selectedOption'),
           ],
         ),
       ),

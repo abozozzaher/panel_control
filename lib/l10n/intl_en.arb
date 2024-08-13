@@ -71,5 +71,15 @@
     "total_length":"Total Length",
     "total_weight":"Total Weight",
     "enter_code_here" : "Enter code here",
-    "saveـand_send_data" : "Save and send data"
+    "saveـand_send_data" : "Save and send data",
+    "morning":"Morning","afternoon":"Afternoon","evening":"Evening",
+
+    "test_page" : "Test Page",
+    "select_an_option" : "Select an option",
+    "enter_custom_value" : "Enter Custom Value",
+    "custom" : "Custom",
+    "no_data_to_send" : "No data to send",
+    "save_and_send_data" : "Save and send data",
+    "invalid_code_scanned_and_removed" : "Invalid code scanned and removed",
+"long_press_to_activate_the_button" : "Long press to activate the button"
 }

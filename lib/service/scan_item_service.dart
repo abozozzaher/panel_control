@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../generated/l10n.dart';
-import '../provider/scan_item_provider.dart';
 
 class ScanItemService {
   final AudioPlayer audioPlayer = AudioPlayer();

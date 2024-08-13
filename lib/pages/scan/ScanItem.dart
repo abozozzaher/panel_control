@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import '../../generated/l10n.dart';
 import '../../provider/scan_item_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
+import '../../service/dataBase.dart';
 import '../../service/scan_item_service.dart';
 import 'Dialogs.dart';
 import 'Scanned_data_table_widgets.dart';
@@ -33,16 +36,16 @@ class _ScanItemQrState extends State<ScanItemQr> {
   final ScanItemDialogs scanItemDialogs = ScanItemDialogs();
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
   QRViewController? controller;
   List<String> scannedData = [];
   Map<String, Map<String, dynamic>> codeDetails = {}; // لتخزين تفاصيل كل كود
   bool _isProcessing = false;
-// Provider مع SharedPreferences
   @override
   void initState() {
     super.initState();
     scanItemService.requestCameraPermission();
-    Provider.of<ScanItemProvider>(context, listen: false).reloadData();
+    // Provider.of<ScanItemProvider>(context, listen: false).reloadData();
   }
 
   Future<void> showAddCodeDialog() async {
@@ -73,23 +76,29 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         ? () {
                             String baseUrl =
                                 'https://panel-control-company-zaher.web.app/';
-                            String formattedData =
+                            String code =
                                 '${baseUrl}${codeController.text.substring(0, 4)}-${codeController.text.substring(4, 6)}/${codeController.text}';
 
                             scanItemService
-                                .fetchDataFromFirebase(formattedData)
+                                .fetchDataFromFirebase(code)
                                 .then((data) {
                               if (data != null) {
-                                if (provider.scannedData
-                                    .contains(formattedData)) {
+                                if (provider.scannedData.contains(code)) {
                                   scanItemDialogs.showDuplicateDialog(
                                       context, codeController.text);
                                 } else {
                                   setState(() {
-                                    //  provider.addScanData(formattedData, data);
-                                    provider.addScanData(
-                                        formattedData, provider.codeDetails);
+                                    provider.addScannedData(
+                                        code); // حفظ الكود في قائمة الكودات الممسوحة
+
+                                    provider.addCodeDetails(code);
                                   });
+                                  setState(() {
+                                    provider.codeDetails[code] = data;
+                                  });
+                                  provider.saveCodeDetails(
+                                      code, data); // Save data to the database
+
                                   scanItemService
                                       .playSound('assets/sound/beep.mp3');
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -130,35 +139,38 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
       final String code = scanData.code!;
       final provider = Provider.of<ScanItemProvider>(context, listen: false);
-
       if (!provider.scannedData.contains(code)) {
         if (code.contains('https://panel-control-company-zaher.web.app/')) {
           setState(() {
-            provider.addScanData(code, {});
+            provider
+                .addScannedData(code); // حفظ الكود في قائمة الكودات الممسوحة
+            provider.addCodeDetails(code);
           });
-          /*  
-        provider.addScanData(code, {});
-          
-          setState(() {
-            scannedData.add(code);
-          });
-          */
           scanItemService.playSound('assets/sound/beep.mp3');
           scanItemService.fetchDataFromFirebase(code).then((data) {
             if (data != null) {
               setState(() {
                 provider.codeDetails[code] = data;
               });
+              provider.saveCodeDetails(code, data); // Save data to the database
+
+              // لعرض الكود مختصر بدون الرابط والشهر
+              var urlLength =
+                  'https://panel-control-company-zaher.web.app/'.length;
+              final displayCode = code.length > urlLength + 8
+                  ? code.substring(urlLength + 8)
+                  : code;
+// هذه نهاية الامر السابق لعرض الرابط مختصر
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${S().scanned} $displayCode'),
+                  backgroundColor: scanData.format == BarcodeFormat.qrcode
+                      ? Colors.green
+                      : Colors.blue,
+                ),
+              );
             }
           });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${S().scanned} $code'),
-              backgroundColor: scanData.format == BarcodeFormat.qrcode
-                  ? Colors.green
-                  : Colors.blue,
-            ),
-          );
         } else {
           scanItemDialogs.showErorrDialog(context, code);
         }
@@ -174,6 +186,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ScanItemProvider>(context);
+    final codeDetailse = provider.codeDetails;
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final userData = userProvider.user;
@@ -243,8 +256,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
         children: [
           kIsWeb
               ? Container()
-              : Container(
-                  color: Colors.blue,
+              : SizedBox(
                   height: 300,
                   child: QRView(
                     key: qrKey,
@@ -290,7 +302,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                   ],
                 ),
                 // القسم الثالث رسالة التاكيد
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -298,27 +310,28 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: ElevatedButton(
-                          child: Text('Save and send data'),
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Center(
-                                        child: Text(
-                                            'Long press to activate the button')),
-                                    duration: Duration(seconds: 2)));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Center(
+                                    child: Text(
+                                        S().long_press_to_activate_the_button)),
+                                duration: Duration(seconds: 2)));
                           },
                           onLongPress: provider.scannedData.isNotEmpty &&
                                   userData!.work == true
-                              ? () => showConfirmDialog(userData)
+                              ? () {
+                                  showConfirmDialog(userData);
+                                }
                               : () {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
                                       content: Center(
-                                          child: Text('No data to send')),
+                                          child: Text(S().no_data_to_send)),
                                       duration: Duration(seconds: 2),
                                     ),
                                   );
                                 },
+                          child: Text(S().save_and_send_data),
                         ),
                       ),
                     ),
@@ -349,10 +362,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       icon: const Icon(Icons.delete),
                       onPressed: () {
                         setState(() {
-                          provider.removeScanData(code);
-
-                          //   scannedData.removeAt(index);
-                          //  codeDetails.remove(code);
+                          provider.removeData(code);
                         });
                       },
                     ),
@@ -367,121 +377,11 @@ class _ScanItemQrState extends State<ScanItemQr> {
             ),
           ),
           scanDataTableWidgets.scrollViewScannedDataTableWidget(context),
-
-          /*
-          Container(
-            color: Colors.grey,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: [
-                    DataColumn(
-                        label: Text(S().type,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().color,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().width,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().yarn_number,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().quantity,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().length,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text('${S().weight} ${S().total}',
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text('${S().scanned}',
-                            style: TextStyle(color: Colors.greenAccent))),
-                  ],
-                  rows: buildRows(codeDetails),
-                ),
-              ),
-            ),
-          ),
-          */
         ],
       ),
     );
   }
 
-/*
-  List<DataRow> buildRows(codeDetails) {
-    final provider = Provider.of<ScanItemProvider>(context);
-
-    Map<String, Map<String, dynamic>> aggregatedData = {};
-
-    for (var entry in provider.codeDetails.entries) {
-      var data = entry.value;
-
-      String key =
-          '${data['yarn_number']}-${data['type']}-${data['color']}-${data['width']}';
-
-      if (!aggregatedData.containsKey(key)) {
-        aggregatedData[key] = {
-          'yarn_number': data['yarn_number'],
-          'type': data['type'],
-          'color': data['color'],
-          'width': data['width'],
-          'total_weight': 0,
-          'quantity': 0,
-          'length': 0,
-          'scanned_data': 0,
-        };
-      }
-      aggregatedData[key]!['total_weight'] += data['total_weight'] is int
-          ? data['total_weight']
-          : int.tryParse(data['total_weight'].toString()) ?? 0;
-      aggregatedData[key]!['quantity'] += data['quantity'] is int
-          ? data['quantity']
-          : int.tryParse(data['quantity'].toString()) ?? 0;
-      aggregatedData[key]!['length'] += data['length'] is int
-          ? data['length']
-          : int.tryParse(data['length'].toString()) ?? 0;
-      aggregatedData[key]!['scanned_data'] += 1;
-    }
-
-    return aggregatedData.entries.map((entry) {
-      var data = entry.value;
-      return DataRow(cells: [
-        DataCell(Center(
-          child: Text(data['type'].toString(),
-              style: const TextStyle(color: Colors.redAccent)),
-        )),
-        DataCell(Center(
-          child: Text(data['color'].toString(),
-              style: const TextStyle(color: Colors.redAccent)),
-        )),
-        DataCell(Center(
-            child: Text('${data['width']} mm',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text('${data['yarn_number']} D',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text('${data['quantity']} Pcs',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text('${data['length']} Mt',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text('${data['total_weight']} Kg',
-                style: const TextStyle(color: Colors.redAccent)))),
-        DataCell(Center(
-            child: Text(data['scanned_data'].toString(),
-                style: const TextStyle(color: Colors.black)))),
-      ]);
-    }).toList();
-  }
-*/
 // هذا دايلوك ارسال البيانات الى الفاير بيس وانتهاء العملية البيع
   Future<void> showConfirmDialog(UserData? userData) async {
     final provider = Provider.of<ScanItemProvider>(context, listen: false);
@@ -520,10 +420,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Confirm Data',
-            textAlign: TextAlign.center,
-          ),
+          title: const Text('Confirm Data', textAlign: TextAlign.center),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -566,22 +463,19 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
-                        'Send',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black),
-                      )),
+                      child: const Text('Send',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black))),
                 ),
                 const SizedBox(height: 5, width: 5),
                 Expanded(
                   child: TextButton(
                     style:
                         TextButton.styleFrom(backgroundColor: Colors.redAccent),
-                    child: Text(
-                      S().cancel,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
+                    child: Text(S().cancel,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black)),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

@@ -1,132 +1,69 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dart:convert';
+
+import '../service/dataBase.dart';
 
 class ScanItemProvider with ChangeNotifier {
-  List<String> scannedData = [];
-  Map<String, Map<String, dynamic>> codeDetails = {};
-//  Map<String, Map<String, dynamic>> get codeDetails => _codeDetails;
+  final List<String> _scannedData = [];
 
-  DateTime? lastSaved;
-  // وظيفة لتحديث البيانات
-  void updateCodeDetails(Map<String, Map<String, dynamic>> newCodeDetails) {
-    codeDetails = newCodeDetails;
-    notifyListeners();
-  }
-
-  Future<void> loadData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    scannedData = prefs.getStringList('scannedData') ?? [];
-    lastSaved = DateTime.tryParse(prefs.getString('lastSaved') ?? '');
-
-    if (lastSaved != null &&
-        DateTime.now().difference(lastSaved!).inHours >= 1) {
-      scannedData.clear();
-      codeDetails.clear();
-      await prefs.remove('scannedData');
-      await prefs.remove('codeDetails');
-      await prefs.remove('lastSaved');
-    } else {
-      final codeDetailsStr = prefs.getString('codeDetails');
-      if (codeDetailsStr != null) {
-        codeDetails = Map<String, Map<String, dynamic>>.from(
-          (await jsonDecode(codeDetailsStr)) as Map<String, dynamic>,
-        );
-        print('Loaded Code Details: $codeDetails');
-      }
-    }
-    notifyListeners();
-  }
-
-  Future<void> saveData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('scannedData', scannedData);
-    await prefs.setString('codeDetails', jsonEncode(codeDetails));
-
-    await prefs.setString('lastSaved', DateTime.now().toIso8601String());
-    notifyListeners();
-  }
-
-  void addScanData(String data, Map<String, dynamic> details) {
-    scannedData.add(data);
-    codeDetails[data] = details;
-    saveData();
-  }
-
-  void removeScanData(String data) {
-    scannedData.remove(data);
-    codeDetails.remove(data);
-    saveData();
-  }
-
-  Future<void> reloadData() async {
-    await loadData();
-  }
-
-  /*
-  List<String> _scannedData = [];
   List<String> get scannedData => _scannedData;
+  final Map<String, Map<String, dynamic>> _codeDetails = {};
+  Map<String, Map<String, dynamic>> get codeDetails => _codeDetails;
 
-  Map<String, Map<String, dynamic>> codeDetails = {};
-  final String scannedDataKey = 'scannedDataKey';
-  final String codeDetailsKey = 'codeDetailsKey';
-  final int expirationDuration = 3600; // 1 ساعة بالثواني
+  final DatabaseHelper _databaseHelper = DatabaseHelper();
 
-  ScanItemProvider() {
-    _loadData();
-  }
-  void addData(String newData) {
-    if (!_scannedData.contains(newData)) {
-      _scannedData.add(newData);
-      saveToSharedPreferences();
+  Future<void> addCodeDetails(String code) async {
+    final data = await _databaseHelper.getCodeDetails(code);
+    if (data != null) {
+      _codeDetails[code] = data;
       notifyListeners();
     }
   }
 
-  void loadFromSharedPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _scannedData = prefs.getStringList('scannedData') ?? [];
+  Future<void> saveCodeDetails(
+      String code, Map<String, dynamic> details) async {
+    await _databaseHelper.insertCodeDetails(code, jsonEncode(details));
+    _codeDetails[code] = details;
     notifyListeners();
   }
 
-  void saveToSharedPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('scannedData', _scannedData);
-  }
-
-  Future<void> _loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final savedScannedData = prefs.getStringList(scannedDataKey) ?? [];
-    final savedCodeDetailsString = prefs.getString(codeDetailsKey) ?? '{}';
-
-    _scannedData = savedScannedData;
-    codeDetails = Map<String, Map<String, dynamic>>.from(
-        json.decode(savedCodeDetailsString) as Map);
-
-    // تحقق من صلاحية البيانات
-    await _checkDataValidity();
-    notifyListeners();
-  }
-
-  Future<void> _checkDataValidity() async {
-    final prefs = await SharedPreferences.getInstance();
-    final currentTime = DateTime.now().millisecondsSinceEpoch / 1000;
-    final expirationTime = prefs.getDouble('expirationTime') ?? 0;
-
-    if (currentTime > expirationTime) {
-      await clearAll();
+  Future<void> addScannedData(String code) async {
+    if (!_scannedData.contains(code)) {
+      _scannedData.add(code);
+      await _databaseHelper.insertScannedData(code);
+      notifyListeners();
     }
   }
 
-  Future<void> clearAll() async {
-    scannedData.clear();
-    codeDetails.clear();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(scannedDataKey);
-    await prefs.remove(codeDetailsKey);
-    await prefs.remove('expirationTime');
+  Future<void> loadScannedData() async {
+    final List<String> loadedData = await _databaseHelper.getScannedData();
+    _scannedData.addAll(loadedData);
     notifyListeners();
   }
-*/
+
+  Future<void> deleteCodeDetails(String code) async {
+    await _databaseHelper.deleteCodeDetails(code);
+    _codeDetails.remove(code);
+    notifyListeners();
+  }
+
+  Future<void> deleteScannedData(String code) async {
+    await _databaseHelper.deleteScannedData(code);
+    _scannedData.remove(code);
+    notifyListeners();
+  }
+
+  void removeData(String data) async {
+    _codeDetails.remove(data);
+    _scannedData.remove(data);
+
+    final dbHelper = DatabaseHelper();
+    await dbHelper.deleteScannedData(data);
+    await dbHelper.deleteCodeDetails(data);
+
+    notifyListeners();
+  }
 }

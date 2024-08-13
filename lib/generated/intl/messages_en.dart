@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "Türkiye Gaziantep Sanayi MAH. 60092"),
+        "afternoon": MessageLookupByLibrary.simpleMessage("Afternoon"),
         "available": MessageLookupByLibrary.simpleMessage("Available"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
         "button": MessageLookupByLibrary.simpleMessage("Button"),
@@ -36,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "company_name": MessageLookupByLibrary.simpleMessage(
             "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "custom": MessageLookupByLibrary.simpleMessage("Custom"),
         "data": MessageLookupByLibrary.simpleMessage("Data"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
         "duplicate_code":
@@ -45,9 +47,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_code": MessageLookupByLibrary.simpleMessage("Enter Code"),
         "enter_code_here":
             MessageLookupByLibrary.simpleMessage("Enter code here"),
+        "enter_custom_value":
+            MessageLookupByLibrary.simpleMessage("Enter Custom Value"),
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "error_404": MessageLookupByLibrary.simpleMessage("Error 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("Error Code"),
+        "evening": MessageLookupByLibrary.simpleMessage("Evening"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Failed to upload image"),
         "first_name": MessageLookupByLibrary.simpleMessage("First Name"),
@@ -60,18 +65,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "id": MessageLookupByLibrary.simpleMessage("ID"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("Image uploaded successfully"),
+        "invalid_code_scanned_and_removed":
+            MessageLookupByLibrary.simpleMessage(
+                "Invalid code scanned and removed"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
         "last_name": MessageLookupByLibrary.simpleMessage("Last Name"),
         "length": MessageLookupByLibrary.simpleMessage("Length"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "long_press_to_activate_the_button":
+            MessageLookupByLibrary.simpleMessage(
+                "Long press to activate the button"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
+        "morning": MessageLookupByLibrary.simpleMessage("Morning"),
         "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
         "no_data_found": MessageLookupByLibrary.simpleMessage("No data found."),
         "no_data_found_for_this_code": MessageLookupByLibrary.simpleMessage(
             "No data found for this code."),
+        "no_data_to_send":
+            MessageLookupByLibrary.simpleMessage("No data to send"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "page_not_found":
             MessageLookupByLibrary.simpleMessage("Page not found"),
@@ -96,14 +110,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "sale_status": MessageLookupByLibrary.simpleMessage("Sale Status"),
+        "save_and_send_data":
+            MessageLookupByLibrary.simpleMessage("Save and send data"),
         "saved_successfully_with": MessageLookupByLibrary.simpleMessage(
             "item saved successfully with ID :"),
         "scan": MessageLookupByLibrary.simpleMessage("Scan"),
         "scan_a_code": MessageLookupByLibrary.simpleMessage("Scan a code"),
         "scanned": MessageLookupByLibrary.simpleMessage("Scanned"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
+        "select_an_option":
+            MessageLookupByLibrary.simpleMessage("Select an option"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
+        "test_page": MessageLookupByLibrary.simpleMessage("Test Page"),
         "the_code": MessageLookupByLibrary.simpleMessage("The Code"),
         "toggle_language":
             MessageLookupByLibrary.simpleMessage("Toggle Language"),

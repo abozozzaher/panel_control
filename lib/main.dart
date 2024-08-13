@@ -42,7 +42,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider<UserProvider>(create: (_) => userProvider),
         ChangeNotifierProvider<ScanItemProvider>(
-            create: (_) => ScanItemProvider()..reloadData()),
+            create: (_) => ScanItemProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

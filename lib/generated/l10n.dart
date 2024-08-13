@@ -771,6 +771,116 @@ class S {
   }
 
   // skipped getter for the 'saveـand_send_data' key
+
+  /// `Morning`
+  String get morning {
+    return Intl.message(
+      'Morning',
+      name: 'morning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Afternoon`
+  String get afternoon {
+    return Intl.message(
+      'Afternoon',
+      name: 'afternoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Evening`
+  String get evening {
+    return Intl.message(
+      'Evening',
+      name: 'evening',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Test Page`
+  String get test_page {
+    return Intl.message(
+      'Test Page',
+      name: 'test_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select an option`
+  String get select_an_option {
+    return Intl.message(
+      'Select an option',
+      name: 'select_an_option',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Custom Value`
+  String get enter_custom_value {
+    return Intl.message(
+      'Enter Custom Value',
+      name: 'enter_custom_value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom`
+  String get custom {
+    return Intl.message(
+      'Custom',
+      name: 'custom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data to send`
+  String get no_data_to_send {
+    return Intl.message(
+      'No data to send',
+      name: 'no_data_to_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save and send data`
+  String get save_and_send_data {
+    return Intl.message(
+      'Save and send data',
+      name: 'save_and_send_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid code scanned and removed`
+  String get invalid_code_scanned_and_removed {
+    return Intl.message(
+      'Invalid code scanned and removed',
+      name: 'invalid_code_scanned_and_removed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Long press to activate the button`
+  String get long_press_to_activate_the_button {
+    return Intl.message(
+      'Long press to activate the button',
+      name: 'long_press_to_activate_the_button',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
