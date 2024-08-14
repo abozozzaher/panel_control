@@ -17,9 +17,12 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../generated/l10n.dart';
+import '../../model/product.dart';
 import '../../provider/user_provider.dart';
+import '../../service/add_new_item)_service.dart';
 import '../../service/app_drawer.dart';
 import '../../service/data_lists.dart';
+import 'dropdownWidget.dart';
 
 class AddNewItemScreen extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -32,6 +35,11 @@ class AddNewItemScreen extends StatefulWidget {
 }
 
 class _AddNewItemScreenState extends State<AddNewItemScreen> {
+  String? selectedKey;
+  final DataLists dataLists = DataLists();
+  String selectedColor1 = 'black';
+
+//  final AddNewItemService addNewItemService = AddNewItemService();
   String? selectedType;
   String? selectedWidth;
   String? selectedWeight;
@@ -42,7 +50,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   String? selectedLength;
 
   XFile? selectedImage;
-  Uint8List? _webImage;
+  Uint8List? webImage;
 
   List<String>? types;
   List<String>? widths;
@@ -56,6 +64,39 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   String productId = '';
 
   String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
+  @override
+  void initState() {
+    super.initState();
+    loadDefaults();
+  }
+
+  Future<void> loadDefaults() async {
+    await loadDefaultValues();
+  }
+
+  Future<void> loadDefaultValues() async {
+    // Set default values from Firestore or local defaults if Firestore is empty
+    // Load default values from data_lists.dart
+    types = dataLists.types;
+    widths = dataLists.widths;
+    weights = dataLists.weights;
+    colors = dataLists.colors as List<String>?;
+    yarnNumbers = dataLists.yarnNumbers;
+    shift = dataLists.shift;
+    quantity = dataLists.quantity;
+    length = dataLists.length;
+    setState(() {
+      selectedType = types!.isNotEmpty ? types![0] : null;
+      selectedWidth = widths!.isNotEmpty ? widths![6] : null;
+      selectedWeight = weights!.isNotEmpty ? weights![0] : null;
+      selectedColor = colors!.isNotEmpty ? colors![0] : null;
+      selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1] : null;
+      selectedShift = shift!.isNotEmpty ? shift![0] : null;
+      selectedQuantity = quantity!.isNotEmpty ? quantity![0] : null;
+      selectedLength = length!.isNotEmpty ? length![2] : null;
+      productId = generateCode();
+    });
+  }
 
   /// تحويل الأرقام العربية إلى أرقام إنجليزية
   String convertArabicToEnglish(String text) {
@@ -71,41 +112,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         RegExp(r'[٠-٩]'),
         (match) =>
             String.fromCharCode(match.group(0)!.codeUnitAt(0) - 1632 + 48));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadDefaults(); // Load default values and data from Firestore
-  }
-
-  Future<void> loadDefaults() async {
-    // Load default values
-    await loadDefaultValues();
-  }
-
-  Future<void> loadDefaultValues() async {
-    // Set default values from Firestore or local defaults if Firestore is empty
-    // Load default values from data_lists.dart
-    types = DataLists().types;
-    widths = DataLists().widths;
-    weights = DataLists().weights;
-    colors = DataLists().colors;
-    yarnNumbers = DataLists().yarnNumbers;
-    shift = DataLists().shift;
-    quantity = DataLists().quantity;
-    length = DataLists().length;
-    setState(() {
-      selectedType = types!.isNotEmpty ? types![0] : null; // null : null;
-      selectedWidth = widths!.isNotEmpty ? widths![6] : null;
-      selectedWeight = weights!.isNotEmpty ? weights![0] : null;
-      selectedColor = colors!.isNotEmpty ? colors![0] : null;
-      selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1] : null;
-      selectedShift = shift!.isNotEmpty ? shift![0] : null;
-      selectedQuantity = quantity!.isNotEmpty ? quantity![0] : null;
-      selectedLength = length!.isNotEmpty ? length![2] : null;
-      productId = generateCode();
-    });
   }
 
   Future<void> addItem() async {
@@ -165,9 +171,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               Text('${S().shift} : $selectedShift'),
               Text('${S().quantity} : $selectedQuantity' 'Pcs'),
               Text('${S().length} : $selectedLength' 'Mt'),
-              if (selectedImage != null || _webImage != null)
+              if (selectedImage != null || webImage != null)
                 kIsWeb
-                    ? Image.memory(_webImage!, width: 100, height: 100)
+                    ? Image.memory(webImage!, width: 100, height: 100)
                     : Image.file(File(selectedImage!.path),
                         width: 100, height: 100),
             ],
@@ -190,7 +196,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       });
 
                       // Upload image to storage if selected
-                      if (selectedImage != null || _webImage != null) {
+                      if (selectedImage != null || webImage != null) {
                         try {
                           imageUrl = await uploadImageToStorage(selectedImage);
 
@@ -283,7 +289,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         selectedLength = length!.isNotEmpty ? length![2] : null;
 
                         selectedImage = null;
-                        _webImage = null;
+                        webImage = null;
                         productId = generateCode();
                         isUploading =
                             false; // Reset the uploading flag after the upload is complete
@@ -321,6 +327,13 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     );
   }
 
+  String generateCode() {
+    DateTime now = DateTime.now();
+    var formatter = DateFormat('yyyyMMddHHmmssssssss');
+    String date = formatter.format(now);
+    return date; // Dynamic serial number should be updated
+  }
+
   Future<String> uploadImageToStorage(XFile? image) async {
     String englishYearMonth = convertArabicToEnglishForMonth(yearMonth);
 
@@ -335,18 +348,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     if (image != null) {
       uploadTask = storageReference.putFile(File(image.path), metadata);
     } else {
-      uploadTask = storageReference.putData(_webImage!, metadata);
+      uploadTask = storageReference.putData(webImage!, metadata);
     }
 
     await uploadTask;
     return await storageReference.getDownloadURL();
-  }
-
-  String generateCode() {
-    DateTime now = DateTime.now();
-    var formatter = DateFormat('yyyyMMddHHmmssssssss');
-    String date = formatter.format(now);
-    return date; // Dynamic serial number should be updated
   }
 
   Future<void> generateAndPrintPDF(
@@ -707,7 +713,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result != null) {
         setState(() {
-          _webImage = result.files.first.bytes;
+          webImage = result.files.first.bytes;
         });
       }
     } else {
@@ -716,6 +722,12 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         selectedImage = image;
       });
     }
+  }
+
+  // دالة لحفظ الكلمة المفتاحية المختارة في قاعدة البيانات
+  void _saveToDatabase(String selectedKey) {
+    // اكتب هنا كود الحفظ لقاعدة البيانات باستخدام الـ selectedKey
+    print("تم حفظ الكلمة المفتاحية في قاعدة البيانات: $selectedKey");
   }
 
   @override
@@ -751,9 +763,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                     textDirection: ui.TextDirection.rtl),
                 const SizedBox(height: 10),
-                if (selectedImage != null || _webImage != null)
+                if (selectedImage != null || webImage != null)
                   kIsWeb
-                      ? Image.memory(_webImage!, width: 200, height: 200)
+                      ? Image.memory(webImage!, width: 200, height: 200)
                       : Image.file(File(selectedImage!.path),
                           width: 200, height: 200),
                 const SizedBox(height: 10),
@@ -763,14 +775,24 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   label: Text(S().pick_image),
                 ),
                 const SizedBox(height: 10),
-                buildDropdown('${S().select} ${S().type}', selectedType, types!,
+
+                ///555555555
+
+                buildDropdown(
+                    context, '${S().select} ${S().type}', selectedType, types!,
                     (value) {
                   setState(() {
                     selectedType = value;
                   });
                 }, '${S().select} ${S().type}'),
+
+                ///555555555
+                ///
                 buildDropdown(
-                  '${S().select} ${S().width}', selectedWidth, widths!,
+                  context,
+                  '${S().select} ${S().width}',
+                  selectedWidth,
+                  widths!,
                   (value) {
                     setState(() {
                       selectedWidth = value;
@@ -780,6 +802,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   suffixText: 'mm', // يمكنك إضافة النص الذي تريده هنا
                 ),
                 buildDropdown(
+                  context,
                   '${S().select} ${S().weight}',
                   selectedWeight,
                   weights!,
@@ -791,14 +814,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   '${S().select} ${S().weight}',
                   suffixText: 'g', // يمكنك إضافة النص الذي تريده هنا
                 ),
-                buildDropdown(
-                    '${S().select} ${S().color}', selectedColor, colors!,
-                    (value) {
+                buildDropdown(context, '${S().select} ${S().color}',
+                    selectedColor, colors!, (value) {
                   setState(() {
                     selectedColor = value;
                   });
                 }, '${S().select} ${S().color}'),
                 buildDropdown(
+                  context,
                   '${S().select} ${S().yarn_number}',
                   selectedYarnNumber,
                   yarnNumbers!,
@@ -810,15 +833,16 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   '${S().select} ${S().yarn_number}',
                   suffixText: 'D', // يمكنك إضافة النص الذي تريده هنا
                 ),
-                buildDropdown(
-                    '${S().select} ${S().shift}', selectedShift, shift!,
-                    (value) {
+                buildDropdown(context, '${S().select} ${S().shift}',
+                    selectedShift, shift!, (value) {
                   setState(() {
                     selectedShift = value;
                   });
                 }, '${S().select} ${S().shift}'),
                 buildDropdown(
-                  '${S().select} ${S().length}', selectedLength, length!,
+                  context,
+                  '${S().select} ${S().length}',
+                  selectedLength, length!,
                   (value) {
                     setState(() {
                       selectedLength = value;
@@ -828,6 +852,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   suffixText: 'Mt', // يمكنك إضافة النص الذي تريده هنا
                 ),
                 buildDropdown(
+                  context,
                   '${S().select} ${S().quantity}',
                   selectedQuantity,
                   quantity!,
@@ -839,6 +864,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   '${S().select} ${S().quantity}',
                   suffixText: 'Pcs', // يمكنك إضافة النص الذي تريده هنا
                 ),
+
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.save_as_outlined),
@@ -850,33 +876,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildDropdown(String hint, String? selectedValue, List<String> items,
-      ValueChanged<String?> onChanged, String hintText,
-      {String suffixText = ''}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text(hintText, style: const TextStyle(color: Colors.grey)),
-        DropdownButton<String>(
-          hint: Text(hint),
-          value: selectedValue,
-          onChanged: onChanged,
-          items: items.map((item) {
-            return DropdownMenuItem(
-              value: item,
-              child: Center(
-                child: Text('$item $suffixText',
-                    textDirection: ui.TextDirection.ltr),
-              ), // إضافة النص الإضافي هنا
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 }

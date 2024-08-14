@@ -30,8 +30,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Türkiye Gaziantep Sanayi MAH. 60092"),
         "afternoon": MessageLookupByLibrary.simpleMessage("Afternoon"),
         "available": MessageLookupByLibrary.simpleMessage("Available"),
+        "black": MessageLookupByLibrary.simpleMessage("اسود"),
+        "blue": MessageLookupByLibrary.simpleMessage("كحلي"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
+        "brown": MessageLookupByLibrary.simpleMessage("بني"),
+        "brown_burnt": MessageLookupByLibrary.simpleMessage("بني محروق"),
         "button": MessageLookupByLibrary.simpleMessage("Button"),
+        "camel": MessageLookupByLibrary.simpleMessage("جملي"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "color": MessageLookupByLibrary.simpleMessage("Color"),
         "company_name": MessageLookupByLibrary.simpleMessage(
@@ -60,8 +65,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
         "go_to_page":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
+        "habl": MessageLookupByLibrary.simpleMessage("حبل"),
         "has_already_been_scanned":
             MessageLookupByLibrary.simpleMessage("has already been scanned."),
+        "hourani": MessageLookupByLibrary.simpleMessage("حورانية"),
         "id": MessageLookupByLibrary.simpleMessage("ID"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("Image uploaded successfully"),
@@ -77,7 +84,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Long press to activate the button"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
-        "morning": MessageLookupByLibrary.simpleMessage("Morning"),
+        "military": MessageLookupByLibrary.simpleMessage("عسكري"),
+        "morning": MessageLookupByLibrary.simpleMessage("Morning1"),
         "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
@@ -108,7 +116,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Product Details"),
         "product_id": MessageLookupByLibrary.simpleMessage("Product ID"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
+        "raza": MessageLookupByLibrary.simpleMessage("رزة"),
+        "red": MessageLookupByLibrary.simpleMessage("حمري"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "robe": MessageLookupByLibrary.simpleMessage("عباية"),
+        "sabla": MessageLookupByLibrary.simpleMessage("سبلة"),
         "sale_status": MessageLookupByLibrary.simpleMessage("Sale Status"),
         "save_and_send_data":
             MessageLookupByLibrary.simpleMessage("Save and send data"),
@@ -120,7 +132,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_an_option":
             MessageLookupByLibrary.simpleMessage("Select an option"),
+        "shanta": MessageLookupByLibrary.simpleMessage("شنطه"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
+        "silver": MessageLookupByLibrary.simpleMessage("فضي"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
         "test_page": MessageLookupByLibrary.simpleMessage("Test Page"),
         "the_code": MessageLookupByLibrary.simpleMessage("The Code"),
@@ -134,7 +148,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_quantity":
             MessageLookupByLibrary.simpleMessage("Total Quantity"),
         "total_weight": MessageLookupByLibrary.simpleMessage("Total Weight"),
+        "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
+        "veil": MessageLookupByLibrary.simpleMessage("محجرة"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number")

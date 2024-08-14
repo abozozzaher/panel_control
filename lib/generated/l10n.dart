@@ -772,10 +772,10 @@ class S {
 
   // skipped getter for the 'saveـand_send_data' key
 
-  /// `Morning`
+  /// `Morning1`
   String get morning {
     return Intl.message(
-      'Morning',
+      'Morning1',
       name: 'morning',
       desc: '',
       args: [],
@@ -877,6 +877,166 @@ class S {
     return Intl.message(
       'Long press to activate the button',
       name: 'long_press_to_activate_the_button',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عباية`
+  String get robe {
+    return Intl.message(
+      'عباية',
+      name: 'robe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `محجرة`
+  String get veil {
+    return Intl.message(
+      'محجرة',
+      name: 'veil',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حورانية`
+  String get hourani {
+    return Intl.message(
+      'حورانية',
+      name: 'hourani',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `سبلة`
+  String get sabla {
+    return Intl.message(
+      'سبلة',
+      name: 'sabla',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `شنطه`
+  String get shanta {
+    return Intl.message(
+      'شنطه',
+      name: 'shanta',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حبل`
+  String get habl {
+    return Intl.message(
+      'حبل',
+      name: 'habl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `رزة`
+  String get raza {
+    return Intl.message(
+      'رزة',
+      name: 'raza',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `اسود`
+  String get black {
+    return Intl.message(
+      'اسود',
+      name: 'black',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `بني محروق`
+  String get brown_burnt {
+    return Intl.message(
+      'بني محروق',
+      name: 'brown_burnt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `بني`
+  String get brown {
+    return Intl.message(
+      'بني',
+      name: 'brown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `جملي`
+  String get camel {
+    return Intl.message(
+      'جملي',
+      name: 'camel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `حمري`
+  String get red {
+    return Intl.message(
+      'حمري',
+      name: 'red',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `كحلي`
+  String get blue {
+    return Intl.message(
+      'كحلي',
+      name: 'blue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `عسكري`
+  String get military {
+    return Intl.message(
+      'عسكري',
+      name: 'military',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `فضي`
+  String get silver {
+    return Intl.message(
+      'فضي',
+      name: 'silver',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `translate`
+  String get translate {
+    return Intl.message(
+      'translate',
+      name: 'translate',
       desc: '',
       args: [],
     );

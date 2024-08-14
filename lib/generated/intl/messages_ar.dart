@@ -28,11 +28,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "add": MessageLookupByLibrary.simpleMessage("اضف"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "Türkiye Gaziantep Sanayi Mah.60092"),
-        "afternoon": MessageLookupByLibrary.simpleMessage("Afternoon"),
+        "afternoon": MessageLookupByLibrary.simpleMessage("عصري"),
         "available": MessageLookupByLibrary.simpleMessage("متاح"),
+        "black": MessageLookupByLibrary.simpleMessage("اسود"),
+        "blue": MessageLookupByLibrary.simpleMessage("كحلي"),
         "blue_textiles":
             MessageLookupByLibrary.simpleMessage("المنسوجات الزرقاء"),
+        "brown": MessageLookupByLibrary.simpleMessage("بني"),
+        "brown_burnt": MessageLookupByLibrary.simpleMessage("بني محروق"),
         "button": MessageLookupByLibrary.simpleMessage("زر"),
+        "camel": MessageLookupByLibrary.simpleMessage("جملي"),
         "cancel": MessageLookupByLibrary.simpleMessage("الغاء"),
         "color": MessageLookupByLibrary.simpleMessage("لون"),
         "company_name": MessageLookupByLibrary.simpleMessage(
@@ -52,7 +57,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "error": MessageLookupByLibrary.simpleMessage("خطأ"),
         "error_404": MessageLookupByLibrary.simpleMessage("خطأ 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("خطا بالكود"),
-        "evening": MessageLookupByLibrary.simpleMessage("Evening"),
+        "evening": MessageLookupByLibrary.simpleMessage("ليلي"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("فشل في تحميل الصورة"),
         "first_name": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
@@ -60,8 +65,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("هل نسيت كلمة السر"),
         "go_to_page":
             MessageLookupByLibrary.simpleMessage("انتقل إلى الصفحة الرئيسية"),
+        "habl": MessageLookupByLibrary.simpleMessage("حبل"),
         "has_already_been_scanned":
             MessageLookupByLibrary.simpleMessage("تم بالفعل مسحها ضوئيًا."),
+        "hourani": MessageLookupByLibrary.simpleMessage("حورانية"),
         "id": MessageLookupByLibrary.simpleMessage("بطاقة تعريف"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("تم تحميل الصورة بنجاح"),
@@ -77,7 +84,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Long press to activate the button"),
         "menu": MessageLookupByLibrary.simpleMessage("قائمة"),
-        "morning": MessageLookupByLibrary.simpleMessage("Morning"),
+        "military": MessageLookupByLibrary.simpleMessage("عسكري"),
+        "morning": MessageLookupByLibrary.simpleMessage("صباحي"),
         "new1": MessageLookupByLibrary.simpleMessage("جديد"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
@@ -108,7 +116,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تفاصيل المنتج"),
         "product_id": MessageLookupByLibrary.simpleMessage("رمز المنتج"),
         "quantity": MessageLookupByLibrary.simpleMessage("كمية"),
+        "raza": MessageLookupByLibrary.simpleMessage("رزة"),
+        "red": MessageLookupByLibrary.simpleMessage("حمري"),
         "register": MessageLookupByLibrary.simpleMessage("يسجل"),
+        "robe": MessageLookupByLibrary.simpleMessage("عباية"),
+        "sabla": MessageLookupByLibrary.simpleMessage("سبلة"),
         "sale_status": MessageLookupByLibrary.simpleMessage("حالة البيع"),
         "save_and_send_data":
             MessageLookupByLibrary.simpleMessage("Save and send data"),
@@ -120,7 +132,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "select": MessageLookupByLibrary.simpleMessage("اختار"),
         "select_an_option":
             MessageLookupByLibrary.simpleMessage("Select an option"),
+        "shanta": MessageLookupByLibrary.simpleMessage("شنطه"),
         "shift": MessageLookupByLibrary.simpleMessage("وردية"),
+        "silver": MessageLookupByLibrary.simpleMessage("فضي"),
         "sold": MessageLookupByLibrary.simpleMessage("مُباع"),
         "test_page": MessageLookupByLibrary.simpleMessage("Test Page"),
         "the_code": MessageLookupByLibrary.simpleMessage("الرمز"),
@@ -133,7 +147,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_quantity":
             MessageLookupByLibrary.simpleMessage("الكمية الإجمالية"),
         "total_weight": MessageLookupByLibrary.simpleMessage("الوزن الكلي"),
+        "translate": MessageLookupByLibrary.simpleMessage("يترجم"),
         "type": MessageLookupByLibrary.simpleMessage("النوع"),
+        "veil": MessageLookupByLibrary.simpleMessage("محجرة"),
         "weight": MessageLookupByLibrary.simpleMessage("وزن"),
         "width": MessageLookupByLibrary.simpleMessage("عرض"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("رمز خيط الغزل")

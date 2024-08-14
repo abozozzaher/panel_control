@@ -12,7 +12,7 @@ import 'generated/l10n.dart';
 
 import 'pages/auth/login_page.dart';
 import 'pages/home_page.dart';
-import 'pages/product/NewItem.dart';
+import 'pages/addNewProduct/NewItem.dart';
 import 'pages/product/ProductPage.dart';
 import 'pages/scan/ScanItem.dart';
 import 'provider/scan_item_provider.dart';
