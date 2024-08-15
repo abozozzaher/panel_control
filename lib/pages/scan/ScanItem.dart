@@ -45,7 +45,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
   void initState() {
     super.initState();
     scanItemService.requestCameraPermission();
-    // Provider.of<ScanItemProvider>(context, listen: false).reloadData();
   }
 
   Future<void> showAddCodeDialog() async {
@@ -73,7 +72,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
                   return TextButton(
                     onPressed: codeController.text.length == 20 &&
                             codeController.text.isNotEmpty
-                        ? () {
+                        ? ()
+                            /*
+                         {
                             String baseUrl =
                                 'https://panel-control-company-zaher.web.app/';
                             String code =
@@ -112,6 +113,84 @@ class _ScanItemQrState extends State<ScanItemQr> {
                               } else {
                                 scanItemDialogs.showErorrDialog(
                                     context, codeController.text);
+                              }
+                            });
+                          }
+                          */
+                            {
+                            String baseUrl =
+                                'https://panel-control-company-zaher.web.app/';
+                            String code =
+                                '${baseUrl}${codeController.text.substring(0, 4)}-${codeController.text.substring(4, 6)}/${codeController.text}';
+
+                            // التحقق مما إذا كان الكود موجودًا بالفعل في قاعدة البيانات المحلية
+                            DatabaseHelper()
+                                .getCodeDetails(code)
+                                .then((localData) async {
+                              if (localData != null) {
+                                // البيانات موجودة في قاعدة البيانات المحلية
+                                if (provider.scannedData.contains(code)) {
+                                  scanItemDialogs.showDuplicateDialog(
+                                      context, codeController.text);
+                                } else {
+                                  setState(() {
+                                    provider.addScannedData(
+                                        code); // حفظ الكود في قائمة الكودات الممسوحة
+                                    provider.addCodeDetails(code);
+                                  });
+                                  setState(() {
+                                    provider.codeDetails[code] = localData;
+                                  });
+                                  provider.saveCodeDetails(code,
+                                      localData); // حفظ البيانات في قاعدة البيانات
+
+                                  scanItemService
+                                      .playSound('assets/sound/beep.mp3');
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            '${S().add} ${S().the_code} ${codeController.text}'),
+                                        backgroundColor: Colors.green),
+                                  );
+                                  Navigator.of(context).pop();
+                                }
+                              } else {
+                                // البيانات غير موجودة في قاعدة البيانات، جلبها من Firebase
+                                scanItemService
+                                    .fetchDataFromFirebase(code)
+                                    .then((data) {
+                                  if (data != null) {
+                                    if (provider.scannedData.contains(code)) {
+                                      scanItemDialogs.showDuplicateDialog(
+                                          context, codeController.text);
+                                    } else {
+                                      setState(() {
+                                        provider.addScannedData(
+                                            code); // حفظ الكود في قائمة الكودات الممسوحة
+                                        provider.addCodeDetails(code);
+                                      });
+                                      setState(() {
+                                        provider.codeDetails[code] = data;
+                                      });
+                                      provider.saveCodeDetails(code,
+                                          data); // حفظ البيانات في قاعدة البيانات
+
+                                      scanItemService
+                                          .playSound('assets/sound/beep.mp3');
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                '${S().add} ${S().the_code} ${codeController.text}'),
+                                            backgroundColor: Colors.green),
+                                      );
+                                      Navigator.of(context).pop();
+                                    }
+                                  } else {
+                                    scanItemDialogs.showErorrDialog(
+                                        context, codeController.text);
+                                  }
+                                });
                               }
                             });
                           }
@@ -440,6 +519,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       style: TextButton.styleFrom(
                           backgroundColor: Colors.greenAccent),
                       onPressed: () async {
+                        //      var unsoldDocs = formattedScannedData.where((doc) => doc.saleـstatus == false).toList();
+
+                        //   if(unsoldDocs.isEmpty){
                         // إرسال البيانات إلى Firebase
                         await FirebaseFirestore.instance
                             .collection('seles')
@@ -462,6 +544,17 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         });
 
                         Navigator.of(context).pop();
+                        /*
+                      }else {
+                            String unsoldDocsMessage = unsoldDocs.map((doc) => doc.toString()).join(', ');
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Cannot submit, the following documents have saleـstatus == false: $unsoldDocsMessage'),
+      ),
+    );
+                      }
+                      */
                       },
                       child: const Text('Send',
                           style: TextStyle(

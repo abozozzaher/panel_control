@@ -56,10 +56,10 @@ class DataLists {
 // قائمة الشفتات (النوبات)
   List<String> shift = [(S().morning), (S().afternoon), (S().evening)];
 // قائمة الكميات
-  List<String> quantity = ['10', '20', '35', '50', ''];
+  List<String> quantity = ['10', '20', '35', '50'];
 
 // قائمة الأطوال
-  List<String> length = ['25', '35', '50', '70', '100', '~~~'];
+  List<String> length = ['25', '35', '50', '70', '100'];
 }
 
 // تعريف كلاس TypeItem لتخزين الكلمة الأصلية والكلمة المفتاحية للترجمة

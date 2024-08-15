@@ -1,72 +1,89 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
-
-import 'package:path/path.dart';
+import '../../generated/l10n.dart';
 
 Widget buildDropdown(
   BuildContext context, // تأكد من تمرير BuildContext
-
   String hint,
   String? selectedValue,
   List<String> items,
   ValueChanged<String?> onChanged,
   String hintText, {
   String suffixText = '',
+  bool allowAddNew = false,
+  bool isNumeric = false,
 }) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     mainAxisSize: MainAxisSize.max,
     children: [
       Text(hintText, style: const TextStyle(color: Colors.grey)),
-      DropdownButton<String>(
-        hint: Text(hint),
-        value: selectedValue,
-        onChanged: (value) {
-          if (value == 'add_new') {
-            showAddNewDialog(context, (newItem) {
-              // Add the new item to the list and update the dropdown
-              if (newItem.isNotEmpty && !items.contains(newItem)) {
-                items.add(newItem);
-                onChanged(newItem);
-              }
-            });
-          } else {
-            onChanged(value);
-          }
-        },
-        items: [
-          ...items.map((item) {
-            return DropdownMenuItem(
-              value: item,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('$item $suffixText',
-                      textDirection: ui.TextDirection.ltr),
-                ],
-              ),
-            );
-          }).toList(),
-          DropdownMenuItem(
-            value: 'add_new',
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Add new item'),
+      allowAddNew == true
+          ? DropdownButton<String>(
+              alignment: Alignment.center,
+              hint: Text(hint),
+              value: selectedValue,
+              onChanged: (value) {
+                if (value == 'add_new') {
+                  showAddNewDialog(context, (newItem) {
+                    // Add the new item to the list and update the dropdown
+                    if (newItem.isNotEmpty && !items.contains(newItem)) {
+                      items.add(newItem);
+                      onChanged(newItem);
+                    }
+                  }, isNumeric);
+                } else {
+                  onChanged(value);
+                }
+              },
+              items: [
+                ...items.map((item) {
+                  return DropdownMenuItem(
+                    value: item,
+                    child: Center(
+                      child: Text(
+                        '$item $suffixText',
+                        textDirection: ui.TextDirection.ltr,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                DropdownMenuItem(
+                  value: 'add_new',
+                  child: Center(child: Text('Add new item')),
+                ),
               ],
+            )
+          : DropdownButton<String>(
+              alignment: Alignment.center,
+              hint: Text(hint),
+              value: selectedValue,
+              onChanged: onChanged,
+              items: items.map((item) {
+                return DropdownMenuItem(
+                  value: item,
+                  child: Center(
+                    child: Text(
+                      '$item $suffixText',
+                      textDirection: ui.TextDirection.ltr,
+                      textAlign: TextAlign.center,
+                    ),
+                  ), // إضافة النص الإضافي هنا
+                );
+              }).toList(),
             ),
-          ),
-        ],
-      ),
     ],
   );
 }
 
-void showAddNewDialog(BuildContext context, Function(String) onItemAdded) {
+void showAddNewDialog(
+  BuildContext context,
+  Function(String) onItemAdded,
+  isNumeric,
+) {
   final TextEditingController _controller = TextEditingController();
 
   showDialog(
@@ -76,17 +93,21 @@ void showAddNewDialog(BuildContext context, Function(String) onItemAdded) {
         title: Text('Add New Item'),
         content: TextField(
           controller: _controller,
+          keyboardType: isNumeric
+              ? TextInputType.number
+              : TextInputType.text, // فتح لوحة الأرقام أو لوحة النصوص
+
           decoration: InputDecoration(hintText: 'Enter new item'),
         ),
         actions: [
           TextButton(
-            child: Text('Cancel'),
+            child: Text(S().cancel),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           TextButton(
-            child: Text('Add'),
+            child: Text(S().add),
             onPressed: () {
               final newItem = _controller.text.trim();
               if (newItem.isNotEmpty) {

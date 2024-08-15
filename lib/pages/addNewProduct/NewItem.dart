@@ -86,8 +86,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     quantity = dataLists.quantity;
     length = dataLists.length;
     setState(() {
-      selectedType = types!.isNotEmpty ? types![0] : null;
-      selectedWidth = widths!.isNotEmpty ? widths![6] : null;
+      selectedType = types!.isNotEmpty ? null : null; //types![0] : null;
+      selectedWidth = widths!.isNotEmpty ? null : null; //widths![6] : null;
       selectedWeight = weights!.isNotEmpty ? weights![0] : null;
       selectedColor = colors!.isNotEmpty ? colors![0] : null;
       selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1] : null;
@@ -123,14 +123,23 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     bool isUploading = false;
     // Check if selectedType is null
     String englishProductId = convertArabicToEnglish(productId);
-    if (selectedType == null) {
+    if (selectedType == null ||
+        selectedWidth == null ||
+        selectedWeight == null ||
+        selectedColor == null ||
+        selectedYarnNumber == null ||
+        selectedShift == null ||
+        selectedQuantity == null ||
+        selectedLength == null) {
       // Show error message and return if selectedType is null
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(S().error),
-            content: Text(S().please_select_a_type),
+            content: Text(selectedType == null
+                ? S().please_select_a_type
+                : S().please_fill_all_fields),
             actions: <Widget>[
               TextButton(
                 child: Text(S().ok),
@@ -779,12 +788,20 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 ///555555555
 
                 buildDropdown(
-                    context, '${S().select} ${S().type}', selectedType, types!,
-                    (value) {
-                  setState(() {
-                    selectedType = value;
-                  });
-                }, '${S().select} ${S().type}'),
+                  context,
+                  '${S().select} ${S().type}',
+                  selectedType,
+                  types!,
+                  (value) {
+                    setState(() {
+                      selectedType = value;
+                    });
+                  },
+                  '${S().select} ${S().type}',
+
+                  //   isNumeric: false,
+                  allowAddNew: true, // enable "Add new item" option
+                ),
 
                 ///555555555
                 ///
@@ -800,6 +817,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   },
                   '${S().select} ${S().width}',
                   suffixText: 'mm', // يمكنك إضافة النص الذي تريده هنا
+                  isNumeric: true,
+                  allowAddNew: true, // enable "Add new item" option
                 ),
                 buildDropdown(
                   context,
@@ -813,13 +832,24 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   },
                   '${S().select} ${S().weight}',
                   suffixText: 'g', // يمكنك إضافة النص الذي تريده هنا
+                  isNumeric: true,
+                  allowAddNew: true, // enable "Add new item" option
                 ),
-                buildDropdown(context, '${S().select} ${S().color}',
-                    selectedColor, colors!, (value) {
-                  setState(() {
-                    selectedColor = value;
-                  });
-                }, '${S().select} ${S().color}'),
+                buildDropdown(
+                  context,
+                  '${S().select} ${S().color}',
+                  selectedColor,
+                  colors!,
+                  (value) {
+                    setState(() {
+                      selectedColor = value;
+                    });
+                  },
+                  '${S().select} ${S().color}',
+                  //     isNumeric: false,
+                  allowAddNew: true, // enable "Add new item" option
+                ),
+
                 buildDropdown(
                   context,
                   '${S().select} ${S().yarn_number}',
@@ -832,13 +862,21 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   },
                   '${S().select} ${S().yarn_number}',
                   suffixText: 'D', // يمكنك إضافة النص الذي تريده هنا
+
+                  //   allowAddNew: false, // enable "Add new item" option
                 ),
-                buildDropdown(context, '${S().select} ${S().shift}',
-                    selectedShift, shift!, (value) {
-                  setState(() {
-                    selectedShift = value;
-                  });
-                }, '${S().select} ${S().shift}'),
+                buildDropdown(
+                  context, '${S().select} ${S().shift}',
+                  selectedShift,
+                  shift!,
+                  (value) {
+                    setState(() {
+                      selectedShift = value;
+                    });
+                  },
+                  '${S().select} ${S().shift}',
+                  //   allowAddNew: false, // enable "Add new item" option
+                ),
                 buildDropdown(
                   context,
                   '${S().select} ${S().length}',
@@ -850,6 +888,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   },
                   '${S().select} ${S().length}',
                   suffixText: 'Mt', // يمكنك إضافة النص الذي تريده هنا
+                  isNumeric: true,
+                  allowAddNew: true, // enable "Add new item" option
                 ),
                 buildDropdown(
                   context,
@@ -863,6 +903,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   },
                   '${S().select} ${S().quantity}',
                   suffixText: 'Pcs', // يمكنك إضافة النص الذي تريده هنا
+                  isNumeric: true,
+                  allowAddNew: true, // enable "Add new item" option
                 ),
 
                 const SizedBox(height: 20),

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'dataBase.dart';
 
 class ScanItemService {
   final AudioPlayer audioPlayer = AudioPlayer();
