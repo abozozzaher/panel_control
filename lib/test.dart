@@ -20,30 +20,6 @@ class _TestPageState extends State<TestPage> {
   TextEditingController customController = TextEditingController();
   List<String> options = ['Option 1', 'Option 2', 'Option 3'];
 
-  Future<void> saveCustomOption(String option) async {
-    await FirebaseFirestore.instance.collection('customOptions').add({
-      'option': option,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-  }
-
-  Future<void> fetchFirestoreData() async {
-    // الحصول على مرجع إلى مجموعة
-    CollectionReference collection =
-        FirebaseFirestore.instance.collection('products_info');
-
-    // جلب كل الوثائق في المجموعة
-    QuerySnapshot querySnapshot = await collection.get();
-
-    // تحويل الوثائق إلى قائمة من الخرائط
-    List<QueryDocumentSnapshot> documents = querySnapshot.docs;
-    List<Map<String, dynamic>> dataList =
-        documents.map((doc) => doc.data() as Map<String, dynamic>).toList();
-
-    // استخدام البيانات كما تحتاج
-    print(dataList);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

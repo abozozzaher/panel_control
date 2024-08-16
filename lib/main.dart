@@ -34,9 +34,22 @@ void main() async {
 
   final userProvider = UserProvider();
   await userProvider.loadUserData(); // تحميل بيانات المستخدم عند بدء التطبيق
-
   final bool isLoggedIn = await _checkLoginStatus();
   usePathUrlStrategy();
+  /*
+  var path = '/codes/db/path';
+  sqfliteFfiInit();
+  if (kIsWeb) {
+    // sqfliteCommonFfiWebSetup();
+
+    // Change default factory on the web
+    databaseFactory = databaseFactoryFfiWeb;
+    path = 'codes.db';
+  } else {
+    databaseFactory = databaseFactoryFfi;
+  }
+   var db = openDatabase(path);
+*/
   runApp(
     MultiProvider(
       providers: [

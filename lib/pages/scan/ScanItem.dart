@@ -72,16 +72,14 @@ class _ScanItemQrState extends State<ScanItemQr> {
                   return TextButton(
                     onPressed: codeController.text.length == 20 &&
                             codeController.text.isNotEmpty
-                        ? ()
-                            /*
-                         {
+                        ? () {
                             String baseUrl =
                                 'https://panel-control-company-zaher.web.app/';
                             String code =
                                 '${baseUrl}${codeController.text.substring(0, 4)}-${codeController.text.substring(4, 6)}/${codeController.text}';
 
                             scanItemService
-                                .fetchDataFromFirebase(code)
+                                .fetchDataFromFirebase(context, code)
                                 .then((data) {
                               if (data != null) {
                                 if (provider.scannedData.contains(code)) {
@@ -116,84 +114,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
                               }
                             });
                           }
-                          */
-                            {
-                            String baseUrl =
-                                'https://panel-control-company-zaher.web.app/';
-                            String code =
-                                '${baseUrl}${codeController.text.substring(0, 4)}-${codeController.text.substring(4, 6)}/${codeController.text}';
-
-                            // التحقق مما إذا كان الكود موجودًا بالفعل في قاعدة البيانات المحلية
-                            DatabaseHelper()
-                                .getCodeDetails(code)
-                                .then((localData) async {
-                              if (localData != null) {
-                                // البيانات موجودة في قاعدة البيانات المحلية
-                                if (provider.scannedData.contains(code)) {
-                                  scanItemDialogs.showDuplicateDialog(
-                                      context, codeController.text);
-                                } else {
-                                  setState(() {
-                                    provider.addScannedData(
-                                        code); // حفظ الكود في قائمة الكودات الممسوحة
-                                    provider.addCodeDetails(code);
-                                  });
-                                  setState(() {
-                                    provider.codeDetails[code] = localData;
-                                  });
-                                  provider.saveCodeDetails(code,
-                                      localData); // حفظ البيانات في قاعدة البيانات
-
-                                  scanItemService
-                                      .playSound('assets/sound/beep.mp3');
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            '${S().add} ${S().the_code} ${codeController.text}'),
-                                        backgroundColor: Colors.green),
-                                  );
-                                  Navigator.of(context).pop();
-                                }
-                              } else {
-                                // البيانات غير موجودة في قاعدة البيانات، جلبها من Firebase
-                                scanItemService
-                                    .fetchDataFromFirebase(code)
-                                    .then((data) {
-                                  if (data != null) {
-                                    if (provider.scannedData.contains(code)) {
-                                      scanItemDialogs.showDuplicateDialog(
-                                          context, codeController.text);
-                                    } else {
-                                      setState(() {
-                                        provider.addScannedData(
-                                            code); // حفظ الكود في قائمة الكودات الممسوحة
-                                        provider.addCodeDetails(code);
-                                      });
-                                      setState(() {
-                                        provider.codeDetails[code] = data;
-                                      });
-                                      provider.saveCodeDetails(code,
-                                          data); // حفظ البيانات في قاعدة البيانات
-
-                                      scanItemService
-                                          .playSound('assets/sound/beep.mp3');
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                '${S().add} ${S().the_code} ${codeController.text}'),
-                                            backgroundColor: Colors.green),
-                                      );
-                                      Navigator.of(context).pop();
-                                    }
-                                  } else {
-                                    scanItemDialogs.showErorrDialog(
-                                        context, codeController.text);
-                                  }
-                                });
-                              }
-                            });
-                          }
                         : null,
                     child: Text(S().add),
                   );
@@ -225,8 +145,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
                 .addScannedData(code); // حفظ الكود في قائمة الكودات الممسوحة
             provider.addCodeDetails(code);
           });
+
           scanItemService.playSound('assets/sound/beep.mp3');
-          scanItemService.fetchDataFromFirebase(code).then((data) {
+          scanItemService.fetchDataFromFirebase(context, code).then((data) {
             if (data != null) {
               setState(() {
                 provider.codeDetails[code] = data;
@@ -446,8 +367,10 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       },
                     ),
                     onTap: () async {
-                      final data =
-                          await scanItemService.fetchDataFromFirebase(code);
+                      // طلب البيانات اولا من قاعدة البيانات
+                      final data = await scanItemService.fetchDataFromFirebase(
+                          context, code);
+
                       scanItemDialogs.showDetailsDialog(context, code, data);
                     },
                   );

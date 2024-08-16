@@ -52,6 +52,11 @@ dependencies:
   cached_network_image: ^3.3.1
   double_back_to_close_app: ^2.1.0
   sqflite: ^2.0.0+4
+  #sqflite_common: any
+  #sqflite_common_ffi: any
+  #sqflite_common_ffi_web: any
+  #sqlite3_flutter_libs: any
+
   google_fonts: ^6.2.1
 
 

@@ -1,4 +1,5 @@
 {
     "github-enterprise.uri": "https://panel contro",
-    "cmake.sourceDirectory": "/Users/zaher-lap-mac/Flutter All/Apps/panel_control/linux"
+    "cmake.sourceDirectory": "/Users/zaher-lap-mac/Flutter All/Apps/panel_control/linux",
+    "cmake.ignoreCMakeListsMissing": true
 }
