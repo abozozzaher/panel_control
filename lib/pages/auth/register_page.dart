@@ -79,9 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     setState(() {
-      print('ss222ss');
-
-      _loading = true; // تعيين قيمة لمؤشر التحميل عند بدء التسجيل
+      _loading = true;
     });
 
     try {
@@ -134,19 +132,14 @@ class _RegisterPageState extends State<RegisterPage> {
       await prefs.setBool('admin', userData.admin);
       await prefs.setBool('isLoggedIn', true);
       setState(() {
-        print('sss333333s');
-
-        _loading = false; // تعيين قيمة لمؤشر التحميل عند انتهاء التسجيل
-        print('sss333333s2');
+        _loading = false;
       });
-      print('sss333333s3');
 
       context.go('/');
     } on FirebaseAuthException catch (e) {
       setState(() {
-        print('sssswww');
         _errorMessage = e.message;
-        _loading = false; // تعيين قيمة لمؤشر التحميل عند حدوث خطأ
+        _loading = false;
       });
     }
   }
@@ -209,10 +202,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
-                  onPressed: _loading
-                      ? null
-                      : () => _register(
-                          userProviderTest), // تعيين الوظيفة غير متاحة أثناء التحميل
+                  onPressed:
+                      _loading ? null : () => _register(userProviderTest),
                   icon: const Icon(Icons.account_box_outlined),
                   label: _loading
                       ? const SizedBox(

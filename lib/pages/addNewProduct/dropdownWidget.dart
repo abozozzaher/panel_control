@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import '../../generated/l10n.dart';
+import '../../service/data_lists.dart';
 
 Widget buildDropdown(
   BuildContext context, // تأكد من تمرير BuildContext
   String hint,
   String? selectedValue,
-  List<String> items,
+  // List<String> items,
+  List<List<String>> items,
+  // List<Map<String, String>> items,
   ValueChanged<String?> onChanged,
   String hintText, {
   String suffixText = '',
   bool allowAddNew = false,
   bool isNumeric = false,
 }) {
+  final DataLists dataLists = DataLists();
+
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -30,7 +35,7 @@ Widget buildDropdown(
                   showAddNewDialog(context, (newItem) {
                     // Add the new item to the list and update the dropdown
                     if (newItem.isNotEmpty && !items.contains(newItem)) {
-                      items.add(newItem);
+                      items.add([newItem, newItem]);
                       onChanged(newItem);
                     }
                   }, isNumeric);
@@ -40,11 +45,15 @@ Widget buildDropdown(
               },
               items: [
                 ...items.map((item) {
+                  String displayText =
+                      Localizations.localeOf(context).languageCode == 'ar'
+                          ? item[1]
+                          : item[0];
                   return DropdownMenuItem(
-                    value: item,
+                    value: item[0],
                     child: Center(
                       child: Text(
-                        '$item $suffixText',
+                        '$displayText $suffixText', //   '$item $suffixText',
                         textDirection: ui.TextDirection.ltr,
                         textAlign: TextAlign.center,
                       ),
@@ -53,7 +62,7 @@ Widget buildDropdown(
                 }).toList(),
                 DropdownMenuItem(
                   value: 'add_new',
-                  child: Center(child: Text('Add new item')),
+                  child: Center(child: Text(S().add_new_item)),
                 ),
               ],
             )
@@ -63,15 +72,22 @@ Widget buildDropdown(
               value: selectedValue,
               onChanged: onChanged,
               items: items.map((item) {
+                String displayText =
+                    Localizations.localeOf(context).languageCode == 'ar'
+                        ? item[1]
+                        : item[0];
+
+                print('dddd');
+                print(item);
                 return DropdownMenuItem(
-                  value: item,
+                  value: item[0], // القيمة الأساسية باللغة الإنجليزية
                   child: Center(
                     child: Text(
-                      '$item $suffixText',
+                      '$displayText $suffixText',
                       textDirection: ui.TextDirection.ltr,
                       textAlign: TextAlign.center,
                     ),
-                  ), // إضافة النص الإضافي هنا
+                  ),
                 );
               }).toList(),
             ),
@@ -90,14 +106,14 @@ void showAddNewDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Add New Item'),
+        title: Text(S().add_new_item),
         content: TextField(
           controller: _controller,
           keyboardType: isNumeric
               ? TextInputType.number
               : TextInputType.text, // فتح لوحة الأرقام أو لوحة النصوص
 
-          decoration: InputDecoration(hintText: 'Enter new item'),
+          decoration: InputDecoration(hintText: S().enter_new_item),
         ),
         actions: [
           TextButton(

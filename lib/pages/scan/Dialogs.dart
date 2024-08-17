@@ -105,11 +105,11 @@ class ScanItemDialogs {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Invalid Items', textAlign: TextAlign.center),
+          title: Text(S().invalid_items, textAlign: TextAlign.center),
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Text('You have some items marked as sold out :',
+                Text(S().you_have_some_items_marked_as_sold_out_,
                     textAlign: TextAlign.center),
                 for (var doc in invalidDocuments)
                   Text(doc.split('/').last, textAlign: TextAlign.center),

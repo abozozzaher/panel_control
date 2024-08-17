@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
           .get();
 
       if (!userDoc.exists) {
-        throw Exception('user_data_not_found');
+        throw Exception(S().user_data_not_found);
       }
 
       // تحويل البيانات إلى كائن UserData
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'error_occurred';
+        _errorMessage = S().error_occurred;
       });
     }
   }

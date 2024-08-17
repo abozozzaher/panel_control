@@ -772,10 +772,10 @@ class S {
 
   // skipped getter for the 'saveـand_send_data' key
 
-  /// `Morning1`
+  /// `Morning`
   String get morning {
     return Intl.message(
-      'Morning1',
+      'Morning',
       name: 'morning',
       desc: '',
       args: [],
@@ -882,70 +882,70 @@ class S {
     );
   }
 
-  /// `عباية`
-  String get robe {
+  /// `Abaya`
+  String get abaya {
     return Intl.message(
-      'عباية',
-      name: 'robe',
+      'Abaya',
+      name: 'abaya',
       desc: '',
       args: [],
     );
   }
 
-  /// `محجرة`
-  String get veil {
+  /// `Quarry`
+  String get mahjara {
     return Intl.message(
-      'محجرة',
-      name: 'veil',
+      'Quarry',
+      name: 'mahjara',
       desc: '',
       args: [],
     );
   }
 
-  /// `حورانية`
+  /// `Hourania`
   String get hourani {
     return Intl.message(
-      'حورانية',
+      'Hourania',
       name: 'hourani',
       desc: '',
       args: [],
     );
   }
 
-  /// `سبلة`
-  String get sabla {
+  /// `Siblings`
+  String get sablah {
     return Intl.message(
-      'سبلة',
-      name: 'sabla',
+      'Siblings',
+      name: 'sablah',
       desc: '',
       args: [],
     );
   }
 
-  /// `شنطه`
+  /// `bag`
   String get shanta {
     return Intl.message(
-      'شنطه',
+      'bag',
       name: 'shanta',
       desc: '',
       args: [],
     );
   }
 
-  /// `حبل`
+  /// `pregnancy`
   String get habl {
     return Intl.message(
-      'حبل',
+      'pregnancy',
       name: 'habl',
       desc: '',
       args: [],
     );
   }
 
-  /// `رزة`
+  /// `Razor`
   String get raza {
     return Intl.message(
-      'رزة',
+      'Razor',
       name: 'raza',
       desc: '',
       args: [],
@@ -1032,11 +1032,121 @@ class S {
     );
   }
 
+  /// `Navy Blue`
+  String get navy_blue {
+    return Intl.message(
+      'Navy Blue',
+      name: 'navy_blue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jamli`
+  String get jamli {
+    return Intl.message(
+      'Jamli',
+      name: 'jamli',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Burnt Brown`
+  String get burnt_brown {
+    return Intl.message(
+      'Burnt Brown',
+      name: 'burnt_brown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add new item`
+  String get add_new_item {
+    return Intl.message(
+      'Add new item',
+      name: 'add_new_item',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `translate`
   String get translate {
     return Intl.message(
       'translate',
       name: 'translate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter new item`
+  String get enter_new_item {
+    return Intl.message(
+      'Enter new item',
+      name: 'enter_new_item',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User data not found`
+  String get user_data_not_found {
+    return Intl.message(
+      'User data not found',
+      name: 'user_data_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `error occurred`
+  String get error_occurred {
+    return Intl.message(
+      'error occurred',
+      name: 'error_occurred',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid Items`
+  String get invalid_items {
+    return Intl.message(
+      'Invalid Items',
+      name: 'invalid_items',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have some items marked as sold out :`
+  String get you_have_some_items_marked_as_sold_out_ {
+    return Intl.message(
+      'You have some items marked as sold out :',
+      name: 'you_have_some_items_marked_as_sold_out_',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scanned Data Length`
+  String get scanned_data_length {
+    return Intl.message(
+      'Scanned Data Length',
+      name: 'scanned_data_length',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send`
+  String get send {
+    return Intl.message(
+      'Send',
+      name: 'send',
       desc: '',
       args: [],
     );

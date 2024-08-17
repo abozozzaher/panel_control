@@ -22,42 +22,49 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "abaya": MessageLookupByLibrary.simpleMessage("عباية"),
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
                 "تم الرفض.ليس لديك الدور المطلوب."),
-        "add": MessageLookupByLibrary.simpleMessage("اضف"),
+        "add": MessageLookupByLibrary.simpleMessage("يضيف"),
+        "add_new_item":
+            MessageLookupByLibrary.simpleMessage("أضف عنصرًا جديدًا"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "Türkiye Gaziantep Sanayi Mah.60092"),
-        "afternoon": MessageLookupByLibrary.simpleMessage("عصري"),
+        "afternoon": MessageLookupByLibrary.simpleMessage("بعد الظهر"),
         "available": MessageLookupByLibrary.simpleMessage("متاح"),
         "black": MessageLookupByLibrary.simpleMessage("اسود"),
-        "blue": MessageLookupByLibrary.simpleMessage("كحلي"),
         "blue_textiles":
             MessageLookupByLibrary.simpleMessage("المنسوجات الزرقاء"),
         "brown": MessageLookupByLibrary.simpleMessage("بني"),
         "brown_burnt": MessageLookupByLibrary.simpleMessage("بني محروق"),
+        "burnt_brown": MessageLookupByLibrary.simpleMessage("براون محترق"),
         "button": MessageLookupByLibrary.simpleMessage("زر"),
         "camel": MessageLookupByLibrary.simpleMessage("جملي"),
-        "cancel": MessageLookupByLibrary.simpleMessage("الغاء"),
+        "cancel": MessageLookupByLibrary.simpleMessage("يلغي"),
         "color": MessageLookupByLibrary.simpleMessage("لون"),
         "company_name": MessageLookupByLibrary.simpleMessage(
             "Zahir Logistic Textile Industry and Trade Limited Company"),
-        "confirm": MessageLookupByLibrary.simpleMessage("تأكد"),
-        "custom": MessageLookupByLibrary.simpleMessage("Custom"),
-        "data": MessageLookupByLibrary.simpleMessage("التاريخ"),
+        "confirm": MessageLookupByLibrary.simpleMessage("يتأكد"),
+        "custom": MessageLookupByLibrary.simpleMessage("مخصص"),
+        "data": MessageLookupByLibrary.simpleMessage("بيانات"),
         "details": MessageLookupByLibrary.simpleMessage("تفاصيل"),
         "duplicate_code": MessageLookupByLibrary.simpleMessage("رمز مكرر"),
         "email": MessageLookupByLibrary.simpleMessage("بريد إلكتروني"),
         "email_sent":
             MessageLookupByLibrary.simpleMessage("أرسل البريد الإلكتروني"),
-        "enter_code": MessageLookupByLibrary.simpleMessage("ادخل الرمز"),
-        "enter_code_here": MessageLookupByLibrary.simpleMessage("أدخل رمز هنا"),
+        "enter_code": MessageLookupByLibrary.simpleMessage("أدخل الرمز"),
+        "enter_code_here":
+            MessageLookupByLibrary.simpleMessage("أدخل الرمز هنا"),
         "enter_custom_value":
-            MessageLookupByLibrary.simpleMessage("Enter Custom Value"),
+            MessageLookupByLibrary.simpleMessage("أدخل القيمة المخصصة"),
+        "enter_new_item":
+            MessageLookupByLibrary.simpleMessage("أدخل عنصر جديد"),
         "error": MessageLookupByLibrary.simpleMessage("خطأ"),
         "error_404": MessageLookupByLibrary.simpleMessage("خطأ 404"),
-        "error_code": MessageLookupByLibrary.simpleMessage("خطا بالكود"),
-        "evening": MessageLookupByLibrary.simpleMessage("ليلي"),
+        "error_code": MessageLookupByLibrary.simpleMessage("رمز الخطأ"),
+        "error_occurred": MessageLookupByLibrary.simpleMessage("حدث خطأ"),
+        "evening": MessageLookupByLibrary.simpleMessage("مساء"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("فشل في تحميل الصورة"),
         "first_name": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
@@ -74,29 +81,35 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم تحميل الصورة بنجاح"),
         "invalid_code_scanned_and_removed":
             MessageLookupByLibrary.simpleMessage(
-                "Invalid code scanned and removed"),
-        "item": MessageLookupByLibrary.simpleMessage("عنصر"),
+                "رمز غير صالح تم مسحه ضوئيًا وإزالته"),
+        "invalid_items":
+            MessageLookupByLibrary.simpleMessage("عناصر غير صالحة"),
+        "item": MessageLookupByLibrary.simpleMessage("غرض"),
+        "jamli": MessageLookupByLibrary.simpleMessage("جملي"),
         "last_name": MessageLookupByLibrary.simpleMessage("اسم العائلة"),
         "length": MessageLookupByLibrary.simpleMessage("طول"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
-        "logout": MessageLookupByLibrary.simpleMessage("تسجيل خروج"),
+        "logout": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
         "long_press_to_activate_the_button":
             MessageLookupByLibrary.simpleMessage(
-                "Long press to activate the button"),
-        "menu": MessageLookupByLibrary.simpleMessage("قائمة"),
+                "اضغط لفترة طويلة لتنشيط الزر"),
+        "mahjara": MessageLookupByLibrary.simpleMessage("محجرة"),
+        "menu": MessageLookupByLibrary.simpleMessage("قائمة طعام"),
         "military": MessageLookupByLibrary.simpleMessage("عسكري"),
         "morning": MessageLookupByLibrary.simpleMessage("صباحي"),
+        "navy_blue": MessageLookupByLibrary.simpleMessage("كحلي"),
         "new1": MessageLookupByLibrary.simpleMessage("جديد"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
-        "no_data_found": MessageLookupByLibrary.simpleMessage("لاتوجد بيانات."),
+        "no_data_found":
+            MessageLookupByLibrary.simpleMessage("لم يتم العثور على بيانات."),
         "no_data_found_for_this_code": MessageLookupByLibrary.simpleMessage(
             "لم يتم العثور على بيانات لهذا الرمز."),
         "no_data_to_send":
-            MessageLookupByLibrary.simpleMessage("No data to send"),
+            MessageLookupByLibrary.simpleMessage("لا توجد بيانات لإرسالها"),
         "ok": MessageLookupByLibrary.simpleMessage("نعم"),
         "page_not_found":
-            MessageLookupByLibrary.simpleMessage("الصفحة غير موجودة"),
+            MessageLookupByLibrary.simpleMessage("الصفحة لم يتم العثور عليها"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "password_reset":
             MessageLookupByLibrary.simpleMessage("إعادة تعيين كلمة المرور"),
@@ -106,52 +119,56 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لعب صوت الصفير"),
         "play_scan_sound":
             MessageLookupByLibrary.simpleMessage("تشغيل صوت المسح الضوئي"),
-        "please_enter_your_email":
-            MessageLookupByLibrary.simpleMessage("رجاءا أدخل بريدك الإلكتروني"),
+        "please_enter_your_email": MessageLookupByLibrary.simpleMessage(
+            "الرجاء إدخال بريدك الإلكتروني"),
         "please_fill_all_fields":
-            MessageLookupByLibrary.simpleMessage("لو سمحت أملأ كل الحقول"),
+            MessageLookupByLibrary.simpleMessage("يرجى ملء جميع الحقول"),
         "please_select_a_type":
             MessageLookupByLibrary.simpleMessage("الرجاء تحديد نوع."),
         "product_details":
             MessageLookupByLibrary.simpleMessage("تفاصيل المنتج"),
-        "product_id": MessageLookupByLibrary.simpleMessage("رمز المنتج"),
+        "product_id": MessageLookupByLibrary.simpleMessage("معرف المنتج"),
         "quantity": MessageLookupByLibrary.simpleMessage("كمية"),
         "raza": MessageLookupByLibrary.simpleMessage("رزة"),
         "red": MessageLookupByLibrary.simpleMessage("حمري"),
         "register": MessageLookupByLibrary.simpleMessage("يسجل"),
-        "robe": MessageLookupByLibrary.simpleMessage("عباية"),
-        "sabla": MessageLookupByLibrary.simpleMessage("سبلة"),
+        "sablah": MessageLookupByLibrary.simpleMessage("سبلة"),
         "sale_status": MessageLookupByLibrary.simpleMessage("حالة البيع"),
         "save_and_send_data":
-            MessageLookupByLibrary.simpleMessage("Save and send data"),
-        "saved_successfully_with": MessageLookupByLibrary.simpleMessage(
-            "تم حفظ العنصر بنجاح مع رمز :"),
-        "scan": MessageLookupByLibrary.simpleMessage("امسح"),
+            MessageLookupByLibrary.simpleMessage("حفظ وإرسال البيانات"),
+        "saved_successfully_with":
+            MessageLookupByLibrary.simpleMessage("تم حفظ العنصر بنجاح مع ID:"),
+        "scan": MessageLookupByLibrary.simpleMessage("مسح"),
         "scan_a_code": MessageLookupByLibrary.simpleMessage("مسح الرمز"),
         "scanned": MessageLookupByLibrary.simpleMessage("مسح ضوئي"),
-        "select": MessageLookupByLibrary.simpleMessage("اختار"),
-        "select_an_option":
-            MessageLookupByLibrary.simpleMessage("Select an option"),
+        "scanned_data_length":
+            MessageLookupByLibrary.simpleMessage("طول البيانات الممسوحة ضوئيا"),
+        "select": MessageLookupByLibrary.simpleMessage("يختار"),
+        "select_an_option": MessageLookupByLibrary.simpleMessage("حدد خيار"),
+        "send": MessageLookupByLibrary.simpleMessage("يرسل"),
         "shanta": MessageLookupByLibrary.simpleMessage("شنطه"),
-        "shift": MessageLookupByLibrary.simpleMessage("وردية"),
+        "shift": MessageLookupByLibrary.simpleMessage("يحول"),
         "silver": MessageLookupByLibrary.simpleMessage("فضي"),
         "sold": MessageLookupByLibrary.simpleMessage("مُباع"),
-        "test_page": MessageLookupByLibrary.simpleMessage("Test Page"),
+        "test_page": MessageLookupByLibrary.simpleMessage("صفحة الاختبار"),
         "the_code": MessageLookupByLibrary.simpleMessage("الرمز"),
         "toggle_language": MessageLookupByLibrary.simpleMessage("تبديل اللغة"),
         "toggle_theme": MessageLookupByLibrary.simpleMessage("تبديل موضوع"),
         "total": MessageLookupByLibrary.simpleMessage("المجموع"),
         "total_codes_scanned": MessageLookupByLibrary.simpleMessage(
             "إجمالي الرموز الممسوحة ضوئيا"),
-        "total_length": MessageLookupByLibrary.simpleMessage("الطول الاجمالي"),
-        "total_quantity":
-            MessageLookupByLibrary.simpleMessage("الكمية الإجمالية"),
-        "total_weight": MessageLookupByLibrary.simpleMessage("الوزن الكلي"),
+        "total_length": MessageLookupByLibrary.simpleMessage("الطول الكلي"),
+        "total_quantity": MessageLookupByLibrary.simpleMessage("الكمية الكلية"),
+        "total_weight": MessageLookupByLibrary.simpleMessage("إجمالي الوزن"),
         "translate": MessageLookupByLibrary.simpleMessage("يترجم"),
-        "type": MessageLookupByLibrary.simpleMessage("النوع"),
-        "veil": MessageLookupByLibrary.simpleMessage("محجرة"),
+        "type": MessageLookupByLibrary.simpleMessage("يكتب"),
+        "user_data_not_found": MessageLookupByLibrary.simpleMessage(
+            "لم يتم العثور على بيانات المستخدم"),
         "weight": MessageLookupByLibrary.simpleMessage("وزن"),
         "width": MessageLookupByLibrary.simpleMessage("عرض"),
-        "yarn_number": MessageLookupByLibrary.simpleMessage("رمز خيط الغزل")
+        "yarn_number": MessageLookupByLibrary.simpleMessage("رقم الغزل"),
+        "you_have_some_items_marked_as_sold_out_":
+            MessageLookupByLibrary.simpleMessage(
+                "لديك بعض العناصر التي تم تمييزها كما تم بيعها:")
       };
 }

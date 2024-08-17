@@ -421,10 +421,11 @@ class _ScanItemQrState extends State<ScanItemQr> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Total Weight: $totalWeight Kg'),
-              Text('Total Length: $totalLength MT'),
-              Text('Total Quantity: $totalQuantity Pcs'),
-              Text('Scanned Data Length: ${formattedScannedData.length}'),
+              Text('${S().total_weight} : $totalWeight Kg'),
+              Text('${S().total_length} : $totalLength MT'),
+              Text('${S().total_quantity} : $totalQuantity Pcs'),
+              Text(
+                  '${S().scanned_data_length} : ${formattedScannedData.length}'),
             ],
           ),
           actions: [
@@ -474,6 +475,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         'created_by': userData!.id,
                       });
                       print('666666');
+                      /* تعديل حالة المنتج من فولس الى ترو
                       // Update sale_status field in each document
                       formattedScannedData.forEach((remainingPath) {
                         String monthFolder =
@@ -492,6 +494,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                           });
                         });
                       });
+                      */
                       print('111111');
                       print(formattedScannedData);
                       print(invalidDocuments);
@@ -507,7 +510,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       scanItemDialogs.soldOutDialog(context, invalidDocuments);
                     }
                   },
-                  child: const Text('Send',
+                  child: Text(S().send,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                 )),

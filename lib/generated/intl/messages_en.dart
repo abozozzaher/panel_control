@@ -22,10 +22,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "abaya": MessageLookupByLibrary.simpleMessage("Abaya"),
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
                 "Access Denied. You do not have the required role."),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
+        "add_new_item": MessageLookupByLibrary.simpleMessage("Add new item"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "Türkiye Gaziantep Sanayi MAH. 60092"),
         "afternoon": MessageLookupByLibrary.simpleMessage("Afternoon"),
@@ -35,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
         "brown": MessageLookupByLibrary.simpleMessage("بني"),
         "brown_burnt": MessageLookupByLibrary.simpleMessage("بني محروق"),
+        "burnt_brown": MessageLookupByLibrary.simpleMessage("Burnt Brown"),
         "button": MessageLookupByLibrary.simpleMessage("Button"),
         "camel": MessageLookupByLibrary.simpleMessage("جملي"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
@@ -54,9 +57,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter code here"),
         "enter_custom_value":
             MessageLookupByLibrary.simpleMessage("Enter Custom Value"),
+        "enter_new_item":
+            MessageLookupByLibrary.simpleMessage("Enter new item"),
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "error_404": MessageLookupByLibrary.simpleMessage("Error 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("Error Code"),
+        "error_occurred":
+            MessageLookupByLibrary.simpleMessage("error occurred"),
         "evening": MessageLookupByLibrary.simpleMessage("Evening"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Failed to upload image"),
@@ -65,17 +72,19 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
         "go_to_page":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
-        "habl": MessageLookupByLibrary.simpleMessage("حبل"),
+        "habl": MessageLookupByLibrary.simpleMessage("pregnancy"),
         "has_already_been_scanned":
             MessageLookupByLibrary.simpleMessage("has already been scanned."),
-        "hourani": MessageLookupByLibrary.simpleMessage("حورانية"),
+        "hourani": MessageLookupByLibrary.simpleMessage("Hourania"),
         "id": MessageLookupByLibrary.simpleMessage("ID"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("Image uploaded successfully"),
         "invalid_code_scanned_and_removed":
             MessageLookupByLibrary.simpleMessage(
                 "Invalid code scanned and removed"),
+        "invalid_items": MessageLookupByLibrary.simpleMessage("Invalid Items"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
+        "jamli": MessageLookupByLibrary.simpleMessage("Jamli"),
         "last_name": MessageLookupByLibrary.simpleMessage("Last Name"),
         "length": MessageLookupByLibrary.simpleMessage("Length"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
@@ -83,9 +92,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "long_press_to_activate_the_button":
             MessageLookupByLibrary.simpleMessage(
                 "Long press to activate the button"),
+        "mahjara": MessageLookupByLibrary.simpleMessage("Quarry"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
         "military": MessageLookupByLibrary.simpleMessage("عسكري"),
-        "morning": MessageLookupByLibrary.simpleMessage("Morning1"),
+        "morning": MessageLookupByLibrary.simpleMessage("Morning"),
+        "navy_blue": MessageLookupByLibrary.simpleMessage("Navy Blue"),
         "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
@@ -116,11 +127,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Product Details"),
         "product_id": MessageLookupByLibrary.simpleMessage("Product ID"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
-        "raza": MessageLookupByLibrary.simpleMessage("رزة"),
+        "raza": MessageLookupByLibrary.simpleMessage("Razor"),
         "red": MessageLookupByLibrary.simpleMessage("حمري"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
-        "robe": MessageLookupByLibrary.simpleMessage("عباية"),
-        "sabla": MessageLookupByLibrary.simpleMessage("سبلة"),
+        "sablah": MessageLookupByLibrary.simpleMessage("Siblings"),
         "sale_status": MessageLookupByLibrary.simpleMessage("Sale Status"),
         "save_and_send_data":
             MessageLookupByLibrary.simpleMessage("Save and send data"),
@@ -129,10 +139,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "scan": MessageLookupByLibrary.simpleMessage("Scan"),
         "scan_a_code": MessageLookupByLibrary.simpleMessage("Scan a code"),
         "scanned": MessageLookupByLibrary.simpleMessage("Scanned"),
+        "scanned_data_length":
+            MessageLookupByLibrary.simpleMessage("Scanned Data Length"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_an_option":
             MessageLookupByLibrary.simpleMessage("Select an option"),
-        "shanta": MessageLookupByLibrary.simpleMessage("شنطه"),
+        "send": MessageLookupByLibrary.simpleMessage("Send"),
+        "shanta": MessageLookupByLibrary.simpleMessage("bag"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
         "silver": MessageLookupByLibrary.simpleMessage("فضي"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
@@ -150,9 +163,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_weight": MessageLookupByLibrary.simpleMessage("Total Weight"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
-        "veil": MessageLookupByLibrary.simpleMessage("محجرة"),
+        "user_data_not_found":
+            MessageLookupByLibrary.simpleMessage("User data not found"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),
-        "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number")
+        "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number"),
+        "you_have_some_items_marked_as_sold_out_":
+            MessageLookupByLibrary.simpleMessage(
+                "You have some items marked as sold out :")
       };
 }

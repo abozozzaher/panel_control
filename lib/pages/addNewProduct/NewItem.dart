@@ -52,14 +52,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   XFile? selectedImage;
   Uint8List? webImage;
 
-  List<String>? types;
-  List<String>? widths;
-  List<String>? weights;
-  List<String>? colors;
-  List<String>? yarnNumbers;
-  List<String>? shift;
-  List<String>? quantity;
-  List<String>? length;
+  List<List<String>>? types;
+  List<List<String>>? widths;
+  List<List<String>>? weights;
+  List<List<String>>? colors;
+  List<List<String>>? yarnNumbers;
+  List<List<String>>? shift;
+  List<List<String>>? quantity;
+  List<List<String>>? length;
   late String image;
   String productId = '';
 
@@ -80,20 +80,22 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     types = dataLists.types;
     widths = dataLists.widths;
     weights = dataLists.weights;
-    colors = dataLists.colors as List<String>?;
+    colors = dataLists.colors;
     yarnNumbers = dataLists.yarnNumbers;
     shift = dataLists.shift;
     quantity = dataLists.quantity;
     length = dataLists.length;
     setState(() {
-      selectedType = types!.isNotEmpty ? null : null; //types![0] : null;
-      selectedWidth = widths!.isNotEmpty ? null : null; //widths![6] : null;
-      selectedWeight = weights!.isNotEmpty ? weights![0] : null;
-      selectedColor = colors!.isNotEmpty ? colors![0] : null;
-      selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1] : null;
-      selectedShift = shift!.isNotEmpty ? shift![0] : null;
-      selectedQuantity = quantity!.isNotEmpty ? quantity![0] : null;
-      selectedLength = length!.isNotEmpty ? length![2] : null;
+      selectedType = types!.isNotEmpty ? types![0][0] : null;
+
+      selectedWidth = widths!.isNotEmpty ? widths![6][0] : null;
+      selectedWeight = weights!.isNotEmpty ? weights![0][0] : null;
+      selectedColor = colors!.isNotEmpty ? colors![0][0] : null;
+      selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
+      selectedShift = shift!.isNotEmpty ? shift![0][0] : null;
+      selectedLength = length!.isNotEmpty ? length![2][0] : null;
+      selectedQuantity = quantity!.isNotEmpty ? quantity![0][0] : null;
+
       productId = generateCode();
     });
   }
@@ -172,14 +174,27 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 englishProductId,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text('${S().type} : $selectedType'),
-              Text('${S().width} : $selectedWidth' 'mm'),
-              Text('${S().weight} : $selectedWeight' 'g'),
-              Text('${S().color} : $selectedColor'),
-              Text('${S().yarn_number} : $selectedYarnNumber' 'D'),
-              Text('${S().shift} : $selectedShift'),
-              Text('${S().quantity} : $selectedQuantity' 'Pcs'),
-              Text('${S().length} : $selectedLength' 'Mt'),
+              Text(
+                  '${S().type} : ${types!.firstWhere((element) => element[0] == selectedType)[1]}'),
+              Text(
+                  '${S().width} : ${widths!.firstWhere((element) => element[0] == selectedWidth)[1]}'
+                  'mm'),
+              Text(
+                  '${S().weight} : ${weights!.firstWhere((element) => element[0] == selectedWeight)[1]}'
+                  'g'),
+              Text(
+                  '${S().color} : ${colors!.firstWhere((element) => element[0] == selectedColor)[1]}'),
+              Text(
+                  '${S().yarn_number} : ${yarnNumbers!.firstWhere((element) => element[0] == selectedYarnNumber)[1]}'
+                  'D'),
+              Text(
+                  '${S().shift} : ${shift!.firstWhere((element) => element[0] == selectedShift)[1]}'),
+              Text(
+                  '${S().quantity} : ${quantity!.firstWhere((element) => element[0] == selectedQuantity)[1]}'
+                  'Pcs'),
+              Text(
+                  '${S().length} : ${length!.firstWhere((element) => element[0] == selectedLength)[1]}'
+                  'Mt'),
               if (selectedImage != null || webImage != null)
                 kIsWeb
                     ? Image.memory(webImage!, width: 100, height: 100)
@@ -228,8 +243,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                                         '${S().failed_to_upload_image} : $e'))),
                           );
                           setState(() {
-                            isUploading =
-                                false; // Reset the uploading flag if the upload fails
+                            isUploading = false;
                           });
                           return;
                         }
@@ -280,31 +294,29 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         child: Text(
                             '${S().saved_successfully_with} $englishProductId'),
                       )));
-
-                      // Reset fields and generate new product ID
                       setState(() {
-                        selectedType = types!.isNotEmpty
-                            ? types![0]
-                            : null; //  null : null;
-                        selectedWidth = widths!.isNotEmpty ? widths![6] : null;
+                        selectedType = types!.isNotEmpty ? types![0][0] : null;
+
+                        selectedWidth =
+                            widths!.isNotEmpty ? widths![6][0] : null;
                         selectedWeight =
-                            weights!.isNotEmpty ? weights![0] : null;
-                        selectedColor = colors!.isNotEmpty ? colors![0] : null;
+                            weights!.isNotEmpty ? weights![0][0] : null;
+                        selectedColor =
+                            colors!.isNotEmpty ? colors![0][0] : null;
                         selectedYarnNumber =
-                            yarnNumbers!.isNotEmpty ? yarnNumbers![1] : null;
-                        selectedShift = shift!.isNotEmpty ? shift![0] : null;
+                            yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
+                        selectedShift = shift!.isNotEmpty ? shift![0][0] : null;
                         selectedQuantity =
-                            quantity!.isNotEmpty ? quantity![0] : null;
-                        selectedLength = length!.isNotEmpty ? length![2] : null;
+                            quantity!.isNotEmpty ? quantity![0][0] : null;
+                        selectedLength =
+                            length!.isNotEmpty ? length![2][0] : null;
 
                         selectedImage = null;
                         webImage = null;
                         productId = generateCode();
-                        isUploading =
-                            false; // Reset the uploading flag after the upload is complete
+                        isUploading = false;
                       });
-
-                      Navigator.of(context).pop(); // Close dialog
+                      Navigator.of(context).pop();
                     },
                     child: Text(
                       S().confirm,
@@ -350,7 +362,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     String day = '${DateTime.now().day}';
 
     Reference storageReference = FirebaseStorage.instance.ref().child(
-        'products/$englishYearMonth/$day/${image != null ? path.basename(image.path) : '$englishProductId.jpg'}');
+        'products/$englishYearMonth/$day/${image != null ? '$englishProductId.jpg' : '$englishProductId.jpg'}');
     SettableMetadata metadata = SettableMetadata(contentType: 'image/jpeg');
 
     UploadTask uploadTask;
@@ -778,9 +790,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   label: Text(S().pick_image),
                 ),
                 const SizedBox(height: 10),
-
-                ///555555555
-
                 buildDropdown(
                   context,
                   '${S().select} ${S().type}',
@@ -792,13 +801,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     });
                   },
                   '${S().select} ${S().type}',
-
-                  //   isNumeric: false,
-                  allowAddNew: true, // enable "Add new item" option
+                  isNumeric: false,
+                  allowAddNew: true,
                 ),
-
-                ///555555555
-                ///
                 buildDropdown(
                   context,
                   '${S().select} ${S().width}',
@@ -810,9 +815,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     });
                   },
                   '${S().select} ${S().width}',
-                  suffixText: 'mm', // يمكنك إضافة النص الذي تريده هنا
+                  suffixText: 'mm',
                   isNumeric: true,
-                  allowAddNew: true, // enable "Add new item" option
+                  allowAddNew: true,
                 ),
                 buildDropdown(
                   context,
@@ -843,7 +848,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   //     isNumeric: false,
                   allowAddNew: true, // enable "Add new item" option
                 ),
-
                 buildDropdown(
                   context,
                   '${S().select} ${S().yarn_number}',
@@ -900,7 +904,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   isNumeric: true,
                   allowAddNew: true, // enable "Add new item" option
                 ),
-
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.save_as_outlined),
