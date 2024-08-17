@@ -1,13 +1,7 @@
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:panel_control/model/user.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +9,6 @@ import '../../generated/l10n.dart';
 import '../../provider/scan_item_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
-import '../../service/dataBase.dart';
 import '../../service/scan_item_service.dart';
 import 'Dialogs.dart';
 import 'Scanned_data_table_widgets.dart';
@@ -446,6 +439,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                     var salesStatusFalseDocs = provider.codeDetails;
                     bool allStatusFalse = true;
                     List<String> invalidDocuments = [];
+
                     // تحقق من حالة sale_status لكل مستند
                     salesStatusFalseDocs.forEach((key, value) {
                       if (value is Map<String, dynamic> &&
@@ -479,6 +473,29 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         'payـstatus': false,
                         'created_by': userData!.id,
                       });
+                      print('666666');
+                      // Update sale_status field in each document
+                      formattedScannedData.forEach((remainingPath) {
+                        String monthFolder =
+                            '${remainingPath.substring(0, 4)}-${remainingPath.substring(4, 6)}';
+                        print(monthFolder);
+                        String productId = remainingPath.substring(0);
+                        FirebaseFirestore.instance
+                            .collection('products')
+                            .doc('productsForAllMonths')
+                            .collection(monthFolder)
+                            .where('productId', isEqualTo: productId)
+                            .get()
+                            .then((querySnapshot) {
+                          querySnapshot.docs.forEach((doc) {
+                            doc.reference.update({'saleـstatus': true});
+                          });
+                        });
+                      });
+                      print('111111');
+                      print(formattedScannedData);
+                      print(invalidDocuments);
+
                       setState(() {
                         provider.scannedData.clear();
                         provider.codeDetails.clear();

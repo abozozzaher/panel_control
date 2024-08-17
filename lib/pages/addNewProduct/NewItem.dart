@@ -733,12 +733,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     }
   }
 
-  // دالة لحفظ الكلمة المفتاحية المختارة في قاعدة البيانات
-  void _saveToDatabase(String selectedKey) {
-    // اكتب هنا كود الحفظ لقاعدة البيانات باستخدام الـ selectedKey
-    print("تم حفظ الكلمة المفتاحية في قاعدة البيانات: $selectedKey");
-  }
-
   @override
   Widget build(BuildContext context) {
     bool isMobile = MediaQuery.of(context).size.width < 600;
