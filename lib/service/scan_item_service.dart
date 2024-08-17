@@ -27,6 +27,8 @@ class ScanItemService {
     }
   }
 
+  /*
+
   Future<Map<String, dynamic>?> fetchDataFromFirebase(
       BuildContext context, String code) async {
     try {
@@ -92,8 +94,8 @@ class ScanItemService {
       print('11111 Error saving data locally:  $e');
     }
   }
-
-  Future<Map<String, dynamic>?> fetchData(String url) async {
+*/
+  Future<Map<String, dynamic>?> fetchDataFromFirebase(String url) async {
     try {
       String baseUrl = 'https://panel-control-company-zaher.web.app/';
       if (!url.startsWith(baseUrl)) {

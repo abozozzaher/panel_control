@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -79,7 +80,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                                 '${baseUrl}${codeController.text.substring(0, 4)}-${codeController.text.substring(4, 6)}/${codeController.text}';
 
                             scanItemService
-                                .fetchDataFromFirebase(context, code)
+                                .fetchDataFromFirebase(code)
                                 .then((data) {
                               if (data != null) {
                                 if (provider.scannedData.contains(code)) {
@@ -147,7 +148,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
           });
 
           scanItemService.playSound('assets/sound/beep.mp3');
-          scanItemService.fetchDataFromFirebase(context, code).then((data) {
+          scanItemService.fetchDataFromFirebase(code).then((data) {
             if (data != null) {
               setState(() {
                 provider.codeDetails[code] = data;
@@ -368,8 +369,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                     ),
                     onTap: () async {
                       // طلب البيانات اولا من قاعدة البيانات
-                      final data = await scanItemService.fetchDataFromFirebase(
-                          context, code);
+                      final data = provider.codeDetails[code];
 
                       scanItemDialogs.showDetailsDialog(context, code, data);
                     },
@@ -389,6 +389,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
     final provider = Provider.of<ScanItemProvider>(context, listen: false);
 
     String codeSales = scanItemService.generateCodeSales();
+
     List<String> formattedScannedData = [];
 
     final int totalQuantity = provider.codeDetails.values
@@ -438,52 +439,61 @@ class _ScanItemQrState extends State<ScanItemQr> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                  child: TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.greenAccent),
-                      onPressed: () async {
-                        //      var unsoldDocs = formattedScannedData.where((doc) => doc.saleـstatus == false).toList();
-
-                        //   if(unsoldDocs.isEmpty){
-                        // إرسال البيانات إلى Firebase
-                        await FirebaseFirestore.instance
-                            .collection('seles')
-                            .doc(codeSales)
-                            .set({
-                          'date': DateTime.now(),
-                          'codeSales': codeSales,
-                          'totalWeight': totalWeight,
-                          'totalLength': totalLength,
-                          'totalQuantity': totalQuantity,
-                          'scannedData': formattedScannedData,
-                          'scannedDataLength': formattedScannedData.length,
-                          'payـstatus': false,
-                          'created_by': userData!.id,
-                        });
-
-                        setState(() {
-                          provider.scannedData.clear();
-                          provider.codeDetails.clear();
-                        });
-
-                        Navigator.of(context).pop();
-                        /*
-                      }else {
-                            String unsoldDocsMessage = unsoldDocs.map((doc) => doc.toString()).join(', ');
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Cannot submit, the following documents have saleـstatus == false: $unsoldDocsMessage'),
-      ),
-    );
+                    child: TextButton(
+                  style:
+                      TextButton.styleFrom(backgroundColor: Colors.greenAccent),
+                  onPressed: () async {
+                    var salesStatusFalseDocs = provider.codeDetails;
+                    bool allStatusFalse = true;
+                    List<String> invalidDocuments = [];
+                    // تحقق من حالة sale_status لكل مستند
+                    salesStatusFalseDocs.forEach((key, value) {
+                      if (value is Map<String, dynamic> &&
+                          value.containsKey('saleـstatus')) {
+                        bool saleStatus = value['saleـstatus'];
+                        if (saleStatus != false) {
+                          allStatusFalse = false;
+                          invalidDocuments
+                              .add(key); // أضف المستند غير المطابق إلى القائمة
+                        }
+                      } else {
+                        allStatusFalse = false;
+                        invalidDocuments
+                            .add(key); // أضف المستند غير المطابق إلى القائمة
                       }
-                      */
-                      },
-                      child: const Text('Send',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black))),
-                ),
+                    });
+
+                    if (allStatusFalse) {
+                      // إرسال البيانات إلى Firebase
+                      await FirebaseFirestore.instance
+                          .collection('seles')
+                          .doc(codeSales)
+                          .set({
+                        'date': DateTime.now(),
+                        'codeSales': codeSales,
+                        'totalWeight': totalWeight,
+                        'totalLength': totalLength,
+                        'totalQuantity': totalQuantity,
+                        'scannedData': formattedScannedData,
+                        'scannedDataLength': formattedScannedData.length,
+                        'payـstatus': false,
+                        'created_by': userData!.id,
+                      });
+                      setState(() {
+                        provider.scannedData.clear();
+                        provider.codeDetails.clear();
+                      });
+
+                      Navigator.of(context).pop();
+                    } else {
+                      // عرض مربع حوار يظهر العناصر غير المطابقة
+                      scanItemDialogs.soldOutDialog(context, invalidDocuments);
+                    }
+                  },
+                  child: const Text('Send',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                )),
                 const SizedBox(height: 5, width: 5),
                 Expanded(
                   child: TextButton(

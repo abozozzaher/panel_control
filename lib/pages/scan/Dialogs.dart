@@ -17,16 +17,18 @@ class ScanItemDialogs {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(S().duplicate_code),
-          content:
-              Text('${S().the_code} "$code" ${S().has_already_been_scanned}'),
+          title: Text(S().duplicate_code, textAlign: TextAlign.center),
+          content: Text(
+            '${S().the_code} ${code.split('/').last}\n${S().has_already_been_scanned}',
+            textAlign: TextAlign.center,
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _isDialogShowing = false;
               },
-              child: Text(S().ok),
+              child: Text(S().ok, textAlign: TextAlign.center),
             ),
           ],
         );
@@ -44,8 +46,9 @@ class ScanItemDialogs {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(S().error_code),
-          content: Text(S().invalid_code_scanned_and_removed),
+          title: Text(S().error_code, textAlign: TextAlign.center),
+          content: Text(S().invalid_code_scanned_and_removed,
+              textAlign: TextAlign.center),
           backgroundColor: Colors.redAccent,
           actions: [
             TextButton(
@@ -53,7 +56,7 @@ class ScanItemDialogs {
                 Navigator.of(context).pop();
                 _isDialogShowing = false;
               },
-              child: Text(S().ok),
+              child: Text(S().ok, textAlign: TextAlign.center),
             ),
           ],
         );
@@ -67,25 +70,58 @@ class ScanItemDialogs {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${S().details} $code'),
+          title: Text('${S().details} ${code.split('/').last}',
+              textAlign: TextAlign.center),
           content: SingleChildScrollView(
             child: data != null
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: data.entries.map((entry) {
                       return ListTile(
-                        title: Text('${entry.key}: ${entry.value}'),
+                        title: Text('${entry.key}: ${entry.value}',
+                            textAlign: TextAlign.center),
                       );
                     }).toList(),
                   )
-                : Text(S().no_data_found_for_this_code),
+                : Text(S().no_data_found_for_this_code,
+                    textAlign: TextAlign.center),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(S().ok),
+              child: Text(S().ok, textAlign: TextAlign.center),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> soldOutDialog(
+      BuildContext context, List<String> invalidDocuments) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Invalid Items', textAlign: TextAlign.center),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                Text('You have some items marked as sold out :',
+                    textAlign: TextAlign.center),
+                for (var doc in invalidDocuments)
+                  Text(doc.split('/').last, textAlign: TextAlign.center),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Center(child: Text(S().ok)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
           ],
         );
