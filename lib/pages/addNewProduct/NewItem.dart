@@ -21,7 +21,7 @@ import '../../model/product.dart';
 import '../../provider/user_provider.dart';
 import '../../service/add_new_item)_service.dart';
 import '../../service/app_drawer.dart';
-import '../../service/data_lists.dart';
+import '../../data/data_lists.dart';
 import 'dropdownWidget.dart';
 
 class AddNewItemScreen extends StatefulWidget {
@@ -752,21 +752,18 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${S().add} ${S().item} ${S().new1}'),
-        centerTitle: true,
-        leading: isMobile
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  context.go('/');
-                },
-              )
-            : null,
-      ),
+          title: Text('${S().add} ${S().item} ${S().new1}'),
+          centerTitle: true,
+          leading: isMobile
+              ? null
+              : IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    context.go('/');
+                  },
+                )),
       drawer: AppDrawer(
-        toggleTheme: widget.toggleTheme,
-        toggleLocale: widget.toggleLocale,
-      ),
+          toggleTheme: widget.toggleTheme, toggleLocale: widget.toggleLocale),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

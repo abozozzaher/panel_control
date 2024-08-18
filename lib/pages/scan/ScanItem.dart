@@ -242,9 +242,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
         ],
       ),
       drawer: AppDrawer(
-        toggleTheme: widget.toggleTheme,
-        toggleLocale: widget.toggleLocale,
-      ),
+          toggleTheme: widget.toggleTheme, toggleLocale: widget.toggleLocale),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

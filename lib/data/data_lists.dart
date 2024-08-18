@@ -43,6 +43,18 @@ class DataLists {
     ['1200', '1200'],
   ];
 
+  List<List<String>> yarnTypes = [
+    ['Po', 'يوليستر'],
+    ['pp', 'بروبلين'],
+    ['coton', 'قطن'],
+  ];
+
+  List<List<String>> yarnSupplier = [
+    ['Po', 'يوليستر'],
+    ['pp', 'بروبلين'],
+    ['coton', 'قطن'],
+  ];
+
   List<List<String>> quantity = [
     ['10', '10'],
     ['20', '20'],

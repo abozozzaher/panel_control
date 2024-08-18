@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
 import 'generated/l10n.dart';
 
+import 'pages/adminHome.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/home_page.dart';
 import 'pages/addNewProduct/NewItem.dart';
@@ -31,25 +32,21 @@ void main() async {
       storageBucket: "panel-control-company-zaher.appspot.com",
     ),
   );
+/*
 
+حل مشكلة اللغة العربية في اضافة نوع الخيط الكود
+اظهار دايلوك قبل ارسال البيانات الى الفاير بيس للاضافة الخيط
+اضافة كود للعميل وايضاً يكون بالنكليزي
+تحسين شكل الصفحة اضافة العميل
+اظهار دايلوك قبل ارسال البيانات العميل
+بعد اضافة بيانات العميل يقوم بتفريغ الخانات
+التفكير في طريقة عمل صفحة لادارة الموجودات وحسابات العميل
+*/
   final userProvider = UserProvider();
   await userProvider.loadUserData(); // تحميل بيانات المستخدم عند بدء التطبيق
   final bool isLoggedIn = await _checkLoginStatus();
   usePathUrlStrategy();
-  /*
-  var path = '/codes/db/path';
-  sqfliteFfiInit();
-  if (kIsWeb) {
-    // sqfliteCommonFfiWebSetup();
 
-    // Change default factory on the web
-    databaseFactory = databaseFactoryFfiWeb;
-    path = 'codes.db';
-  } else {
-    databaseFactory = databaseFactoryFfi;
-  }
-   var db = openDatabase(path);
-*/
   runApp(
     MultiProvider(
       providers: [
@@ -142,6 +139,21 @@ class _MyAppState extends State<MyApp> {
     return false;
   }
 
+  Future<bool> checkUserRoleAdmin() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return false;
+
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+    if (userDoc.exists && userDoc.data() != null) {
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+      return userData['admin'] == true;
+    }
+    return false;
+  }
+
   late final GoRouter _router = GoRouter(
     initialLocation: widget.isLoggedIn ? '/' : '/register',
     routes: [
@@ -228,6 +240,42 @@ class _MyAppState extends State<MyApp> {
             }
             if (snapshot.data == true) {
               return ScanItemQr(
+                toggleTheme: _toggleTheme,
+                toggleLocale: _toggleLocale,
+              );
+            } else {
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(S().access_denied_you_do_not_have_the_required_role),
+                      SizedBox(height: 20), // لإضافة مسافة بين النص والزر
+                      ElevatedButton(
+                        onPressed: () {
+                          // الانتقال إلى الصفحة الرئيسية
+                          context.go('/');
+                        },
+                        child: Text(S().go_to_page),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+      GoRoute(
+        path: '/admin',
+        builder: (context, state) => FutureBuilder<bool>(
+          future: checkUserRoleAdmin(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            }
+            if (snapshot.data == true) {
+              return AdminHomePage(
                 toggleTheme: _toggleTheme,
                 toggleLocale: _toggleLocale,
               );

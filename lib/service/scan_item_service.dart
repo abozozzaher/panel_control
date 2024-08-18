@@ -1,15 +1,9 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
 
-import '../provider/scan_item_provider.dart';
-import 'dataBase.dart';
+import '../data/dataBase.dart';
 
 class ScanItemService {
   final AudioPlayer audioPlayer = AudioPlayer();

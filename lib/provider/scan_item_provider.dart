@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 
-import '../service/dataBase.dart';
+import '../data/dataBase.dart';
 
 class ScanItemProvider with ChangeNotifier {
   final List<String> _scannedData = [];

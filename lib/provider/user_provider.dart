@@ -18,16 +18,22 @@ class UserProvider with ChangeNotifier {
     final id = prefs.getString('id');
     final firstName = prefs.getString('firstName');
     final lastName = prefs.getString('lastName');
+    final email = prefs.getString('email');
     final phone = prefs.getString('phone');
     final image = prefs.getString('image') ?? 'assets/img/user.jpg';
     final work = prefs.getBool('work') ?? false;
     final admin = prefs.getBool('admin') ?? false;
 
-    if (id != null && firstName != null && lastName != null && phone != null) {
+    if (id != null &&
+        firstName != null &&
+        lastName != null &&
+        phone != null &&
+        email != null) {
       _user = UserData(
         id: id,
         firstName: firstName,
         lastName: lastName,
+        email: email,
         phone: phone,
         image: image,
         work: work,
@@ -43,6 +49,7 @@ class UserProvider with ChangeNotifier {
     await prefs.setString('id', userData.id);
     await prefs.setString('firstName', userData.firstName);
     await prefs.setString('lastName', userData.lastName);
+    await prefs.setString('email', userData.email);
     await prefs.setString('phone', userData.phone);
     await prefs.setString('image', userData.image);
     await prefs.setBool('work', userData.work);

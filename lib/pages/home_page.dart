@@ -24,17 +24,19 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     print('zaher 1');
     final userProvider = Provider.of<UserProvider>(context);
-    // final UserData? currentUserData =  userProvider.user != null ? userProvider.user : null;
     final UserData? currentUserData = userProvider.user;
+
+    bool work = currentUserData!.work;
+    bool admin = currentUserData.admin;
+
     print(userProvider.user!.id);
     print(userProvider.user!.work);
-    bool work = currentUserData!.work;
-
     print('zaher 1');
-    //  print(currentUserData);
+    print(currentUserData.admin);
     print('zaher 2');
     //print(currentUser);
     print('zaher 3');
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -47,9 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
         drawer: AppDrawer(
-          toggleTheme: widget.toggleTheme,
-          toggleLocale: widget.toggleLocale,
-        ),
+            toggleTheme: widget.toggleTheme, toggleLocale: widget.toggleLocale),
         body: // currentUserData != null ?
             SingleChildScrollView(
           child: Center(
@@ -70,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: const TextStyle(fontSize: 24),
                 ),
                 Text(currentUserData.phone),
+                Text(currentUserData.email),
                 const SizedBox(height: 10),
                 Text('${S().id}: ${currentUserData.id}'),
                 const SizedBox(height: 20),
@@ -89,6 +90,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     icon: const Icon(Icons.qr_code_scanner),
                     label: Text('${S().scan} ${S().item}'),
+                  ),
+                const SizedBox(height: 10),
+                if (admin)
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      context.go('/admin');
+                    },
+                    icon: const Icon(Icons.admin_panel_settings_outlined),
+                    label: Text('صفحة الادارة'),
                   ),
                 const SizedBox(height: 10),
                 ElevatedButton.icon(

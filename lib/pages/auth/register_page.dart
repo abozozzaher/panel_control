@@ -110,6 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
         id: userCredential.user!.uid,
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
+        email: _emailController.text,
         phone: _phoneController.text,
         image: imageUrl,
         work: work,
@@ -130,6 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
       await prefs.setString('image', userData.image);
       await prefs.setBool('work', userData.work);
       await prefs.setBool('admin', userData.admin);
+      await prefs.setString('email', userData.email);
       await prefs.setBool('isLoggedIn', true);
       setState(() {
         _loading = false;
