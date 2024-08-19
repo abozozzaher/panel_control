@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../generated/l10n.dart';
 import '../service/app_drawer.dart';
 import 'clien/addClien.dart';
+import 'invoice/newInvoice.dart';
 import 'yarn/addNewYarn.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -92,6 +93,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     onPressed: () {
                       // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
                       print('تم الضغط على إضافة فاتورة');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => InvoiceNewAdd(
+                              toggleTheme: widget.toggleTheme,
+                              toggleLocale: widget.toggleTheme),
+                        ),
+                      );
                     },
                     child: Text('إضافة فاتورة'),
                   ),

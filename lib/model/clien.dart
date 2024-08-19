@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class ClienData {
@@ -30,5 +31,17 @@ class ClienData {
       'createdAt': formattedCreatedAt,
       'codeIdClien': codeIdClien,
     };
+  }
+
+  factory ClienData.fromMap(Map<String, dynamic> data) {
+    return ClienData(
+      fullNameArabic: data['fullNameArabic'],
+      fullNameEnglish: data['fullNameEnglish'],
+      address: data['address'],
+      phoneNumber: data['phoneNumber'],
+      createdAt:
+          DateFormat('yyyy-MM-dd HH:mm:ss', 'en').parse(data['createdAt']),
+      codeIdClien: data['codeIdClien'],
+    );
   }
 }

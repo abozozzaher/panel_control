@@ -17,6 +17,7 @@ import 'pages/addNewProduct/NewItem.dart';
 import 'pages/product/ProductPage.dart';
 import 'pages/scan/ScanItem.dart';
 import 'provider/scan_item_provider.dart';
+import 'provider/trader_provider.dart';
 import 'provider/user_provider.dart';
 import 'test.dart';
 import 'test2.dart';
@@ -37,6 +38,7 @@ void main() async {
 كل عملية ادخال تسجل واخراج تسجل وفي الحقل الاول يستجل التاريخ مثل 
       formattedCreatedAt: '+ $codeIdYarn'
 وفي حال كان ادخال نضع + واخراج او ناقص -
+نضيف كلمة دخل او اخراج جانب القيمة لتصنيف الجملة هل هي ادخال او اخراج
 التفكير في طريقة عمل صفحة لادارة الموجودات وحسابات العميل
 اضافة مع جو كونتكس للصفحة نيفيكوتر بوش
 add novigator. push . context.go('/'); اريد بناء هذا الشكل
@@ -58,6 +60,7 @@ https://davbfr.github.io/dart_pdf/
         ChangeNotifierProvider<UserProvider>(create: (_) => userProvider),
         ChangeNotifierProvider<ScanItemProvider>(
             create: (_) => ScanItemProvider()),
+        ChangeNotifierProvider<TraderProvider>(create: (_) => TraderProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),
