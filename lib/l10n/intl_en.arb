@@ -110,5 +110,8 @@
     "invalid_items": "Invalid Items",
     "you_have_some_items_marked_as_sold_out_": "You have some items marked as sold out :",
     "scanned_data_length":"Scanned Data Length",
-    "send": "Send"
+    "send": "Send",
+    "user":"user",
+    "yarn_type": "Yarn Type",
+    "yarn_supplier":"Yarn Supplier"
 }

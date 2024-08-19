@@ -37,7 +37,6 @@ class AddNewItemScreen extends StatefulWidget {
 class _AddNewItemScreenState extends State<AddNewItemScreen> {
   String? selectedKey;
   final DataLists dataLists = DataLists();
-  String selectedColor1 = 'black';
 
 //  final AddNewItemService addNewItemService = AddNewItemService();
   String? selectedType;
@@ -62,7 +61,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   List<List<String>>? length;
   late String image;
   String productId = '';
-
   String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
   @override
   void initState() {
@@ -270,7 +268,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         'color': selectedColor,
                         'yarn_number': selectedYarnNumber,
                         'productId': englishProductId,
-                        'date': DateTime.now(),
+                        'createdAt': DateFormat('yyyy-MM-dd HH:mm:ss', 'en')
+                            .format(DateTime.now()),
                         'shift': selectedShift,
                         'quantity': selectedQuantity,
                         'length': selectedLength,

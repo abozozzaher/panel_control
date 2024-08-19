@@ -108,5 +108,8 @@
     "invalid_items": "عناصر غير صالحة",
     "you_have_some_items_marked_as_sold_out_": "لديك بعض العناصر التي تم تمييزها كما تم بيعها:",
     "scanned_data_length": "طول البيانات الممسوحة ضوئيا",
-    "send": "يرسل"
+    "send": "يرسل",
+    "user":"المستخدم",
+    "yarn_type": "نوع الخيط",
+    "yarn_supplier":"مورد الخيط"
 }

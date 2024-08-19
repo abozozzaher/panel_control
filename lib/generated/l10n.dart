@@ -1151,6 +1151,36 @@ class S {
       args: [],
     );
   }
+
+  /// `user`
+  String get user {
+    return Intl.message(
+      'user',
+      name: 'user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yarn Type`
+  String get yarn_type {
+    return Intl.message(
+      'Yarn Type',
+      name: 'yarn_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yarn Supplier`
+  String get yarn_supplier {
+    return Intl.message(
+      'Yarn Supplier',
+      name: 'yarn_supplier',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

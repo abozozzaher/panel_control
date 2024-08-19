@@ -50,9 +50,9 @@ class DataLists {
   ];
 
   List<List<String>> yarnSupplier = [
-    ['Po', 'يوليستر'],
-    ['pp', 'بروبلين'],
-    ['coton', 'قطن'],
+    ['haron', 'هارون'],
+    ['malir', 'مليح'],
+    ['onder', 'اودر'],
   ];
 
   List<List<String>> quantity = [

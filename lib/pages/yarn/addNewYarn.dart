@@ -31,7 +31,8 @@ class _AddYarnState extends State<AddYarn> {
 
   String generateCode() {
     // تنسيق التاريخ
-    String formattedDate = DateFormat('yy00MM00dd00ss').format(DateTime.now());
+    String formattedDate =
+        DateFormat('yy00MM00dd00HH00mm').format(DateTime.now());
 
     // تحويل الأرقام العربية إلى إنجليزية
     return convertArabicToEnglish(formattedDate);
@@ -53,7 +54,7 @@ class _AddYarnState extends State<AddYarn> {
     final String todayDate =
         DateFormat('dd/MM/yyyy').format(DateTime.now()); // صيغة التاريخ
     bool isMobile = MediaQuery.of(context).size.width < 600;
-
+    String yarnId = generateCode();
     return Scaffold(
       appBar: AppBar(
           title: Text('Add Yarn'),
@@ -74,8 +75,10 @@ class _AddYarnState extends State<AddYarn> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Yarn Id  :  ${generateCode()}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+              Text('Today\'s Date: $todayDate'),
+              SizedBox(height: 20),
+              Text('Yarn Id  :  $yarnId',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   textDirection: ui.TextDirection.rtl),
               buildDropdown(
                 context,
@@ -103,13 +106,13 @@ class _AddYarnState extends State<AddYarn> {
                   });
                 },
                 '${S().select} ${S().type}',
-                suffixText: 'D', // يمكنك إضافة النص الذي تريده هنا
+                //   suffixText: 'D', // يمكنك إضافة النص الذي تريده هنا
 
                 //   allowAddNew: false, // enable "Add new item" option
               ),
               buildDropdown(
                 context,
-                '${S().select} ${S().sablah}',
+                '${S().select} ${S().yarn_supplier}',
                 selectedYarnSupplier,
                 dataLists.yarnSupplier,
                 (value) {
@@ -117,7 +120,7 @@ class _AddYarnState extends State<AddYarn> {
                     selectedYarnSupplier = value;
                   });
                 },
-                '${S().select} ${S().sablah}',
+                '${S().select} ${S().yarn_supplier}',
                 //     isNumeric: false,
                 allowAddNew: true, // enable "Add new item" option
               ),
@@ -137,14 +140,12 @@ class _AddYarnState extends State<AddYarn> {
               ),
               SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(S().weight,
-                      style: TextStyle(
-                          fontSize: 16)), // كلمة "الوزن" الثابتة على اليسار
+                  Text(S().weight),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: TextField(
                         controller: weightController,
                         keyboardType: TextInputType.number,
@@ -153,23 +154,12 @@ class _AddYarnState extends State<AddYarn> {
                           isDense: true,
                           border: OutlineInputBorder(),
                         ),
-                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
-                  Text("Kg",
-                      style: TextStyle(
-                          fontSize: 16)), // وحدة "Kg" الثابتة على اليمين
+                  Text("Kg"),
                 ],
               ),
-
-              SizedBox(height: 10), // مسافة صغيرة قبل عرض التاريخ
-
-              Text(
-                'Today\'s Date: $todayDate', // إظهار تاريخ اليوم
-                style: TextStyle(fontSize: 16),
-              ),
-
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
@@ -178,6 +168,7 @@ class _AddYarnState extends State<AddYarn> {
                       selectedYarnSupplier != null &&
                       selectedColor != null &&
                       weightController.text.isNotEmpty) {
+                    // Create the yarn data
                     final yarnData = YarnData(
                       yarnNumber: selectedYarnNumber!,
                       yarnType: selectedYarnType!,
@@ -188,25 +179,96 @@ class _AddYarnState extends State<AddYarn> {
                       firstName: user.firstName,
                       lastName: user.lastName,
                       createdAt: DateTime.now(),
-                      codeIdYarn: generateCode(),
+                      codeIdYarn: yarnId,
                     );
 
-                    await FirebaseFirestore.instance
-                        .collection('yarns')
-                        .doc(yarnData.codeIdYarn)
-                        .set(yarnData.toMap());
+                    // Show confirmation dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Confirm Yarn Data',
+                              textAlign: TextAlign.center),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('${S().id} : ${yarnData.codeIdYarn}'),
+                              Text(
+                                  '${S().yarn_number} : ${dataLists.yarnNumbers.firstWhere((element) => element[0] == selectedYarnNumber)[1]}'),
+                              Text(
+                                  '${S().yarn_type} : ${dataLists.yarnTypes.firstWhere((element) => element[0] == selectedYarnType)[1]}'),
+                              Text(
+                                  '${S().yarn_supplier} : ${dataLists.yarnSupplier.firstWhere((element) => element[0] == selectedYarnSupplier)[1]}'),
+                              Text(
+                                  '${S().color} : ${dataLists.colors.firstWhere((element) => element[0] == selectedColor)[1]}'),
+                              Text(
+                                  '${S().weight} : ${weightController.text} kg'),
+                              Text(
+                                  '${S().user} : ${yarnData.firstName} ${yarnData.lastName}'),
+                            ],
+                          ),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                        backgroundColor: Colors.redAccent),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close dialog
+                                    },
+                                    child: Text(
+                                      S().cancel,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 5, width: 5),
+                                Expanded(
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                        backgroundColor: Colors.greenAccent),
+                                    child: Text(S().confirm,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
+                                    onPressed: () async {
+                                      // Add the yarn to Firestore
+                                      await FirebaseFirestore.instance
+                                          .collection('yarns')
+                                          .doc(yarnData.codeIdYarn)
+                                          .set(yarnData.toMap());
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Yarn added successfully!')));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Yarn added successfully!')));
 
-                    // Clear the form
-                    setState(() {
-                      selectedYarnNumber = null;
-                      selectedYarnType = null;
-                      selectedYarnSupplier = null;
-                      selectedColor = null;
-                      weightController.clear();
-                    });
+                                      // Clear the form
+                                      setState(() {
+                                        selectedYarnNumber = null;
+                                        selectedYarnType = null;
+                                        selectedYarnSupplier = null;
+                                        selectedColor = null;
+                                        weightController.clear();
+                                      });
+
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text('Please fill all fields.'),

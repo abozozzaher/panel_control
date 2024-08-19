@@ -163,11 +163,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_weight": MessageLookupByLibrary.simpleMessage("Total Weight"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
+        "user": MessageLookupByLibrary.simpleMessage("user"),
         "user_data_not_found":
             MessageLookupByLibrary.simpleMessage("User data not found"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number"),
+        "yarn_supplier": MessageLookupByLibrary.simpleMessage("Yarn Supplier"),
+        "yarn_type": MessageLookupByLibrary.simpleMessage("Yarn Type"),
         "you_have_some_items_marked_as_sold_out_":
             MessageLookupByLibrary.simpleMessage(
                 "You have some items marked as sold out :")

@@ -94,7 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "اضغط لفترة طويلة لتنشيط الزر"),
         "mahjara": MessageLookupByLibrary.simpleMessage("محجرة"),
-        "menu": MessageLookupByLibrary.simpleMessage("قائمة طعام"),
+        "menu": MessageLookupByLibrary.simpleMessage("قائمة"),
         "military": MessageLookupByLibrary.simpleMessage("عسكري"),
         "morning": MessageLookupByLibrary.simpleMessage("صباحي"),
         "navy_blue": MessageLookupByLibrary.simpleMessage("كحلي"),
@@ -162,11 +162,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_weight": MessageLookupByLibrary.simpleMessage("إجمالي الوزن"),
         "translate": MessageLookupByLibrary.simpleMessage("يترجم"),
         "type": MessageLookupByLibrary.simpleMessage("يكتب"),
+        "user": MessageLookupByLibrary.simpleMessage("المستخدم"),
         "user_data_not_found": MessageLookupByLibrary.simpleMessage(
             "لم يتم العثور على بيانات المستخدم"),
         "weight": MessageLookupByLibrary.simpleMessage("وزن"),
         "width": MessageLookupByLibrary.simpleMessage("عرض"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("رقم الغزل"),
+        "yarn_supplier": MessageLookupByLibrary.simpleMessage("مورد الخيط"),
+        "yarn_type": MessageLookupByLibrary.simpleMessage("نوع الخيط"),
         "you_have_some_items_marked_as_sold_out_":
             MessageLookupByLibrary.simpleMessage(
                 "لديك بعض العناصر التي تم تمييزها كما تم بيعها:")

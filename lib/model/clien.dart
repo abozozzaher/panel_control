@@ -1,5 +1,6 @@
+import 'package:intl/intl.dart';
+
 class ClienData {
-  String clienCode;
   String fullNameArabic;
   String fullNameEnglish;
   String address;
@@ -8,7 +9,6 @@ class ClienData {
   String codeIdClien;
 
   ClienData({
-    required this.clienCode,
     required this.fullNameArabic,
     required this.fullNameEnglish,
     required this.address,
@@ -19,14 +19,16 @@ class ClienData {
 
   // تحويل البيانات إلى شكل يمكن رفعه إلى Firebase
   Map<String, dynamic> toMap() {
+    String formattedCreatedAt =
+        DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(createdAt);
+
     return {
-      'clienCode': clienCode,
       'fullNameArabic': fullNameArabic,
       'fullNameEnglish': fullNameEnglish,
       'address': address,
       'phoneNumber': phoneNumber,
-      'createdAt': createdAt.toIso8601String(),
-      'code': codeIdClien,
+      'createdAt': formattedCreatedAt,
+      'codeIdClien': codeIdClien,
     };
   }
 }

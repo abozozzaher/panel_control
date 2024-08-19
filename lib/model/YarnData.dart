@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class YarnData {
   String yarnNumber;
   String yarnType;
@@ -24,6 +26,9 @@ class YarnData {
   });
 
   Map<String, dynamic> toMap() {
+    String formattedCreatedAt =
+        DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(createdAt);
+
     return {
       'yarnNumber': yarnNumber,
       'yarnType': yarnType,
@@ -33,8 +38,9 @@ class YarnData {
       'userId': userId,
       'firstName': firstName,
       'lastName': lastName,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': formattedCreatedAt,
       'code': codeIdYarn,
+      formattedCreatedAt: '+ $codeIdYarn'
     };
   }
 }

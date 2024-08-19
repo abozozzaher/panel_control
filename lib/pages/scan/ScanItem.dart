@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:panel_control/model/user.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -70,7 +71,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                             String baseUrl =
                                 'https://panel-control-company-zaher.web.app/';
                             String code =
-                                '${baseUrl}${codeController.text.substring(0, 4)}-${codeController.text.substring(4, 6)}/${codeController.text}';
+                                '$baseUrl${codeController.text.substring(0, 4)}-${codeController.text.substring(4, 6)}/${codeController.text}';
 
                             scanItemService
                                 .fetchDataFromFirebase(code)
@@ -180,7 +181,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ScanItemProvider>(context);
-    final codeDetailse = provider.codeDetails;
+    //  final codeDetailse = provider.codeDetails;
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final userData = userProvider.user;
@@ -307,7 +308,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                                 content: Center(
                                     child: Text(
                                         S().long_press_to_activate_the_button)),
-                                duration: Duration(seconds: 2)));
+                                duration: const Duration(seconds: 2)));
                           },
                           onLongPress: provider.scannedData.isNotEmpty &&
                                   userData!.work == true
@@ -319,7 +320,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                                     SnackBar(
                                       content: Center(
                                           child: Text(S().no_data_to_send)),
-                                      duration: Duration(seconds: 2),
+                                      duration: const Duration(seconds: 2),
                                     ),
                                   );
                                 },
@@ -462,7 +463,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
                           .collection('seles')
                           .doc(codeSales)
                           .set({
-                        'date': DateTime.now(),
+                        'createdAt': DateFormat('yyyy-MM-dd HH:mm:ss', 'en')
+                            .format(DateTime.now()),
                         'codeSales': codeSales,
                         'totalWeight': totalWeight,
                         'totalLength': totalLength,
@@ -471,6 +473,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         'scannedDataLength': formattedScannedData.length,
                         'payـstatus': false,
                         'created_by': userData!.id,
+                        'not_attached_to_client': false
                       });
                       print('666666');
                       /* تعديل حالة المنتج من فولس الى ترو
@@ -509,7 +512,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                     }
                   },
                   child: Text(S().send,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                 )),
                 const SizedBox(height: 5, width: 5),
