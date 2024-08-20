@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TraderProvider with ChangeNotifier {
-  String traderCode = '';
-  String traderName = '';
+import '../model/clien.dart';
 
-  void setTrader(String code, String name) {
-    traderCode = code;
-    traderName = name;
+class TraderProvider with ChangeNotifier {
+  ClienData? _trader;
+
+  ClienData? get trader => _trader;
+
+  void setTrader(ClienData trader) {
+    _trader = trader;
     notifyListeners();
   }
 }

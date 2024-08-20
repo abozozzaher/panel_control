@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-import '../../generated/l10n.dart';
-import '../../data/data_lists.dart';
+import '../generated/l10n.dart';
 
 Widget buildDropdown(
   BuildContext context, // تأكد من تمرير BuildContext
   String hint,
   String? selectedValue,
-  // List<String> items,
   List<List<String>> items,
-  // List<Map<String, String>> items,
   ValueChanged<String?> onChanged,
   String hintText, {
   String suffixText = '',
   bool allowAddNew = false,
   bool isNumeric = false,
 }) {
-  final DataLists dataLists = DataLists();
-
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

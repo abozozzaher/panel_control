@@ -9,7 +9,7 @@ import '../../generated/l10n.dart';
 import '../../model/YarnData.dart';
 import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
-import '../addNewProduct/dropdownWidget.dart';
+import '../../service/dropdownWidget.dart';
 
 class AddYarn extends StatefulWidget {
   final VoidCallback toggleTheme;

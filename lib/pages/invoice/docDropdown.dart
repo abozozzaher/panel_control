@@ -27,22 +27,8 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
     List<MultiSelectItem<String>> items = [];
     for (var doc in querySnapshot.docs) {
       String documentName = doc.id; // or doc['name'] if you have a name field
-      /*    List<dynamic> scannedData = doc['scannedData'];
-
-      List<MultiSelectItem<String>> groupItems = scannedData
-          .map((data) => MultiSelectItem<String>(data, data))
-          .toList();
-
-      MultiSelectGroup<String> documentGroup = MultiSelectGroup<String>(
-        documentName,
-        groupItems,
-      );
-     
-
-      items.add(MultiSelectItem<String>(documentName, documentName));
-      items.addAll(groupItems);
-      
-       */
+      //  String documentDetails = doc['scannedDataLength'];
+      // items.add(MultiSelectItem<String>(documentName, documentDetails));
       items.add(MultiSelectItem<String>(documentName, documentName));
     }
 
@@ -56,7 +42,7 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
     return Column(
       children: [
         Container(
-          height: 300,
+          height: 200,
           child: MultiSelectDialogField(
             items: _items,
             title: Text("Select Scanned Data"),

@@ -14,6 +14,7 @@ class TraderDropdown extends StatefulWidget {
 class _TraderDropdownState extends State<TraderDropdown> {
   List<ClienData> clients = [];
   bool isLoading = true;
+  String? _selectedCode;
   @override
   void initState() {
     super.initState();
@@ -49,6 +50,7 @@ class _TraderDropdownState extends State<TraderDropdown> {
         return DropdownButton<String>(
             hint: Text('Select Client'),
             isExpanded: true,
+            value: _selectedCode,
             items: clients.map((client) {
               return DropdownMenuItem<String>(
                 value: client.codeIdClien,
@@ -57,6 +59,9 @@ class _TraderDropdownState extends State<TraderDropdown> {
             }).toList(),
             onChanged: (String? selectedCode) async {
               if (selectedCode != null) {
+                setState(() {
+                  _selectedCode = selectedCode; // Update the selected code
+                });
                 print('Selected Code: $selectedCode'); // للتحقق من الكود المحدد
 
                 final selectedClient = clients.firstWhere(
@@ -74,17 +79,27 @@ class _TraderDropdownState extends State<TraderDropdown> {
                 if (selectedClient != null) {
                   print(
                       'Client found: ${selectedClient.fullNameEnglish}'); // التحقق من العثور على العميل
-/*
-                  // حفظ بيانات العميل في Provider
-                  provider.setTrader(selectedClient.codeIdClien,
-                      selectedClient.fullNameEnglish);
 
+                  // حفظ بيانات العميل في Provider
+                  provider.setTrader(selectedClient);
+                  print(
+                      'Provider data: ${provider.trader!.address} = ${provider.trader!.codeIdClien}= ${provider.trader!.fullNameArabic}= ${provider.trader!.fullNameEnglish}');
+/*
+يوجد خطا فيحفظ البيانات في قاعدة البيانات نعود اليها فيما بعد
+4444444444
                   // حفظ بيانات العميل في SQLite
                   final dbHelper = DatabaseHelper();
-                  await dbHelper.insertCodeDetails(
-                    selectedClient.codeIdClien,
-                    selectedClient.toMap().toString(),
-                  );
+                  await dbHelper.insertTraderCodeDetails(
+                      selectedClient.codeIdClien,
+                      selectedClient.fullNameEnglish);
+                  final savedData = await dbHelper
+                      .getTraderCodeDetails(selectedClient.codeIdClien);
+
+                  if (savedData != null) {
+                    print('SQLite data: ${savedData.toString()}');
+                  } else {
+                    print('No data found in SQLite');
+                  }
 */
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Client saved successfully')),

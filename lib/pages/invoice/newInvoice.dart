@@ -77,7 +77,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
                     Provider.of<TraderProvider>(context, listen: false);
 
                 // التحقق من وجود التاجر والمستندات
-                if (traderProvider.traderCode.isEmpty ||
+                if (traderProvider.trader!.codeIdClien.isEmpty ||
                     selectedDocuments.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text('Please select trader and documents')));
@@ -87,7 +87,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
                 // إنشاء الفاتورة
                 final invoice = Invoice(
                   invoiceCode: invoiceCode!,
-                  traderCode: traderProvider.traderCode,
+                  traderCode: traderProvider.trader!.codeIdClien,
                   documentCodes: selectedDocuments,
                   scannedData: scannedData,
                 );

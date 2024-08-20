@@ -3,6 +3,8 @@ import 'package:path/path.dart';
 
 import 'dart:convert';
 
+import '../model/clien.dart';
+
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
@@ -29,6 +31,28 @@ class DatabaseHelper {
       },
       version: 1,
     );
+  }
+
+  Future<void> insertTraderCodeDetails(String code, String data) async {
+    final db = await database;
+    await db.insert(
+      'code_details',
+      {'code': code, 'data': data},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<Map<String, dynamic>?> getTraderCodeDetails(String code) async {
+    final db = await database;
+    final result =
+        await db.query('code_details', where: 'code = ?', whereArgs: [code]);
+    if (result.isNotEmpty) {
+      print('Data found: ${result.first}');
+      return result.first;
+    } else {
+      print('No data found');
+      return null;
+    }
   }
 
   Future<void> insertCodeDetails(String code, String data) async {
