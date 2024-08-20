@@ -155,7 +155,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
               final displayCode = code.length > urlLength + 8
                   ? code.substring(urlLength + 8)
                   : code;
-// هذه نهاية الامر السابق لعرض الرابط مختصر
+              // هذه نهاية الامر السابق لعرض الرابط مختصر
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${S().scanned} $displayCode'),
@@ -181,7 +181,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ScanItemProvider>(context);
-    //  final codeDetailse = provider.codeDetails;
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final userData = userProvider.user;

@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class DocumentDropdown extends StatefulWidget {
+  final Function(List<String>, List<DocumentSnapshot>) onDocumentsSelected;
+  DocumentDropdown({required this.onDocumentsSelected});
+
   @override
   _DocumentDropdownState createState() => _DocumentDropdownState();
 }
@@ -26,9 +29,7 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
 
     List<MultiSelectItem<String>> items = [];
     for (var doc in querySnapshot.docs) {
-      String documentName = doc.id; // or doc['name'] if you have a name field
-      //  String documentDetails = doc['scannedDataLength'];
-      // items.add(MultiSelectItem<String>(documentName, documentDetails));
+      String documentName = doc.id;
       items.add(MultiSelectItem<String>(documentName, documentName));
     }
 
@@ -42,15 +43,25 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
     return Column(
       children: [
         Container(
-          height: 200,
+          height: 100,
           child: MultiSelectDialogField(
             items: _items,
             title: Text("Select Scanned Data"),
             buttonText: Text("Select Items"),
-            onConfirm: (List<String> selected) {
+            onConfirm: (List<String> selected) async {
+              List<DocumentSnapshot> selectedDocuments = [];
+              for (var documentId in selected) {
+                DocumentSnapshot documentSnapshot = await FirebaseFirestore
+                    .instance
+                    .collection('seles')
+                    .doc(documentId)
+                    .get();
+                selectedDocuments.add(documentSnapshot);
+              }
               setState(() {
                 _selectedItems = selected;
               });
+              widget.onDocumentsSelected(_selectedItems, selectedDocuments);
             },
             listType: MultiSelectListType.LIST,
           ),

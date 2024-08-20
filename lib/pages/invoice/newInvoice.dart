@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../model/invoice.dart';
@@ -18,8 +19,10 @@ class InvoiceNewAdd extends StatefulWidget {
 
 class _InvoiceNewAddState extends State<InvoiceNewAdd> {
   String? invoiceCode;
-  List<String> selectedDocuments = [];
+//  List<String> selectedDocuments = [];
   List<String> scannedData = [];
+  List<DocumentSnapshot> documentSnapshots = [];
+  bool _traderSelected = false; // new flag
 
   @override
   void initState() {
@@ -36,6 +39,12 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
 
   @override
   Widget build(BuildContext context) {
+    print('sss1sss');
+
+    // print(selectedDocuments);
+    print(scannedData);
+    print(documentSnapshots);
+    print('ssssss');
     return Scaffold(
       appBar: AppBar(
         title: Text('New Invoice', textAlign: TextAlign.center),
@@ -53,32 +62,56 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
 
             // منسدلة اختيار التاجر
             Text('Select Trader', style: TextStyle(fontSize: 16)),
-            TraderDropdown(),
+            TraderDropdown(
+              onTraderSelected: (trader) {
+                setState(() {
+                  _traderSelected = true;
+                });
+              },
+            ),
 
             SizedBox(height: 16),
 
             // منسدلة اختيار المستندات
-            Text('Select Documents', style: TextStyle(fontSize: 16)),
-            DocumentDropdown(),
+            //    Text('Select Documents', style: TextStyle(fontSize: 16)),
+            _traderSelected
+                ? Text('Select Documents', style: TextStyle(fontSize: 16))
+                : Text('Please select a trader first',
+                    style: TextStyle(fontSize: 16, color: Colors.grey)),
+            _traderSelected
+                ? DocumentDropdown(
+                    onDocumentsSelected: (documents, snapshots) {
+                      setState(() {
+                        scannedData = documents;
+                        documentSnapshots = snapshots;
+                      });
+                    },
+                  )
+                : Container(),
 
             SizedBox(height: 16),
 
-            // عرض البيانات المستخرجة من المستندات المختارة
             Text('Scanned Data', style: TextStyle(fontSize: 16)),
-            //  Expanded(child: ScannedDataList(scannedData)),
+            Expanded(
+                child: ScannedDataList(
+                    scannedData: scannedData,
+                    documentSnapshots: documentSnapshots)),
 
             SizedBox(height: 16),
 
             // زر حفظ الفاتورة
             ElevatedButton(
               onPressed: () {
+                print('$scannedData هنا الداتا بعد النقر على الزر');
                 // جلب التاجر المحدد
                 final traderProvider =
                     Provider.of<TraderProvider>(context, listen: false);
+                print(
+                    '${traderProvider.trader!.address}  هنا الداتا بعد النقر على الزر تظهر معلومات التاجر');
 
                 // التحقق من وجود التاجر والمستندات
                 if (traderProvider.trader!.codeIdClien.isEmpty ||
-                    selectedDocuments.isEmpty) {
+                    scannedData.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text('Please select trader and documents')));
                   return;
@@ -88,7 +121,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
                 final invoice = Invoice(
                   invoiceCode: invoiceCode!,
                   traderCode: traderProvider.trader!.codeIdClien,
-                  documentCodes: selectedDocuments,
+                  documentCodes: scannedData,
                   scannedData: scannedData,
                 );
 
