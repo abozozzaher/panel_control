@@ -16,6 +16,7 @@ import 'pages/home_page.dart';
 import 'pages/addNewProduct/NewItem.dart';
 import 'pages/product/ProductPage.dart';
 import 'pages/scan/ScanItem.dart';
+import 'provider/invoice_provider.dart';
 import 'provider/scan_item_provider.dart';
 import 'provider/trader_provider.dart';
 import 'provider/user_provider.dart';
@@ -34,6 +35,8 @@ void main() async {
     ),
   );
 /*
+اصلاح الكود في مرحلة فاتش الداتا في تجهيز الفاتورة وحفظ البيانات في قاعدة البيانات وتوحيد شكلها واظهارها بشكل جدول 
+اضافة طلب فاتورة ويقوم العامل باختيار اكمال الطلب ووكل عملية مسح يقوم بمسح من المتطلبات ويظهر لدي في قائمة الفواتير
 تعديل السناك بار الى توست flutter pub add fluttertoast
 انشاء مجموعة ضمن ملف العملي يكتب فيه ديكمونت واحد بتاريخ السنة
 كل عملية ادخال تسجل واخراج تسجل وفي الحقل الاول يستجل التاريخ مثل 
@@ -62,6 +65,7 @@ https://davbfr.github.io/dart_pdf/
         ChangeNotifierProvider<ScanItemProvider>(
             create: (_) => ScanItemProvider()),
         ChangeNotifierProvider<TraderProvider>(create: (_) => TraderProvider()),
+        ChangeNotifierProvider(create: (_) => DocumentProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

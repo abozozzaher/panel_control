@@ -1,13 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-
 import 'dart:convert';
 
 import '../model/clien.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper _instance = DatabaseHelper._internal();
-  factory DatabaseHelper() => _instance;
+  static final DatabaseHelper instance = DatabaseHelper._internal();
+  factory DatabaseHelper() => instance;
   DatabaseHelper._internal();
 
   static Database? _database;

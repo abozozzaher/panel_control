@@ -1,60 +1,31 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../service/scan_item_service.dart';
+import 'package:provider/provider.dart';
+import '../../provider/invoice_provider.dart';
 
 class ScannedDataList extends StatelessWidget {
-  final List<String> scannedData;
-  final List<DocumentSnapshot> documentSnapshots;
-
-  ScannedDataList({required this.scannedData, required this.documentSnapshots});
-
-  final ScanItemService scanItemService = ScanItemService();
-
   @override
   Widget build(BuildContext context) {
-    print('object1');
-    print(scannedData);
-    print('object2');
-    return SingleChildScrollView(
-      child: DataTable(
-        columns: [
-          DataColumn(label: Text('Scanned Data')),
-          DataColumn(label: Text('Created By')),
-        ],
-        rows: scannedData.map((data) {
-          int index = scannedData.indexOf(data);
-          List<dynamic> scannedDataList =
-              documentSnapshots[index]['scannedData'];
+    // استرجاع مزود البيانات
+    final documentsProvider = Provider.of<DocumentProvider>(context);
 
-          List<Future<void>> transformedCodes = scannedDataList.map((code) {
-            String prefix = code.substring(0, 4);
-            String middle = code.substring(4, 6);
+    List<String> selectedItems = [];
 
-            // Construct the transformed code
-            String transformedCode =
-                'https://panel-control-company-zaher.web.app/$prefix-$middle/$scannedDataList';
+    // عرض العناصر المحددة فقط في ListTile
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: selectedItems.length,
+      itemBuilder: (context, index) {
+        final documentId = selectedItems[index];
+        final document = documentsProvider.selectedDocuments
+            .firstWhere((document) => document.id == documentId);
+        final codeSales = document['codeSales'] ?? 'No Code Sales';
+        final scannedData = document['scannedData'] ?? [];
 
-            //  return transformedCode;
-
-            return scanItemService
-                .fetchDataFromFirebaseForInvoice(transformedCode)
-                .then((data) {
-              print('Fetched data: $data معلومات الكود');
-              print('Fetched data: $transformedCode  بس كود مع الرابط');
-              print('Fetched data: $scannedDataList بس كود');
-            });
-          }).toList();
-          String scannedDataString = transformedCodes.join('\n\n');
-// المشكلة هنا 44444
-          return DataRow(
-            cells: [
-              DataCell(Text(data)),
-              DataCell(Text(scannedDataString)),
-            ],
-          );
-        }).toList(),
-      ),
+        return ListTile(
+          title: Text(codeSales.toString()),
+          subtitle: Text(scannedData.join(', ')),
+        );
+      },
     );
   }
 }

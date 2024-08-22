@@ -52,6 +52,7 @@ dependencies:
   cached_network_image: ^3.3.1
   double_back_to_close_app: ^2.1.0
   sqflite: ^2.0.0+4
+  #sqflite_web: ^2.0.0+2
   #sqflite_common: any
   #sqflite_common_ffi: any
   #sqflite_common_ffi_web: any
