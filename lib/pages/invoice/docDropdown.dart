@@ -56,11 +56,11 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
     }
 
     // حفظ البيانات في DocumentProvider
-    Provider.of<DocumentProvider>(context, listen: false).setSelectedDocuments(
+    Provider.of<InvoiceProvider>(context, listen: false).setSelectedDocuments(
         items.map((item) => item.value).toList(), documents);
 // عرض البيانات في وحدة التحكم للتأكد
     print(
-        "Selected Document IDs: ${Provider.of<DocumentProvider>(context, listen: false).selectedDocumentIds}");
+        "Selected Document IDs: ${Provider.of<InvoiceProvider>(context, listen: false).selectedDocumentIds}");
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Data saved to provider!')),
@@ -74,7 +74,7 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
   @override
   Widget build(BuildContext context) {
     final documentProvider =
-        Provider.of<DocumentProvider>(context, listen: false);
+        Provider.of<InvoiceProvider>(context, listen: false);
     return Column(
       children: [
         Container(

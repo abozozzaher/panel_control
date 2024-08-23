@@ -35,7 +35,12 @@ void main() async {
     ),
   );
 /*
-اصلاح الكود في مرحلة فاتش الداتا في تجهيز الفاتورة وحفظ البيانات في قاعدة البيانات وتوحيد شكلها واظهارها بشكل جدول 
+تصليح مشكلةلاند داتا عند اختيار الكود في الفاتورة لانه في حال الخروج والعودة او اختيار اكثر من خيار يفقد البيانات
+وضع معلومات التاجر شرط لتشغيل الامر التالي وحفظ بيانات التاجر في البروفيدر
+وبيانات الجدول حفظها في الداتا
+اصلاح الكود وتنظيفه
+اضافة شرط في حال كان الكود ممسوح بقائمة ثانية يعطي تنبيه ولا يضاف الى الجدول الا واحد
+وعند المسح في حال كان تم مسحه مسبقاً تنبيه العامل
 اضافة طلب فاتورة ويقوم العامل باختيار اكمال الطلب ووكل عملية مسح يقوم بمسح من المتطلبات ويظهر لدي في قائمة الفواتير
 تعديل السناك بار الى توست flutter pub add fluttertoast
 انشاء مجموعة ضمن ملف العملي يكتب فيه ديكمونت واحد بتاريخ السنة
@@ -65,7 +70,7 @@ https://davbfr.github.io/dart_pdf/
         ChangeNotifierProvider<ScanItemProvider>(
             create: (_) => ScanItemProvider()),
         ChangeNotifierProvider<TraderProvider>(create: (_) => TraderProvider()),
-        ChangeNotifierProvider(create: (_) => DocumentProvider()),
+        ChangeNotifierProvider(create: (_) => InvoiceProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

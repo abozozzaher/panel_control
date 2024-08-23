@@ -6,7 +6,7 @@ class ScannedDataList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // استرجاع مزود البيانات
-    final documentsProvider = Provider.of<DocumentProvider>(context);
+    final documentsProvider = Provider.of<InvoiceProvider>(context);
 
     List<String> selectedItems = [];
 
