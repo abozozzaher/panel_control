@@ -22,10 +22,12 @@ class DatabaseHelper {
       path,
       onCreate: (db, version) {
         db.execute(
-          "CREATE TABLE code_details(code TEXT PRIMARY KEY, data TEXT)",
+          'CREATE TABLE code_details (id INTEGER PRIMARY KEY, data TEXT)',
+          //  "CREATE TABLE code_details(code TEXT PRIMARY KEY, data TEXT)",
         );
         db.execute(
-          "CREATE TABLE scanned_data(code TEXT PRIMARY KEY)",
+          'CREATE TABLE scanned_data (id INTEGER PRIMARY KEY, data TEXT)',
+          //  "CREATE TABLE scanned_data(code TEXT PRIMARY KEY)",
         );
       },
       version: 1,

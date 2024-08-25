@@ -1,3 +1,5 @@
+/*
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -56,8 +58,7 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
     }
 
     // حفظ البيانات في DocumentProvider
-    Provider.of<InvoiceProvider>(context, listen: false).setSelectedDocuments(
-        items.map((item) => item.value).toList(), documents);
+    // Provider.of<InvoiceProvider>(context, listen: false).setSelectedDocuments(   items.map((item) => item.value).toList(), documents);
 // عرض البيانات في وحدة التحكم للتأكد
     print(
         "Selected Document IDs: ${Provider.of<InvoiceProvider>(context, listen: false).selectedDocumentIds}");
@@ -85,7 +86,7 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
             buttonText: Text("Select Items"),
             onConfirm: (List<String> selected) async {
               List<Map<String, dynamic>> selectedDocuments = [];
-
+/*
               for (var documentId in selected) {
                 try {
                   // جلب بيانات المستند من Provider
@@ -103,7 +104,7 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
                 }
               }
 
-/*
+
               for (var documentId in selected) {
                 try {
                   // جلب بيانات المستند من SQLite بدلاً من Firebase
@@ -134,3 +135,6 @@ class _DocumentDropdownState extends State<DocumentDropdown> {
     );
   }
 }
+
+
+*/

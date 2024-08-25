@@ -15,16 +15,16 @@ class ScannedDataList extends StatelessWidget {
       shrinkWrap: true,
       itemCount: selectedItems.length,
       itemBuilder: (context, index) {
+        /*
         final documentId = selectedItems[index];
-        final document = documentsProvider.selectedDocuments
-            .firstWhere((document) => document.id == documentId);
+        final document = documentsProvider.selectedDocuments.firstWhere((document) => document.id == documentId);
         final codeSales = document['codeSales'] ?? 'No Code Sales';
         final scannedData = document['scannedData'] ?? [];
-
+*/
         return ListTile(
-          title: Text(codeSales.toString()),
-          subtitle: Text(scannedData.join(', ')),
-        );
+            // title: Text(codeSales.toString()),
+            //   subtitle: Text(scannedData.join(', ')),
+            );
       },
     );
   }
