@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:panel_control/pages/invoice/dataTest.dart';
+import 'package:panel_control/pages/invoice/dataTabelFetcher.dart';
 import 'package:panel_control/pages/invoice/invoiceTablo.dart';
 import 'package:provider/provider.dart';
 import '../../generated/l10n.dart';
@@ -186,52 +186,17 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
             children: [
               Text('Invoice Code: $invoiceCode'),
               ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => DialogInvoice(),
-                  );
-                },
-                icon: Icon(Icons.list),
-                label: Text('Select Items'),
-              ),
-              SizedBox(height: 20),
-              DataFetcher(),
-              SizedBox(height: 20),
-              /*  
-              FutureBuilder<Map<String, Map<String, dynamic>>>(
-                future: _mergeDataFromSelectedItems(
-                    invoiceProvider.selectedDocumentIds),
-                builder: (context, snapshot) {
-                  print('sdsd1 ${invoiceProvider.selectedDocumentIds}');
-                  print('sdsd2 ${invoiceProvider.selectedItemData}');
-                  print('sdsdssss ${snapshot.data}');
-                  if (snapshot.connectionState == ConnectionState.none) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error1: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No data found'));
-                  } else {
-                    final aggregatedData = snapshot.data!;
-
-                    return Container(
-                      color: Colors.grey[200],
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                            columns: _buildColumns(),
-                            rows: _buildRows(aggregatedData),
-                          ),
-                        ),
-                      ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => DialogInvoice(),
                     );
-                  }
-                },
-              ),
-        */
+                  },
+                  icon: Icon(Icons.list),
+                  label: Text('Select Items')),
+              SizedBox(height: 20),
+              DataTabelFetcher(),
+              SizedBox(height: 20),
               ElevatedButton.icon(
                   onPressed: () {
                     invoiceProvider.deleteData();
@@ -242,62 +207,5 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
         ),
       ),
     );
-  }
-
-  List<DataRow> _buildRows(Map<String, Map<String, dynamic>> aggregatedData) {
-    return aggregatedData.entries.map((entry) {
-      var data = entry.value;
-      return DataRow(cells: [
-        DataCell(Center(
-            child: Text(data['type'].toString(),
-                style: const TextStyle(color: Colors.black)))),
-        DataCell(Center(
-            child: Text(data['color'].toString(),
-                style: const TextStyle(color: Colors.black)))),
-        DataCell(Center(
-            child: Text('${data['width']} mm',
-                style: const TextStyle(color: Colors.black)))),
-        DataCell(Center(
-            child: Text('${data['yarn_number']} D',
-                style: const TextStyle(color: Colors.black)))),
-        DataCell(Center(
-            child: Text('${data['quantity']} Pcs',
-                style: const TextStyle(color: Colors.black)))),
-        DataCell(Center(
-            child: Text('${data['length']} Mt',
-                style: const TextStyle(color: Colors.black)))),
-        DataCell(Center(
-            child: Text('${data['total_weight']} Kg',
-                style: const TextStyle(color: Colors.black)))),
-        DataCell(Center(
-            child: Text(data['scanned_data'].toString(),
-                style: const TextStyle(color: Colors.black)))),
-      ]);
-    }).toList();
-  }
-
-  List<DataColumn> _buildColumns() {
-    return [
-      DataColumn(
-          label: Text(S().type, style: TextStyle(color: Colors.greenAccent))),
-      DataColumn(
-          label: Text(S().color, style: TextStyle(color: Colors.greenAccent))),
-      DataColumn(
-          label: Text(S().width, style: TextStyle(color: Colors.greenAccent))),
-      DataColumn(
-          label: Text(S().yarn_number,
-              style: TextStyle(color: Colors.greenAccent))),
-      DataColumn(
-          label:
-              Text(S().quantity, style: TextStyle(color: Colors.greenAccent))),
-      DataColumn(
-          label: Text(S().length, style: TextStyle(color: Colors.greenAccent))),
-      DataColumn(
-          label: Text('${S().weight} ${S().total}',
-              style: TextStyle(color: Colors.greenAccent))),
-      DataColumn(
-          label:
-              Text(S().scanned, style: TextStyle(color: Colors.greenAccent))),
-    ];
   }
 }

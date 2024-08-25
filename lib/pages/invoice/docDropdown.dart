@@ -1,3 +1,81 @@
+import 'package:flutter/material.dart';
+
+class DataTableExample extends StatelessWidget {
+  final Map<String, Map<String, dynamic>> aggregatedData;
+
+  DataTableExample({required this.aggregatedData});
+
+  List<DataRow> _buildRows() {
+    return aggregatedData.entries.map((entry) {
+      var data = entry.value;
+      return DataRow(cells: [
+        DataCell(Center(
+            child: Text(data['type'].toString(),
+                style: const TextStyle(color: Colors.black)))),
+        DataCell(Center(
+            child: Text(data['color'].toString(),
+                style: const TextStyle(color: Colors.black)))),
+        DataCell(Center(
+            child: Text('${data['width']} mm',
+                style: const TextStyle(color: Colors.black)))),
+        DataCell(Center(
+            child: Text('${data['yarn_number']} D',
+                style: const TextStyle(color: Colors.black)))),
+        DataCell(Center(
+            child: Text('${data['quantity']} Pcs',
+                style: const TextStyle(color: Colors.black)))),
+        DataCell(Center(
+            child: Text('${data['length']} Mt',
+                style: const TextStyle(color: Colors.black)))),
+        DataCell(Center(
+            child: Text('${data['total_weight']} Kg',
+                style: const TextStyle(color: Colors.black)))),
+        DataCell(Center(
+            child: Text(data['scanned_data'].toString(),
+                style: const TextStyle(color: Colors.black)))),
+      ]);
+    }).toList();
+  }
+
+  List<DataColumn> _buildColumns() {
+    return [
+      DataColumn(
+          label: Text('Type', style: TextStyle(color: Colors.greenAccent))),
+      DataColumn(
+          label: Text('Color', style: TextStyle(color: Colors.greenAccent))),
+      DataColumn(
+          label: Text('Width', style: TextStyle(color: Colors.greenAccent))),
+      DataColumn(
+          label:
+              Text('Yarn Number', style: TextStyle(color: Colors.greenAccent))),
+      DataColumn(
+          label: Text('Quantity', style: TextStyle(color: Colors.greenAccent))),
+      DataColumn(
+          label: Text('Length', style: TextStyle(color: Colors.greenAccent))),
+      DataColumn(
+          label: Text('Weight', style: TextStyle(color: Colors.greenAccent))),
+      DataColumn(
+          label: Text('Scanned Data',
+              style: TextStyle(color: Colors.greenAccent))),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Data Table Example')),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columns: _buildColumns(),
+          rows: _buildRows(),
+        ),
+      ),
+    );
+  }
+}
+
+
 /*
 
 import 'dart:convert';
