@@ -102,83 +102,85 @@ class DataTabelFetcher extends StatelessWidget {
       return aggregatedData;
     }
 
-    return FutureBuilder<Map<String, Map<String, dynamic>>>(
-      future: fetchData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (snapshot.hasData) {
-          final aggregatedData = snapshot.data;
+    return Center(
+      child: FutureBuilder<Map<String, Map<String, dynamic>>>(
+        future: fetchData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final aggregatedData = snapshot.data;
 
-          return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: [
-                  DataColumn(
-                      label: Text(S().type,
-                          style: TextStyle(color: Colors.greenAccent))),
-                  DataColumn(
-                      label: Text(S().color,
-                          style: TextStyle(color: Colors.greenAccent))),
-                  DataColumn(
-                      label: Text(S().width,
-                          style: TextStyle(color: Colors.greenAccent))),
-                  DataColumn(
-                      label: Text(S().yarn_number,
-                          style: TextStyle(color: Colors.greenAccent))),
-                  DataColumn(
-                      label: Text(S().quantity,
-                          style: TextStyle(color: Colors.greenAccent))),
-                  DataColumn(
-                      label: Text(S().length,
-                          style: TextStyle(color: Colors.greenAccent))),
-                  DataColumn(
-                      label: Text('${S().weight} ${S().total}',
-                          style: TextStyle(color: Colors.greenAccent))),
-                  DataColumn(
-                      label: Text(S().scanned,
-                          style: TextStyle(color: Colors.greenAccent))),
-                ],
-                rows: aggregatedData!.entries.map((entry) {
-                  final itemData = entry.value;
-                  return DataRow(cells: [
-                    DataCell(Center(
-                        child: Text(itemData['type'].toString(),
-                            style: const TextStyle(color: Colors.black)))),
-                    DataCell(Center(
-                        child: Text(itemData['color'].toString(),
-                            style: const TextStyle(color: Colors.black)))),
-                    DataCell(Center(
-                        child: Text('${itemData['width']} mm',
-                            style: const TextStyle(color: Colors.black)))),
-                    DataCell(Center(
-                        child: Text('${itemData['yarn_number']} D',
-                            style: const TextStyle(color: Colors.black)))),
-                    DataCell(Center(
-                        child: Text('${itemData['quantity']} Pcs',
-                            style: const TextStyle(color: Colors.black)))),
-                    DataCell(Center(
-                        child: Text('${itemData['length']} Mt',
-                            style: const TextStyle(color: Colors.black)))),
-                    DataCell(Center(
-                        child: Text('${itemData['total_weight']} Kg',
-                            style: const TextStyle(color: Colors.black)))),
-                    DataCell(Center(
-                        child: Text('${itemData['scanned_data']}',
-                            style: const TextStyle(color: Colors.black)))),
-                  ]);
-                }).toList(),
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columns: [
+                    DataColumn(
+                        label: Text(S().type,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().color,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().width,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().yarn_number,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().quantity,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().length,
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text('${S().weight} ${S().total}',
+                            style: TextStyle(color: Colors.greenAccent))),
+                    DataColumn(
+                        label: Text(S().scanned,
+                            style: TextStyle(color: Colors.greenAccent))),
+                  ],
+                  rows: aggregatedData!.entries.map((entry) {
+                    final itemData = entry.value;
+                    return DataRow(cells: [
+                      DataCell(Center(
+                          child: Text(itemData['type'].toString(),
+                              style: const TextStyle(color: Colors.black)))),
+                      DataCell(Center(
+                          child: Text(itemData['color'].toString(),
+                              style: const TextStyle(color: Colors.black)))),
+                      DataCell(Center(
+                          child: Text('${itemData['width']} mm',
+                              style: const TextStyle(color: Colors.black)))),
+                      DataCell(Center(
+                          child: Text('${itemData['yarn_number']} D',
+                              style: const TextStyle(color: Colors.black)))),
+                      DataCell(Center(
+                          child: Text('${itemData['quantity']} Pcs',
+                              style: const TextStyle(color: Colors.black)))),
+                      DataCell(Center(
+                          child: Text('${itemData['length']} Mt',
+                              style: const TextStyle(color: Colors.black)))),
+                      DataCell(Center(
+                          child: Text('${itemData['total_weight']} Kg',
+                              style: const TextStyle(color: Colors.black)))),
+                      DataCell(Center(
+                          child: Text('${itemData['scanned_data']}',
+                              style: const TextStyle(color: Colors.black)))),
+                    ]);
+                  }).toList(),
+                ),
               ),
-            ),
-          );
-        } else {
-          return Center(child: Text('No data available'));
-        }
-      },
+            );
+          } else {
+            return Center(child: Text('No data available'));
+          }
+        },
+      ),
     );
   }
 }

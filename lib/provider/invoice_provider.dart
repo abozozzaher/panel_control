@@ -100,6 +100,7 @@ class InvoiceProvider with ChangeNotifier {
     notifyListeners();
   }
 
+// من هون ولفوق للحذف لاحقاً
   Map<String, dynamic> itemsData = {};
   Map<String, bool> selectionState = {};
 

@@ -942,11 +942,11 @@ class S {
     );
   }
 
-  /// `Razor`
-  String get raza {
+  /// `Rizor`
+  String get riza {
     return Intl.message(
-      'Razor',
-      name: 'raza',
+      'Rizor',
+      name: 'riza',
       desc: '',
       args: [],
     );
@@ -1013,10 +1013,10 @@ class S {
   }
 
   /// `عسكري`
-  String get military {
+  String get dark_green {
     return Intl.message(
       'عسكري',
-      name: 'military',
+      name: 'darkـgreen',
       desc: '',
       args: [],
     );

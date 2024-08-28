@@ -11,7 +11,7 @@ class DataLists {
     ['Sablah', (S().sablah)],
     ['Shanta', (S().shanta)],
     ['Habl', (S().habl)],
-    ['Raza', (S().raza)],
+    ['Riza', (S().riza)],
   ];
 
 // قائمة العرض
@@ -44,15 +44,15 @@ class DataLists {
   ];
 
   List<List<String>> yarnTypes = [
-    ['Po', 'يوليستر'],
-    ['pp', 'بروبلين'],
-    ['coton', 'قطن'],
+    ['Polyester', 'يوليستر'],
+    ['Propylene', 'بروبلين'],
+    ['Cotton', 'قطن'],
   ];
 
   List<List<String>> yarnSupplier = [
-    ['haron', 'هارون'],
-    ['malir', 'مليح'],
-    ['onder', 'اودر'],
+    ['Haron', 'Haron'],
+    ['Malih', 'Malih'],
+    ['Onder', 'Onder'],
   ];
 
   List<List<String>> quantity = [
@@ -72,12 +72,12 @@ class DataLists {
 // قائمة الألوان
   List<List<String>> colors = [
     ['Black', S().black],
-    ['Burnt Brown', S().brown_burnt],
+    ['BurntـBrown', S().brown_burnt],
     ['Brown', S().brown],
     ['Jamli', S().jamli],
     ['Red', S().red],
-    ['Navy Blue', S().navy_blue],
-    ['Military', S().military],
+    ['NavyـBlue', S().navy_blue],
+    ['DarkـGreen', S().dark_green],
     ['Silver', S().silver],
   ];
 

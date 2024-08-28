@@ -73,7 +73,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
                   onPressed: () {
                     invoiceProvider.deleteData();
                   },
-                  label: Text('ssss'))
+                  label: Text('اطبع الفاتورة'))
             ],
           ),
         ),
