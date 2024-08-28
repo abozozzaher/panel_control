@@ -12,8 +12,7 @@ class ScanDataTableWidgets {
     final provider = Provider.of<ScanItemProvider>(context);
     final codeDetailes = provider.codeDetails;
 
-    print(codeDetailes); // تأكد من أن البيانات تصل هنا بشكل صحيح
-    print(22223422);
+    // تأكد من أن البيانات تصل هنا بشكل صحيح
     print('Code Details: $codeDetailes'); // التحقق من البيانات هنا
 
     print('Current Time: ${DateTime.now()}');
@@ -73,15 +72,14 @@ class ScanDataTableWidgets {
           'type': data['type'],
           'color': data['color'],
           'width': data['width'],
-          'total_weight': 0,
+          'total_weight': 0.0,
           'quantity': 0,
           'length': 0,
           'scanned_data': 0,
         };
       }
-      aggregatedData[key]!['total_weight'] += data['total_weight'] is int
-          ? data['total_weight']
-          : int.tryParse(data['total_weight'].toString()) ?? 0;
+      aggregatedData[key]!['total_weight'] +=
+          double.tryParse(data['total_weight'].toString()) ?? 0.0;
       aggregatedData[key]!['quantity'] += data['quantity'] is int
           ? data['quantity']
           : int.tryParse(data['quantity'].toString()) ?? 0;

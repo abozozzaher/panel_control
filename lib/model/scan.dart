@@ -5,7 +5,8 @@ class ScanItemQrModel {
   Map<String, dynamic> codeDetails;
   int totalQuantity;
   int totalLength;
-  int totalWeight;
+  double totalWeight;
+
   bool isProcessing;
 
   ScanItemQrModel({
@@ -13,7 +14,7 @@ class ScanItemQrModel {
     this.codeDetails = const {},
     this.totalQuantity = 0,
     this.totalLength = 0,
-    this.totalWeight = 0,
+    this.totalWeight = 0.0,
     this.isProcessing = false,
   });
 

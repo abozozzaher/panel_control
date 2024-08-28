@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../data/dataBase.dart';
 
 class InvoiceProvider with ChangeNotifier {
   List<String> _selectedDocumentIds = []; // For storing selected item IDs
@@ -13,6 +13,8 @@ class InvoiceProvider with ChangeNotifier {
 
   List<String> get selectedDocumentIds => _selectedDocumentIds;
   Map<String, Map<String, dynamic>> get selectedItemData => _selectedItemData;
+
+  final DatabaseHelper _databaseHelper = DatabaseHelper();
 
   void setSelectedItemData(String documentId, Map<String, dynamic> itemData) {
     _selectedItemData[documentId] = itemData;
@@ -98,38 +100,12 @@ class InvoiceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-/*
-  // خريطة لتخزين حالة التحديد لكل عنصر
-  Map<String, bool> _selectionState = {};
-
-  // خريطة لتخزين بيانات العناصر والمستندات
-
-  // دالة للحصول على حالة التحديد
-  Map<String, bool> get selectionState => _selectionState;
-  // خريطة لتخزين بيانات العناصر وحالتها
-  Map<String, Map<String, dynamic>> _itemsData = {};
-
-  // دالة للحصول على بيانات العناصر
-  Map<String, Map<String, dynamic>> get itemsData => _itemsData;
-  // دالة للحصول على بيانات العناصر
-
-  // دالة لتحديث حالة التحديد
-  void setSelectionState(Map<String, bool> selectionState,
-      Map<String, Map<String, dynamic>> itemsData) {
-    _selectionState = selectionState;
-    _itemsData = itemsData;
-    notifyListeners();
-  }
- 
-
-  // دالة لتحديث بيانات العناصر
-  void setItemsData(Map<String, Map<String, dynamic>> itemsData) {
-    _itemsData = itemsData;
-    notifyListeners();
-  }
- */
   Map<String, dynamic> itemsData = {};
   Map<String, bool> selectionState = {};
+
+  // هذه لحفظ البيانات التي تعمل فاتش في الفاتورة تفاصيل العناصر
+  final Map<String, Map<String, dynamic>> _cachedData = {};
+  Map<String, Map<String, dynamic>> get cachedData => _cachedData;
 
   // دالة لجلب البيانات بناءً على الـ id
   Map<String, dynamic>? getDataById(String id) {
@@ -141,6 +117,17 @@ class InvoiceProvider with ChangeNotifier {
       Map<String, bool> newSelectionState, Map<String, dynamic> newItemsData) {
     selectionState = newSelectionState;
     itemsData = newItemsData;
+    notifyListeners();
+  }
+  // دالة لجلب البيانات من قاعدة البيانات
+
+  Map<String, dynamic>? getCachedData(String docId) {
+    return _cachedData[docId];
+  }
+  // دالة لتحديث البيانات في قاعدة البيانات
+
+  void cacheData(String docId, Map<String, dynamic> data) {
+    _cachedData[docId] = data;
     notifyListeners();
   }
 }

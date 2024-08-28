@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
@@ -15,6 +16,56 @@ class DataTabelFetcher extends StatelessWidget {
         .where((id) => invoiceProvider.selectionState[id] == true)
         .toList();
 
+    Map<String, Map<String, dynamic>> prepareData(
+      Map<String, Map<String, dynamic>> aggregatedData,
+      Map<String, dynamic> data,
+    ) {
+      String key =
+          '${data['yarn_number']}-${data['type']}-${data['color']}-${data['width']}';
+
+      if (!aggregatedData.containsKey(key)) {
+        aggregatedData[key] = {
+          'yarn_number': data['yarn_number'],
+          'type': data['type'],
+          'color': data['color'],
+          'width': data['width'],
+          'total_weight': 0.0,
+          'quantity': 0,
+          'length': 0,
+          'scanned_data': 0,
+        };
+      }
+
+      aggregatedData[key]!['total_weight'] +=
+          double.tryParse(data['total_weight'].toString()) ?? 0.0;
+      aggregatedData[key]!['quantity'] += data['quantity'] is int
+          ? data['quantity']
+          : int.tryParse(data['quantity'].toString()) ?? 0;
+      aggregatedData[key]!['length'] += data['length'] is int
+          ? data['length']
+          : int.tryParse(data['length'].toString()) ?? 0;
+      aggregatedData[key]!['scanned_data'] += 1;
+
+      return aggregatedData;
+    }
+
+    Future<Map<String, dynamic>?> fetchDataFromFirestore(String docId) async {
+      final monthFolder = '${docId.substring(0, 4)}-${docId.substring(4, 6)}';
+      final documentSnapshot = await FirebaseFirestore.instance
+          .doc('/products/productsForAllMonths/$monthFolder/$docId')
+          .get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data() as Map<String, dynamic>;
+        print(DateFormat('HH:mm:ss').format(DateTime.now()));
+        print('aaaaa1');
+        print('Fetched Data: $data');
+        print(DateFormat('HH:mm:ss').format(DateTime.now()));
+        return data;
+      }
+      return null;
+    }
+
     Future<Map<String, Map<String, dynamic>>> fetchData() async {
       Map<String, Map<String, dynamic>> aggregatedData = {};
 
@@ -24,48 +75,30 @@ class DataTabelFetcher extends StatelessWidget {
         if (itemData != null) {
           List<dynamic> scannedData = itemData['scannedData'] ?? [];
 
-          // جلب بيانات المستندات من Firestore استنادًا إلى scannedData
           for (var docId in scannedData) {
-            final monthFolder =
-                '${docId.substring(0, 4)}-${docId.substring(4, 6)}';
-            final documentSnapshot = await FirebaseFirestore.instance
-                .doc('/products/productsForAllMonths/$monthFolder/$docId')
-                .get();
+            // Check if data is already available in provider
+            final cachedData = invoiceProvider.getCachedData(docId);
 
-            if (documentSnapshot.exists) {
-              final data = documentSnapshot.data() as Map<String, dynamic>;
+            if (cachedData != null) {
+              print('Cached Data: $cachedData');
 
-              String key =
-                  '${data['yarn_number']}-${data['type']}-${data['color']}-${data['width']}';
+              // استخدم البيانات المخزنة في الكاش
+              aggregatedData = prepareData(aggregatedData, cachedData);
+            } else {
+              // Fetch data from Firestore
+              final data = await fetchDataFromFirestore(docId);
+              if (data != null) {
+                aggregatedData = prepareData(aggregatedData, data);
 
-              if (!aggregatedData.containsKey(key)) {
-                aggregatedData[key] = {
-                  'yarn_number': data['yarn_number'],
-                  'type': data['type'],
-                  'color': data['color'],
-                  'width': data['width'],
-                  'total_weight': 0,
-                  'quantity': 0,
-                  'length': 0,
-                  'scanned_data': 0,
-                };
+                // Cache the data in the provider
+                invoiceProvider.cacheData(docId, data);
               }
-              aggregatedData[key]!['total_weight'] +=
-                  data['total_weight'] is int
-                      ? data['total_weight']
-                      : int.tryParse(data['total_weight'].toString()) ?? 0;
-              aggregatedData[key]!['quantity'] += data['quantity'] is int
-                  ? data['quantity']
-                  : int.tryParse(data['quantity'].toString()) ?? 0;
-              aggregatedData[key]!['length'] += data['length'] is int
-                  ? data['length']
-                  : int.tryParse(data['length'].toString()) ?? 0;
-              aggregatedData[key]!['scanned_data'] += 1;
             }
           }
         }
       }
 
+      print('Aggregated Data: $aggregatedData');
       return aggregatedData;
     }
 

@@ -187,7 +187,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
     int totalQuantity = 0;
     int totalLength = 0;
-    int totalWeight = 0;
+    double totalWeight = 0.0;
+    // int totalWeight = 0;
 
 // حساب إجمالي الكميات
     for (var data in provider.codeDetails.values) {
@@ -216,10 +217,11 @@ class _ScanItemQrState extends State<ScanItemQr> {
     for (var data in provider.codeDetails.values) {
       if (data.containsKey('total_weight')) {
         var weight = data['total_weight'];
-        if (weight is int) {
-          totalWeight += weight;
+        if (weight is num) {
+          // Check if weight is a number (int or double)
+          totalWeight += weight.toDouble(); // Convert to double
         } else if (weight is String) {
-          totalWeight += int.tryParse(weight) ?? 0;
+          totalWeight += double.tryParse(weight) ?? 0.0; // Parse to double
         }
       }
     }
@@ -395,11 +397,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
             : ((int.tryParse(data['length'].toString()) ?? 0) as int))
         .fold(0, (sum, item) => sum + (item as int));
 
-    final int totalWeight = provider.codeDetails.values
-        .map((data) => data['total_weight'] is int
-            ? data['total_weight']
-            : ((int.tryParse(data['total_weight'].toString()) ?? 0) as int))
-        .fold(0, (sum, item) => sum + (item as int));
+    final double totalWeight = provider.codeDetails.values
+        .map((data) => double.tryParse(data['total_weight'].toString()) ?? 0.0)
+        .fold(0, (sum, item) => sum + (item as double));
 
     for (var code in provider.scannedData) {
       if (code.startsWith('https://panel-control-company-zaher.web.app/')) {
