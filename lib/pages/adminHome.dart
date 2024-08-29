@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../generated/l10n.dart';
 import '../service/app_drawer.dart';
 import 'clien/addClien.dart';
+import 'inventory/Inventory.dart';
 import 'invoice/newInvoice.dart';
 import 'yarn/addNewYarn.dart';
 
@@ -102,6 +103,29 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       );
                     },
                     child: Text('إضافة فاتورة'),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16), // مساحة بين الصفوف
+
+            // زر حساب مجموع المخزن
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
+                      print('تم الضغط على زر حساب مجموع المخزن');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Inventory(
+                              toggleTheme: widget.toggleTheme,
+                              toggleLocale: widget.toggleTheme),
+                        ),
+                      );
+                    },
+                    child: Text('اظهار محتوى المستودع كامل'),
                   ),
                 ),
               ],

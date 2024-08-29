@@ -10,16 +10,13 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../generated/l10n.dart';
-import '../../model/product.dart';
 import '../../provider/user_provider.dart';
-import '../../service/add_new_item)_service.dart';
 import '../../service/app_drawer.dart';
 import '../../data/data_lists.dart';
 import '../../service/dropdownWidget.dart';

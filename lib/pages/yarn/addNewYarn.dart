@@ -32,7 +32,7 @@ class _AddYarnState extends State<AddYarn> {
   String generateCode() {
     // تنسيق التاريخ
     String formattedDate =
-        DateFormat('yy00MM00dd00HH00mm').format(DateTime.now());
+        DateFormat('yy00MM00dd00HHmmss').format(DateTime.now());
 
     // تحويل الأرقام العربية إلى إنجليزية
     return convertArabicToEnglish(formattedDate);
