@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(S().password_reset),
+            title: Text(S().password_reset, textAlign: TextAlign.center),
             content: Text(S().password_reset + S().email_sent),
             actions: [
               TextButton(

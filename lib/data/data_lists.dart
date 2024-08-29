@@ -141,4 +141,37 @@ class DataLists {
     allLengths = length.map((item) => item[0]).toList();
     allColors = colors.map((item) => item[0]).toList();
   }
+
+  String translateType(String input) {
+    // Find the list that contains the input and get the corresponding translation
+    if (allTypes!.contains(input)) {
+      int index = allTypes!.indexOf(input);
+      return types[index][1]; // Return the translated value
+    } else if (allWidths!.contains(input)) {
+      int index = allWidths!.indexOf(input);
+      return widths[index][1]; // Return the translated value
+    } else if (allWeights!.contains(input)) {
+      int index = allWeights!.indexOf(input);
+      return weights[index][1]; // Return the translated value
+    } else if (allYarnNumbers!.contains(input)) {
+      int index = allYarnNumbers!.indexOf(input);
+      return yarnNumbers[index][1]; // Return the translated value
+    } else if (allYarnTypes!.contains(input)) {
+      int index = allYarnTypes!.indexOf(input);
+      return yarnTypes[index][1]; // Return the translated value
+    } else if (allYarnSuppliers!.contains(input)) {
+      int index = allYarnSuppliers!.indexOf(input);
+      return yarnSupplier[index][1]; // Return the translated value
+    } else if (allQuantities!.contains(input)) {
+      int index = allQuantities!.indexOf(input);
+      return quantity[index][1]; // Return the translated value
+    } else if (allLengths!.contains(input)) {
+      int index = allLengths!.indexOf(input);
+      return length[index][1]; // Return the translated value
+    } else if (allColors!.contains(input)) {
+      int index = allColors!.indexOf(input);
+      return colors[index][1]; // Return the translated value
+    }
+    return input; // Return the original value if no translation is found
+  }
 }

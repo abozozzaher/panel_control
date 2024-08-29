@@ -71,7 +71,7 @@ class ProductPage extends StatelessWidget {
                   Text('${S().shift} : ${productData['shift']}',
                       style: const TextStyle(fontSize: 18)),
                   Text(
-                      '${S().sale_status} : ${productData['saleـstatus'] ? S().sold : S().available}',
+                      '${S().sale_status} : ${productData['sale_status'] ? S().sold : S().available}',
                       style: const TextStyle(fontSize: 18)),
                   Image.network(
                       productData['image_url'] ?? 'assets/img/loading.gif'),

@@ -101,7 +101,7 @@ void showAddNewDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(S().add_new_item),
+        title: Text(S().add_new_item, textAlign: TextAlign.center),
         content: TextField(
           controller: _controller,
           keyboardType: isNumeric

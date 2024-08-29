@@ -49,7 +49,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(S().enter_code),
+          title: Text(S().enter_code, textAlign: TextAlign.center),
           content: TextField(
               controller: codeController,
               decoration: InputDecoration(hintText: S().enter_code_here),
@@ -442,8 +442,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
                     // تحقق من حالة sale_status لكل مستند
                     salesStatusFalseDocs.forEach((key, value) {
                       if (value is Map<String, dynamic> &&
-                          value.containsKey('saleـstatus')) {
-                        bool saleStatus = value['saleـstatus'];
+                          value.containsKey('sale_status')) {
+                        bool saleStatus = value['sale_status'];
                         if (saleStatus != false) {
                           allStatusFalse = false;
                           invalidDocuments
@@ -490,7 +490,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                             .get()
                             .then((querySnapshot) {
                           querySnapshot.docs.forEach((doc) {
-                            doc.reference.update({'saleـstatus': true});
+                            doc.reference.update({'sale_status': true});
                           });
                         });
                       });

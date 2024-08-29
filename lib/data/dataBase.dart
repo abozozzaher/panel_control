@@ -1,8 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'dart:convert';
 
-import '../model/clien.dart';
+import 'dart:convert';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._internal();
@@ -113,5 +115,63 @@ class DatabaseHelper {
       whereArgs: [code],
     );
     print('Deleted scanned data for code: $code');
+  }
+
+// لكشف المخزون تخزين البيانات في قاعدة البيانات المحلية فقط في الموبيل
+  Future<Database> _openDatabase() async {
+    // فتح قاعدة البيانات
+    return openDatabase(
+      join(await getDatabasesPath(), 'products_database.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE products(id TEXT PRIMARY KEY, yarn_number TEXT, type TEXT, color TEXT, width TEXT, total_weight REAL, quantity INTEGER, length INTEGER, scanned_data INTEGER)',
+        );
+      },
+      version: 1,
+    );
+  }
+
+// التحقق من وجود البيانات في SQLite
+  Future<List<Map<String, dynamic>>> checkProductsInDatabase(
+      List<String> keys) async {
+    final Database db = await _openDatabase();
+    List<Map<String, dynamic>> results = [];
+
+    for (String key in keys) {
+      List<Map<String, dynamic>> queryResult = await db.query(
+        'products',
+        where: 'id = ?',
+        whereArgs: [key],
+      );
+      print('sssss4 $queryResult');
+      results.addAll(queryResult);
+    }
+
+    return results;
+  }
+
+// حفظ البيانات في SQLite
+  Future<void> saveProductToDatabase(
+      Map<String, dynamic> productData, String id) async {
+    final Database db = await _openDatabase();
+    await db.insert(
+      'products',
+      {
+        'id': id,
+        //'productId': productData['productId'],
+        'yarn_number': productData['yarn_number'],
+        'type': productData['type'],
+        'color': productData['color'],
+        'width': productData['width'],
+        'total_weight': productData['total_weight'],
+        'quantity': productData['quantity'],
+        'length': productData['length'],
+        'scanned_data': productData['scanned_data'],
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    print('Data saved: $productData');
+    print('ssss5 : $productData');
+    print('ssss6 : $id');
   }
 }

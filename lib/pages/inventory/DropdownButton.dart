@@ -7,7 +7,7 @@ Widget buildDropdownButton({
   required ValueChanged<String?> onChanged,
 }) {
   return Container(
-    width: 120,
+    width: 150,
     alignment: Alignment.center,
     child: DropdownButton(
       alignment: Alignment.center,

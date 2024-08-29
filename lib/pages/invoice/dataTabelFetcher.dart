@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
 import '../../provider/invoice_provider.dart';
 
 class DataTabelFetcher extends StatelessWidget {
+  final DataLists dataLists = DataLists();
+
   @override
   Widget build(BuildContext context) {
     final invoiceProvider = Provider.of<InvoiceProvider>(context);
@@ -146,32 +149,60 @@ class DataTabelFetcher extends StatelessWidget {
                   ],
                   rows: aggregatedData!.entries.map((entry) {
                     final itemData = entry.value;
-                    return DataRow(cells: [
-                      DataCell(Center(
-                          child: Text(itemData['type'].toString(),
-                              style: const TextStyle(color: Colors.black)))),
-                      DataCell(Center(
-                          child: Text(itemData['color'].toString(),
-                              style: const TextStyle(color: Colors.black)))),
-                      DataCell(Center(
-                          child: Text('${itemData['width']} mm',
-                              style: const TextStyle(color: Colors.black)))),
-                      DataCell(Center(
-                          child: Text('${itemData['yarn_number']} D',
-                              style: const TextStyle(color: Colors.black)))),
-                      DataCell(Center(
-                          child: Text('${itemData['quantity']} Pcs',
-                              style: const TextStyle(color: Colors.black)))),
-                      DataCell(Center(
-                          child: Text('${itemData['length']} Mt',
-                              style: const TextStyle(color: Colors.black)))),
-                      DataCell(Center(
-                          child: Text('${itemData['total_weight']} Kg',
-                              style: const TextStyle(color: Colors.black)))),
-                      DataCell(Center(
-                          child: Text('${itemData['scanned_data']}',
-                              style: const TextStyle(color: Colors.black)))),
-                    ]);
+                    return DataRow(
+                      cells: [
+                        DataCell(Center(
+                          child: Text(
+                            DataLists()
+                                .translateType(itemData['type'].toString()),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )),
+                        DataCell(Center(
+                          child: Text(
+                            DataLists()
+                                .translateType(itemData['color'].toString()),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )),
+                        DataCell(Center(
+                          child: Text(
+                            '${DataLists().translateType(itemData['width'].toString())} mm',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )),
+                        DataCell(Center(
+                          child: Text(
+                            '${DataLists().translateType(itemData['yarn_number'].toString())} D',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )),
+                        DataCell(Center(
+                          child: Text(
+                            '${DataLists().translateType(itemData['quantity'].toString())} Pcs',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )),
+                        DataCell(Center(
+                          child: Text(
+                            '${DataLists().translateType(itemData['length'].toString())} Mt',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )),
+                        DataCell(Center(
+                          child: Text(
+                            '${itemData['total_weight']} Kg',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )),
+                        DataCell(Center(
+                          child: Text(
+                            '${itemData['scanned_data']}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )),
+                      ],
+                    );
                   }).toList(),
                 ),
               ),

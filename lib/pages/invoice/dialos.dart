@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:panel_control/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/invoice_provider.dart';
@@ -57,7 +58,7 @@ class _DialogInvoiceState extends State<DialogInvoice> {
     final invoiceProvider =
         Provider.of<InvoiceProvider>(context, listen: false);
     return AlertDialog(
-      title: Text('Select Items'),
+      title: Text('Select Items', textAlign: TextAlign.center),
       content: items.isEmpty
           ? Center(child: CircularProgressIndicator())
           : Container(
@@ -82,19 +83,25 @@ class _DialogInvoiceState extends State<DialogInvoice> {
               ),
             ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            // حفظ التحديد في البروفيدر
-            invoiceProvider.setSelectionState(selectionState, itemsData);
-            print(selectionState);
-            print(itemsData);
-            Navigator.of(context).pop();
-          },
-          child: Text('Save'),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(S().cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                // حفظ التحديد في البروفيدر
+                invoiceProvider.setSelectionState(selectionState, itemsData);
+                print(selectionState);
+                print(itemsData);
+                Navigator.of(context).pop();
+              },
+              child: Text('Save'),
+            ),
+          ],
         ),
       ],
     );

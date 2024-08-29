@@ -271,7 +271,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         'quantity': selectedQuantity,
                         'length': selectedLength,
                         'created_by': userData.id,
-                        'saleـstatus': false,
+                        'sale_status': false,
                         if (imageUrl != null) 'image_url': imageUrl,
                         //444
                         if (imageUrl == null) 'image_url': '',
