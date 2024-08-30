@@ -96,7 +96,8 @@ class _InventoryState extends State<Inventory> {
               };
 
               // تخزين المنتج في SQLite مباشرة إذا كان على الويب
-              databaseHelper.saveProductToDatabase(allProducts[key]!, key);
+              databaseHelper.saveProductToDatabaseInventory(
+                  allProducts[key]!, key);
             }
 
             allProducts[key]!['total_weight'] +=
@@ -113,7 +114,7 @@ class _InventoryState extends State<Inventory> {
       } else {
         // إذا لم يكن على الويب، تحقق من وجود البيانات في SQLite
         List<Map<String, dynamic>> existingProducts =
-            await databaseHelper.checkProductsInDatabase(keysToCheck);
+            await databaseHelper.checkProductsInDatabaseInventory(keysToCheck);
         existingProducts.forEach((product) {
           allProducts[product['id']] = product;
         });
@@ -161,7 +162,8 @@ class _InventoryState extends State<Inventory> {
                 'scanned_data': 0,
               };
 
-              databaseHelper.saveProductToDatabase(allProducts[key]!, key);
+              databaseHelper.saveProductToDatabaseInventory(
+                  allProducts[key]!, key);
             }
 
             allProducts[key]!['total_weight'] +=

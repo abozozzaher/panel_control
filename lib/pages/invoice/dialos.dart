@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panel_control/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/dataBase.dart';
 import '../../provider/invoice_provider.dart';
 
 class DialogInvoice extends StatefulWidget {
@@ -11,6 +13,8 @@ class DialogInvoice extends StatefulWidget {
 }
 
 class _DialogInvoiceState extends State<DialogInvoice> {
+  final DatabaseHelper databaseHelper = DatabaseHelper();
+
   List<Map<String, dynamic>> items = [];
   Map<String, bool> selectionState = {};
   Map<String, Map<String, dynamic>> itemsData = {};
@@ -29,16 +33,16 @@ class _DialogInvoiceState extends State<DialogInvoice> {
 
       print(querySnapshot.docs.length);
 
-      setState(() {
-        items = querySnapshot.docs
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
+      final List<Map<String, dynamic>> fetchedItems = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
 
-        // تحميل حالة التحديد من البروفيدر
+      setState(() {
+        items = fetchedItems;
+
         final invoiceProvider =
             Provider.of<InvoiceProvider>(context, listen: false);
 
-        // تعيين بيانات العناصر وحالة التحديد
         selectionState = {
           for (var item in items)
             item['codeSales'] as String:
@@ -47,6 +51,7 @@ class _DialogInvoiceState extends State<DialogInvoice> {
         };
         itemsData = {for (var item in items) item['codeSales'] as String: item};
       });
+
       print('ddddd ${items}');
     } catch (e) {
       print('Error fetching items: $e');

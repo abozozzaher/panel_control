@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:panel_control/pages/invoice/dataTabelFetcher.dart';
 import 'package:provider/provider.dart';
+import '../../data/dataBase.dart';
 import '../../model/clien.dart';
 import '../../provider/invoice_provider.dart';
 import '../../service/invoice_service.dart';
@@ -22,6 +23,8 @@ class InvoiceNewAdd extends StatefulWidget {
 class _InvoiceNewAddState extends State<InvoiceNewAdd> {
   final InvoiceService invoiceService = InvoiceService();
   final DialogInvoice dialogInvoice = DialogInvoice();
+  final DatabaseHelper _dbHelper = DatabaseHelper();
+
   String? invoiceCode;
   List<String> scannedData = [];
   List<DocumentSnapshot> documentSnapshots = [];
@@ -72,6 +75,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
               ElevatedButton.icon(
                   onPressed: () {
                     invoiceProvider.deleteData();
+                    _dbHelper.deleteDatabaseInvoice();
                   },
                   label: Text('اطبع الفاتورة'))
             ],

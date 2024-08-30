@@ -1,10 +1,9 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 import 'dart:convert';
+
+import '../model/clien.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._internal();
@@ -118,13 +117,13 @@ class DatabaseHelper {
   }
 
 // لكشف المخزون تخزين البيانات في قاعدة البيانات المحلية فقط في الموبيل
-  Future<Database> _openDatabase() async {
+  Future<Database> _openDatabaseInventory() async {
     // فتح قاعدة البيانات
     return openDatabase(
-      join(await getDatabasesPath(), 'products_database.db'),
+      join(await getDatabasesPath(), 'inventoryProducts_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE products(id TEXT PRIMARY KEY, yarn_number TEXT, type TEXT, color TEXT, width TEXT, total_weight REAL, quantity INTEGER, length INTEGER, scanned_data INTEGER)',
+          'CREATE TABLE inventoryProducts(id TEXT PRIMARY KEY, yarn_number TEXT, type TEXT, color TEXT, width TEXT, total_weight REAL, quantity INTEGER, length INTEGER, scanned_data INTEGER)',
         );
       },
       version: 1,
@@ -132,14 +131,14 @@ class DatabaseHelper {
   }
 
 // التحقق من وجود البيانات في SQLite
-  Future<List<Map<String, dynamic>>> checkProductsInDatabase(
+  Future<List<Map<String, dynamic>>> checkProductsInDatabaseInventory(
       List<String> keys) async {
-    final Database db = await _openDatabase();
+    final Database db = await _openDatabaseInventory();
     List<Map<String, dynamic>> results = [];
 
     for (String key in keys) {
       List<Map<String, dynamic>> queryResult = await db.query(
-        'products',
+        'inventoryProducts',
         where: 'id = ?',
         whereArgs: [key],
       );
@@ -151,14 +150,13 @@ class DatabaseHelper {
   }
 
 // حفظ البيانات في SQLite
-  Future<void> saveProductToDatabase(
+  Future<void> saveProductToDatabaseInventory(
       Map<String, dynamic> productData, String id) async {
-    final Database db = await _openDatabase();
+    final Database db = await _openDatabaseInventory();
     await db.insert(
-      'products',
+      'inventoryProducts',
       {
-        'id': id,
-        //'productId': productData['productId'],
+        'productId': id,
         'yarn_number': productData['yarn_number'],
         'type': productData['type'],
         'color': productData['color'],
@@ -173,5 +171,33 @@ class DatabaseHelper {
     print('Data saved: $productData');
     print('ssss5 : $productData');
     print('ssss6 : $id');
+  }
+
+// لحفظ معلومات من التاجر
+  Future<Database> _openDatabaseTraders() async {
+    return openDatabase(
+      join(await getDatabasesPath(), 'traders_database.db'), // اسم القاعدة هنا
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE traders(fullNameArabic TEXT, fullNameEnglish TEXT, address TEXT, phoneNumber TEXT, createdAt TEXT, codeIdClien TEXT PRIMARY KEY)',
+        );
+      },
+      version: 1,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> checkClientsInDatabaseTraders() async {
+    final Database db = await _openDatabaseTraders();
+    return await db.query('traders');
+  }
+
+  Future<void> saveClientToDatabaseTraders(ClienData clientData) async {
+    final Database db = await _openDatabaseTraders();
+    await db.insert(
+      'traders',
+      clientData.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    print('Data saved traders : $clientData');
   }
 }

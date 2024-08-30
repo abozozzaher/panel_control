@@ -71,11 +71,18 @@ class DataTabelFetcher extends StatelessWidget {
 
     Future<Map<String, Map<String, dynamic>>> fetchData() async {
       Map<String, Map<String, dynamic>> aggregatedData = {};
+      print('Cached Data: 1');
 
       for (String id in selectedIds) {
+        print('Cached Data: 2 $selectedIds , sssss $id');
+
         // جلب البيانات من provider
         final itemData = invoiceProvider.getDataById(id);
+        print('Cached Data: 3 $itemData');
+
         if (itemData != null) {
+          print('Cached Data: 4 $itemData');
+
           List<dynamic> scannedData = itemData['scannedData'] ?? [];
 
           for (var docId in scannedData) {

@@ -1,20 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/dataBase.dart';
 import '../../model/clien.dart';
 import '../../provider/trader_provider.dart';
 
 class TraderDropdown extends StatefulWidget {
-  // final void Function(dynamic trader) onTraderSelected;
+  final void Function(dynamic trader) onTraderSelected;
 
-//  TraderDropdown({required this.onTraderSelected});
+  TraderDropdown({required this.onTraderSelected});
 
   @override
   State<TraderDropdown> createState() => _TraderDropdownState();
 }
 
 class _TraderDropdownState extends State<TraderDropdown> {
+  final DatabaseHelper databaseHelper = DatabaseHelper();
+
   List<ClienData> clients = [];
   bool isLoading = true;
   String? _selectedCode;
@@ -25,20 +29,70 @@ class _TraderDropdownState extends State<TraderDropdown> {
   }
 
   Future<void> fetchClientsFromFirebase() async {
-    try {
-      QuerySnapshot snapshot =
-          await FirebaseFirestore.instance.collection('cliens').get();
-      setState(() {
-        clients = snapshot.docs.map((doc) {
-          return ClienData.fromMap(doc.data() as Map<String, dynamic>);
-        }).toList();
-        isLoading = false;
-      });
-    } catch (e) {
-      print('Error fetching clients: $e');
-      setState(() {
-        isLoading = false;
-      });
+    if (kIsWeb) {
+      // إذا كان المستخدم على الويب
+      try {
+        QuerySnapshot snapshot =
+            await FirebaseFirestore.instance.collection('cliens').get();
+        setState(() {
+          clients = snapshot.docs.map((doc) {
+            return ClienData.fromMap(doc.data() as Map<String, dynamic>);
+          }).toList();
+
+          isLoading = false;
+        });
+      } catch (e) {
+        print('Error fetching clients: $e');
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } else {
+      // إذا كان المستخدم على الموبايل
+      try {
+        List<Map<String, dynamic>> existingClients =
+            await databaseHelper.checkClientsInDatabaseTraders();
+        print('1111');
+        if (existingClients.isNotEmpty) {
+          print('11112');
+          // إذا كانت البيانات موجودة في قاعدة البيانات المحلية
+          //   setState(() {            clients = existingClients                .map((client) => ClienData.fromMap(client))                .toList();          isLoading = false; });
+          List<ClienData> clientsFromDb = existingClients.map((client) {
+            print('11113');
+            return ClienData.fromMap(client);
+          }).toList();
+          setState(() {
+            clients = clientsFromDb;
+            isLoading = false;
+          });
+        } else {
+          print('11114');
+          // إذا لم تكن البيانات موجودة في قاعدة البيانات المحلية، احضرها من Firebase
+          QuerySnapshot snapshot =
+              await FirebaseFirestore.instance.collection('cliens').get();
+          List<ClienData> clientsFromFirebase = snapshot.docs.map((doc) {
+            print('11115');
+            return ClienData.fromMap(doc.data() as Map<String, dynamic>);
+          }).toList();
+
+          // احفظ البيانات في قاعدة البيانات المحلية
+          for (var client in clientsFromFirebase) {
+            print('11116');
+            await databaseHelper.saveClientToDatabaseTraders(client);
+          }
+
+          setState(() {
+            print('11117');
+            clients = clientsFromFirebase;
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+        print('Error fetching clients: $e');
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -50,70 +104,59 @@ class _TraderDropdownState extends State<TraderDropdown> {
           return CircularProgressIndicator();
         }
 
-        return DropdownButton<String>(
-            hint: Text('Select Client'),
-            isExpanded: true,
-            value: _selectedCode,
-            items: clients.map((client) {
-              return DropdownMenuItem<String>(
-                value: client.codeIdClien,
-                child: Text(client.fullNameEnglish),
-              );
-            }).toList(),
-            onChanged: (String? selectedCode) async {
-              if (selectedCode != null) {
-                setState(() {
-                  _selectedCode = selectedCode; // Update the selected code
-                });
-
-                print('Selected Code: $selectedCode'); // للتحقق من الكود المحدد
-                //    widget.onTraderSelected(selectedCode);
-
-                final selectedClient = clients.firstWhere(
-                  (client) => client.codeIdClien == selectedCode,
-                  orElse: () => ClienData(
-                    fullNameArabic: '',
-                    fullNameEnglish: '',
-                    address: '',
-                    phoneNumber: '',
-                    createdAt: DateTime.now(),
-                    codeIdClien: '',
-                  ),
+        return Container(
+          width: 200,
+          child: DropdownButton<String>(
+              hint: Center(child: Text('Select Client')),
+              isExpanded: true,
+              value: _selectedCode,
+              items: clients.map((client) {
+                return DropdownMenuItem<String>(
+                  value: client.codeIdClien,
+                  child:
+                      Text(client.fullNameEnglish, textAlign: TextAlign.center),
                 );
+              }).toList(),
+              onChanged: (String? selectedCode) async {
+                if (selectedCode != null) {
+                  setState(() {
+                    _selectedCode = selectedCode; // Update the selected code
+                  });
 
-                if (selectedClient != null) {
                   print(
-                      'Client found: ${selectedClient.fullNameEnglish}'); // التحقق من العثور على العميل
+                      'Selected Code: $selectedCode'); // للتحقق من الكود المحدد
+                  widget.onTraderSelected(selectedCode);
 
-                  // حفظ بيانات العميل في Provider
-                  provider.setTrader(selectedClient);
-                  print(
-                      'Provider data: ${provider.trader!.address} = ${provider.trader!.codeIdClien}= ${provider.trader!.fullNameArabic}= ${provider.trader!.fullNameEnglish}');
-/*
-يوجد خطا فيحفظ البيانات في قاعدة البيانات نعود اليها فيما بعد
-4444444444
-                  // حفظ بيانات العميل في SQLite
-                  final dbHelper = DatabaseHelper();
-                  await dbHelper.insertTraderCodeDetails(
-                      selectedClient.codeIdClien,
-                      selectedClient.fullNameEnglish);
-                  final savedData = await dbHelper
-                      .getTraderCodeDetails(selectedClient.codeIdClien);
-
-                  if (savedData != null) {
-                    print('SQLite data: ${savedData.toString()}');
-                  } else {
-                    print('No data found in SQLite');
-                  }
-*/
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Client saved successfully')),
+                  final selectedClient = clients.firstWhere(
+                    (client) => client.codeIdClien == selectedCode,
+                    orElse: () => ClienData(
+                      fullNameArabic: '',
+                      fullNameEnglish: '',
+                      address: '',
+                      phoneNumber: '',
+                      createdAt: DateTime.now(),
+                      codeIdClien: '',
+                    ),
                   );
-                } else {
-                  print('Client not found'); // في حالة عدم العثور على العميل
+
+                  if (selectedClient != null) {
+                    print(
+                        'Client found: ${selectedClient.fullNameEnglish}'); // التحقق من العثور على العميل
+
+                    // حفظ بيانات العميل في Provider
+                    provider.setTrader(selectedClient);
+                    print(
+                        'Provider data: ${provider.trader!.address} = ${provider.trader!.codeIdClien}= ${provider.trader!.fullNameArabic}= ${provider.trader!.fullNameEnglish}');
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Client saved successfully')),
+                    );
+                  } else {
+                    print('Client not found'); // في حالة عدم العثور على العميل
+                  }
                 }
-              }
-            });
+              }),
+        );
       },
     );
   }
