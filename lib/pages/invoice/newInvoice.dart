@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:panel_control/pages/invoice/TraderDropdown.dart';
+import 'package:panel_control/pages/invoice/acceptedDialo.dart';
 import 'package:panel_control/pages/invoice/dataTabelFetcher.dart';
 import 'package:provider/provider.dart';
 import '../../data/dataBase.dart';
@@ -60,6 +62,9 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text('Invoice Code: $invoiceCode'),
+              SizedBox(height: 20),
+              TraderDropdown(),
+              SizedBox(height: 20),
               ElevatedButton.icon(
                   onPressed: () {
                     showDialog(
@@ -72,12 +77,14 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
               SizedBox(height: 20),
               DataTabelFetcher(),
               SizedBox(height: 20),
+              // عمل شكل فاتورة
               ElevatedButton.icon(
-                  onPressed: () {
-                    invoiceProvider.deleteData();
-                    _dbHelper.deleteDatabaseInvoice();
-                  },
-                  label: Text('اطبع الفاتورة'))
+                  onPressed: () {},
+                  icon: Icon(Icons.picture_as_pdf),
+                  label: Text('عرض الفاتورة')),
+              SizedBox(height: 20),
+              ElevatedButton.icon(
+                  onPressed: () {}, label: Text('احفظ الفاتورة الفاتورة'))
             ],
           ),
         ),

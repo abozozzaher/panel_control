@@ -1,20 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
 import '../../provider/invoice_provider.dart';
 
-class DataTabelFetcher extends StatelessWidget {
+class DataTabelFetcher extends StatefulWidget {
+  @override
+  _DataTabelFetcherState createState() => _DataTabelFetcherState();
+}
+
+class _DataTabelFetcherState extends State<DataTabelFetcher> {
   final DataLists dataLists = DataLists();
+  double grandTotalPrice = 0.0; // تعريف المتغير هنا
+  double previousDebtTotal = 0.0; // المجموع السعر مع الدين
+  double shippingFeesTotal = 0.0; // المجموع السعر مع الدين و اجور الشحن
+  bool _canUpdate = true;
+  List<bool> _selectedItem = [];
+
+  TextEditingController previousDebt = TextEditingController();
+  TextEditingController shippingFees = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final invoiceProvider = Provider.of<InvoiceProvider>(context);
 
-    // افترض أن هناك قائمة من الـ ids لتكون بمثابة مثال
+    List<String> columnTitles = [
+      S().type,
+      S().color,
+      S().yarn_number,
+      S().length,
+      '${S().weight} ${S().total}',
+      'عدد الاكياس',
+      S().quantity,
+      'Price',
+      'Total price',
+    ];
+
+    List<DataColumn> columns = columnTitles.map((title) {
+      return DataColumn(
+        label: Text(title),
+      );
+    }).toList();
+
     List<String> selectedIds = invoiceProvider.selectionState.keys
         .where((id) => invoiceProvider.selectionState[id] == true)
         .toList();
@@ -60,10 +90,6 @@ class DataTabelFetcher extends StatelessWidget {
 
       if (documentSnapshot.exists) {
         final data = documentSnapshot.data() as Map<String, dynamic>;
-        print(DateFormat('HH:mm:ss').format(DateTime.now()));
-        print('aaaaa1');
-        print('Fetched Data: $data');
-        print(DateFormat('HH:mm:ss').format(DateTime.now()));
         return data;
       }
       return null;
@@ -71,36 +97,22 @@ class DataTabelFetcher extends StatelessWidget {
 
     Future<Map<String, Map<String, dynamic>>> fetchData() async {
       Map<String, Map<String, dynamic>> aggregatedData = {};
-      print('Cached Data: 1');
 
       for (String id in selectedIds) {
-        print('Cached Data: 2 $selectedIds , sssss $id');
-
-        // جلب البيانات من provider
         final itemData = invoiceProvider.getDataById(id);
-        print('Cached Data: 3 $itemData');
 
         if (itemData != null) {
-          print('Cached Data: 4 $itemData');
-
           List<dynamic> scannedData = itemData['scannedData'] ?? [];
 
           for (var docId in scannedData) {
-            // Check if data is already available in provider
             final cachedData = invoiceProvider.getCachedData(docId);
 
             if (cachedData != null) {
-              print('Cached Data: $cachedData');
-
-              // استخدم البيانات المخزنة في الكاش
               aggregatedData = prepareData(aggregatedData, cachedData);
             } else {
-              // Fetch data from Firestore
               final data = await fetchDataFromFirestore(docId);
               if (data != null) {
                 aggregatedData = prepareData(aggregatedData, data);
-
-                // Cache the data in the provider
                 invoiceProvider.cacheData(docId, data);
               }
             }
@@ -108,7 +120,6 @@ class DataTabelFetcher extends StatelessWidget {
         }
       }
 
-      print('Aggregated Data: $aggregatedData');
       return aggregatedData;
     }
 
@@ -123,99 +134,362 @@ class DataTabelFetcher extends StatelessWidget {
           } else if (snapshot.hasData) {
             final aggregatedData = snapshot.data;
 
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+            // Initialize totals
+            double totalWeight = 0.0;
+            int totalQuantity = 0;
+            int totalLength = 0;
+            int totalScannedData = 0;
+
+            List<DataRow> dataRows = aggregatedData!.entries.map((entry) {
+              final itemData = entry.value;
+              final groupKey = entry.key;
+              final index = aggregatedData.keys
+                  .toList()
+                  .indexOf(groupKey); // احصل على الفهرس هنا
+
+// تحديث حالة التحديد بناءً على البروفيدر
+              _selectedItem = aggregatedData.keys.map((key) {
+                return invoiceProvider.getSelectionState(key) ?? false;
+              }).toList();
+
+              // Accumulate totals
+              totalWeight += itemData['total_weight'] as double;
+              totalQuantity += itemData['quantity'] as int;
+              totalLength += itemData['length'] as int;
+              totalScannedData += itemData['scanned_data'] as int;
+
+              return DataRow(
+                cells: [
+                  DataCell(Center(
+                    child: Text(
+                        DataLists().translateType(itemData['type'].toString())),
+                  )),
+                  DataCell(Center(
+                    child: Text(DataLists()
+                        .translateType(itemData['color'].toString())),
+                  )),
+                  DataCell(Center(
+                    child: Text(
+                        '${DataLists().translateType(itemData['yarn_number'].toString())} D'),
+                  )),
+                  DataCell(Center(
+                    child: Text(
+                        '${DataLists().translateType(itemData['length'].toString())} Mt'),
+                  )),
+                  DataCell(Center(
+                    child: Text('${itemData['total_weight']} Kg'),
+                  )),
+                  DataCell(Center(
+                    child: Text('${itemData['scanned_data']}'),
+                  )),
+                  DataCell(Center(
+                    child: Text(
+                        '${DataLists().translateType(itemData['quantity'].toString())} Pcs'),
+                  )),
+                  DataCell(Center(
+                    child: TextField(
+                      controller: invoiceProvider.getPriceController(groupKey),
+                      style: TextStyle(
+                          color: Colors.redAccent, fontWeight: FontWeight.bold),
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.center,
+                      onChanged: (text) {
+                        double price = double.tryParse(text) ?? 0.00;
+                        double quantity =
+                            double.tryParse(itemData['quantity'].toString()) ??
+                                0.00;
+                        double totalWeight = double.tryParse(
+                                itemData['total_weight'].toString()) ??
+                            0.00;
+                        ////444
+
+                        double totalPrice = _selectedItem[index]
+                            ? price * totalWeight
+                            : price * quantity;
+
+                        invoiceProvider.getTotalPriceNotifier(groupKey).value =
+                            totalPrice.toString();
+                        if (_canUpdate) {
+                          _canUpdate = false;
+                          Future.delayed(Duration(milliseconds: 3000), () {
+                            setState(() {
+                              grandTotalPrice =
+                                  invoiceProvider.calculateGrandTotalPrice();
+                            });
+                            _canUpdate = true;
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                        prefixText: '\$',
+                        hintText: '0.00',
+                      ),
+                    ),
+                  )),
+                  DataCell(Center(
+                    child: ValueListenableBuilder(
+                      valueListenable:
+                          invoiceProvider.getTotalPriceNotifier(groupKey),
+                      builder: (context, value, child) {
+                        return Text(
+                          '\$ $value',
+                          style: TextStyle(color: Colors.redAccent),
+                        );
+                      },
+                    ),
+                  )),
+                ],
+                selected: _selectedItem[index],
+                onSelectChanged: (bool? selectedItem) {
+                  setState(() {
+                    if (selectedItem != null) {
+                      _selectedItem[index] = selectedItem;
+                      // تحديث حالة التحديد في البروفيدر
+                      final key = aggregatedData.keys.toList()[index];
+                      invoiceProvider.updateSelectionState(key, selectedItem);
+                      invoiceProvider.getPriceController(key).clear();
+                      invoiceProvider.getTotalPriceNotifier(groupKey).value =
+                          '0.00';
+                    }
+                  });
+                },
+              );
+            }).toList();
+
+            // Add a row for totals المجموع الاول
+            dataRows.add(
+              DataRow(
+                cells: [
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(
+                    child: Text(
+                      '$totalLength Mt',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+                  DataCell(Center(
+                    child: Text(
+                      '$totalWeight Kg',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+                  DataCell(Center(
+                    child: Text(
+                      '$totalScannedData',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+                  DataCell(Center(
+                    child: Text(
+                      '$totalQuantity Pcs',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+                  DataCell(Center(child: Text('مجموع الفاتورة'))),
+                  DataCell(Center(
+                    child: Text(
+                      '\$ $grandTotalPrice',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.redAccent,
+                          fontSize: 18),
+                    ),
+                  )),
+                ],
+              ),
+            );
+
+            // Add a row for totals الدين السابق
+            dataRows.add(
+              DataRow(
+                cells: [
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(
+                    Center(
+                        child: Text(
+                      previousDebtTotal > -1
+                          ? 'الدين السابق'
+                          : 'لا يوجد دين سابق',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: previousDebtTotal == 0
+                              ? Colors.black
+                              : previousDebtTotal > 1
+                                  ? Colors.redAccent
+                                  : Colors.green),
+                    )),
+                  ),
+                  DataCell(
+                    Center(
+                      child: TextField(
+                        controller: previousDebt,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                            color: previousDebtTotal > -1
+                                ? Colors.redAccent
+                                : Colors.green,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                        onChanged: (text) {
+                          if (text.isNotEmpty) {
+                            Future.delayed(Duration(milliseconds: 3000), () {
+                              setState(() {
+                                double inputValue = double.parse(text);
+                                previousDebtTotal = inputValue;
+                              });
+                            });
+                          } else {
+                            setState(() {
+                              previousDebtTotal = 0.0;
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixText: '\$',
+                          hintText: '0.00',
+                        ),
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Center(
+                      child: Text(
+                        '\$ ${previousDebtTotal != 0 ? previousDebtTotal + grandTotalPrice : 0}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: previousDebtTotal > -1
+                                ? Colors.redAccent
+                                : Colors.green),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+
+            // Add a row for totals اجور الشحن
+            dataRows.add(
+              DataRow(
+                cells: [
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(
+                      child: Text('اجور الشحن', textAlign: TextAlign.center))),
+                  DataCell(
+                    Center(
+                      child: TextField(
+                        controller: shippingFees,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                            color: shippingFeesTotal > -1
+                                ? Colors.redAccent
+                                : Colors.green,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                        onChanged: (text) {
+                          if (text.isNotEmpty) {
+                            Future.delayed(Duration(milliseconds: 3000), () {
+                              setState(() {
+                                double inputValue = double.parse(text);
+                                shippingFeesTotal = inputValue;
+                              });
+                            });
+                          } else {
+                            setState(() {
+                              shippingFeesTotal = 0.0;
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixText: '\$',
+                          hintText: '0.00',
+                        ),
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Center(
+                      child: Text(
+                        '\$ ${shippingFeesTotal != 0 ? shippingFeesTotal + previousDebtTotal + grandTotalPrice : 0}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: shippingFeesTotal > -1
+                              ? Colors.redAccent
+                              : Colors.green,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+
+            // Add a row for totals قيمة الفاتورة
+            dataRows.add(
+              DataRow(
+                cells: [
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(
+                      child: Text('قيمة الفاتورة المستحقة',
+                          textAlign: TextAlign.center))),
+                  DataCell(Center(child: Text(''))),
+                  DataCell(
+                    Center(
+                      child: Text(
+                        '\$ ${previousDebtTotal + grandTotalPrice + shippingFeesTotal}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.redAccent,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+
+            return Directionality(
+              textDirection: TextDirection.ltr,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
-                  columns: [
-                    DataColumn(
-                        label: Text(S().type,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().color,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().width,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().yarn_number,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().quantity,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().length,
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text('${S().weight} ${S().total}',
-                            style: TextStyle(color: Colors.greenAccent))),
-                    DataColumn(
-                        label: Text(S().scanned,
-                            style: TextStyle(color: Colors.greenAccent))),
-                  ],
-                  rows: aggregatedData!.entries.map((entry) {
-                    final itemData = entry.value;
-                    return DataRow(
-                      cells: [
-                        DataCell(Center(
-                          child: Text(
-                            DataLists()
-                                .translateType(itemData['type'].toString()),
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: Text(
-                            DataLists()
-                                .translateType(itemData['color'].toString()),
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: Text(
-                            '${DataLists().translateType(itemData['width'].toString())} mm',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: Text(
-                            '${DataLists().translateType(itemData['yarn_number'].toString())} D',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: Text(
-                            '${DataLists().translateType(itemData['quantity'].toString())} Pcs',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: Text(
-                            '${DataLists().translateType(itemData['length'].toString())} Mt',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: Text(
-                            '${itemData['total_weight']} Kg',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: Text(
-                            '${itemData['scanned_data']}',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )),
-                      ],
-                    );
-                  }).toList(),
+                  columns: columns,
+                  rows: dataRows,
+                  headingTextStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.amberAccent,
+                      decorationThickness: 100),
+                  headingRowColor:
+                      WidgetStateProperty.resolveWith((states) => Colors.black),
+                  dataTextStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      decorationThickness: 100),
                 ),
               ),
             );
           } else {
-            return Center(child: Text('No data available'));
+            return Center(
+                child: Text('No data available', textAlign: TextAlign.center));
           }
         },
       ),

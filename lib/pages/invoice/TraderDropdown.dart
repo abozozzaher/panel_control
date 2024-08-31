@@ -8,9 +8,9 @@ import '../../model/clien.dart';
 import '../../provider/trader_provider.dart';
 
 class TraderDropdown extends StatefulWidget {
-  final void Function(dynamic trader) onTraderSelected;
+  //final void Function(dynamic trader) onTraderSelected;
 
-  TraderDropdown({required this.onTraderSelected});
+  //TraderDropdown({required this.onTraderSelected});
 
   @override
   State<TraderDropdown> createState() => _TraderDropdownState();
@@ -125,7 +125,7 @@ class _TraderDropdownState extends State<TraderDropdown> {
 
                   print(
                       'Selected Code: $selectedCode'); // للتحقق من الكود المحدد
-                  widget.onTraderSelected(selectedCode);
+                  //   widget.onTraderSelected(selectedCode);
 
                   final selectedClient = clients.firstWhere(
                     (client) => client.codeIdClien == selectedCode,

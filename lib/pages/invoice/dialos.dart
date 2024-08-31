@@ -104,7 +104,7 @@ class _DialogInvoiceState extends State<DialogInvoice> {
                 print(itemsData);
                 Navigator.of(context).pop();
               },
-              child: Text('Save'),
+              child: Text(S().save_and_send_data),
             ),
           ],
         ),

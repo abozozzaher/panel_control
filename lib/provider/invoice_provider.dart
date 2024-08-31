@@ -131,4 +131,48 @@ class InvoiceProvider with ChangeNotifier {
     _cachedData[docId] = data;
     notifyListeners();
   }
+
+  // هذه لحساب مجموع السعر وحفظه في البروفيدر
+  final Map<String, TextEditingController> _priceControllers = {};
+  final Map<String, ValueNotifier<String>> _totalPriceNotifiers = {};
+
+  // Get a price controller for a specific key
+  TextEditingController getPriceController(String key) {
+    if (!_priceControllers.containsKey(key)) {
+      _priceControllers[key] = TextEditingController();
+    }
+    return _priceControllers[key]!;
+  }
+
+  // Get a total price notifier for a specific key
+  ValueNotifier<String> getTotalPriceNotifier(String key) {
+    if (!_totalPriceNotifiers.containsKey(key)) {
+      _totalPriceNotifiers[key] = ValueNotifier<String>('0.00');
+    }
+    return _totalPriceNotifiers[key]!;
+  }
+
+  // Calculate the grand total price
+  double calculateGrandTotalPrice() {
+    return _totalPriceNotifiers.entries.fold(0.0, (sum, entry) {
+      return sum + (double.tryParse(entry.value.value) ?? 0.0);
+    });
+  }
+
+  // Clear all controllers and notifiers (if needed)
+  void clear() {
+    _priceControllers.clear();
+    _totalPriceNotifiers.clear();
+    notifyListeners();
+  }
+
+  Map<String, bool> _selectionState = {}; // لتخزين حالة التحديد
+
+  // الطريقة لتحديث حالة التحديد
+  void updateSelectionState(String key, bool isSelected) {
+    _selectionState[key] = isSelected;
+    notifyListeners();
+  }
+
+  bool? getSelectionState(String key) => _selectionState[key];
 }
