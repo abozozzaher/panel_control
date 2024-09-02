@@ -57,7 +57,7 @@ class _AddYarnState extends State<AddYarn> {
     String yarnId = generateCode();
     return Scaffold(
       appBar: AppBar(
-          title: Text('Add Yarn'),
+          title: Text(S().add_yarn),
           centerTitle: true,
           leading: isMobile
               ? null
@@ -271,11 +271,11 @@ class _AddYarnState extends State<AddYarn> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Please fill all fields.'),
+                      content: Text(S().please_fill_all_fields),
                     ));
                   }
                 },
-                child: Text('Add Yarn'),
+                child: Text(S().add_yarn),
               ),
             ],
           ),

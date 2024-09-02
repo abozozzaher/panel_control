@@ -159,6 +159,20 @@ class InvoiceProvider with ChangeNotifier {
     });
   }
 
+  // خريطة لتخزين الأسعار حسب المجموعة
+  Map<String, double> _prices = {};
+
+  // دالة لتحديث السعر المرتبط بالمجموعة
+  void setPrice(String groupKey, double price) {
+    _prices[groupKey] = price;
+    notifyListeners();
+  }
+
+  // دالة لجلب السعر المرتبط بالمجموعة
+  double getPrice(String groupKey) {
+    return _prices[groupKey] ?? 0.00;
+  }
+
   // Clear all controllers and notifiers (if needed)
   void clear() {
     _priceControllers.clear();

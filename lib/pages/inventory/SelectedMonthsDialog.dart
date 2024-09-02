@@ -22,7 +22,7 @@ Future<List<String>> showMultiSelectDialog(BuildContext context,
                   selectedItems = List.from(options); // Select all options
                   (context as Element).markNeedsBuild(); // Refresh the dialog
                 },
-                child: Text('Select All'),
+                child: Text(S().select_all),
               ),
               // List of options with checkboxes
               Column(

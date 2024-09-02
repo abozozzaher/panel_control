@@ -28,25 +28,30 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Access Denied. You do not have the required role."),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "add_new_item": MessageLookupByLibrary.simpleMessage("Add new item"),
+        "add_yarn": MessageLookupByLibrary.simpleMessage("Add Yarn"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "Türkiye Gaziantep Sanayi MAH. 60092"),
         "afternoon": MessageLookupByLibrary.simpleMessage("Afternoon"),
         "available": MessageLookupByLibrary.simpleMessage("Available"),
-        "black": MessageLookupByLibrary.simpleMessage("اسود"),
-        "blue": MessageLookupByLibrary.simpleMessage("كحلي"),
+        "black": MessageLookupByLibrary.simpleMessage("Black"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
-        "brown": MessageLookupByLibrary.simpleMessage("بني"),
-        "brown_burnt": MessageLookupByLibrary.simpleMessage("بني محروق"),
+        "brown": MessageLookupByLibrary.simpleMessage("Brown"),
         "burnt_brown": MessageLookupByLibrary.simpleMessage("Burnt Brown"),
         "button": MessageLookupByLibrary.simpleMessage("Button"),
-        "camel": MessageLookupByLibrary.simpleMessage("جملي"),
+        "camel": MessageLookupByLibrary.simpleMessage("camel"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "client_saved_successfully":
+            MessageLookupByLibrary.simpleMessage("Client saved successfully"),
+        "code_invoice": MessageLookupByLibrary.simpleMessage("code invoice"),
         "color": MessageLookupByLibrary.simpleMessage("Color"),
         "company_name": MessageLookupByLibrary.simpleMessage(
             "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "cotton": MessageLookupByLibrary.simpleMessage("Cotton"),
         "custom": MessageLookupByLibrary.simpleMessage("Custom"),
+        "dark_green": MessageLookupByLibrary.simpleMessage("Dark Green"),
         "data": MessageLookupByLibrary.simpleMessage("Data"),
+        "date": MessageLookupByLibrary.simpleMessage("Date"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
         "duplicate_code":
             MessageLookupByLibrary.simpleMessage("Duplicate Code"),
@@ -83,8 +88,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Invalid code scanned and removed"),
         "invalid_items": MessageLookupByLibrary.simpleMessage("Invalid Items"),
+        "invoice": MessageLookupByLibrary.simpleMessage("Invoice"),
+        "invoice_amount_due":
+            MessageLookupByLibrary.simpleMessage("invoice amount due"),
+        "invoice_to": MessageLookupByLibrary.simpleMessage("Invoice to"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
-        "jamli": MessageLookupByLibrary.simpleMessage("Jamli"),
         "last_name": MessageLookupByLibrary.simpleMessage("Last Name"),
         "length": MessageLookupByLibrary.simpleMessage("Length"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
@@ -94,46 +102,52 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Long press to activate the button"),
         "mahjara": MessageLookupByLibrary.simpleMessage("Quarry"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
-        "military": MessageLookupByLibrary.simpleMessage("عسكري"),
         "morning": MessageLookupByLibrary.simpleMessage("Morning"),
         "navy_blue": MessageLookupByLibrary.simpleMessage("Navy Blue"),
         "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register":
-            MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
+            MessageLookupByLibrary.simpleMessage("Dont have an account?"),
         "no_data_found": MessageLookupByLibrary.simpleMessage("No data found."),
         "no_data_found_for_this_code": MessageLookupByLibrary.simpleMessage(
             "No data found for this code."),
         "no_data_to_send":
             MessageLookupByLibrary.simpleMessage("No data to send"),
+        "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
+        "no_previous_religion":
+            MessageLookupByLibrary.simpleMessage("No previous religion"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
+        "page": MessageLookupByLibrary.simpleMessage("Page"),
         "page_not_found":
             MessageLookupByLibrary.simpleMessage("Page not found"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "password_reset":
             MessageLookupByLibrary.simpleMessage("Password Reset"),
+        "payment_info": MessageLookupByLibrary.simpleMessage("Payment info"),
+        "pcs": MessageLookupByLibrary.simpleMessage("Pcs"),
         "phone": MessageLookupByLibrary.simpleMessage("Phone"),
         "pick_image": MessageLookupByLibrary.simpleMessage("Pick image"),
-        "play_beep_sound":
-            MessageLookupByLibrary.simpleMessage("Play Beep Sound"),
-        "play_scan_sound":
-            MessageLookupByLibrary.simpleMessage("Play Scan Sound"),
         "please_enter_your_email":
             MessageLookupByLibrary.simpleMessage("Please enter your email"),
         "please_fill_all_fields":
             MessageLookupByLibrary.simpleMessage("Please fill all fields"),
         "please_select_a_type":
             MessageLookupByLibrary.simpleMessage("Please select a type."),
+        "polyester": MessageLookupByLibrary.simpleMessage("Polyester"),
+        "previous_debt": MessageLookupByLibrary.simpleMessage("Previous Debt"),
+        "price": MessageLookupByLibrary.simpleMessage("Price"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("Product Details"),
         "product_id": MessageLookupByLibrary.simpleMessage("Product ID"),
+        "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
-        "raza": MessageLookupByLibrary.simpleMessage("Razor"),
-        "red": MessageLookupByLibrary.simpleMessage("حمري"),
+        "red": MessageLookupByLibrary.simpleMessage("red"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "riza": MessageLookupByLibrary.simpleMessage("Riza"),
         "sablah": MessageLookupByLibrary.simpleMessage("Siblings"),
         "sale_status": MessageLookupByLibrary.simpleMessage("Sale Status"),
         "save_and_send_data":
             MessageLookupByLibrary.simpleMessage("Save and send data"),
+        "save_invoice": MessageLookupByLibrary.simpleMessage("Save Invoice"),
         "saved_successfully_with": MessageLookupByLibrary.simpleMessage(
             "item saved successfully with ID :"),
         "scan": MessageLookupByLibrary.simpleMessage("Scan"),
@@ -142,14 +156,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "scanned_data_length":
             MessageLookupByLibrary.simpleMessage("Scanned Data Length"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
+        "select_all": MessageLookupByLibrary.simpleMessage("Select All"),
         "select_an_option":
             MessageLookupByLibrary.simpleMessage("Select an option"),
+        "select_client": MessageLookupByLibrary.simpleMessage("Select Client"),
+        "select_items": MessageLookupByLibrary.simpleMessage("Select Items"),
         "send": MessageLookupByLibrary.simpleMessage("Send"),
         "shanta": MessageLookupByLibrary.simpleMessage("bag"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
-        "silver": MessageLookupByLibrary.simpleMessage("فضي"),
+        "shipping_fees": MessageLookupByLibrary.simpleMessage("Shipping Fees"),
+        "silver": MessageLookupByLibrary.simpleMessage("Silver"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
-        "test_page": MessageLookupByLibrary.simpleMessage("Test Page"),
+        "sub_total": MessageLookupByLibrary.simpleMessage("Sub Total"),
+        "tax": MessageLookupByLibrary.simpleMessage("Tax"),
+        "terms_conditions":
+            MessageLookupByLibrary.simpleMessage("Terms & Conditions"),
+        "thank_you_for_your_business":
+            MessageLookupByLibrary.simpleMessage("Thank you for your business"),
         "the_code": MessageLookupByLibrary.simpleMessage("The Code"),
         "toggle_language":
             MessageLookupByLibrary.simpleMessage("Toggle Language"),
@@ -158,20 +181,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_codes_scanned":
             MessageLookupByLibrary.simpleMessage("Total Codes Scanned"),
         "total_length": MessageLookupByLibrary.simpleMessage("Total Length"),
+        "total_price": MessageLookupByLibrary.simpleMessage("Total Price"),
         "total_quantity":
             MessageLookupByLibrary.simpleMessage("Total Quantity"),
         "total_weight": MessageLookupByLibrary.simpleMessage("Total Weight"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
+        "unit": MessageLookupByLibrary.simpleMessage("Unit"),
         "user": MessageLookupByLibrary.simpleMessage("user"),
         "user_data_not_found":
             MessageLookupByLibrary.simpleMessage("User data not found"),
+        "view_invoice": MessageLookupByLibrary.simpleMessage("View Invoice"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number"),
         "yarn_supplier": MessageLookupByLibrary.simpleMessage("Yarn Supplier"),
         "yarn_type": MessageLookupByLibrary.simpleMessage("Yarn Type"),
-        "you_have_some_items_marked_as_sold_out_":
+        "you_have_some_items_marked_as_sold_out":
             MessageLookupByLibrary.simpleMessage(
                 "You have some items marked as sold out :")
       };

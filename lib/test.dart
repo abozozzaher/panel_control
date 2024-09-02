@@ -24,7 +24,7 @@ class _TestPageState extends State<TestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S().test_page),
+        title: Text('est_page'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

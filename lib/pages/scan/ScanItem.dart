@@ -270,10 +270,11 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                              '${S().total_codes_scanned} : ${provider.scannedData.length} PPcs',
+                              '${S().total_codes_scanned} : ${provider.scannedData.length} ${S().unit}',
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 13)),
-                          Text('${S().total_quantity} : $totalQuantity Pcs',
+                          Text(
+                              '${S().total_quantity} : $totalQuantity ${S().pcs}',
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 13)),
                         ],
@@ -421,7 +422,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
             children: [
               Text('${S().total_weight} : $totalWeight Kg'),
               Text('${S().total_length} : $totalLength MT'),
-              Text('${S().total_quantity} : $totalQuantity Pcs'),
+              Text('${S().total_quantity} : $totalQuantity ${S().pcs}'),
               Text(
                   '${S().scanned_data_length} : ${formattedScannedData.length}'),
             ],

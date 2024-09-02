@@ -362,7 +362,7 @@ class _InventoryState extends State<Inventory> {
                             )),
                             DataCell(Center(
                               child: Text(
-                                '${DataLists().translateType(itemData['quantity'].toString())} Pcs',
+                                '${DataLists().translateType(itemData['quantity'].toString())} ${S().pcs}',
                                 textDirection: TextDirection.ltr,
                                 style: TextStyle(color: Colors.black),
                               ),

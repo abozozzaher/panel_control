@@ -109,7 +109,7 @@ class ScanItemDialogs {
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Text(S().you_have_some_items_marked_as_sold_out_,
+                Text(S().you_have_some_items_marked_as_sold_out,
                     textAlign: TextAlign.center),
                 for (var doc in invalidDocuments)
                   Text(doc.split('/').last, textAlign: TextAlign.center),

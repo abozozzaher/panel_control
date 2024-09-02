@@ -70,7 +70,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text('إضافة بيانات العميل'),
+          title: Text('Add customer data'),
           centerTitle: true,
           leading: isMobile
               ? null
@@ -270,7 +270,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                         );
                       }
                     },
-                    child: Text('إضافة العميل'),
+                    child: Text('Add customer'),
                   ),
                 ],
               ),

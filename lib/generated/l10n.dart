@@ -140,10 +140,10 @@ class S {
     );
   }
 
-  /// `Don't have an account?`
+  /// `Dont have an account?`
   String get no_account_register {
     return Intl.message(
-      'Don\'t have an account?',
+      'Dont have an account?',
       name: 'no_account_register',
       desc: '',
       args: [],
@@ -610,6 +610,16 @@ class S {
     );
   }
 
+  /// `Page`
+  String get page {
+    return Intl.message(
+      'Page',
+      name: 'page',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Error 404`
   String get error_404 {
     return Intl.message(
@@ -625,26 +635,6 @@ class S {
     return Intl.message(
       'Page not found',
       name: 'page_not_found',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Play Beep Sound`
-  String get play_beep_sound {
-    return Intl.message(
-      'Play Beep Sound',
-      name: 'play_beep_sound',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Play Scan Sound`
-  String get play_scan_sound {
-    return Intl.message(
-      'Play Scan Sound',
-      name: 'play_scan_sound',
       desc: '',
       args: [],
     );
@@ -770,8 +760,6 @@ class S {
     );
   }
 
-  // skipped getter for the 'saveـand_send_data' key
-
   /// `Morning`
   String get morning {
     return Intl.message(
@@ -797,16 +785,6 @@ class S {
     return Intl.message(
       'Evening',
       name: 'evening',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Test Page`
-  String get test_page {
-    return Intl.message(
-      'Test Page',
-      name: 'test_page',
       desc: '',
       args: [],
     );
@@ -942,90 +920,70 @@ class S {
     );
   }
 
-  /// `Rizor`
+  /// `Riza`
   String get riza {
     return Intl.message(
-      'Rizor',
+      'Riza',
       name: 'riza',
       desc: '',
       args: [],
     );
   }
 
-  /// `اسود`
+  /// `Black`
   String get black {
     return Intl.message(
-      'اسود',
+      'Black',
       name: 'black',
       desc: '',
       args: [],
     );
   }
 
-  /// `بني محروق`
-  String get brown_burnt {
-    return Intl.message(
-      'بني محروق',
-      name: 'brown_burnt',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `بني`
+  /// `Brown`
   String get brown {
     return Intl.message(
-      'بني',
+      'Brown',
       name: 'brown',
       desc: '',
       args: [],
     );
   }
 
-  /// `جملي`
+  /// `camel`
   String get camel {
     return Intl.message(
-      'جملي',
+      'camel',
       name: 'camel',
       desc: '',
       args: [],
     );
   }
 
-  /// `حمري`
+  /// `red`
   String get red {
     return Intl.message(
-      'حمري',
+      'red',
       name: 'red',
       desc: '',
       args: [],
     );
   }
 
-  /// `كحلي`
-  String get blue {
-    return Intl.message(
-      'كحلي',
-      name: 'blue',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `عسكري`
+  /// `Dark Green`
   String get dark_green {
     return Intl.message(
-      'عسكري',
-      name: 'darkـgreen',
+      'Dark Green',
+      name: 'dark_green',
       desc: '',
       args: [],
     );
   }
 
-  /// `فضي`
+  /// `Silver`
   String get silver {
     return Intl.message(
-      'فضي',
+      'Silver',
       name: 'silver',
       desc: '',
       args: [],
@@ -1037,16 +995,6 @@ class S {
     return Intl.message(
       'Navy Blue',
       name: 'navy_blue',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Jamli`
-  String get jamli {
-    return Intl.message(
-      'Jamli',
-      name: 'jamli',
       desc: '',
       args: [],
     );
@@ -1123,10 +1071,10 @@ class S {
   }
 
   /// `You have some items marked as sold out :`
-  String get you_have_some_items_marked_as_sold_out_ {
+  String get you_have_some_items_marked_as_sold_out {
     return Intl.message(
       'You have some items marked as sold out :',
-      name: 'you_have_some_items_marked_as_sold_out_',
+      name: 'you_have_some_items_marked_as_sold_out',
       desc: '',
       args: [],
     );
@@ -1177,6 +1125,286 @@ class S {
     return Intl.message(
       'Yarn Supplier',
       name: 'yarn_supplier',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Yarn`
+  String get add_yarn {
+    return Intl.message(
+      'Add Yarn',
+      name: 'add_yarn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select All`
+  String get select_all {
+    return Intl.message(
+      'Select All',
+      name: 'select_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `code invoice`
+  String get code_invoice {
+    return Intl.message(
+      'code invoice',
+      name: 'code_invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Client`
+  String get select_client {
+    return Intl.message(
+      'Select Client',
+      name: 'select_client',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Client saved successfully`
+  String get client_saved_successfully {
+    return Intl.message(
+      'Client saved successfully',
+      name: 'client_saved_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Items`
+  String get select_items {
+    return Intl.message(
+      'Select Items',
+      name: 'select_items',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invoice`
+  String get invoice {
+    return Intl.message(
+      'Invoice',
+      name: 'invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date`
+  String get date {
+    return Intl.message(
+      'Date',
+      name: 'date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sub Total`
+  String get sub_total {
+    return Intl.message(
+      'Sub Total',
+      name: 'sub_total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tax`
+  String get tax {
+    return Intl.message(
+      'Tax',
+      name: 'tax',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Polyester`
+  String get polyester {
+    return Intl.message(
+      'Polyester',
+      name: 'polyester',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cotton`
+  String get cotton {
+    return Intl.message(
+      'Cotton',
+      name: 'cotton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Propylene`
+  String get propylene {
+    return Intl.message(
+      'Propylene',
+      name: 'propylene',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thank you for your business`
+  String get thank_you_for_your_business {
+    return Intl.message(
+      'Thank you for your business',
+      name: 'thank_you_for_your_business',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment info`
+  String get payment_info {
+    return Intl.message(
+      'Payment info',
+      name: 'payment_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Previous Debt`
+  String get previous_debt {
+    return Intl.message(
+      'Previous Debt',
+      name: 'previous_debt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shipping Fees`
+  String get shipping_fees {
+    return Intl.message(
+      'Shipping Fees',
+      name: 'shipping_fees',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unit`
+  String get unit {
+    return Intl.message(
+      'Unit',
+      name: 'unit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pcs`
+  String get pcs {
+    return Intl.message(
+      'Pcs',
+      name: 'pcs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price`
+  String get price {
+    return Intl.message(
+      'Price',
+      name: 'price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Price`
+  String get total_price {
+    return Intl.message(
+      'Total Price',
+      name: 'total_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View Invoice`
+  String get view_invoice {
+    return Intl.message(
+      'View Invoice',
+      name: 'view_invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Invoice`
+  String get save_invoice {
+    return Intl.message(
+      'Save Invoice',
+      name: 'save_invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `invoice amount due`
+  String get invoice_amount_due {
+    return Intl.message(
+      'invoice amount due',
+      name: 'invoice_amount_due',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No previous religion`
+  String get no_previous_religion {
+    return Intl.message(
+      'No previous religion',
+      name: 'no_previous_religion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No dues`
+  String get no_dues {
+    return Intl.message(
+      'No dues',
+      name: 'no_dues',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invoice to`
+  String get invoice_to {
+    return Intl.message(
+      'Invoice to',
+      name: 'invoice_to',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms & Conditions`
+  String get terms_conditions {
+    return Intl.message(
+      'Terms & Conditions',
+      name: 'terms_conditions',
       desc: '',
       args: [],
     );

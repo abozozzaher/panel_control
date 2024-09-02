@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/dataBase.dart';
+import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/trader_provider.dart';
 
@@ -107,7 +108,7 @@ class _TraderDropdownState extends State<TraderDropdown> {
         return Container(
           width: 200,
           child: DropdownButton<String>(
-              hint: Center(child: Text('Select Client')),
+              hint: Center(child: Text(S().select_client)),
               isExpanded: true,
               value: _selectedCode,
               items: clients.map((client) {
@@ -149,7 +150,7 @@ class _TraderDropdownState extends State<TraderDropdown> {
                         'Provider data: ${provider.trader!.address} = ${provider.trader!.codeIdClien}= ${provider.trader!.fullNameArabic}= ${provider.trader!.fullNameEnglish}');
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Client saved successfully')),
+                      SnackBar(content: Text(S().client_saved_successfully)),
                     );
                   } else {
                     print('Client not found'); // في حالة عدم العثور على العميل

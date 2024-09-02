@@ -44,9 +44,9 @@ class DataLists {
   ];
 
   List<List<String>> yarnTypes = [
-    ['Polyester', 'يوليستر'],
-    ['Propylene', 'بروبلين'],
-    ['Cotton', 'قطن'],
+    ['Polyester', S().polyester],
+    ['Propylene', S().propylene],
+    ['Cotton', S().cotton],
   ];
 
   List<List<String>> yarnSupplier = [
@@ -72,12 +72,12 @@ class DataLists {
 // قائمة الألوان
   List<List<String>> colors = [
     ['Black', S().black],
-    ['BurntـBrown', S().brown_burnt],
+    ['Burnt Brown', S().burnt_brown],
     ['Brown', S().brown],
-    ['Jamli', S().jamli],
+    ['camli', S().camel],
     ['Red', S().red],
-    ['NavyـBlue', S().navy_blue],
-    ['DarkـGreen', S().dark_green],
+    ['Navy Blue', S().navy_blue],
+    ['Dark Green', S().dark_green],
     ['Silver', S().silver],
   ];
 

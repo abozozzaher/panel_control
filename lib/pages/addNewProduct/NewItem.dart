@@ -185,8 +185,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               Text(
                   '${S().shift} : ${shift!.firstWhere((element) => element[0] == selectedShift)[1]}'),
               Text(
-                  '${S().quantity} : ${quantity!.firstWhere((element) => element[0] == selectedQuantity)[1]}'
-                  'Pcs'),
+                  '${S().quantity} : ${quantity!.firstWhere((element) => element[0] == selectedQuantity)[1]} ${S().pcs}'),
               Text(
                   '${S().length} : ${length!.firstWhere((element) => element[0] == selectedLength)[1]}'
                   'Mt'),
@@ -417,8 +416,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   pw.Expanded(
                     child: pw.Container(
                       alignment: pw.Alignment.topLeft,
-                      margin: const pw.EdgeInsets.all(
-                          5.0), // 5mm margin around image
+                      margin: const pw.EdgeInsets.all(5.0),
                       child: pw.Image(profileImage),
                     ),
                   ),
@@ -452,8 +450,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   pw.Expanded(
                     child: pw.Container(
                       alignment: pw.Alignment.topRight,
-                      margin: const pw.EdgeInsets.all(
-                          5.0), // 5mm margin around image
+                      margin: const pw.EdgeInsets.all(5.0),
                       child: pw.Image(pw.MemoryImage(qrCodeImage)),
                     ),
                   ),
@@ -893,7 +890,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                     });
                   },
                   '${S().select} ${S().quantity}',
-                  suffixText: 'Pcs', // يمكنك إضافة النص الذي تريده هنا
+                  suffixText: S().pcs, // يمكنك إضافة النص الذي تريده هنا
                   isNumeric: true,
                   allowAddNew: true, // enable "Add new item" option
                 ),

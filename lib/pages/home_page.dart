@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       context.go('/admin');
                     },
                     icon: const Icon(Icons.admin_panel_settings_outlined),
-                    label: Text('صفحة الادارة'),
+                    label: Text('Administration page'),
                   ),
                 const SizedBox(height: 10),
                 ElevatedButton.icon(

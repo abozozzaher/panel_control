@@ -107,7 +107,7 @@ class ScanDataTableWidgets {
             child: Text('${data['yarn_number']} D',
                 style: const TextStyle(color: Colors.black)))),
         DataCell(Center(
-            child: Text('${data['quantity']} Pcs',
+            child: Text('${data['quantity']} ${S().pcs}',
                 style: const TextStyle(color: Colors.black)))),
         DataCell(Center(
             child: Text('${data['length']} Mt',

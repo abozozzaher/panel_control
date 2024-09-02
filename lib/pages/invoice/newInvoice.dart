@@ -6,6 +6,7 @@ import 'package:panel_control/pages/invoice/acceptedDialo.dart';
 import 'package:panel_control/pages/invoice/dataTabelFetcher.dart';
 import 'package:provider/provider.dart';
 import '../../data/dataBase.dart';
+import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/invoice_provider.dart';
 import '../../service/invoice_service.dart';
@@ -73,7 +74,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
                     );
                   },
                   icon: Icon(Icons.list),
-                  label: Text('Select Items')),
+                  label: Text(S().select_items)),
               SizedBox(height: 20),
               DataTabelFetcher(),
               SizedBox(height: 20),
@@ -81,10 +82,10 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
               ElevatedButton.icon(
                   onPressed: () {},
                   icon: Icon(Icons.picture_as_pdf),
-                  label: Text('عرض الفاتورة')),
+                  label: Text(S().view_invoice)),
               SizedBox(height: 20),
               ElevatedButton.icon(
-                  onPressed: () {}, label: Text('احفظ الفاتورة الفاتورة'))
+                  onPressed: () {}, label: Text(S().save_invoice))
             ],
           ),
         ),
