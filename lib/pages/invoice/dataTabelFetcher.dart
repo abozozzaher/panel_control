@@ -15,17 +15,27 @@ class DataTabelFetcher extends StatefulWidget {
 class _DataTabelFetcherState extends State<DataTabelFetcher> {
   final DataLists dataLists = DataLists();
   double grandTotalPrice = 0.0; // تعريف المتغير هنا
-  double taxs = .0; // الضريبة
 
-  double previousDebts = 0.0; // المجموع السعر مع الدين
-  double shippingFees = 0.0; // المجموع السعر مع الدين و اجور الشحن
-
-  bool _canUpdate = true;
   List<bool> _selectedItem = [];
 
-  TextEditingController tax = TextEditingController();
-  TextEditingController previousDebt = TextEditingController();
-  TextEditingController shippingFee = TextEditingController();
+  TextEditingController taxController = TextEditingController();
+  TextEditingController previousDebtController = TextEditingController();
+  TextEditingController shippingFeeController = TextEditingController();
+
+  final ValueNotifier<double> taxsNotifier =
+      ValueNotifier<double>(0.0); // الضريبة
+  final ValueNotifier<double> previousDebtsNotifier =
+      ValueNotifier<double>(0.0); // المجموع السعر مع الدين
+  final ValueNotifier<double> shippingFeesNotifier =
+      ValueNotifier<double>(0.0); // المجموع السعر مع الدين و اجور الشحن
+
+  /// تحويل الأرقام العربية إلى أرقام إنجليزية
+  String convertArabicToEnglish(String text) {
+    return text.replaceAllMapped(
+      RegExp(r'[٠-٩]'),
+      (match) => (match.group(0)!.codeUnitAt(0) - 1632).toString(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,23 +219,13 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                         double totalPrice = _selectedItem[index]
                             ? price * totalWeight
                             : price * quantity;
-                        Future.delayed(Duration(seconds: 3), () {
-                          // حفظ السعر الكلي في البروفايدر
-                          invoiceProvider.setPrice(groupKey, totalPrice);
-                        });
+                        // حفظ السعر الكلي في البروفايدر
+                        invoiceProvider.setPrice(groupKey, totalPrice);
+
                         invoiceProvider.getTotalPriceNotifier(groupKey).value =
                             totalPrice.toString();
-                        if (_canUpdate) {
-                          _canUpdate = false;
-                          Future.delayed(Duration(seconds: 3), () {
-                            setState(() {
-                              grandTotalPrice =
-                                  invoiceProvider.calculateGrandTotalPrice();
-                            });
-
-                            _canUpdate = true;
-                          });
-                        }
+                        grandTotalPrice =
+                            invoiceProvider.calculateGrandTotalPrice();
                       },
                       decoration: InputDecoration(
                         prefixText: '\$',
@@ -299,7 +299,7 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   DataCell(Center(child: Text('${S().total}  ${S().invoice}'))),
                   DataCell(Center(
                     child: Text(
-                      '\$ ${grandTotalPrice.toStringAsFixed(2)}',
+                      '\$ $grandTotalPrice',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.redAccent,
@@ -309,6 +309,8 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                 ],
               ),
             );
+            print('object $grandTotalPrice');
+
             // Add a row for totals Tax الضريبة
             dataRows.add(
               DataRow(
@@ -325,22 +327,18 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   DataCell(
                     Center(
                       child: TextField(
-                        controller: tax,
+                        controller: taxController,
                         keyboardType: TextInputType.number,
                         style: TextStyle(fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                         onChanged: (text) {
                           if (text.isNotEmpty) {
-                            Future.delayed(Duration(milliseconds: 3000), () {
-                              setState(() {
-                                double inputValue = double.parse(text);
-                                taxs = inputValue / 100;
-                              });
-                            });
+                            String englishNumbers =
+                                convertArabicToEnglish(text);
+                            double inputValue = double.parse(englishNumbers);
+                            taxsNotifier.value = inputValue / 100;
                           } else {
-                            setState(() {
-                              taxs = .0;
-                            });
+                            taxsNotifier.value = 0.00;
                           }
                         },
                         decoration: InputDecoration(
@@ -352,20 +350,28 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   ),
                   DataCell(
                     Center(
-                      child: Text(
-                        '${(taxs).toStringAsFixed(2)}%',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                      child: ValueListenableBuilder<double>(
+                        valueListenable: taxsNotifier,
+                        builder: (context, value, child) {
+                          return Text(
+                            '${value.toStringAsFixed(2)}%',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
+            final taxValue = 1 + taxsNotifier.value;
+
             // حساب السعر مع الضريبة
-            final grandTotalPriceTaxs = grandTotalPrice * (1 + taxs);
+            final grandTotalPriceTaxs = grandTotalPrice * taxValue;
+
             // Add a row for totals الدين السابق
             dataRows.add(
               DataRow(
@@ -379,16 +385,16 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   DataCell(
                     Center(
                         child: Text(
-                      previousDebts == 0
+                      previousDebtsNotifier.value == 0
                           ? S().no_dues
-                          : previousDebts > -1
+                          : previousDebtsNotifier.value > -1
                               ? S().previous_debt
                               : S().no_previous_religion,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: previousDebts == 0
+                          color: previousDebtsNotifier.value == 0
                               ? Colors.black
-                              : previousDebts > 1
+                              : previousDebtsNotifier.value > 1
                                   ? Colors.redAccent
                                   : Colors.green),
                     )),
@@ -396,28 +402,24 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   DataCell(
                     Center(
                       child: TextField(
-                        controller: previousDebt,
+                        controller: previousDebtController,
                         keyboardType: TextInputType.number,
                         style: TextStyle(
-                            color: previousDebts == 0
+                            color: previousDebtsNotifier.value == 0
                                 ? Colors.black
-                                : previousDebts > -1
+                                : previousDebtsNotifier.value > -1
                                     ? Colors.redAccent
                                     : Colors.green,
                             fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                         onChanged: (text) {
                           if (text.isNotEmpty) {
-                            Future.delayed(Duration(milliseconds: 3000), () {
-                              setState(() {
-                                double inputValue = double.parse(text);
-                                previousDebts = inputValue;
-                              });
-                            });
+                            String englishNumbers =
+                                convertArabicToEnglish(text);
+                            previousDebtsNotifier.value =
+                                double.parse(englishNumbers);
                           } else {
-                            setState(() {
-                              previousDebts = 0.0;
-                            });
+                            previousDebtsNotifier.value = 0.0;
                           }
                         },
                         decoration: InputDecoration(
@@ -427,21 +429,28 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                       ),
                     ),
                   ),
+
+// عرض النتيجة
                   DataCell(
                     Center(
-                      child: Text(
-                        '\$ ${previousDebts != 0 ? (previousDebts + grandTotalPriceTaxs).toStringAsFixed(2) : 0}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: previousDebts == 0
-                                ? Colors.black
-                                : previousDebts > -1
-                                    ? Colors.redAccent
-                                    : Colors.green),
+                      child: ValueListenableBuilder<double>(
+                        valueListenable: previousDebtsNotifier,
+                        builder: (context, value, child) {
+                          return Text(
+                            '\$ ${value != 0 ? (value + grandTotalPriceTaxs).toStringAsFixed(2) : 0}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: value == 0
+                                    ? Colors.black
+                                    : value > -1
+                                        ? Colors.redAccent
+                                        : Colors.green),
+                          );
+                        },
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
@@ -459,29 +468,27 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   DataCell(Center(
                       child: Text(S().shipping_fees,
                           textAlign: TextAlign.center))),
+
+// TextField
                   DataCell(
                     Center(
                       child: TextField(
-                        controller: shippingFee,
+                        controller: shippingFeeController,
                         keyboardType: TextInputType.number,
                         style: TextStyle(
-                            color: shippingFees > -1
+                            color: shippingFeesNotifier.value > -1
                                 ? Colors.redAccent
                                 : Colors.green,
                             fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                         onChanged: (text) {
                           if (text.isNotEmpty) {
-                            Future.delayed(Duration(milliseconds: 3000), () {
-                              setState(() {
-                                double inputValue = double.parse(text);
-                                shippingFees = inputValue;
-                              });
-                            });
+                            String englishNumbers =
+                                convertArabicToEnglish(text);
+                            shippingFeesNotifier.value =
+                                double.parse(englishNumbers);
                           } else {
-                            setState(() {
-                              shippingFees = 0.0;
-                            });
+                            shippingFeesNotifier.value = 0.0;
                           }
                         },
                         decoration: InputDecoration(
@@ -491,24 +498,35 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                       ),
                     ),
                   ),
+
+// Display the total
                   DataCell(
                     Center(
-                      child: Text(
-                        '\$ ${shippingFees != 0 ? (shippingFees + previousDebts + grandTotalPriceTaxs).toStringAsFixed(2) : 0}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: shippingFees > -1
-                              ? Colors.redAccent
-                              : Colors.green,
-                          fontSize: 18,
-                        ),
+                      child: ValueListenableBuilder<double>(
+                        valueListenable: shippingFeesNotifier,
+                        builder: (context, value, child) {
+                          return Text(
+                            '\$ ${value != 0 ? (value + previousDebtsNotifier.value + grandTotalPriceTaxs).toStringAsFixed(2) : 0}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  value > -1 ? Colors.redAccent : Colors.green,
+                              fontSize: 18,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
 
+            final totalAllMoney = grandTotalPriceTaxs +
+                previousDebtsNotifier.value +
+                shippingFeesNotifier.value;
+
+            //   print('ssss $TotalAllMoney');
             // Add a row for totals قيمة الفاتورة
             dataRows.add(
               DataRow(
@@ -522,19 +540,23 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   DataCell(Center(
                       child: Text(S().invoice_amount_due,
                           textAlign: TextAlign.center))),
-                  DataCell(Center(child: Text(''))),
+                  DataCell(Center(
+                      child: ElevatedButton(
+                    child: Text('Click to calculate'),
+                    onPressed: () {
+                      setState(() {});
+                    },
+                  ))),
                   DataCell(
                     Center(
-                      child: Text(
-                        '\$ ${(previousDebts + grandTotalPriceTaxs + shippingFees).toStringAsFixed(2)}',
-                        style: TextStyle(
+                        child: Text(
+                      '\$ ${totalAllMoney.toStringAsFixed(2)}',
+                      style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.redAccent,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  )
+                          fontSize: 18),
+                    )),
+                  ),
                 ],
               ),
             );
@@ -578,19 +600,20 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                         final allPrices = aggregatedData.keys.map((groupKey) {
                           return invoiceProvider.getPrice(groupKey);
                         }).toList();
-                        final total =
-                            grandTotalPriceTaxs + previousDebts + shippingFees;
+                        final total = grandTotalPriceTaxs +
+                            previousDebtsNotifier.value +
+                            shippingFeesNotifier.value;
 
                         await generatePdf(
                             context,
                             aggregatedData,
                             grandTotalPrice,
-                            previousDebts,
-                            shippingFees,
+                            previousDebtsNotifier.value,
+                            shippingFeesNotifier.value,
                             prices,
                             allPrices,
                             total,
-                            taxs);
+                            taxsNotifier.value);
                       },
                       icon: Icon(Icons.picture_as_pdf),
                       label: Text(S().view_invoice),
@@ -606,5 +629,13 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    taxController.dispose();
+    previousDebtController.dispose();
+    shippingFeeController.dispose();
+    super.dispose();
   }
 }

@@ -165,7 +165,7 @@ class InvoiceProvider with ChangeNotifier {
   // دالة لتحديث السعر المرتبط بالمجموعة
   void setPrice(String groupKey, double price) {
     _prices[groupKey] = price;
-    notifyListeners();
+    //notifyListeners();
   }
 
   // دالة لجلب السعر المرتبط بالمجموعة
@@ -185,7 +185,7 @@ class InvoiceProvider with ChangeNotifier {
   // الطريقة لتحديث حالة التحديد
   void updateSelectionState(String key, bool isSelected) {
     _selectionState[key] = isSelected;
-    notifyListeners();
+    // notifyListeners();
   }
 
   bool? getSelectionState(String key) => _selectionState[key];

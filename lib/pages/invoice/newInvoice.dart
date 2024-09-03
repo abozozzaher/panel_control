@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:panel_control/pages/invoice/TraderDropdown.dart';
-import 'package:panel_control/pages/invoice/acceptedDialo.dart';
 import 'package:panel_control/pages/invoice/dataTabelFetcher.dart';
 import 'package:provider/provider.dart';
 import '../../data/dataBase.dart';
