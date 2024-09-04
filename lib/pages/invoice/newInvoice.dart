@@ -23,7 +23,6 @@ class InvoiceNewAdd extends StatefulWidget {
 }
 
 class _InvoiceNewAddState extends State<InvoiceNewAdd> {
-  final InvoiceService invoiceService = InvoiceService();
   final DialogInvoice dialogInvoice = DialogInvoice();
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
@@ -38,7 +37,6 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
   @override
   void initState() {
     super.initState();
-    invoiceCode = invoiceService.generateInvoiceCode();
     final invoiceProvider =
         Provider.of<InvoiceProvider>(context, listen: false);
     invoiceProvider.loadSelectedItems();
@@ -47,6 +45,10 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
   @override
   Widget build(BuildContext context) {
     final invoiceProvider = Provider.of<InvoiceProvider>(context);
+    final InvoiceService invoiceService =
+        InvoiceService(context, invoiceProvider);
+    invoiceCode = invoiceService.generateInvoiceCode();
+
     return Scaffold(
       appBar: AppBar(actions: [
         IconButton(

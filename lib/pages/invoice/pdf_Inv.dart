@@ -7,6 +7,10 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
+import 'package:provider/provider.dart';
+
+import '../../provider/invoice_provider.dart';
+import '../../service/invoice_service.dart';
 
 Future<void> generatePdf(
   context,
@@ -29,13 +33,19 @@ Future<void> generatePdf(
 
   // Create a PDF document.
   final doc = pw.Document();
+  String invoiceCode;
+
+  final invoiceProvider = Provider.of<InvoiceProvider>(context, listen: false);
+  final InvoiceService invoiceService =
+      InvoiceService(context, invoiceProvider);
+  invoiceCode = invoiceService.generateInvoiceCode();
 
   doc.addPage(
     pw.MultiPage(
-      pageTheme: _buildTheme(context, svgFooter, fontTajBold, fontTajRegular),
-      //  header: _buildHeader,
+      pageTheme: _buildTheme(
+          context, svgFooter, fontTajBold, fontTajRegular, invoiceCode),
       header: (context) =>
-          _buildHeader(context, imageLogo), // تمرير البيانات هنا
+          _buildHeader(context, imageLogo, invoiceCode), // تمرير البيانات هنا
 
       footer: _buildFooter,
       build: (context) => [
@@ -45,7 +55,7 @@ Future<void> generatePdf(
         _contentFooter(
             context, total, taxs, grandTotalPrice, previousDebts, shippingFees),
         pw.SizedBox(height: 20),
-        _termsAndConditions(context, fontTajBold),
+        _termsAndConditions(context, fontTajBold, invoiceCode),
       ],
     ),
   );
@@ -58,9 +68,10 @@ Future<void> generatePdf(
 
 // تصميم شكل الصفحة
 pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
-    pw.Font fontTajBold, pw.Font fontTajRegular) {
+    pw.Font fontTajBold, pw.Font fontTajRegular, String invoiceCode) {
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
-
+  double heighPdf = 50;
+  double widthPdf = heighPdf * 3;
   return pw.PageTheme(
     theme: pw.ThemeData.withFont(base: fontTajBold).copyWith(
       defaultTextStyle:
@@ -73,7 +84,23 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
     ),
     buildBackground: (context) => pw.FullPage(
       ignoreMargins: true,
-      child: pw.SvgImage(svg: svgFooter),
+      // child: pw.SvgImage(svg: svgFooter),
+      child: pw.Stack(alignment: pw.Alignment.bottomCenter, children: [
+        pw.SvgImage(svg: svgFooter),
+        // الباركود ال بي دي اف
+
+        pw.Positioned(
+          bottom: 10, // adjust the top position as needed
+          right: 70, // adjust the left position as needed
+          child: pw.BarcodeWidget(
+            barcode: pw.Barcode.pdf417(),
+            data: invoiceCode,
+            drawText: false,
+            height: heighPdf,
+            width: widthPdf,
+          ),
+        ),
+      ]),
     ),
     textDirection: isRTL ? pw.TextDirection.rtl : pw.TextDirection.ltr,
     margin: pw.EdgeInsets.all(20),
@@ -81,7 +108,8 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
 }
 
 // راس الفاتورة
-pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo) {
+pw.Widget _buildHeader(
+    pw.Context context, Uint8List imageLogo, String invoiceCode) {
   return pw.Column(
     children: [
       pw.Row(
@@ -118,7 +146,7 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo) {
                       crossAxisCount: 2,
                       children: [
                         pw.Text(S().invoice),
-                        pw.Text(S().code_invoice),
+                        pw.Text(invoiceCode),
                         pw.Text(S().data),
                         pw.Text(_formatDate(DateTime.now())),
                       ],
@@ -166,7 +194,7 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo) {
                       child: pw.BarcodeWidget(
                         barcode: pw.Barcode.qrCode(),
                         data:
-                            'هنا يكون كود رمز الفاتورة', // يمكنك استبدال هذا بالرابط الذي تريده
+                            invoiceCode, // يمكنك استبدال هذا بالرابط الذي تريده
                         width: 72,
                         height: 72,
                       ),
@@ -185,24 +213,10 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo) {
 
 // الذيل
 pw.Widget _buildFooter(pw.Context context) {
-  double heighPdf = 40;
-  double widthPdf = heighPdf * 3;
   return pw.Row(
     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
     crossAxisAlignment: pw.CrossAxisAlignment.center,
     children: [
-      // الباركود ال بي دي اف
-      pw.Container(
-        //    alignment: pw.Alignment.bottomCenter,
-        child: pw.BarcodeWidget(
-          barcode: pw.Barcode.pdf417(),
-          data: 'Invoice# code here',
-          drawText: false,
-          height: heighPdf,
-          width: widthPdf,
-        ),
-      ),
-
       //  رقم الصفحة
       pw.Text(
         '${S().page} ${context.pageNumber}/${context.pagesCount}',
@@ -444,7 +458,8 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
 }
 
 // سياسية الارجاع
-pw.Widget _termsAndConditions(pw.Context context, pw.Font fontTajBold) {
+pw.Widget _termsAndConditions(
+    pw.Context context, pw.Font fontTajBold, String invoiceCode) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.end,
     children: [

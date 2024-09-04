@@ -88,6 +88,19 @@ class DataLists {
     ['Afternoon', S().afternoon],
     ['Evening', S().evening],
   ];
+// اسماء الاعمدة في جدول الفاتورة
+  List<String> columnTitles = [
+    S().type,
+    S().color,
+    S().yarn_number,
+    S().length,
+    '${S().weight} ${S().total}',
+    S().unit,
+    S().quantity,
+    S().price,
+    S().total_price,
+  ];
+
 // قائمة الاشهر لاستيرادها
   List<String> months = [
     // 2024
