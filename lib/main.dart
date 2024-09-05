@@ -20,8 +20,6 @@ import 'provider/invoice_provider.dart';
 import 'provider/scan_item_provider.dart';
 import 'provider/trader_provider.dart';
 import 'provider/user_provider.dart';
-import 'test.dart';
-import 'test2.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +35,7 @@ void main() async {
 /*
 python3 update_translations.py
 flutter pub run intl_utils:generate
+رصيد التاجر بعد اختار اسمه يتم تنزيل البيانات فوراً 
 اضافة في منسدلة التجار بحث للبحث عن اسم تاجر
 تجهيز ورقة حساب كل عميل حساب الدخل والخرج
 الدخل سلفة والخرج يتم تسجيله بناء على الفاتورة
@@ -83,6 +82,7 @@ flutter pub run intl_utils:generate
 تعريف اسم الصفحة حسب go context وبنفس الوقت تشغيل نيتوفكيشن بوش للسبب في حال الرجول ينتقل الى الصفحة السابفة لا يغلق التطبيق
 add novigator. push . context.go('/'); اريد بناء هذا الشكل
 اضافة نقريتين للخروج
+يجب حفظ الضريبة والدين واجور الشحن في البروفيدر خطة مستقبلية
 
 
 */
@@ -220,17 +220,6 @@ class _MyAppState extends State<MyApp> {
             productId: productId,
           );
         },
-      ),
-      GoRoute(
-        path: '/test',
-        builder: (context, state) => TestPage(
-          toggleTheme: _toggleTheme,
-          toggleLocale: _toggleLocale,
-        ),
-      ),
-      GoRoute(
-        path: '/test2',
-        builder: (context, state) => QRViewExample(),
       ),
       GoRoute(
         path: '/register',

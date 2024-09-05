@@ -44,6 +44,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "An error occurred while adding"),
         "application_management_page":
             MessageLookupByLibrary.simpleMessage("Application management page"),
+        "are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file":
+            MessageLookupByLibrary.simpleMessage(
+                "Are you sure you want to record the data and view the PDF file ?"),
         "available": MessageLookupByLibrary.simpleMessage("Available"),
         "black": MessageLookupByLibrary.simpleMessage("Black"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
@@ -66,14 +69,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm_customer_data":
             MessageLookupByLibrary.simpleMessage("Confirm customer data"),
         "confirm_data": MessageLookupByLibrary.simpleMessage("Confirm Data"),
+        "confirm_the_process":
+            MessageLookupByLibrary.simpleMessage("Confirm the process"),
         "confirm_yarn_data":
             MessageLookupByLibrary.simpleMessage("Confirm Yarn Data"),
         "cotton": MessageLookupByLibrary.simpleMessage("Cotton"),
         "custom": MessageLookupByLibrary.simpleMessage("Custom"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("Customer added successfully"),
-        "customer_address":
-            MessageLookupByLibrary.simpleMessage("Customer address"),
         "dark_green": MessageLookupByLibrary.simpleMessage("Dark Green"),
         "data": MessageLookupByLibrary.simpleMessage("Data"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),

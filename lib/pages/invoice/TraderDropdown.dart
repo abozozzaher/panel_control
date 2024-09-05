@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../../data/dataBase.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
-import '../../provider/invoice_provider.dart';
 import '../../provider/trader_provider.dart';
 
 class TraderDropdown extends StatefulWidget {
@@ -28,6 +27,14 @@ class _TraderDropdownState extends State<TraderDropdown> {
   void initState() {
     super.initState();
     fetchClientsFromFirebase();
+    // استرجاع الكود المحدد من البروفايدر
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final traderProvider =
+          Provider.of<TraderProvider>(context, listen: false);
+      setState(() {
+        _selectedCode = traderProvider.selectedCode;
+      });
+    });
   }
 
   Future<void> fetchClientsFromFirebase() async {
@@ -94,8 +101,7 @@ class _TraderDropdownState extends State<TraderDropdown> {
   @override
   Widget build(BuildContext context) {
     Locale locale = Localizations.localeOf(context);
-    bool isRtl = locale.languageCode ==
-        'ar'; // Assuming 'ar' is the language code for Arabic
+    bool isRtl = locale.languageCode == 'ar';
 
     return Consumer<TraderProvider>(
       builder: (context, provider, child) {
@@ -123,6 +129,7 @@ class _TraderDropdownState extends State<TraderDropdown> {
                   setState(() {
                     _selectedCode = selectedCode; // Update the selected code
                   });
+                  provider.setSelectedCode(selectedCode);
 
                   //   widget.onTraderSelected(selectedCode);
 

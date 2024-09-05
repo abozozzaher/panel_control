@@ -1490,16 +1490,6 @@ class S {
     );
   }
 
-  /// `Customer address`
-  String get customer_address {
-    return Intl.message(
-      'Customer address',
-      name: 'customer_address',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Please enter the full name in English`
   String get please_enter_the_full_name_in_english {
     return Intl.message(
@@ -1705,6 +1695,26 @@ class S {
     return Intl.message(
       'Today\\s Date',
       name: 'todays_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm the process`
+  String get confirm_the_process {
+    return Intl.message(
+      'Confirm the process',
+      name: 'confirm_the_process',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to record the data and view the PDF file ?`
+  String get are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file {
+    return Intl.message(
+      'Are you sure you want to record the data and view the PDF file ?',
+      name: 'are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file',
       desc: '',
       args: [],
     );

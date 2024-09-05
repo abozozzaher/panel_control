@@ -188,5 +188,7 @@
     "yarn_id": "Yarn Id",
     "confirm_yarn_data": "Confirm Yarn Data",
     "clien_id": "Kimlik müşterisi",
-    "todays_date": "Today\\s Date"
+    "todays_date": "Today\\s Date",
+    "confirm_the_process": "Confirm the process",
+    "are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file_": "Are you sure you want to record the data and view the PDF file ?"
 }

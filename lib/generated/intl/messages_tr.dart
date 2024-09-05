@@ -64,14 +64,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm_customer_data":
             MessageLookupByLibrary.simpleMessage("Confirm customer data"),
         "confirm_data": MessageLookupByLibrary.simpleMessage("Confirm Data"),
+        "confirm_the_process":
+            MessageLookupByLibrary.simpleMessage("Confirm the process"),
         "confirm_yarn_data":
             MessageLookupByLibrary.simpleMessage("Confirm Yarn Data"),
         "cotton": MessageLookupByLibrary.simpleMessage("Cotton"),
         "custom": MessageLookupByLibrary.simpleMessage("Gelenek"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("Customer added successfully"),
-        "customer_address":
-            MessageLookupByLibrary.simpleMessage("Customer address"),
         "dark_green": MessageLookupByLibrary.simpleMessage("Koyu yeşil"),
         "data": MessageLookupByLibrary.simpleMessage("Veri"),
         "date": MessageLookupByLibrary.simpleMessage("Tarih"),

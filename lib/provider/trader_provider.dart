@@ -7,8 +7,23 @@ class TraderProvider with ChangeNotifier {
 
   ClienData? get trader => _trader;
 
+  String? _selectedCode;
+
+  String? get selectedCode => _selectedCode;
+
+  void setSelectedCode(String? code) {
+    _selectedCode = code;
+    notifyListeners();
+  }
+
   void setTrader(ClienData trader) {
     _trader = trader;
+    notifyListeners();
+  }
+
+  void clearTrader() {
+    _trader = null;
+    _selectedCode = null;
     notifyListeners();
   }
 }

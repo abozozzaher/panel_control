@@ -8,6 +8,7 @@ import '../../data/dataBase.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/invoice_provider.dart';
+import '../../provider/trader_provider.dart';
 import '../../service/invoice_service.dart';
 import 'dialos.dart';
 
@@ -47,6 +48,8 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
     final invoiceProvider = Provider.of<InvoiceProvider>(context);
     final InvoiceService invoiceService =
         InvoiceService(context, invoiceProvider);
+    final trader = Provider.of<TraderProvider>(context).trader;
+
     invoiceCode = invoiceService.generateInvoiceCode();
 
     return Scaffold(
@@ -69,15 +72,19 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
               TraderDropdown(),
               SizedBox(height: 20),
               // مندسلة الطلبات التي تم مسحها من قبل العامل
-              ElevatedButton.icon(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => DialogInvoice(),
-                    );
-                  },
-                  icon: Icon(Icons.list),
-                  label: Text(S().select_items)),
+              trader == null
+
+                  /// 454545
+                  ? Center(child: Text('No trader selected'))
+                  : ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => DialogInvoice(),
+                        );
+                      },
+                      icon: Icon(Icons.list),
+                      label: Text(S().select_items)),
               SizedBox(height: 20),
               // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
               DataTabelFetcher(),

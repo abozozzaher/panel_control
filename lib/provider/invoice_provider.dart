@@ -174,13 +174,6 @@ class InvoiceProvider with ChangeNotifier {
     return _prices[groupKey] ?? 0.00;
   }
 
-  // Clear all controllers and notifiers (if needed)
-  void clear() {
-    _priceControllers.clear();
-    _totalPriceNotifiers.clear();
-    notifyListeners();
-  }
-
   Map<String, bool> _selectionState = {}; // لتخزين حالة التحديد
 
   // الطريقة لتحديث حالة التحديد
@@ -190,4 +183,23 @@ class InvoiceProvider with ChangeNotifier {
   }
 
   bool? getSelectionState(String key) => _selectionState[key];
+
+  // Clear all controllers and notifiers (if needed)
+  void clear() {
+    print('Before clearing1:');
+    print('Price controllers: ${_priceControllers.keys}');
+    print('Total price notifiers: ${_totalPriceNotifiers.keys}');
+    print('Items data: $itemsData');
+    print('Selected item data: $selectedItemData');
+    print('Selection state: $_selectionState');
+    print('Selection state1: $selectionState');
+    print('Prices: $_prices');
+    _priceControllers.clear();
+    _totalPriceNotifiers.clear();
+    itemsData.clear();
+    selectionState.clear();
+    _prices.clear();
+
+    notifyListeners();
+  }
 }

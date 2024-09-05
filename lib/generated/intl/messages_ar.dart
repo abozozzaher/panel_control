@@ -68,14 +68,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm_customer_data":
             MessageLookupByLibrary.simpleMessage("تأكيد بيانات العميل"),
         "confirm_data": MessageLookupByLibrary.simpleMessage("تأكيد البيانات"),
+        "confirm_the_process":
+            MessageLookupByLibrary.simpleMessage("Confirm the process"),
         "confirm_yarn_data":
             MessageLookupByLibrary.simpleMessage("تأكيد بيانات الخيط"),
         "cotton": MessageLookupByLibrary.simpleMessage("قطن"),
         "custom": MessageLookupByLibrary.simpleMessage("مخصص"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة العميل بنجاح"),
-        "customer_address":
-            MessageLookupByLibrary.simpleMessage("عنوان العميل"),
         "dark_green": MessageLookupByLibrary.simpleMessage("عسكري"),
         "data": MessageLookupByLibrary.simpleMessage("التاريخ"),
         "date": MessageLookupByLibrary.simpleMessage("تاريخ"),

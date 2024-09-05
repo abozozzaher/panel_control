@@ -97,7 +97,6 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                     totalQuantity += itemData['quantity'] as int;
                     totalLength += itemData['length'] as int;
                     totalScannedData += itemData['scanned_data'] as int;
-
                     return itemForTabel(
                       itemData,
                       invoiceProvider,
@@ -127,8 +126,6 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   // Add a row for totals المجموع الاول
                   dataRows.add(rowForTotals(totalLength, totalWeight,
                       totalScannedData, totalQuantity, grandTotalPrice));
-
-                  print('object $grandTotalPrice');
 
                   // Add a row for totals Tax الضريبة
                   dataRows.add(rowTax(

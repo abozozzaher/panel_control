@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../provider/invoice_provider.dart';
+import '../../../provider/trader_provider.dart';
 import '../../../service/invoice_service.dart';
 import '../pdf_Inv.dart';
 
@@ -16,6 +19,9 @@ Directionality tableBuilld(
     ValueNotifier<double> previousDebtsNotifier,
     ValueNotifier<double> shippingFeesNotifier,
     ValueNotifier<double> taxsNotifier) {
+  final trader = Provider.of<TraderProvider>(context).trader;
+  final traderClean = Provider.of<TraderProvider>(context);
+
   return Directionality(
     textDirection: TextDirection.ltr,
     child: SingleChildScrollView(
@@ -46,17 +52,17 @@ Directionality tableBuilld(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('تأكيد العملية'),
-                    content: Text(
-                        'هل أنت متأكد من تسجيل البيانات وعرض ملف الـ PDF؟'),
+                    title: Text(S().confirm_the_process),
+                    content: Text(S()
+                        .are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(false),
-                        child: Text('إلغاء'),
+                        child: Text(S().cancel),
                       ),
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(true),
-                        child: Text('تأكيد'),
+                        child: Text(S().confirm),
                       ),
                     ],
                   );
@@ -77,15 +83,26 @@ Directionality tableBuilld(
                   }).toList();
 
                   // جلب جميع الأسعار من البروفايدر
-                  final allPrices = aggregatedData.keys.map((groupKey) {
+                  final totalLinePrices = aggregatedData.keys.map((groupKey) {
                     return invoiceProvider.getPrice(groupKey);
                   }).toList();
                   final total = grandTotalPriceTaxs +
                       previousDebtsNotifier.value +
                       shippingFeesNotifier.value;
+                  final taxs = taxsNotifier.value;
+                  final previousDebts = previousDebtsNotifier.value;
+                  final shippingFees = shippingFeesNotifier.value;
 
                   // تسجيل البيانات في Firebase
-                  await invoiceService.saveData(aggregatedData, total);
+                  await invoiceService.saveData(
+                      aggregatedData,
+                      total,
+                      trader,
+                      grandTotalPrice,
+                      grandTotalPriceTaxs,
+                      taxs,
+                      previousDebts,
+                      shippingFees);
 
                   // إنشاء وعرض ملف الـ PDF
                   await generatePdf(
@@ -95,13 +112,21 @@ Directionality tableBuilld(
                       previousDebtsNotifier.value,
                       shippingFeesNotifier.value,
                       prices,
-                      allPrices,
+                      totalLinePrices,
                       total,
                       taxsNotifier.value);
+                  context.go('/');
+                  // تفريغ الجدول من البيانات
+                  invoiceProvider.clear(); // تفريغ الـ
+                  traderClean.clearTrader();
+
+                  print('aaaaa ${invoiceProvider}');
+
+                  // إعادة بناء الواجهة لتحديث الجدول
                 } catch (e) {
                   // التعامل مع الأخطاء
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('حدث خطأ: $e')),
+                    SnackBar(content: Center(child: Text('${S().error} : $e'))),
                   );
                 }
               }

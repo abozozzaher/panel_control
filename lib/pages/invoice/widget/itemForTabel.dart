@@ -84,20 +84,5 @@ DataRow itemForTabel(
     ],
     selected: _selectedItem[index],
     onSelectChanged: onChanged,
-
-    /*
-    onSelectChanged: (bool? selectedItem) {
-      setState(() {
-        if (selectedItem != null) {
-          _selectedItem[index] = selectedItem;
-          // تحديث حالة التحديد في البروفيدر
-          final key = aggregatedData.keys.toList()[index];
-          invoiceProvider.updateSelectionState(key, selectedItem);
-          invoiceProvider.getPriceController(key).clear();
-          invoiceProvider.getTotalPriceNotifier(groupKey).value = '0.00';
-        }
-      });
-    },
-    */
   );
 }

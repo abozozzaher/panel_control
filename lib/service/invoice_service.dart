@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:panel_control/model/clien.dart';
 
 import '../data/data_lists.dart';
 import '../provider/invoice_provider.dart';
@@ -8,6 +9,7 @@ import '../provider/invoice_provider.dart';
 class InvoiceService {
   final BuildContext context;
   final InvoiceProvider invoiceProvider;
+  Map<String, dynamic> separateData = {};
 
   InvoiceService(this.context, this.invoiceProvider);
   final DataLists dataLists = DataLists();
@@ -20,12 +22,34 @@ class InvoiceService {
     return 'INV-$formattedDate';
   }
 
-  Map<String, Map<String, dynamic>> prepareData(
+  Map<String, dynamic> prepareData(
     Map<String, Map<String, dynamic>> aggregatedData,
     Map<String, dynamic> data,
   ) {
     String key =
         '${data['yarn_number']}-${data['type']}-${data['color']}-${data['width']}';
+
+    // إنشاء خريطة جديدة لتخزين البيانات بشكل منفصل
+    Map<String, dynamic> separateData = {
+      'yarn_number': data['yarn_number'],
+      'type': data['type'],
+      'color': data['color'],
+      'width': data['width'],
+      'total_weight': double.tryParse(data['total_weight'].toString()) ?? 0.0,
+      'quantity': data['quantity'] is int
+          ? data['quantity']
+          : int.tryParse(data['quantity'].toString()) ?? 0,
+      'length': data['length'] is int
+          ? data['length']
+          : int.tryParse(data['length'].toString()) ?? 0,
+      'scanned_data': 1,
+      'product_id': data['productId'],
+      'shift': data['shift'],
+      'created_by': data['created_by'],
+      'image_url': data['image_url'],
+
+      // أضف هنا أي بيانات إضافية تحتاجها
+    };
 
     if (!aggregatedData.containsKey(key)) {
       aggregatedData[key] = {
@@ -40,17 +64,13 @@ class InvoiceService {
       };
     }
 
-    aggregatedData[key]!['total_weight'] +=
-        double.tryParse(data['total_weight'].toString()) ?? 0.0;
-    aggregatedData[key]!['quantity'] += data['quantity'] is int
-        ? data['quantity']
-        : int.tryParse(data['quantity'].toString()) ?? 0;
-    aggregatedData[key]!['length'] += data['length'] is int
-        ? data['length']
-        : int.tryParse(data['length'].toString()) ?? 0;
+    aggregatedData[key]!['total_weight'] += separateData['total_weight'];
+    aggregatedData[key]!['quantity'] += separateData['quantity'];
+    aggregatedData[key]!['length'] += separateData['length'];
     aggregatedData[key]!['scanned_data'] += 1;
 
-    return aggregatedData;
+    // إرجاع separateData لاستخدامها في دالة أخرى
+    return separateData;
   }
 
   Future<Map<String, dynamic>?> fetchDataFromFirestore(String docId) async {
@@ -68,12 +88,14 @@ class InvoiceService {
 
   Future<Map<String, Map<String, dynamic>>> fetchData() async {
     Map<String, Map<String, dynamic>> aggregatedData = {};
+    Map<String, dynamic> allSeparateData =
+        {}; // خريطة لتخزين جميع البيانات المنفصلة
     List<String> selectedIds = invoiceProvider.selectionState.keys
         .where((id) => invoiceProvider.selectionState[id] == true)
         .toList();
+
     for (String id in selectedIds) {
       final itemData = invoiceProvider.getDataById(id);
-
       if (itemData != null) {
         List<dynamic> scannedData = itemData['scannedData'] ?? [];
 
@@ -81,11 +103,13 @@ class InvoiceService {
           final cachedData = invoiceProvider.getCachedData(docId);
 
           if (cachedData != null) {
-            aggregatedData = prepareData(aggregatedData, cachedData);
+            final separateData = prepareData(aggregatedData, cachedData);
+            allSeparateData[docId] = separateData; // حفظ البيانات المنفصلة
           } else {
             final data = await fetchDataFromFirestore(docId);
             if (data != null) {
-              aggregatedData = prepareData(aggregatedData, data);
+              final separateData = prepareData(aggregatedData, data);
+              allSeparateData[docId] = separateData; // حفظ البيانات المنفصلة
               invoiceProvider.cacheData(docId, data);
             }
           }
@@ -93,24 +117,93 @@ class InvoiceService {
       }
     }
 
+    // تعيين البيانات المنفصلة للحفظ
+    this.separateData = allSeparateData;
     return aggregatedData;
   }
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> saveData(
-      Map<String, dynamic> aggregatedData, double total) async {
-    try {
-      // اختر مجموعة واسم الوثيقة المناسبة لتخزين البيانات
-      CollectionReference invoices = _firestore.collection('invoices');
+      Map<String, dynamic> aggregatedData,
+      double total,
+      ClienData? trader,
+      double grandTotalPrice,
+      double grandTotalPriceTaxs,
+      double taxs,
+      double previousDebts,
+      double shippingFees) async {
+    // قائمة لجمع جميع الأسعار
+    final totalLinePrices = aggregatedData.keys.map((groupKey) {
+      return invoiceProvider.getPrice(groupKey);
+    }).toList();
+    // قائمة لجمع جميع الأسعار
 
-      // قم بإضافة البيانات إلى Firestore
-      await invoices.add({
+    aggregatedData = aggregatedData.map((groupKey, groupData) {
+      double price =
+          double.tryParse(invoiceProvider.getPriceController(groupKey).text) ??
+              0.00;
+
+      // الحصول على السعر المناسب من allPrices
+      final priceIndex = aggregatedData.keys.toList().indexOf(groupKey);
+      final totalLinePrice = priceIndex < totalLinePrices.length
+          ? totalLinePrices[priceIndex]
+          : 0.00;
+      // إضافة السعر إلى الماب الخاصة بكل مجموعة
+      return MapEntry(groupKey, {
+        ...groupData,
+        'price': price,
+        'totalLinePrices': totalLinePrice, // إضافة allPrice
+      });
+    });
+
+    try {
+      DocumentReference clientDocument =
+          _firestore.collection('cliens').doc(trader!.codeIdClien);
+
+      await clientDocument
+          .collection('invoices')
+          .doc(generateInvoiceCode())
+          .set({
         'aggregatedData': aggregatedData,
+        'separateData': separateData, // استخدام البيانات المنفصلة هنا
         'total': total,
+        'grandTotalPrice': grandTotalPrice,
+        'grandTotalPriceTaxs': grandTotalPriceTaxs,
+        'taxs': taxs,
+        'previousDebts': previousDebts,
+        'shippingFees': shippingFees,
         'createdAt':
             DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(DateTime.now()),
       });
+      separateData.values.forEach((innerMap) {
+        final productId = innerMap['product_id'];
+
+        final monthFolder =
+            '${productId.substring(0, 4)}-${productId.substring(4, 6)}';
+        final productDocument = _firestore
+            .collection('products')
+            .doc('productsForAllMonths')
+            .collection(monthFolder)
+            .doc(productId);
+
+        productDocument.update({
+          'sale_status': true, // or any other status you want to update
+        });
+      });
+
+      List<String> selectedIds = invoiceProvider.selectionState.keys
+          .where((id) => invoiceProvider.selectionState[id] == true)
+          .toList();
+
+      for (String id in selectedIds) {
+        //     final itemData = invoiceProvider.getDataById(id);
+        //  String   codeSales = itemData!['codeSales'] ?? [];
+
+        _firestore.collection('seles').doc(id).update({
+          'not_attached_to_client': true,
+        });
+      }
     } catch (e) {
       print('Error saving data to Firestore: $e');
       throw e; // أعيد الخطأ للتعامل معه لاحقًا
