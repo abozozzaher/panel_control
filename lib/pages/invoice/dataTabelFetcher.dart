@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:panel_control/pages/invoice/pdf_Inv.dart';
-import 'package:path/path.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
 import '../../provider/invoice_provider.dart';
+import '../../provider/trader_provider.dart';
 import '../../service/invoice_service.dart';
 import 'widget/itemForTabel.dart';
 import 'widget/rowForAllTotals.dart';
@@ -48,6 +47,8 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
 
   @override
   Widget build(BuildContext context) {
+    final trader = Provider.of<TraderProvider>(context).trader;
+
     final invoiceProvider = Provider.of<InvoiceProvider>(context);
     final InvoiceService invoiceService =
         InvoiceService(context, invoiceProvider);
@@ -58,127 +59,133 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
         label: Text(title),
       );
     }).toList();
+    return trader == null
 
-    return Center(
-      child: FutureBuilder<Map<String, Map<String, dynamic>>>(
-        future: invoiceService.fetchData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final aggregatedData = snapshot.data;
+        /// 454545
+        ? Center(child: Text('No trader selected'))
+        : Center(
+            child: FutureBuilder<Map<String, Map<String, dynamic>>>(
+              future: invoiceService.fetchData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('${S().error}: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  final aggregatedData = snapshot.data;
 
-            // Initialize totals
-            double totalWeight = 0.0;
-            int totalQuantity = 0;
-            int totalLength = 0;
-            int totalScannedData = 0;
+                  // Initialize totals
+                  double totalWeight = 0.0;
+                  int totalQuantity = 0;
+                  int totalLength = 0;
+                  int totalScannedData = 0;
 
-            List<DataRow> dataRows = aggregatedData!.entries.map((entry) {
-              final itemData = entry.value;
-              final groupKey = entry.key;
-              final index = aggregatedData.keys
-                  .toList()
-                  .indexOf(groupKey); // احصل على الفهرس هنا
+                  List<DataRow> dataRows = aggregatedData!.entries.map((entry) {
+                    final itemData = entry.value;
+                    final groupKey = entry.key;
+                    final index = aggregatedData.keys
+                        .toList()
+                        .indexOf(groupKey); // احصل على الفهرس هنا
 
 // تحديث حالة التحديد بناءً على البروفيدر
-              _selectedItem = aggregatedData.keys.map((key) {
-                return invoiceProvider.getSelectionState(key) ?? false;
-              }).toList();
+                    _selectedItem = aggregatedData.keys.map((key) {
+                      return invoiceProvider.getSelectionState(key) ?? false;
+                    }).toList();
 
-              // Accumulate totals
-              totalWeight += itemData['total_weight'] as double;
-              totalQuantity += itemData['quantity'] as int;
-              totalLength += itemData['length'] as int;
-              totalScannedData += itemData['scanned_data'] as int;
+                    // Accumulate totals
+                    totalWeight += itemData['total_weight'] as double;
+                    totalQuantity += itemData['quantity'] as int;
+                    totalLength += itemData['length'] as int;
+                    totalScannedData += itemData['scanned_data'] as int;
 
-              return itemForTabel(
-                itemData,
-                invoiceProvider,
-                groupKey,
-                index,
-                aggregatedData,
-                grandTotalPrice,
-                _selectedItem,
-                (bool? selectedItem) {
-                  setState(() {
-                    if (selectedItem != null) {
-                      _selectedItem[index] = selectedItem;
-                      // تحديث حالة التحديد في البروفيدر
-                      final key = aggregatedData.keys.toList()[index];
-                      invoiceProvider.updateSelectionState(key, selectedItem);
-                      invoiceProvider.getPriceController(key).clear();
-                      invoiceProvider.getTotalPriceNotifier(groupKey).value =
-                          '0.00';
-                    }
-                  });
-                },
-              );
-            }).toList();
+                    return itemForTabel(
+                      itemData,
+                      invoiceProvider,
+                      groupKey,
+                      index,
+                      aggregatedData,
+                      grandTotalPrice,
+                      _selectedItem,
+                      (bool? selectedItem) {
+                        setState(() {
+                          if (selectedItem != null) {
+                            _selectedItem[index] = selectedItem;
+                            // تحديث حالة التحديد في البروفيدر
+                            final key = aggregatedData.keys.toList()[index];
+                            invoiceProvider.updateSelectionState(
+                                key, selectedItem);
+                            invoiceProvider.getPriceController(key).clear();
+                            invoiceProvider
+                                .getTotalPriceNotifier(groupKey)
+                                .value = '0.00';
+                          }
+                        });
+                      },
+                    );
+                  }).toList();
 
-            // Add a row for totals المجموع الاول
-            dataRows.add(rowForTotals(totalLength, totalWeight,
-                totalScannedData, totalQuantity, grandTotalPrice));
+                  // Add a row for totals المجموع الاول
+                  dataRows.add(rowForTotals(totalLength, totalWeight,
+                      totalScannedData, totalQuantity, grandTotalPrice));
 
-            print('object $grandTotalPrice');
+                  print('object $grandTotalPrice');
 
-            // Add a row for totals Tax الضريبة
-            dataRows.add(
-                rowTax(taxController, convertArabicToEnglish, taxsNotifier));
-            final taxValue = 1 + taxsNotifier.value;
+                  // Add a row for totals Tax الضريبة
+                  dataRows.add(rowTax(
+                      taxController, convertArabicToEnglish, taxsNotifier));
+                  final taxValue = 1 + taxsNotifier.value;
 
-            // حساب السعر مع الضريبة
-            final grandTotalPriceTaxs = grandTotalPrice * taxValue;
+                  // حساب السعر مع الضريبة
+                  final grandTotalPriceTaxs = grandTotalPrice * taxValue;
 
-            // Add a row for previousDebts الدين السابق
-            dataRows.add(rowForPreviousDebts(
-                grandTotalPriceTaxs,
-                previousDebtController,
-                convertArabicToEnglish,
-                previousDebtsNotifier));
+                  // Add a row for previousDebts الدين السابق
+                  dataRows.add(rowForPreviousDebts(
+                      grandTotalPriceTaxs,
+                      previousDebtController,
+                      convertArabicToEnglish,
+                      previousDebtsNotifier));
 
-            // Add a row for shippingFees اجور الشحن
-            dataRows.add(
-              rowForShippingFees(
-                  grandTotalPriceTaxs,
-                  shippingFeeController,
-                  convertArabicToEnglish,
-                  shippingFeesNotifier,
-                  previousDebtsNotifier),
-            );
+                  // Add a row for shippingFees اجور الشحن
+                  dataRows.add(
+                    rowForShippingFees(
+                        grandTotalPriceTaxs,
+                        shippingFeeController,
+                        convertArabicToEnglish,
+                        shippingFeesNotifier,
+                        previousDebtsNotifier),
+                  );
 
-            final totalAllMoney = grandTotalPriceTaxs +
-                previousDebtsNotifier.value +
-                shippingFeesNotifier.value;
+                  final totalAllMoney = grandTotalPriceTaxs +
+                      previousDebtsNotifier.value +
+                      shippingFeesNotifier.value;
 
-            //   print('ssss $TotalAllMoney');
-            // Add a row for all totals قيمة الفاتورة
-            dataRows.add(
-              rowForAllTotals(totalAllMoney, () {
-                setState(() {});
-              }),
-            );
+                  //   print('ssss $TotalAllMoney');
+                  // Add a row for all totals قيمة الفاتورة
+                  dataRows.add(
+                    rowForAllTotals(totalAllMoney, () {
+                      setState(() {});
+                    }),
+                  );
 
-            return tableBuilld(
-                columns,
-                dataRows,
-                invoiceService,
-                invoiceProvider,
-                grandTotalPriceTaxs,
-                context,
-                grandTotalPrice,
-                previousDebtsNotifier,
-                shippingFeesNotifier,
-                taxsNotifier);
-          } else {
-            return Center(
-                child: Text(S().no_data_found, textAlign: TextAlign.center));
-          }
-        },
-      ),
-    );
+                  return tableBuilld(
+                      columns,
+                      dataRows,
+                      invoiceService,
+                      invoiceProvider,
+                      grandTotalPriceTaxs,
+                      context,
+                      grandTotalPrice,
+                      previousDebtsNotifier,
+                      shippingFeesNotifier,
+                      taxsNotifier);
+                } else {
+                  return Center(
+                      child:
+                          Text(S().no_data_found, textAlign: TextAlign.center));
+                }
+              },
+            ),
+          );
   }
 
   @override

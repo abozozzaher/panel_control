@@ -31,8 +31,6 @@ class _DialogInvoiceState extends State<DialogInvoice> {
           .where('not_attached_to_client', isEqualTo: false)
           .get();
 
-      print(querySnapshot.docs.length);
-
       final List<Map<String, dynamic>> fetchedItems = querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList();
@@ -51,8 +49,6 @@ class _DialogInvoiceState extends State<DialogInvoice> {
         };
         itemsData = {for (var item in items) item['codeSales'] as String: item};
       });
-
-      print('ddddd ${items}');
     } catch (e) {
       print('Error fetching items: $e');
     }
@@ -63,7 +59,7 @@ class _DialogInvoiceState extends State<DialogInvoice> {
     final invoiceProvider =
         Provider.of<InvoiceProvider>(context, listen: false);
     return AlertDialog(
-      title: Text('Select Items', textAlign: TextAlign.center),
+      title: Text(S().select_items, textAlign: TextAlign.center),
       content: items.isEmpty
           ? Center(child: CircularProgressIndicator())
           : Container(

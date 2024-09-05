@@ -63,10 +63,12 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Invoice Code: $invoiceCode'),
+              Text('${S().invoice_code}: $invoiceCode'),
+              // بيانات التاجر منسدلة اختيار التاجر
               SizedBox(height: 20),
               TraderDropdown(),
               SizedBox(height: 20),
+              // مندسلة الطلبات التي تم مسحها من قبل العامل
               ElevatedButton.icon(
                   onPressed: () {
                     showDialog(
@@ -77,16 +79,8 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
                   icon: Icon(Icons.list),
                   label: Text(S().select_items)),
               SizedBox(height: 20),
+              // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
               DataTabelFetcher(),
-              SizedBox(height: 20),
-              // عمل شكل فاتورة
-              ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.picture_as_pdf),
-                  label: Text(S().view_invoice)),
-              SizedBox(height: 20),
-              ElevatedButton.icon(
-                  onPressed: () {}, label: Text(S().save_invoice))
             ],
           ),
         ),

@@ -15,7 +15,7 @@ DataRow rowForAllTotals(double totalAllMoney, VoidCallback onPressed) {
           child: Text(S().invoice_amount_due, textAlign: TextAlign.center))),
       DataCell(Center(
           child: ElevatedButton(
-              child: Text('Click to calculate'), onPressed: onPressed))),
+              child: Text(S().click_to_calculate), onPressed: onPressed))),
       DataCell(
         Center(
             child: Text(

@@ -25,7 +25,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Application management page'),
+        title: Text(S().application_management_page),
         centerTitle: true,
         leading: isMobile
             ? null
@@ -57,9 +57,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                       // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
-                      print('تم الضغط على إضافة عميل');
                     },
-                    child: Text('add Clien'),
+                    child: Text(S().add_clien),
                   ),
                 ),
 
@@ -78,7 +77,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
-                    child: Text('Add yarn'),
+                    child: Text(S().add_yarn),
                   ),
                 ),
               ],
@@ -125,7 +124,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
-                    child: Text('Show full repository content'),
+                    child: Text(S().show_full_repository_content),
                   ),
                 ),
               ],

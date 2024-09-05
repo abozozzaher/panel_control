@@ -27,11 +27,23 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Access Denied. You do not have the required role."),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
+        "add_clien": MessageLookupByLibrary.simpleMessage("add Clien"),
+        "add_customer_data":
+            MessageLookupByLibrary.simpleMessage("Add customer data"),
         "add_new_item": MessageLookupByLibrary.simpleMessage("Add new item"),
         "add_yarn": MessageLookupByLibrary.simpleMessage("Add Yarn"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "Türkiye Gaziantep Sanayi MAH. 60092"),
+        "addressArabic": MessageLookupByLibrary.simpleMessage("Address Arabic"),
+        "addressEnglish":
+            MessageLookupByLibrary.simpleMessage("Address English"),
+        "administration_page":
+            MessageLookupByLibrary.simpleMessage("Administration page"),
         "afternoon": MessageLookupByLibrary.simpleMessage("Afternoon"),
+        "an_error_occurred_while_adding": MessageLookupByLibrary.simpleMessage(
+            "An error occurred while adding"),
+        "application_management_page":
+            MessageLookupByLibrary.simpleMessage("Application management page"),
         "available": MessageLookupByLibrary.simpleMessage("Available"),
         "black": MessageLookupByLibrary.simpleMessage("Black"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
@@ -40,6 +52,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "button": MessageLookupByLibrary.simpleMessage("Button"),
         "camel": MessageLookupByLibrary.simpleMessage("camel"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "click_to_calculate":
+            MessageLookupByLibrary.simpleMessage("Click to calculate"),
+        "clien_id": MessageLookupByLibrary.simpleMessage("Clien Id "),
+        "client_code": MessageLookupByLibrary.simpleMessage("Client Code"),
         "client_saved_successfully":
             MessageLookupByLibrary.simpleMessage("Client saved successfully"),
         "code_invoice": MessageLookupByLibrary.simpleMessage("code invoice"),
@@ -47,8 +63,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "company_name": MessageLookupByLibrary.simpleMessage(
             "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "confirm_customer_data":
+            MessageLookupByLibrary.simpleMessage("Confirm customer data"),
+        "confirm_data": MessageLookupByLibrary.simpleMessage("Confirm Data"),
+        "confirm_yarn_data":
+            MessageLookupByLibrary.simpleMessage("Confirm Yarn Data"),
         "cotton": MessageLookupByLibrary.simpleMessage("Cotton"),
         "custom": MessageLookupByLibrary.simpleMessage("Custom"),
+        "customer_added_successfully":
+            MessageLookupByLibrary.simpleMessage("Customer added successfully"),
+        "customer_address":
+            MessageLookupByLibrary.simpleMessage("Customer address"),
         "dark_green": MessageLookupByLibrary.simpleMessage("Dark Green"),
         "data": MessageLookupByLibrary.simpleMessage("Data"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
@@ -75,6 +100,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "first_name": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
+        "full_name_arabic":
+            MessageLookupByLibrary.simpleMessage("Full Name (Arabic)"),
+        "full_name_english":
+            MessageLookupByLibrary.simpleMessage("Full Name (English)"),
         "go_to_page":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
         "habl": MessageLookupByLibrary.simpleMessage("pregnancy"),
@@ -91,6 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "invoice": MessageLookupByLibrary.simpleMessage("Invoice"),
         "invoice_amount_due":
             MessageLookupByLibrary.simpleMessage("invoice amount due"),
+        "invoice_code": MessageLookupByLibrary.simpleMessage("Invoice Code"),
         "invoice_to": MessageLookupByLibrary.simpleMessage("Invoice to"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
         "last_name": MessageLookupByLibrary.simpleMessage("Last Name"),
@@ -103,6 +133,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "mahjara": MessageLookupByLibrary.simpleMessage("Quarry"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
         "morning": MessageLookupByLibrary.simpleMessage("Morning"),
+        "name_in_arabic":
+            MessageLookupByLibrary.simpleMessage("Name in Arabic"),
+        "name_in_english":
+            MessageLookupByLibrary.simpleMessage("Name in English"),
         "navy_blue": MessageLookupByLibrary.simpleMessage("Navy Blue"),
         "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register":
@@ -125,7 +159,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "payment_info": MessageLookupByLibrary.simpleMessage("Payment info"),
         "pcs": MessageLookupByLibrary.simpleMessage("Pcs"),
         "phone": MessageLookupByLibrary.simpleMessage("Phone"),
+        "phone_number": MessageLookupByLibrary.simpleMessage("phone number"),
         "pick_image": MessageLookupByLibrary.simpleMessage("Pick image"),
+        "please_enter_phone_number":
+            MessageLookupByLibrary.simpleMessage("Please enter phone number"),
+        "please_enter_the_address":
+            MessageLookupByLibrary.simpleMessage("Please enter the address"),
+        "please_enter_the_full_name_in_english":
+            MessageLookupByLibrary.simpleMessage(
+                "Please enter the full name in English"),
+        "please_enter_the_name_in_arabic": MessageLookupByLibrary.simpleMessage(
+            "Please enter the name in Arabic"),
         "please_enter_your_email":
             MessageLookupByLibrary.simpleMessage("Please enter your email"),
         "please_fill_all_fields":
@@ -138,6 +182,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "product_details":
             MessageLookupByLibrary.simpleMessage("Product Details"),
         "product_id": MessageLookupByLibrary.simpleMessage("Product ID"),
+        "products_table":
+            MessageLookupByLibrary.simpleMessage("Products Table"),
         "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "red": MessageLookupByLibrary.simpleMessage("red"),
@@ -161,10 +207,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Select an option"),
         "select_client": MessageLookupByLibrary.simpleMessage("Select Client"),
         "select_items": MessageLookupByLibrary.simpleMessage("Select Items"),
+        "select_months": MessageLookupByLibrary.simpleMessage("Select Months"),
         "send": MessageLookupByLibrary.simpleMessage("Send"),
         "shanta": MessageLookupByLibrary.simpleMessage("bag"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
         "shipping_fees": MessageLookupByLibrary.simpleMessage("Shipping Fees"),
+        "show_full_repository_content": MessageLookupByLibrary.simpleMessage(
+            "Show full repository content"),
         "silver": MessageLookupByLibrary.simpleMessage("Silver"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
         "sub_total": MessageLookupByLibrary.simpleMessage("Sub Total"),
@@ -174,6 +223,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "thank_you_for_your_business":
             MessageLookupByLibrary.simpleMessage("Thank you for your business"),
         "the_code": MessageLookupByLibrary.simpleMessage("The Code"),
+        "todays_date": MessageLookupByLibrary.simpleMessage("Today\\s Date"),
         "toggle_language":
             MessageLookupByLibrary.simpleMessage("Toggle Language"),
         "toggle_theme": MessageLookupByLibrary.simpleMessage("Toggle Theme"),
@@ -194,6 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "view_invoice": MessageLookupByLibrary.simpleMessage("View Invoice"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),
+        "yarn_id": MessageLookupByLibrary.simpleMessage("Yarn Id"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number"),
         "yarn_supplier": MessageLookupByLibrary.simpleMessage("Yarn Supplier"),
         "yarn_type": MessageLookupByLibrary.simpleMessage("Yarn Type"),

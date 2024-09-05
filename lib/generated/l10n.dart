@@ -1409,6 +1409,306 @@ class S {
       args: [],
     );
   }
+
+  /// `Invoice Code`
+  String get invoice_code {
+    return Intl.message(
+      'Invoice Code',
+      name: 'invoice_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click to calculate`
+  String get click_to_calculate {
+    return Intl.message(
+      'Click to calculate',
+      name: 'click_to_calculate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Application management page`
+  String get application_management_page {
+    return Intl.message(
+      'Application management page',
+      name: 'application_management_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `add Clien`
+  String get add_clien {
+    return Intl.message(
+      'add Clien',
+      name: 'add_clien',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show full repository content`
+  String get show_full_repository_content {
+    return Intl.message(
+      'Show full repository content',
+      name: 'show_full_repository_content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Administration page`
+  String get administration_page {
+    return Intl.message(
+      'Administration page',
+      name: 'administration_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add customer data`
+  String get add_customer_data {
+    return Intl.message(
+      'Add customer data',
+      name: 'add_customer_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clien Id `
+  String get clien_id {
+    return Intl.message(
+      'Clien Id ',
+      name: 'clien_id',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer address`
+  String get customer_address {
+    return Intl.message(
+      'Customer address',
+      name: 'customer_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the full name in English`
+  String get please_enter_the_full_name_in_english {
+    return Intl.message(
+      'Please enter the full name in English',
+      name: 'please_enter_the_full_name_in_english',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the address`
+  String get please_enter_the_address {
+    return Intl.message(
+      'Please enter the address',
+      name: 'please_enter_the_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full Name (English)`
+  String get full_name_english {
+    return Intl.message(
+      'Full Name (English)',
+      name: 'full_name_english',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full Name (Arabic)`
+  String get full_name_arabic {
+    return Intl.message(
+      'Full Name (Arabic)',
+      name: 'full_name_arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the name in Arabic`
+  String get please_enter_the_name_in_arabic {
+    return Intl.message(
+      'Please enter the name in Arabic',
+      name: 'please_enter_the_name_in_arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `phone number`
+  String get phone_number {
+    return Intl.message(
+      'phone number',
+      name: 'phone_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter phone number`
+  String get please_enter_phone_number {
+    return Intl.message(
+      'Please enter phone number',
+      name: 'please_enter_phone_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm customer data`
+  String get confirm_customer_data {
+    return Intl.message(
+      'Confirm customer data',
+      name: 'confirm_customer_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Client Code`
+  String get client_code {
+    return Intl.message(
+      'Client Code',
+      name: 'client_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name in English`
+  String get name_in_english {
+    return Intl.message(
+      'Name in English',
+      name: 'name_in_english',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name in Arabic`
+  String get name_in_arabic {
+    return Intl.message(
+      'Name in Arabic',
+      name: 'name_in_arabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Address Arabic`
+  String get addressArabic {
+    return Intl.message(
+      'Address Arabic',
+      name: 'addressArabic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Address English`
+  String get addressEnglish {
+    return Intl.message(
+      'Address English',
+      name: 'addressEnglish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer added successfully`
+  String get customer_added_successfully {
+    return Intl.message(
+      'Customer added successfully',
+      name: 'customer_added_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An error occurred while adding`
+  String get an_error_occurred_while_adding {
+    return Intl.message(
+      'An error occurred while adding',
+      name: 'an_error_occurred_while_adding',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Products Table`
+  String get products_table {
+    return Intl.message(
+      'Products Table',
+      name: 'products_table',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Months`
+  String get select_months {
+    return Intl.message(
+      'Select Months',
+      name: 'select_months',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Data`
+  String get confirm_data {
+    return Intl.message(
+      'Confirm Data',
+      name: 'confirm_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yarn Id`
+  String get yarn_id {
+    return Intl.message(
+      'Yarn Id',
+      name: 'yarn_id',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Yarn Data`
+  String get confirm_yarn_data {
+    return Intl.message(
+      'Confirm Yarn Data',
+      name: 'confirm_yarn_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today\s Date`
+  String get todays_date {
+    return Intl.message(
+      'Today\\s Date',
+      name: 'todays_date',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

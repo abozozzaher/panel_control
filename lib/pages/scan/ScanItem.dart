@@ -415,7 +415,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Data', textAlign: TextAlign.center),
+          title: Text(S().confirm_data, textAlign: TextAlign.center),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

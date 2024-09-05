@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import '../data/dataBase.dart';
+import '../model/clien.dart';
 
 class InvoiceProvider with ChangeNotifier {
   List<String> _selectedDocumentIds = []; // For storing selected item IDs

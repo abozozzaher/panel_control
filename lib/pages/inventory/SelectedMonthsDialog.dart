@@ -10,7 +10,7 @@ Future<List<String>> showMultiSelectDialog(BuildContext context,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Select Months', textAlign: TextAlign.center),
+        title: Text(S().select_months, textAlign: TextAlign.center),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,3 +1,4 @@
+import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,8 @@ import 'dart:ui' as ui;
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/user_provider.dart';
-import '../../service/app_drawer.dart'; // لتوليد الكود الموحد من تاريخ اليوم
+import '../../service/app_drawer.dart';
+import '../../service/upperCase.dart'; // لتوليد الكود الموحد من تاريخ اليوم
 
 class ClienEntryPage extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -26,12 +28,24 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
 
   String? fullNameArabic;
   String? fullNameEnglish;
-  String? address;
+  String? country;
+  String? state;
+  String? city;
+  String? addressArabic;
+  String? addressEnglish;
+  String? email;
   String? phoneNumber;
   final fullNameArabicController = TextEditingController();
   final fullNameEnglishController = TextEditingController();
-  final addressController = TextEditingController();
+  final addressArabicController = TextEditingController();
+  final addressEnglishController = TextEditingController();
+  final emailController = TextEditingController();
   final phoneNumberController = TextEditingController();
+
+  TextEditingController countryController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+
   // لتوليد كود فريد بناءً على تاريخ اليوم
   String generateClienCode() {
     // تنسيق التاريخ
@@ -60,6 +74,9 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
 
   @override
   Widget build(BuildContext context) {
+    String country = countryController.text;
+    String state = stateController.text;
+    String city = cityController.text;
     final userProvider =
         Provider.of<UserProvider>(context); // Replace with actual user provider
     final user = userProvider.user; // Assuming you have currentUser
@@ -70,7 +87,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text('Add customer data'),
+          title: Text(S().add_customer_data),
           centerTitle: true,
           leading: isMobile
               ? null
@@ -82,201 +99,292 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                 )),
       drawer: AppDrawer(
           toggleTheme: widget.toggleTheme, toggleLocale: widget.toggleLocale),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text('Today\'s Date: $todayDate'),
-          SizedBox(height: 20),
-          Text('Clien Id  :  $clienId',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              textDirection: ui.TextDirection.rtl),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: _formKey,
-              child: ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  // إدخال الاسم بالعربية
-                  TextFormField(
-                    controller: fullNameArabicController,
-                    decoration:
-                        InputDecoration(labelText: 'الاسم الكامل (عربي)'),
-                    onSaved: (value) {
-                      fullNameArabic = value;
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'يرجى إدخال الاسم بالعربية';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  // إدخال الاسم بالإنجليزية
-                  TextFormField(
-                    controller: fullNameEnglishController,
-                    decoration:
-                        InputDecoration(labelText: 'Full Name (English)'),
-                    onSaved: (value) {
-                      fullNameEnglish = value;
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the full name in English';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  // إدخال العنوان
-                  TextFormField(
-                    controller: addressController,
-                    decoration: InputDecoration(labelText: 'عنوان العميل'),
-                    maxLines: 2,
-                    onSaved: (value) {
-                      address = value;
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'يرجى إدخال العنوان';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  // إدخال رقم الهاتف
-                  TextFormField(
-                    controller: phoneNumberController,
-                    decoration: InputDecoration(labelText: 'رقم الهاتف'),
-                    keyboardType: TextInputType.phone,
-                    onSaved: (value) {
-                      phoneNumber = value;
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'يرجى إدخال رقم الهاتف';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  SizedBox(height: 20),
-                  // زر لإضافة البيانات
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-
-                        // إنشاء كود العميل الموحد
-
-                        // إنشاء مودل بيانات العميل
-                        ClienData newClien = ClienData(
-                          fullNameArabic: fullNameArabic!,
-                          fullNameEnglish: fullNameEnglish!,
-                          address: address!,
-                          phoneNumber: phoneNumber!,
-                          createdAt: DateTime.now(),
-                          codeIdClien: clienId,
-                        );
-
-                        // عرض مربع حوار لتأكيد البيانات
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('تأكيد بيانات العميل',
-                                  textAlign: TextAlign.center),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text('كود العميل: ${newClien.codeIdClien}'),
-                                  Text('الاسم بالعربية: $fullNameArabic'),
-                                  Text('الاسم بالإنجليزية: $fullNameEnglish'),
-                                  Text('العنوان: $address'),
-                                  Text('رقم الهاتف: $phoneNumber'),
-                                ],
-                              ),
-                              actions: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Expanded(
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            backgroundColor: Colors.redAccent),
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Close dialog
-                                        },
-                                        child: Text(
-                                          S().cancel,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 5, width: 5),
-                                    Expanded(
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            backgroundColor:
-                                                Colors.greenAccent),
-                                        child: Text(S().confirm,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black)),
-                                        onPressed: () {
-                                          // إضافة البيانات إلى Firebase
-                                          addClienToFirebase(newClien)
-                                              .then((_) {
-                                            // Clear the form fields
-                                            setState(() {
-                                              fullNameArabicController.clear();
-                                              fullNameEnglishController.clear();
-                                              addressController.clear();
-                                              phoneNumberController.clear();
-                                            });
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                  content: Text(
-                                                      'تم إضافة العميل بنجاح')),
-                                            );
-
-                                            Navigator.of(context)
-                                                .pop(); // إغلاق مربع الحوار بعد التأكيد
-                                          }).catchError((error) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                  content: Text(
-                                                      'حدث خطأ أثناء الإضافة: $error')),
-                                            );
-                                            Navigator.of(context)
-                                                .pop(); // إغلاق مربع الحوار عند حدوث خطأ
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
+      body: Center(
+        child: SizedBox(
+          width: 600,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('${S().todays_date} : $todayDate'),
+                SizedBox(height: 20),
+                Text('${S().clien_id} :  $clienId',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    textDirection: ui.TextDirection.rtl),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    key: _formKey,
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        // إدخال الاسم بالعربية
+                        TextFormField(
+                          controller: fullNameArabicController,
+                          decoration:
+                              InputDecoration(labelText: S().full_name_arabic),
+                          onSaved: (value) {
+                            fullNameArabic = value;
                           },
-                        );
-                      }
-                    },
-                    child: Text('Add customer'),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return S().please_enter_the_name_in_arabic;
+                            }
+                            return null;
+                          },
+                        ),
+
+                        // إدخال الاسم بالإنجليزية
+                        TextFormField(
+                          controller: fullNameEnglishController,
+                          decoration:
+                              InputDecoration(labelText: S().full_name_english),
+                          onSaved: (value) {
+                            fullNameEnglish = value;
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return S().please_enter_the_full_name_in_english;
+                            }
+                            return null;
+                          },
+                          inputFormatters: [
+                            UpperCaseFirstLetterFormatter(),
+                          ],
+                        ),
+                        // ادخال البلد والعنوان
+                        CountryStateCityPicker(
+                            country: countryController,
+                            state: stateController,
+                            city: cityController,
+                            dialogColor: Colors.grey.shade200,
+                            textFieldDecoration: InputDecoration(
+                                fillColor: Colors.blueGrey.shade100,
+                                filled: true,
+                                suffixIcon:
+                                    const Icon(Icons.arrow_downward_rounded),
+                                border: const OutlineInputBorder(
+                                    borderSide: BorderSide.none))),
+                        // إدخال العنوان  بالعربية
+                        TextFormField(
+                          controller: addressArabicController,
+                          decoration:
+                              InputDecoration(labelText: S().addressArabic),
+                          maxLines: 2,
+                          onSaved: (value) {
+                            addressArabic = value;
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return S().please_enter_the_address;
+                            }
+                            return null;
+                          },
+                        ),
+                        // إدخال العنوان بالانكليزي
+                        TextFormField(
+                          controller: addressEnglishController,
+                          decoration:
+                              InputDecoration(labelText: S().addressEnglish),
+                          maxLines: 2,
+                          onSaved: (value) {
+                            addressEnglish = value;
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return S().please_enter_the_address;
+                            }
+                            return null;
+                          },
+                        ),
+
+                        // إدخال Email
+                        TextFormField(
+                          controller: emailController,
+                          decoration: InputDecoration(labelText: S().email),
+                          keyboardType: TextInputType.emailAddress,
+                          onSaved: (value) {
+                            email = value;
+                          },
+                          /*
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return S().please_enter_phone_number;
+                            }
+                            return null;
+                          },
+                          */
+                        ),
+
+                        // إدخال رقم الهاتف
+                        TextFormField(
+                          controller: phoneNumberController,
+                          decoration:
+                              InputDecoration(labelText: S().phone_number),
+                          keyboardType: TextInputType.phone,
+                          onSaved: (value) {
+                            phoneNumber = value;
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return S().please_enter_phone_number;
+                            }
+                            return null;
+                          },
+                        ),
+
+                        SizedBox(height: 20),
+                        // زر لإضافة البيانات
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+
+                              // إنشاء كود العميل الموحد
+
+                              // إنشاء مودل بيانات العميل
+                              ClienData newClien = ClienData(
+                                fullNameArabic: fullNameArabic!,
+                                fullNameEnglish: fullNameEnglish!,
+                                country: countryController.text,
+                                state: stateController.text,
+                                city: cityController.text,
+                                addressArabic: addressArabic!,
+                                addressEnglish: addressEnglish!,
+                                email: email!,
+                                phoneNumber: phoneNumber!,
+                                createdAt: DateTime.now(),
+                                codeIdClien: clienId,
+                              );
+
+                              // عرض مربع حوار لتأكيد البيانات
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(S().confirm_customer_data,
+                                        textAlign: TextAlign.center),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                            '${S().client_code} : ${newClien.codeIdClien}'),
+                                        Text(
+                                            '${S().name_in_arabic} : $fullNameArabic'),
+                                        Text(
+                                            '${S().name_in_english} : $fullNameEnglish'),
+                                        Text(
+                                            "${countryController.text}, ${stateController.text}, ${cityController.text}"),
+                                        Text(
+                                            '${S().addressArabic} : $addressArabic'),
+                                        Text(
+                                            '${S().addressEnglish} : $addressEnglish'),
+                                        Text('${S().email} : $email'),
+                                        Text('${S().phone} : $phoneNumber'),
+                                      ],
+                                    ),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Expanded(
+                                            child: TextButton(
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.redAccent),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(); // Close dialog
+                                              },
+                                              child: Text(
+                                                S().cancel,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5, width: 5),
+                                          Expanded(
+                                            child: TextButton(
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.greenAccent),
+                                              child: Text(S().confirm,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black)),
+                                              onPressed: () {
+                                                // إضافة البيانات إلى Firebase
+                                                addClienToFirebase(newClien)
+                                                    .then((_) {
+                                                  // Clear the form fields
+                                                  setState(() {
+                                                    fullNameArabicController
+                                                        .clear();
+                                                    fullNameEnglishController
+                                                        .clear();
+                                                    countryController.clear();
+                                                    stateController.clear();
+                                                    cityController.clear();
+
+                                                    addressArabicController
+                                                        .clear();
+                                                    addressEnglishController
+                                                        .clear();
+                                                    emailController.clear();
+                                                    phoneNumberController
+                                                        .clear();
+                                                  });
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                        content: Center(
+                                                      child: Text(S()
+                                                          .customer_added_successfully),
+                                                    )),
+                                                  );
+
+                                                  Navigator.of(context)
+                                                      .pop(); // إغلاق مربع الحوار بعد التأكيد
+                                                }).catchError((error) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                        content: Center(
+                                                      child: Text(
+                                                          '${S().an_error_occurred_while_adding} : $error'),
+                                                    )),
+                                                  );
+                                                  Navigator.of(context)
+                                                      .pop(); // إغلاق مربع الحوار عند حدوث خطأ
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          child: Text(S().add_clien),
+                        ),
+                        SizedBox(height: 20),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

@@ -75,9 +75,9 @@ class _AddYarnState extends State<AddYarn> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Today\'s Date: $todayDate'),
+              Text('${S().todays_date} : $todayDate'),
               SizedBox(height: 20),
-              Text('Yarn Id  :  $yarnId',
+              Text('${S().yarn_id}  :  $yarnId',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   textDirection: ui.TextDirection.rtl),
               buildDropdown(
@@ -187,7 +187,7 @@ class _AddYarnState extends State<AddYarn> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Confirm Yarn Data',
+                          title: Text(S().confirm_yarn_data,
                               textAlign: TextAlign.center),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,

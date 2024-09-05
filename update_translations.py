@@ -1,22 +1,25 @@
 import os
-import re
 import json
 import string
 
 def remove_punctuation(text):
-    """Remove punctuation from the given text."""
-    return text.translate(str.maketrans('', '', string.punctuation))
+    """Remove punctuation, including apostrophes, from the given text."""
+    return text.translate(str.maketrans('', '', string.punctuation + "'"))
 
 def process_file(file_path, search_text, translations):
     """Process the given file to find and replace texts and update translations."""
+    clean_search_text = remove_punctuation(search_text)
+    
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
     # Find and replace occurrences of the search text
     if search_text in content:
-        # Create a key from the search text
-        new_key = remove_punctuation(search_text).replace(' ', '_').lower()
-        new_value = search_text
+        # Create a key from the cleaned search text
+        new_key = clean_search_text.replace(' ', '_').lower()
+
+        # Clean the search text value by removing apostrophes
+        new_value = search_text.replace("'", "")
 
         if new_key not in translations:
             translations[new_key] = new_value
@@ -70,7 +73,6 @@ if __name__ == '__main__':
     main()
 
 
-
 # لتشغيل السكربت:
 # python3 your_script_name.py
 # هذا السكربت لتعديل جمل فقط
@@ -80,3 +82,4 @@ if __name__ == '__main__':
 # python3 your_script_name.py
 
 # python3 update_translations.py
+# flutter pub run intl_utils:generate

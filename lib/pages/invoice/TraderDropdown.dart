@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../data/dataBase.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
+import '../../provider/invoice_provider.dart';
 import '../../provider/trader_provider.dart';
 
 class TraderDropdown extends StatefulWidget {
@@ -53,13 +54,10 @@ class _TraderDropdownState extends State<TraderDropdown> {
       try {
         List<Map<String, dynamic>> existingClients =
             await databaseHelper.checkClientsInDatabaseTraders();
-        print('1111');
         if (existingClients.isNotEmpty) {
-          print('11112');
           // إذا كانت البيانات موجودة في قاعدة البيانات المحلية
           //   setState(() {            clients = existingClients                .map((client) => ClienData.fromMap(client))                .toList();          isLoading = false; });
           List<ClienData> clientsFromDb = existingClients.map((client) {
-            print('11113');
             return ClienData.fromMap(client);
           }).toList();
           setState(() {
@@ -67,23 +65,19 @@ class _TraderDropdownState extends State<TraderDropdown> {
             isLoading = false;
           });
         } else {
-          print('11114');
           // إذا لم تكن البيانات موجودة في قاعدة البيانات المحلية، احضرها من Firebase
           QuerySnapshot snapshot =
               await FirebaseFirestore.instance.collection('cliens').get();
           List<ClienData> clientsFromFirebase = snapshot.docs.map((doc) {
-            print('11115');
             return ClienData.fromMap(doc.data() as Map<String, dynamic>);
           }).toList();
 
           // احفظ البيانات في قاعدة البيانات المحلية
           for (var client in clientsFromFirebase) {
-            print('11116');
             await databaseHelper.saveClientToDatabaseTraders(client);
           }
 
           setState(() {
-            print('11117');
             clients = clientsFromFirebase;
             isLoading = false;
           });
@@ -99,6 +93,10 @@ class _TraderDropdownState extends State<TraderDropdown> {
 
   @override
   Widget build(BuildContext context) {
+    Locale locale = Localizations.localeOf(context);
+    bool isRtl = locale.languageCode ==
+        'ar'; // Assuming 'ar' is the language code for Arabic
+
     return Consumer<TraderProvider>(
       builder: (context, provider, child) {
         if (isLoading) {
@@ -112,10 +110,12 @@ class _TraderDropdownState extends State<TraderDropdown> {
               isExpanded: true,
               value: _selectedCode,
               items: clients.map((client) {
+                String displayName =
+                    isRtl ? client.fullNameArabic : client.fullNameEnglish;
+
                 return DropdownMenuItem<String>(
                   value: client.codeIdClien,
-                  child:
-                      Text(client.fullNameEnglish, textAlign: TextAlign.center),
+                  child: Text(displayName, textAlign: TextAlign.center),
                 );
               }).toList(),
               onChanged: (String? selectedCode) async {
@@ -124,8 +124,6 @@ class _TraderDropdownState extends State<TraderDropdown> {
                     _selectedCode = selectedCode; // Update the selected code
                   });
 
-                  print(
-                      'Selected Code: $selectedCode'); // للتحقق من الكود المحدد
                   //   widget.onTraderSelected(selectedCode);
 
                   final selectedClient = clients.firstWhere(
@@ -133,7 +131,12 @@ class _TraderDropdownState extends State<TraderDropdown> {
                     orElse: () => ClienData(
                       fullNameArabic: '',
                       fullNameEnglish: '',
-                      address: '',
+                      country: '',
+                      state: '',
+                      city: '',
+                      addressArabic: '',
+                      addressEnglish: '',
+                      email: '',
                       phoneNumber: '',
                       createdAt: DateTime.now(),
                       codeIdClien: '',
@@ -147,10 +150,12 @@ class _TraderDropdownState extends State<TraderDropdown> {
                     // حفظ بيانات العميل في Provider
                     provider.setTrader(selectedClient);
                     print(
-                        'Provider data: ${provider.trader!.address} = ${provider.trader!.codeIdClien}= ${provider.trader!.fullNameArabic}= ${provider.trader!.fullNameEnglish}');
+                        'Provider data: ${provider.trader!.addressArabic} = ${provider.trader!.addressEnglish} = ${provider.trader!.codeIdClien}= ${provider.trader!.fullNameArabic}= ${provider.trader!.fullNameEnglish}');
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(S().client_saved_successfully)),
+                      SnackBar(
+                          content: Center(
+                              child: Text(S().client_saved_successfully))),
                     );
                   } else {
                     print('Client not found'); // في حالة عدم العثور على العميل

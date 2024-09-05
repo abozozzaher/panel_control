@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart'
     as mat; // استيراد إعدادات اللغة من Flutter
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:panel_control/generated/l10n.dart';
+import 'package:panel_control/model/clien.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -10,19 +12,21 @@ import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:provider/provider.dart';
 
 import '../../provider/invoice_provider.dart';
+import '../../provider/trader_provider.dart';
 import '../../service/invoice_service.dart';
 
 Future<void> generatePdf(
-  context,
-  Map<String, dynamic> aggregatedData,
-  double grandTotalPrice, // مجموع سعر البضاعة فقط
-  double previousDebts, // الدين على العميل
-  double shippingFees, // اجور الشحن
-  List<double> prices, //سعر السطر
-  List<double> allPrices, // كل مجموع الاسعار
-  double total, // الاجور النهائية
-  double taxs, // الضريبة
-) async {
+    context,
+    Map<String, dynamic> aggregatedData,
+    double grandTotalPrice, // مجموع سعر البضاعة فقط
+    double previousDebts, // الدين على العميل
+    double shippingFees, // اجور الشحن
+    List<double> prices, //سعر السطر
+    List<double> allPrices, // كل مجموع الاسعار
+    double total, // الاجور النهائية
+    double taxs // الضريبة
+
+    ) async {
   final fontTajBold = await PdfGoogleFonts.tajawalBold();
   final fontTajRegular = await PdfGoogleFonts.tajawalRegular();
 
@@ -34,11 +38,13 @@ Future<void> generatePdf(
   // Create a PDF document.
   final doc = pw.Document();
   String invoiceCode;
+  final trader = Provider.of<TraderProvider>(context, listen: false).trader;
 
   final invoiceProvider = Provider.of<InvoiceProvider>(context, listen: false);
   final InvoiceService invoiceService =
       InvoiceService(context, invoiceProvider);
   invoiceCode = invoiceService.generateInvoiceCode();
+  final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
   doc.addPage(
     pw.MultiPage(
@@ -49,7 +55,7 @@ Future<void> generatePdf(
 
       footer: _buildFooter,
       build: (context) => [
-        _contentHeader(context, total),
+        _contentHeader(context, total, isRTL, trader),
         _contentTable(context, aggregatedData, prices, allPrices),
         pw.SizedBox(height: 20),
         _contentFooter(
@@ -230,7 +236,8 @@ pw.Widget _buildFooter(pw.Context context) {
 }
 
 // الراس معلومات
-pw.Widget _contentHeader(pw.Context context, total) {
+pw.Widget _contentHeader(
+    pw.Context context, total, bool isRTL, ClienData? trader) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -270,7 +277,9 @@ pw.Widget _contentHeader(pw.Context context, total) {
                 height: 70,
                 child: pw.RichText(
                     text: pw.TextSpan(
-                        text: 'customerName\n',
+                        text: isRTL
+                            ? trader!.fullNameArabic
+                            : trader!.fullNameEnglish,
                         style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
                           fontSize: 12,
@@ -283,7 +292,23 @@ pw.Widget _contentHeader(pw.Context context, total) {
                         ),
                       ),
                       pw.TextSpan(
-                        text: 'customerAddress',
+                        text:
+                            '${trader.country}, ${trader.state}, ${trader.city},',
+                        style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.normal,
+                          fontSize: 10,
+                        ),
+                      ),
+                      const pw.TextSpan(
+                        text: '\n',
+                        style: pw.TextStyle(
+                          fontSize: 5,
+                        ),
+                      ),
+                      pw.TextSpan(
+                        text: isRTL
+                            ? trader.addressArabic
+                            : trader.addressEnglish,
                         style: pw.TextStyle(
                           fontWeight: pw.FontWeight.normal,
                           fontSize: 10,

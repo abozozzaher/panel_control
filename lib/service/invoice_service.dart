@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../data/data_lists.dart';
 import '../provider/invoice_provider.dart';
@@ -93,5 +94,26 @@ class InvoiceService {
     }
 
     return aggregatedData;
+  }
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> saveData(
+      Map<String, dynamic> aggregatedData, double total) async {
+    try {
+      // اختر مجموعة واسم الوثيقة المناسبة لتخزين البيانات
+      CollectionReference invoices = _firestore.collection('invoices');
+
+      // قم بإضافة البيانات إلى Firestore
+      await invoices.add({
+        'aggregatedData': aggregatedData,
+        'total': total,
+        'createdAt':
+            DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(DateTime.now()),
+      });
+    } catch (e) {
+      print('Error saving data to Firestore: $e');
+      throw e; // أعيد الخطأ للتعامل معه لاحقًا
+    }
   }
 }

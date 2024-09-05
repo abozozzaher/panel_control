@@ -204,7 +204,7 @@ class _InventoryState extends State<Inventory> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Products Table', textAlign: TextAlign.center),
+        title: Text(S().products_table, textAlign: TextAlign.center),
       ),
       body: Center(
         child: Column(
@@ -215,7 +215,7 @@ class _InventoryState extends State<Inventory> {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: openMultiSelectDialog,
-                child: Text('Select Months', textAlign: TextAlign.center),
+                child: Text(S().select_months, textAlign: TextAlign.center),
               ),
             ),
             Padding(

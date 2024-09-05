@@ -41,33 +41,70 @@ Directionality tableBuilld(
 
           ElevatedButton.icon(
             onPressed: () async {
-              final aggregatedData = await invoiceService.fetchData();
+              // عرض مربع حوار لتأكيد العملية
+              final bool? confirmed = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('تأكيد العملية'),
+                    content: Text(
+                        'هل أنت متأكد من تسجيل البيانات وعرض ملف الـ PDF؟'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: Text('إلغاء'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: Text('تأكيد'),
+                      ),
+                    ],
+                  );
+                },
+              );
 
-              // قائمة لجمع جميع الأسعار
-              final prices = aggregatedData.keys.map((groupKey) {
-                return double.tryParse(
-                        invoiceProvider.getPriceController(groupKey).text) ??
-                    0.00;
-              }).toList();
+              // إذا تم تأكيد العملية
+              if (confirmed == true) {
+                try {
+                  final aggregatedData = await invoiceService.fetchData();
 
-              // جلب جميع الأسعار من البروفايدر
-              final allPrices = aggregatedData.keys.map((groupKey) {
-                return invoiceProvider.getPrice(groupKey);
-              }).toList();
-              final total = grandTotalPriceTaxs +
-                  previousDebtsNotifier.value +
-                  shippingFeesNotifier.value;
+                  // قائمة لجمع جميع الأسعار
+                  final prices = aggregatedData.keys.map((groupKey) {
+                    return double.tryParse(invoiceProvider
+                            .getPriceController(groupKey)
+                            .text) ??
+                        0.00;
+                  }).toList();
 
-              await generatePdf(
-                  context,
-                  aggregatedData,
-                  grandTotalPrice,
-                  previousDebtsNotifier.value,
-                  shippingFeesNotifier.value,
-                  prices,
-                  allPrices,
-                  total,
-                  taxsNotifier.value);
+                  // جلب جميع الأسعار من البروفايدر
+                  final allPrices = aggregatedData.keys.map((groupKey) {
+                    return invoiceProvider.getPrice(groupKey);
+                  }).toList();
+                  final total = grandTotalPriceTaxs +
+                      previousDebtsNotifier.value +
+                      shippingFeesNotifier.value;
+
+                  // تسجيل البيانات في Firebase
+                  await invoiceService.saveData(aggregatedData, total);
+
+                  // إنشاء وعرض ملف الـ PDF
+                  await generatePdf(
+                      context,
+                      aggregatedData,
+                      grandTotalPrice,
+                      previousDebtsNotifier.value,
+                      shippingFeesNotifier.value,
+                      prices,
+                      allPrices,
+                      total,
+                      taxsNotifier.value);
+                } catch (e) {
+                  // التعامل مع الأخطاء
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('حدث خطأ: $e')),
+                  );
+                }
+              }
             },
             icon: Icon(Icons.picture_as_pdf),
             label: Text(S().view_invoice),
