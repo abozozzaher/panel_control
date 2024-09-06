@@ -152,6 +152,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
         "no_previous_religion":
             MessageLookupByLibrary.simpleMessage("No previous religion"),
+        "no_trader_selected":
+            MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "page": MessageLookupByLibrary.simpleMessage("Page"),
         "page_not_found":
@@ -204,6 +206,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "scanned": MessageLookupByLibrary.simpleMessage("Scanned"),
         "scanned_data_length":
             MessageLookupByLibrary.simpleMessage("Scanned Data Length"),
+        "search_client": MessageLookupByLibrary.simpleMessage("Search Client"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_all": MessageLookupByLibrary.simpleMessage("Select All"),
         "select_an_option":

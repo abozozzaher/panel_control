@@ -25,7 +25,7 @@ class YarnData {
     required this.codeIdYarn,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap(double? exchangeRateTR) {
     String formattedCreatedAt =
         DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(createdAt);
 
@@ -40,7 +40,8 @@ class YarnData {
       'lastName': lastName,
       'createdAt': formattedCreatedAt,
       'code': codeIdYarn,
-      formattedCreatedAt: '+ $codeIdYarn'
+      formattedCreatedAt: '+ $codeIdYarn',
+      'exchangeRate': '$exchangeRateTR TRY',
     };
   }
 }

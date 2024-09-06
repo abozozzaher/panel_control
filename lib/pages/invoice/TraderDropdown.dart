@@ -7,12 +7,9 @@ import '../../data/dataBase.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/trader_provider.dart';
+import '../../service/app_service.dart';
 
 class TraderDropdown extends StatefulWidget {
-  //final void Function(dynamic trader) onTraderSelected;
-
-  //TraderDropdown({required this.onTraderSelected});
-
   @override
   State<TraderDropdown> createState() => _TraderDropdownState();
 }
@@ -131,8 +128,6 @@ class _TraderDropdownState extends State<TraderDropdown> {
                   });
                   provider.setSelectedCode(selectedCode);
 
-                  //   widget.onTraderSelected(selectedCode);
-
                   final selectedClient = clients.firstWhere(
                     (client) => client.codeIdClien == selectedCode,
                     orElse: () => ClienData(
@@ -159,11 +154,9 @@ class _TraderDropdownState extends State<TraderDropdown> {
                     print(
                         'Provider data: ${provider.trader!.addressArabic} = ${provider.trader!.addressEnglish} = ${provider.trader!.codeIdClien}= ${provider.trader!.fullNameArabic}= ${provider.trader!.fullNameEnglish}');
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Center(
-                              child: Text(S().client_saved_successfully))),
-                    );
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Center(
+                            child: Text(S().client_saved_successfully))));
                   } else {
                     print('Client not found'); // في حالة عدم العثور على العميل
                   }

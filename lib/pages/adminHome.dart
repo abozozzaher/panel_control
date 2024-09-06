@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:panel_control/pages/account/accountPage.dart';
 
 import '../generated/l10n.dart';
 import '../service/app_drawer.dart';
@@ -62,6 +63,24 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                 ),
 
+                SizedBox(width: 16), // مساحة بين الأزرار
+                // زر إدخال حساب
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
+                      print('تم الضغط على إدخال صفحة الحساب');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AccountPages(
+                              toggleTheme: widget.toggleTheme,
+                              toggleLocale: widget.toggleTheme),
+                        ),
+                      );
+                    },
+                    child: Text('Account page'),
+                  ),
+                ),
                 SizedBox(width: 16), // مساحة بين الأزرار
                 // زر إدخال الخيط
                 Expanded(

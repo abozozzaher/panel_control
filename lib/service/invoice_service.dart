@@ -132,7 +132,8 @@ class InvoiceService {
       double grandTotalPriceTaxs,
       double taxs,
       double previousDebts,
-      double shippingFees) async {
+      double shippingFees,
+      String? invoiceCode) async {
     // قائمة لجمع جميع الأسعار
     final totalLinePrices = aggregatedData.keys.map((groupKey) {
       return invoiceProvider.getPrice(groupKey);
@@ -161,10 +162,7 @@ class InvoiceService {
       DocumentReference clientDocument =
           _firestore.collection('cliens').doc(trader!.codeIdClien);
 
-      await clientDocument
-          .collection('invoices')
-          .doc(generateInvoiceCode())
-          .set({
+      await clientDocument.collection('invoices').doc(invoiceCode).set({
         'aggregatedData': aggregatedData,
         'separateData': separateData, // استخدام البيانات المنفصلة هنا
         'total': total,

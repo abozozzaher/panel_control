@@ -147,6 +147,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
         "no_previous_religion":
             MessageLookupByLibrary.simpleMessage("No previous religion"),
+        "no_trader_selected":
+            MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("TAMAM"),
         "page": MessageLookupByLibrary.simpleMessage("Sayfa"),
         "page_not_found":

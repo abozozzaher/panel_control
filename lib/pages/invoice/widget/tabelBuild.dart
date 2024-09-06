@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../generated/l10n.dart';
 import '../../../provider/invoice_provider.dart';
 import '../../../provider/trader_provider.dart';
+import '../../../service/account_service.dart';
 import '../../../service/invoice_service.dart';
 import '../pdf_Inv.dart';
 
@@ -18,9 +19,11 @@ Directionality tableBuilld(
     double grandTotalPrice,
     ValueNotifier<double> previousDebtsNotifier,
     ValueNotifier<double> shippingFeesNotifier,
-    ValueNotifier<double> taxsNotifier) {
+    ValueNotifier<double> taxsNotifier,
+    String? invoiceCode) {
   final trader = Provider.of<TraderProvider>(context).trader;
   final traderClean = Provider.of<TraderProvider>(context);
+  final AccountService accountService = AccountService();
 
   return Directionality(
     textDirection: TextDirection.ltr,
@@ -102,7 +105,11 @@ Directionality tableBuilld(
                       grandTotalPriceTaxs,
                       taxs,
                       previousDebts,
-                      shippingFees);
+                      shippingFees,
+                      invoiceCode);
+                  var valueAccount = total * -1;
+                  accountService.saveValueToFirebase(
+                      trader!.codeIdClien, valueAccount, invoiceCode!);
 
                   // إنشاء وعرض ملف الـ PDF
                   await generatePdf(
@@ -114,13 +121,12 @@ Directionality tableBuilld(
                       prices,
                       totalLinePrices,
                       total,
-                      taxsNotifier.value);
+                      taxsNotifier.value,
+                      invoiceCode);
                   context.go('/');
                   // تفريغ الجدول من البيانات
                   invoiceProvider.clear(); // تفريغ الـ
                   traderClean.clearTrader();
-
-                  print('aaaaa ${invoiceProvider}');
 
                   // إعادة بناء الواجهة لتحديث الجدول
                 } catch (e) {

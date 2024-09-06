@@ -10,6 +10,7 @@ import '../../model/YarnData.dart';
 import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
 import '../../service/dropdownWidget.dart';
+import '../../service/exchangeRate_service.dart';
 
 class AddYarn extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -55,6 +56,7 @@ class _AddYarnState extends State<AddYarn> {
         DateFormat('dd/MM/yyyy').format(DateTime.now()); // صيغة التاريخ
     bool isMobile = MediaQuery.of(context).size.width < 600;
     String yarnId = generateCode();
+
     return Scaffold(
       appBar: AppBar(
           title: Text(S().add_yarn),
@@ -163,6 +165,8 @@ class _AddYarnState extends State<AddYarn> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
+                  double? exchangeRateTR = await fetchExchangeRateTR();
+
                   if (selectedYarnNumber != null &&
                       selectedYarnType != null &&
                       selectedYarnSupplier != null &&
@@ -242,7 +246,7 @@ class _AddYarnState extends State<AddYarn> {
                                       await FirebaseFirestore.instance
                                           .collection('yarns')
                                           .doc(yarnData.codeIdYarn)
-                                          .set(yarnData.toMap());
+                                          .set(yarnData.toMap(exchangeRateTR));
 
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(

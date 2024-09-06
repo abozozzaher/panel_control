@@ -30,11 +30,8 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
   String? invoiceCode;
   List<String> scannedData = [];
   List<DocumentSnapshot> documentSnapshots = [];
-  // bool _traderSelected = false; // new flag
-  // bool _itemSelected = false;
 
   List<ClienData> clients = [];
-//  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -73,9 +70,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
               SizedBox(height: 20),
               // مندسلة الطلبات التي تم مسحها من قبل العامل
               trader == null
-
-                  /// 454545
-                  ? Center(child: Text('No trader selected'))
+                  ? Center(child: Text(S().no_trader_selected))
                   : ElevatedButton.icon(
                       onPressed: () {
                         showDialog(
@@ -87,7 +82,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
                       label: Text(S().select_items)),
               SizedBox(height: 20),
               // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
-              DataTabelFetcher(),
+              DataTabelFetcher(invoiceCode),
             ],
           ),
         ),

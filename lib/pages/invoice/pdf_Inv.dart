@@ -24,9 +24,8 @@ Future<void> generatePdf(
     List<double> prices, //سعر السطر
     List<double> allPrices, // كل مجموع الاسعار
     double total, // الاجور النهائية
-    double taxs // الضريبة
-
-    ) async {
+    double taxs, // الضريبة
+    String invoiceCode) async {
   final fontTajBold = await PdfGoogleFonts.tajawalBold();
   final fontTajRegular = await PdfGoogleFonts.tajawalRegular();
 
@@ -37,13 +36,8 @@ Future<void> generatePdf(
 
   // Create a PDF document.
   final doc = pw.Document();
-  String invoiceCode;
   final trader = Provider.of<TraderProvider>(context, listen: false).trader;
 
-  final invoiceProvider = Provider.of<InvoiceProvider>(context, listen: false);
-  final InvoiceService invoiceService =
-      InvoiceService(context, invoiceProvider);
-  invoiceCode = invoiceService.generateInvoiceCode();
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
   doc.addPage(
@@ -61,7 +55,7 @@ Future<void> generatePdf(
         _contentFooter(
             context, total, taxs, grandTotalPrice, previousDebts, shippingFees),
         pw.SizedBox(height: 20),
-        _termsAndConditions(context, fontTajBold, invoiceCode),
+        _termsAndConditions(context, fontTajBold),
       ],
     ),
   );
@@ -483,8 +477,7 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
 }
 
 // سياسية الارجاع
-pw.Widget _termsAndConditions(
-    pw.Context context, pw.Font fontTajBold, String invoiceCode) {
+pw.Widget _termsAndConditions(pw.Context context, pw.Font fontTajBold) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.end,
     children: [

@@ -1719,6 +1719,26 @@ class S {
       args: [],
     );
   }
+
+  /// `No trader selected`
+  String get no_trader_selected {
+    return Intl.message(
+      'No trader selected',
+      name: 'no_trader_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Client`
+  String get search_client {
+    return Intl.message(
+      'Search Client',
+      name: 'search_client',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

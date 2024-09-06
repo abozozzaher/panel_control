@@ -16,6 +16,11 @@ import 'widget/rowTax.dart';
 import 'widget/tabelBuild.dart';
 
 class DataTabelFetcher extends StatefulWidget {
+  final String? invoiceCode; // Define a class variable to store the invoiceCode
+
+  DataTabelFetcher(
+      this.invoiceCode); // Store the invoiceCode in the class variable
+
   @override
   _DataTabelFetcherState createState() => _DataTabelFetcherState();
 }
@@ -34,8 +39,9 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
       ValueNotifier<double>(0.0); // الضريبة
   final ValueNotifier<double> previousDebtsNotifier =
       ValueNotifier<double>(0.0); // المجموع السعر مع الدين
-  final ValueNotifier<double> shippingFeesNotifier =
-      ValueNotifier<double>(0.0); // المجموع السعر مع الدين و اجور الشحن
+  final ValueNotifier<double> shippingFeesNotifier = ValueNotifier<double>(0.0);
+
+  // المجموع السعر مع الدين و اجور الشحن
 
   /// تحويل الأرقام العربية إلى أرقام إنجليزية
   String convertArabicToEnglish(String text) {
@@ -60,9 +66,7 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
       );
     }).toList();
     return trader == null
-
-        /// 454545
-        ? Center(child: Text('No trader selected'))
+        ? Center(child: Text(S().no_trader_selected))
         : Center(
             child: FutureBuilder<Map<String, Map<String, dynamic>>>(
               future: invoiceService.fetchData(),
@@ -163,7 +167,6 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                       setState(() {});
                     }),
                   );
-
                   return tableBuilld(
                       columns,
                       dataRows,
@@ -174,7 +177,8 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                       grandTotalPrice,
                       previousDebtsNotifier,
                       shippingFeesNotifier,
-                      taxsNotifier);
+                      taxsNotifier,
+                      widget.invoiceCode);
                 } else {
                   return Center(
                       child:
