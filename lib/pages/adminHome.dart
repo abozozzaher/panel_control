@@ -4,6 +4,7 @@ import 'package:panel_control/pages/account/accountPage.dart';
 
 import '../generated/l10n.dart';
 import '../service/app_drawer.dart';
+import 'account/tradersAccount.dart';
 import 'clien/addClien.dart';
 import 'inventory/Inventory.dart';
 import 'invoice/newInvoice.dart';
@@ -69,7 +70,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   child: ElevatedButton(
                     onPressed: () {
                       // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
-                      print('تم الضغط على إدخال صفحة الحساب');
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => AccountPages(
@@ -78,6 +78,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
+                    //// 454545
                     child: Text('Account page'),
                   ),
                 ),
@@ -87,7 +88,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   child: ElevatedButton(
                     onPressed: () {
                       // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
-                      print('تم الضغط على إدخال الخيط');
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => AddYarn(
@@ -111,7 +111,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   child: ElevatedButton(
                     onPressed: () {
                       // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
-                      print('تم الضغط على إضافة فاتورة');
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => InvoiceNewAdd(
@@ -134,7 +133,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   child: ElevatedButton(
                     onPressed: () {
                       // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
-                      print('تم الضغط على زر حساب مجموع المخزن');
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => Inventory(
@@ -144,6 +142,28 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       );
                     },
                     child: Text(S().show_full_repository_content),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16), // مساحة بين الصفوف
+
+            // زر اظهار حساب كل تاجر
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TradersAccount(
+                              toggleTheme: widget.toggleTheme,
+                              toggleLocale: widget.toggleTheme),
+                        ),
+                      );
+                    },
+                    //// 454545
+                    child: Text('Traders Accounts'),
                   ),
                 ),
               ],

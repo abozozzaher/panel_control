@@ -89,6 +89,8 @@ dependencies:
   fluttertoast: ^8.2.8
   country_state_city_pro: ^0.0.6
   http: ^1.2.2
+  flutter_pdfview: ^1.3.2
+  path_provider: ^2.1.4
 
 dev_dependencies:
   flutter_test:

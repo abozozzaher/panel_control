@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart'
-    as mat; // استيراد إعدادات اللغة من Flutter
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart' as mat;
+
 import 'package:panel_control/generated/l10n.dart';
 import 'package:panel_control/model/clien.dart';
 
@@ -11,9 +9,7 @@ import 'package:printing/printing.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:provider/provider.dart';
 
-import '../../provider/invoice_provider.dart';
 import '../../provider/trader_provider.dart';
-import '../../service/invoice_service.dart';
 
 Future<void> generatePdf(
     context,
@@ -437,20 +433,20 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
-                  pw.Text(previousDebts == 0
-                      ? '${S().no_dues} :'
-                      : previousDebts > -1
-                          ? '${S().previous_debt} :'
-                          : '${S().no_previous_religion} :'),
-                  pw.Text(_formatCurrency(previousDebts)),
+                  pw.Text('${S().shipping_fees}:'),
+                  pw.Text(_formatCurrency(shippingFees)),
                 ],
               ),
               pw.SizedBox(height: 5),
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
-                  pw.Text('${S().shipping_fees}:'),
-                  pw.Text(_formatCurrency(shippingFees)),
+                  pw.Text(previousDebts == 0
+                      ? '${S().no_dues} :'
+                      : previousDebts > -1
+                          ? '${S().previous_debt} :'
+                          : '${S().no_previous_religion} :'),
+                  pw.Text(_formatCurrency(previousDebts)),
                 ],
               ),
               pw.Divider(color: PdfColors.blueGrey900),

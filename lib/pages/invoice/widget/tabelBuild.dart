@@ -89,12 +89,11 @@ Directionality tableBuilld(
                   final totalLinePrices = aggregatedData.keys.map((groupKey) {
                     return invoiceProvider.getPrice(groupKey);
                   }).toList();
-                  final total = grandTotalPriceTaxs +
-                      previousDebtsNotifier.value +
-                      shippingFeesNotifier.value;
                   final taxs = taxsNotifier.value;
                   final previousDebts = previousDebtsNotifier.value;
                   final shippingFees = shippingFeesNotifier.value;
+                  final total =
+                      (grandTotalPriceTaxs + shippingFees) - previousDebts;
 
                   // تسجيل البيانات في Firebase
                   await invoiceService.saveData(
@@ -107,7 +106,8 @@ Directionality tableBuilld(
                       previousDebts,
                       shippingFees,
                       invoiceCode);
-                  var valueAccount = total * -1;
+                  final valueAccount =
+                      (grandTotalPriceTaxs + shippingFees) * -1;
                   accountService.saveValueToFirebase(
                       trader!.codeIdClien, valueAccount, invoiceCode!);
 

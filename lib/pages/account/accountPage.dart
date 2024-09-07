@@ -30,6 +30,7 @@ class _AccountPagesState extends State<AccountPages> {
     final trader = Provider.of<TraderProvider>(context).trader;
 
     return Scaffold(
+      //// 454545
       appBar: AppBar(title: Text('Account Page'), centerTitle: true, actions: [
         IconButton(
             onPressed: () {
@@ -57,8 +58,8 @@ class _AccountPagesState extends State<AccountPages> {
                             onPressed: () {
                               setState(() {
                                 _showTextField = !_showTextField;
-                                _buttonText =
-                                    _buttonText == 'Plus' ? 'Minus' : 'Plus';
+                                //// 454545
+                                _buttonText == 'Plus' ? 'Minus' : 'Plus';
                               });
                             },
                             child: Text(_buttonText),
@@ -71,6 +72,7 @@ class _AccountPagesState extends State<AccountPages> {
                                     controller: controllerPlus,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
+                                      //// 454545
                                       labelText: 'Enter value Plus',
                                     ),
                                     keyboardType:
@@ -84,6 +86,7 @@ class _AccountPagesState extends State<AccountPages> {
                                     controller: controllerMinus,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
+                                      //// 454545
                                       labelText: 'Enter value Minus',
                                     ),
                                     keyboardType:
@@ -109,6 +112,7 @@ class _AccountPagesState extends State<AccountPages> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
+                                //// 454545
                                 title: Text(
                                     'هذه القيمة سيتم اضافة لحساب العميل',
                                     textAlign: TextAlign.center),
@@ -116,16 +120,19 @@ class _AccountPagesState extends State<AccountPages> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    //// 454545
                                     Text(
                                         '${'trader Name'} : ${trader.fullNameArabic}'),
                                     _showTextField
                                         ? Container(
                                             color: Colors.greenAccent,
+                                            //// 454545
                                             child: Text(
                                                 '${'account'} : \$ ${value}'),
                                           )
                                         : Container(
                                             color: Colors.redAccent,
+                                            //// 454545
                                             child: Text(
                                                 '${'account'} : \$ ${value}'),
                                           ),
@@ -179,6 +186,7 @@ class _AccountPagesState extends State<AccountPages> {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
                                                       content: Center(
+                                                          //// 454545
                                                           child: Text(
                                                               'Value added successfully'))));
                                               Navigator.of(context).pop();
@@ -201,6 +209,7 @@ class _AccountPagesState extends State<AccountPages> {
                               );
                             });
                       },
+                      //// 454545
                       child: Text('Save Value', textAlign: TextAlign.center),
                     ),
             ],

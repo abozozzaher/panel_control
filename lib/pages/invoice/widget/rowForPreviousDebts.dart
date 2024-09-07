@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:panel_control/service/invoice_service.dart';
 
 import '../../../generated/l10n.dart';
+import '../../../service/trader_service.dart';
 
 DataRow rowForPreviousDebts(
     double grandTotalPriceTaxs,
     TextEditingController previousDebtController,
     String Function(String text) convertArabicToEnglish,
-    ValueNotifier<double> previousDebtsNotifier) {
+    ValueNotifier<double> shippingFeesNotifier,
+    ValueNotifier<double> previousDebtsNotifier,
+    String codeIdClien,
+    InvoiceService invoiceService) {
+  final TraderService traderService = TraderService();
+
   return DataRow(
     cells: [
       DataCell(Center(child: Text(''))),
@@ -20,43 +27,44 @@ DataRow rowForPreviousDebts(
             child: Text(
           previousDebtsNotifier.value == 0
               ? S().no_dues
-              : previousDebtsNotifier.value > -1
+              : previousDebtsNotifier.value < -1
                   ? S().previous_debt
                   : S().no_previous_religion,
           textAlign: TextAlign.center,
           style: TextStyle(
               color: previousDebtsNotifier.value == 0
                   ? Colors.black
-                  : previousDebtsNotifier.value > 1
+                  : previousDebtsNotifier.value < 1
                       ? Colors.redAccent
                       : Colors.green),
         )),
       ),
       DataCell(
         Center(
-          child: TextField(
-            controller: previousDebtController,
-            keyboardType: TextInputType.number,
-            style: TextStyle(
-                color: previousDebtsNotifier.value == 0
-                    ? Colors.black
-                    : previousDebtsNotifier.value > -1
-                        ? Colors.redAccent
-                        : Colors.green,
-                fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-            onChanged: (text) {
-              if (text.isNotEmpty) {
-                String englishNumbers = convertArabicToEnglish(text);
-                previousDebtsNotifier.value = double.parse(englishNumbers);
+          child: FutureBuilder<double>(
+            future: traderService.fetchLastDues(codeIdClien),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator(); // يمكن عرض مؤشر تحميل أثناء انتظار البيانات
+              } else if (snapshot.hasError) {
+                return Text('Error'); // عرض رسالة خطأ في حالة وجود خطأ
               } else {
-                previousDebtsNotifier.value = 0.0;
+                double lastDues = snapshot.data ?? 0.0;
+                previousDebtsNotifier.value = lastDues;
+
+                return Text(
+                  '\$$lastDues',
+                  style: TextStyle(
+                      color: lastDues == 0
+                          ? Colors.black
+                          : lastDues < 0
+                              ? Colors.redAccent
+                              : Colors.green,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                );
               }
             },
-            decoration: InputDecoration(
-              prefixText: '\$',
-              hintText: '0.00',
-            ),
           ),
         ),
       ),
@@ -68,13 +76,13 @@ DataRow rowForPreviousDebts(
             valueListenable: previousDebtsNotifier,
             builder: (context, value, child) {
               return Text(
-                '\$ ${value != 0 ? (value + grandTotalPriceTaxs).toStringAsFixed(2) : 0}',
+                '\$ ${value != 0 ? (value - shippingFeesNotifier.value - grandTotalPriceTaxs) : 0}',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     color: value == 0
                         ? Colors.black
-                        : value > -1
+                        : value < -1
                             ? Colors.redAccent
                             : Colors.green),
               );

@@ -139,26 +139,26 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   // حساب السعر مع الضريبة
                   final grandTotalPriceTaxs = grandTotalPrice * taxValue;
 
-                  // Add a row for previousDebts الدين السابق
-                  dataRows.add(rowForPreviousDebts(
-                      grandTotalPriceTaxs,
-                      previousDebtController,
-                      convertArabicToEnglish,
-                      previousDebtsNotifier));
-
                   // Add a row for shippingFees اجور الشحن
                   dataRows.add(
                     rowForShippingFees(
                         grandTotalPriceTaxs,
                         shippingFeeController,
                         convertArabicToEnglish,
-                        shippingFeesNotifier,
-                        previousDebtsNotifier),
+                        shippingFeesNotifier),
                   );
-
+// Add a row for previousDebts الدين السابق
+                  dataRows.add(rowForPreviousDebts(
+                      grandTotalPriceTaxs,
+                      previousDebtController,
+                      convertArabicToEnglish,
+                      shippingFeesNotifier,
+                      previousDebtsNotifier,
+                      trader.codeIdClien,
+                      invoiceService));
                   final totalAllMoney = grandTotalPriceTaxs +
-                      previousDebtsNotifier.value +
-                      shippingFeesNotifier.value;
+                      shippingFeesNotifier.value -
+                      previousDebtsNotifier.value;
 
                   //   print('ssss $TotalAllMoney');
                   // Add a row for all totals قيمة الفاتورة

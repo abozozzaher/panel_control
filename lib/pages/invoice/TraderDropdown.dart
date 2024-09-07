@@ -7,7 +7,6 @@ import '../../data/dataBase.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/trader_provider.dart';
-import '../../service/app_service.dart';
 
 class TraderDropdown extends StatefulWidget {
   @override

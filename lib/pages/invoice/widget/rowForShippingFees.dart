@@ -6,8 +6,7 @@ DataRow rowForShippingFees(
     double grandTotalPriceTaxs,
     TextEditingController shippingFeeController,
     String Function(String text) convertArabicToEnglish,
-    ValueNotifier<double> shippingFeesNotifier,
-    ValueNotifier<double> previousDebtsNotifier) {
+    ValueNotifier<double> shippingFeesNotifier) {
   return DataRow(
     cells: [
       DataCell(Center(child: Text(''))),
@@ -54,7 +53,7 @@ DataRow rowForShippingFees(
             valueListenable: shippingFeesNotifier,
             builder: (context, value, child) {
               return Text(
-                '\$ ${value != 0 ? (value + previousDebtsNotifier.value + grandTotalPriceTaxs).toStringAsFixed(2) : 0}',
+                '\$ ${value != 0 ? (value + grandTotalPriceTaxs) : 0}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: value > -1 ? Colors.redAccent : Colors.green,
