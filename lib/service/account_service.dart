@@ -16,8 +16,8 @@ class AccountService {
       DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(DateTime.now());
   // التاريخ سعر الصرف هل القيمة ايجابية او سلبية
   ///55555
-  Future<void> saveValueToFirebase(
-      String traderId, double value, String invoiceCode) async {
+  Future<void> saveValueToFirebase(String traderId, double value,
+      String invoiceCode, String downloadUrlPdf) async {
     double? exchangeRateTR = await fetchExchangeRateTR();
 
     final traderAccountCollection = FirebaseFirestore.instance
@@ -51,6 +51,7 @@ class AccountService {
       'docId': docId,
       'exchangeRate': '$exchangeRateTR TRY',
       'invoiceCode': invoiceCode,
+      'downloadUrlPdf': downloadUrlPdf,
       'dues': newDues, // تخزين المجموع الجديد
     });
   }

@@ -72,7 +72,7 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
               future: invoiceService.fetchData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator.adaptive());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('${S().error}: ${snapshot.error}'));
                 } else if (snapshot.hasData) {

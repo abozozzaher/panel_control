@@ -53,7 +53,7 @@ DataRow rowForShippingFees(
             valueListenable: shippingFeesNotifier,
             builder: (context, value, child) {
               return Text(
-                '\$ ${value != 0 ? (value + grandTotalPriceTaxs) : 0}',
+                '\$ ${value != 0 ? (value + grandTotalPriceTaxs).toStringAsFixed(2) : 0}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: value > -1 ? Colors.redAccent : Colors.green,

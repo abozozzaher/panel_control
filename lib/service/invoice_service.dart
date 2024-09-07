@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:panel_control/model/clien.dart';
@@ -133,7 +134,8 @@ class InvoiceService {
       double taxs,
       double previousDebts,
       double shippingFees,
-      String? invoiceCode) async {
+      String? invoiceCode,
+      String downloadUrlPdf) async {
     // قائمة لجمع جميع الأسعار
     final totalLinePrices = aggregatedData.keys.map((groupKey) {
       return invoiceProvider.getPrice(groupKey);
@@ -173,6 +175,7 @@ class InvoiceService {
         'shippingFees': shippingFees,
         'createdAt':
             DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(DateTime.now()),
+        'downloadUrlPdf': downloadUrlPdf
       });
       separateData.values.forEach((innerMap) {
         final productId = innerMap['product_id'];
@@ -195,9 +198,6 @@ class InvoiceService {
           .toList();
 
       for (String id in selectedIds) {
-        //     final itemData = invoiceProvider.getDataById(id);
-        //  String   codeSales = itemData!['codeSales'] ?? [];
-
         _firestore.collection('seles').doc(id).update({
           'not_attached_to_client': true,
         });

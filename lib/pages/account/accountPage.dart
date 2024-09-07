@@ -20,8 +20,8 @@ class AccountPages extends StatefulWidget {
 class _AccountPagesState extends State<AccountPages> {
   final AccountService accountService = AccountService();
 
-  bool _showTextField = true;
-  String _buttonText = 'Plus';
+  bool _showTextField = false; // مربع النص مخفي في البداية
+  String _selectedOperation = ''; // العملية المختارة (إدخال أو إخراج)
   TextEditingController controllerPlus = TextEditingController();
   TextEditingController controllerMinus = TextEditingController();
 
@@ -30,7 +30,8 @@ class _AccountPagesState extends State<AccountPages> {
     final trader = Provider.of<TraderProvider>(context).trader;
 
     return Scaffold(
-      //// 454545
+      ////454545
+
       appBar: AppBar(title: Text('Account Page'), centerTitle: true, actions: [
         IconButton(
             onPressed: () {
@@ -47,63 +48,72 @@ class _AccountPagesState extends State<AccountPages> {
               // بيانات التاجر منسدلة اختيار التاجر
               TraderDropdown(),
               SizedBox(height: 20),
-              // مندسلة الطلبات التي تم مسحها من قبل العامل
+              // اختيار نوع العملية
               trader == null
                   ? Center(child: Text(S().no_trader_selected))
                   : Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
+                          DropdownButton<String>(
+                            value: _selectedOperation.isEmpty
+                                ? null
+                                : _selectedOperation, ////454545
+
+                            hint: Text('Select Operation Type'),
+                            items: [
+                              DropdownMenuItem(
+                                value: 'Plus', ////454545
+
+                                child: Text('Input (إدخال)'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Minus', ////454545
+
+                                child: Text('Output (إخراج)'),
+                              ),
+                            ],
+                            onChanged: (value) {
                               setState(() {
-                                _showTextField = !_showTextField;
-                                //// 454545
-                                _buttonText == 'Plus' ? 'Minus' : 'Plus';
+                                _selectedOperation = value!;
+                                _showTextField = true;
                               });
                             },
-                            child: Text(_buttonText),
                           ),
                           SizedBox(height: 20),
-                          _showTextField
-                              ? SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    controller: controllerPlus,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      //// 454545
-                                      labelText: 'Enter value Plus',
-                                    ),
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
-                                  ),
-                                )
-                              : SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    controller: controllerMinus,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      //// 454545
-                                      labelText: 'Enter value Minus',
-                                    ),
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
-                                  ),
+                          if (_showTextField) ...[
+                            SizedBox(
+                              width: 200,
+                              child: TextField(
+                                ////454545
+
+                                controller: _selectedOperation == 'Plus'
+                                    ? controllerPlus
+                                    : controllerMinus,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  ////454545
+
+                                  labelText: _selectedOperation == 'Plus'
+                                      ? 'Enter value Plus'
+                                      : 'Enter value Minus',
                                 ),
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                          ],
                         ],
                       ),
                     ),
-              SizedBox(height: 20),
-
               trader == null
                   ? Center(child: Text(S().no_trader_selected))
                   : ElevatedButton(
                       onPressed: () {
-                        double value = _showTextField
+                        ////454545
+
+                        double value = _selectedOperation == 'Plus'
                             ? double.tryParse('+${controllerPlus.text}') ?? 0.00
                             : double.tryParse('-${controllerMinus.text}') ??
                                 0.00;
@@ -112,7 +122,8 @@ class _AccountPagesState extends State<AccountPages> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                //// 454545
+                                ////454545
+
                                 title: Text(
                                     'هذه القيمة سيتم اضافة لحساب العميل',
                                     textAlign: TextAlign.center),
@@ -120,22 +131,16 @@ class _AccountPagesState extends State<AccountPages> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    //// 454545
+                                    ////454545
+
                                     Text(
                                         '${'trader Name'} : ${trader.fullNameArabic}'),
-                                    _showTextField
-                                        ? Container(
-                                            color: Colors.greenAccent,
-                                            //// 454545
-                                            child: Text(
-                                                '${'account'} : \$ ${value}'),
-                                          )
-                                        : Container(
-                                            color: Colors.redAccent,
-                                            //// 454545
-                                            child: Text(
-                                                '${'account'} : \$ ${value}'),
-                                          ),
+                                    Container(
+                                      color: _selectedOperation == 'Plus'
+                                          ? Colors.greenAccent
+                                          : Colors.redAccent,
+                                      child: Text('${'account'} : \$ ${value}'),
+                                    ),
                                   ],
                                 ),
                                 actions: [
@@ -149,8 +154,7 @@ class _AccountPagesState extends State<AccountPages> {
                                               backgroundColor:
                                                   Colors.redAccent),
                                           onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Close dialog
+                                            Navigator.of(context).pop();
                                           },
                                           child: Text(
                                             S().cancel,
@@ -171,14 +175,14 @@ class _AccountPagesState extends State<AccountPages> {
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black)),
                                           onPressed: () {
-                                            // إضافة البيانات إلى Firebase
-                                            String invoiceCode =
-                                                'No invoice'; //
+                                            String invoiceCode = 'No invoice';
+                                            String downloadUrlPdf = 'No url';
                                             accountService
                                                 .saveValueToFirebase(
                                                     trader.codeIdClien,
                                                     value,
-                                                    invoiceCode)
+                                                    invoiceCode,
+                                                    downloadUrlPdf)
                                                 .then((_) {
                                               controllerMinus.clear();
                                               controllerPlus.clear();
@@ -186,7 +190,8 @@ class _AccountPagesState extends State<AccountPages> {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
                                                       content: Center(
-                                                          //// 454545
+                                                          ////454545
+
                                                           child: Text(
                                                               'Value added successfully'))));
                                               Navigator.of(context).pop();
@@ -209,7 +214,7 @@ class _AccountPagesState extends State<AccountPages> {
                               );
                             });
                       },
-                      //// 454545
+                      ////454545
                       child: Text('Save Value', textAlign: TextAlign.center),
                     ),
             ],

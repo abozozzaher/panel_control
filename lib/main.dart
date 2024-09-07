@@ -240,7 +240,8 @@ class _MyAppState extends State<MyApp> {
           future: checkUserRole(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(body: Center(child: CircularProgressIndicator()));
+              return Scaffold(
+                  body: Center(child: CircularProgressIndicator.adaptive()));
             }
             if (snapshot.data == true) {
               return AddNewItemScreen(
@@ -276,7 +277,8 @@ class _MyAppState extends State<MyApp> {
           future: checkUserRole(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(body: Center(child: CircularProgressIndicator()));
+              return Scaffold(
+                  body: Center(child: CircularProgressIndicator.adaptive()));
             }
             if (snapshot.data == true) {
               return ScanItemQr(
@@ -312,7 +314,8 @@ class _MyAppState extends State<MyApp> {
           future: checkUserRoleAdmin(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(body: Center(child: CircularProgressIndicator()));
+              return Scaffold(
+                  body: Center(child: CircularProgressIndicator.adaptive()));
             }
             if (snapshot.data == true) {
               return AdminHomePage(

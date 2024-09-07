@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../data/dataBase.dart';
 import '../../model/clien.dart';
 import '../../service/trader_service.dart';
+import '../clien/clienPage.dart';
 
 class TradersAccount extends StatefulWidget {
   const TradersAccount(
@@ -21,76 +22,14 @@ class _TradersAccountState extends State<TradersAccount> {
 
   List<ClienData> clients = [];
   bool isLoading = true;
-  Map<String, double> clientDues = {}; // متغير لحفظ المستحقات
+  Map<String, double> clientDues = {};
+  Map<String, dynamic> clientAllData = {};
   @override
   void initState() {
     super.initState();
     // traderService.
     fetchClientsFromFirebase();
   }
-
-/*
-  Future<void> fetchClientsFromFirebase() async {
-    if (kIsWeb) {
-      // إذا كان المستخدم على الويب
-      try {
-        QuerySnapshot snapshot =
-            await FirebaseFirestore.instance.collection('cliens').get();
-        setState(() {
-          clients = snapshot.docs.map((doc) {
-            return ClienData.fromMap(doc.data() as Map<String, dynamic>);
-          }).toList();
-
-          isLoading = false;
-        });
-      } catch (e) {
-        print('Error fetching clients: $e');
-        setState(() {
-          isLoading = false;
-        });
-      }
-    } else {
-      // إذا كان المستخدم على الموبايل
-      try {
-        List<Map<String, dynamic>> existingClients =
-            await databaseHelper.checkClientsInDatabaseTraders();
-        if (existingClients.isNotEmpty) {
-          // إذا كانت البيانات موجودة في قاعدة البيانات المحلية
-          //   setState(() {            clients = existingClients                .map((client) => ClienData.fromMap(client))                .toList();          isLoading = false; });
-          List<ClienData> clientsFromDb = existingClients.map((client) {
-            return ClienData.fromMap(client);
-          }).toList();
-          setState(() {
-            clients = clientsFromDb;
-            isLoading = false;
-          });
-        } else {
-          // إذا لم تكن البيانات موجودة في قاعدة البيانات المحلية، احضرها من Firebase
-          QuerySnapshot snapshot =
-              await FirebaseFirestore.instance.collection('cliens').get();
-          List<ClienData> clientsFromFirebase = snapshot.docs.map((doc) {
-            return ClienData.fromMap(doc.data() as Map<String, dynamic>);
-          }).toList();
-
-          // احفظ البيانات في قاعدة البيانات المحلية
-          for (var client in clientsFromFirebase) {
-            await databaseHelper.saveClientToDatabaseTraders(client);
-          }
-
-          setState(() {
-            clients = clientsFromFirebase;
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        print('Error fetching clients: $e');
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
-*/
 
   Future<void> fetchClientsFromFirebase() async {
     if (kIsWeb) {
@@ -102,8 +41,13 @@ class _TradersAccountState extends State<TradersAccount> {
         }).toList();
 
         for (var client in fetchedClients) {
-          double dues = await traderService.fetchLastDues(client.codeIdClien);
-          clientDues[client.codeIdClien] = dues; // حفظ المستحقات
+          double lastDues =
+              await traderService.fetchLastDues(client.codeIdClien);
+          clientDues[client.codeIdClien] = lastDues; // حفظ المستحقات الأخيرة
+
+          List<Map<String, dynamic>> allDues =
+              await traderService.fetchAllDues(client.codeIdClien);
+          clientAllData[client.codeIdClien] = allDues; // حفظ جميع المستحقات
         }
 
         setState(() {
@@ -126,8 +70,13 @@ class _TradersAccountState extends State<TradersAccount> {
           }).toList();
 
           for (var client in clientsFromDb) {
-            double dues = await traderService.fetchLastDues(client.codeIdClien);
-            clientDues[client.codeIdClien] = dues; // حفظ المستحقات
+            double lastDues =
+                await traderService.fetchLastDues(client.codeIdClien);
+            clientDues[client.codeIdClien] = lastDues; // حفظ المستحقات الأخيرة
+
+            List<Map<String, dynamic>> allDues =
+                await traderService.fetchAllDues(client.codeIdClien);
+            clientAllData[client.codeIdClien] = allDues; // حفظ جميع المستحقات
           }
 
           setState(() {
@@ -142,8 +91,13 @@ class _TradersAccountState extends State<TradersAccount> {
           }).toList();
 
           for (var client in clientsFromFirebase) {
-            double dues = await traderService.fetchLastDues(client.codeIdClien);
-            clientDues[client.codeIdClien] = dues; // حفظ المستحقات
+            double lastDues =
+                await traderService.fetchLastDues(client.codeIdClien);
+            clientDues[client.codeIdClien] = lastDues; // حفظ المستحقات الأخيرة
+
+            List<Map<String, dynamic>> allDues =
+                await traderService.fetchAllDues(client.codeIdClien);
+            clientAllData[client.codeIdClien] = allDues; // حفظ جميع المستحقات
           }
 
           for (var client in clientsFromFirebase) {
@@ -164,12 +118,13 @@ class _TradersAccountState extends State<TradersAccount> {
     }
   }
 
+  /// 454545
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('قائمة العملاء')),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator.adaptive())
           : clients.isEmpty
               ? Center(child: Text('لا يوجد عملاء'))
               : Column(
@@ -187,6 +142,8 @@ class _TradersAccountState extends State<TradersAccount> {
                         itemBuilder: (context, index) {
                           final client = clients[index];
                           final dues = clientDues[client.codeIdClien] ?? 0.0;
+                          final allData =
+                              clientAllData[client.codeIdClien] ?? [];
 
                           return ListTile(
                             title: Text(client.fullNameArabic,
@@ -194,9 +151,20 @@ class _TradersAccountState extends State<TradersAccount> {
                             subtitle: Text(
                                 '${client.country},${client.state},${client.city}',
                                 textAlign: TextAlign.center),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClienPage(
+                                    client: client,
+                                    allData: allData,
+                                    dues: dues,
+                                  ),
+                                ),
+                              );
+                            },
                             trailing: Text(
-                              'Dues: $dues',
+                              'Dues: ${dues.toStringAsFixed(2)}',
                               style: TextStyle(color: Colors.amber),
                             ),
                           );

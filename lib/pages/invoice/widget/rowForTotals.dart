@@ -37,7 +37,7 @@ DataRow rowForTotals(int totalLength, double totalWeight, int totalScannedData,
       DataCell(Center(child: Text('${S().total}  ${S().invoice}'))),
       DataCell(Center(
         child: Text(
-          '\$ $grandTotalPrice',
+          '\$ ${grandTotalPrice.toStringAsFixed(2)}',
           style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.redAccent,

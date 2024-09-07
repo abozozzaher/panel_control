@@ -60,7 +60,13 @@ class _DialogInvoiceState extends State<DialogInvoice> {
     return AlertDialog(
       title: Text(S().select_items, textAlign: TextAlign.center),
       content: items.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: Column(
+              children: [
+                CircularProgressIndicator.adaptive(),
+                Text(S().no_data_found)
+              ],
+            ))
           : Container(
               width: 300, // adjust the width to your needs
               height: 200,

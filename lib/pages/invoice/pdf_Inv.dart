@@ -1,7 +1,9 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart' as mat;
 
 import 'package:panel_control/generated/l10n.dart';
 import 'package:panel_control/model/clien.dart';
+import 'package:panel_control/service/invoice_service.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -10,6 +12,7 @@ import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:provider/provider.dart';
 
 import '../../provider/trader_provider.dart';
+import '../../service/account_service.dart';
 
 Future<void> generatePdf(
     context,
@@ -18,10 +21,12 @@ Future<void> generatePdf(
     double previousDebts, // الدين على العميل
     double shippingFees, // اجور الشحن
     List<double> prices, //سعر السطر
-    List<double> allPrices, // كل مجموع الاسعار
+    List<double> totalLinePrices, // كل مجموع الاسعار
     double total, // الاجور النهائية
     double taxs, // الضريبة
-    String invoiceCode) async {
+    String invoiceCode,
+    InvoiceService invoiceService,
+    double grandTotalPriceTaxs) async {
   final fontTajBold = await PdfGoogleFonts.tajawalBold();
   final fontTajRegular = await PdfGoogleFonts.tajawalRegular();
 
@@ -33,6 +38,7 @@ Future<void> generatePdf(
   // Create a PDF document.
   final doc = pw.Document();
   final trader = Provider.of<TraderProvider>(context, listen: false).trader;
+  final AccountService accountService = AccountService();
 
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
@@ -46,7 +52,7 @@ Future<void> generatePdf(
       footer: _buildFooter,
       build: (context) => [
         _contentHeader(context, total, isRTL, trader),
-        _contentTable(context, aggregatedData, prices, allPrices),
+        _contentTable(context, aggregatedData, prices, totalLinePrices),
         pw.SizedBox(height: 20),
         _contentFooter(
             context, total, taxs, grandTotalPrice, previousDebts, shippingFees),
@@ -57,9 +63,32 @@ Future<void> generatePdf(
   );
 
   // Return the PDF file content
-  // return doc.save();
   await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => doc.save());
+  final outputFile = await doc.save();
+
+  // تحميل الملف إلى Firebase Storage
+  final storageRef = FirebaseStorage.instance.ref().child(
+      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/$invoiceCode.pdf');
+  await storageRef.putData(outputFile);
+  // الحصول على رابط لتنزيل الملف من Firebase Storage
+  final downloadUrlPdf = await storageRef.getDownloadURL();
+  final valueAccount = (grandTotalPriceTaxs + shippingFees) * -1;
+
+  accountService.saveValueToFirebase(
+      trader.codeIdClien, valueAccount, invoiceCode, downloadUrlPdf);
+
+  await invoiceService.saveData(
+      aggregatedData,
+      total,
+      trader,
+      grandTotalPrice,
+      grandTotalPriceTaxs,
+      taxs,
+      previousDebts,
+      shippingFees,
+      invoiceCode,
+      downloadUrlPdf);
 }
 
 // تصميم شكل الصفحة
@@ -316,7 +345,7 @@ pw.Widget _contentHeader(
 
 // عنوين راس الجدول
 pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
-    List<double> prices, List<double> allPrices) {
+    List<double> prices, List<double> totalLinePrices) {
   final tableHeaders = [
     S().type,
     S().color,
@@ -324,7 +353,7 @@ pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
     S().length,
     S().total_weight,
     S().unit,
-    '${S().price}',
+    S().price,
     S().quantity,
     S().total_price,
   ];
@@ -343,7 +372,7 @@ pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
       '${productData['scanned_data'].toString()} ${S().unit}',
       _formatCurrency(prices[index]),
       '${productData['quantity'].toString()} ${S().pcs}',
-      _formatCurrency(allPrices[index]),
+      _formatCurrency(totalLinePrices[index]),
     ];
   }).toList();
 

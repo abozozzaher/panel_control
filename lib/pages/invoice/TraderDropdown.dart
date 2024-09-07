@@ -102,7 +102,7 @@ class _TraderDropdownState extends State<TraderDropdown> {
     return Consumer<TraderProvider>(
       builder: (context, provider, child) {
         if (isLoading) {
-          return CircularProgressIndicator();
+          return CircularProgressIndicator.adaptive();
         }
 
         return Container(

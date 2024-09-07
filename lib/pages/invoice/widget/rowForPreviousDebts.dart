@@ -45,7 +45,8 @@ DataRow rowForPreviousDebts(
             future: traderService.fetchLastDues(codeIdClien),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // يمكن عرض مؤشر تحميل أثناء انتظار البيانات
+                return CircularProgressIndicator
+                    .adaptive(); // يمكن عرض مؤشر تحميل أثناء انتظار البيانات
               } else if (snapshot.hasError) {
                 return Text('Error'); // عرض رسالة خطأ في حالة وجود خطأ
               } else {
@@ -76,7 +77,7 @@ DataRow rowForPreviousDebts(
             valueListenable: previousDebtsNotifier,
             builder: (context, value, child) {
               return Text(
-                '\$ ${value != 0 ? (value - shippingFeesNotifier.value - grandTotalPriceTaxs) : 0}',
+                '\$ ${value != 0 ? (value - shippingFeesNotifier.value - grandTotalPriceTaxs).toStringAsFixed(2) : 0}',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,

@@ -211,7 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ? const SizedBox(
                           width: 24,
                           height: 24,
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator.adaptive(),
                         )
                       : Text(S().register),
                 ),

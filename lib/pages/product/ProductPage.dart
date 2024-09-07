@@ -37,7 +37,7 @@ class ProductPage extends StatelessWidget {
                 .get(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return const CircularProgressIndicator.adaptive();
               }
               if (snapshot.hasError) {
                 return Text('${S().error} : ${snapshot.error}');

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 import '../data/dataBase.dart';
 
@@ -7,6 +6,9 @@ class TraderService {
   final DatabaseHelper databaseHelper = DatabaseHelper();
 
   /// 5555
+  ///
+  ///
+// لجلب الدين المستحق تم تسجيله فقط في اخر مستند
   Future<double> fetchLastDues(String codeIdClien) async {
     final traderAccountCollection = FirebaseFirestore.instance
         .collection('cliens')
@@ -24,5 +26,23 @@ class TraderService {
     }
 
     return 0.0;
+  }
+
+// لجلب كل بيانات العميل
+  Future<List<Map<String, dynamic>>> fetchAllDues(String codeIdClien) async {
+    final traderAccountCollection = FirebaseFirestore.instance
+        .collection('cliens')
+        .doc(codeIdClien)
+        .collection('account');
+
+    final allDataSnapshot = await traderAccountCollection
+        .orderBy('createdAt', descending: true)
+        .get();
+
+    List<Map<String, dynamic>> allData = allDataSnapshot.docs.map((doc) {
+      return doc.data() as Map<String, dynamic>;
+    }).toList();
+
+    return allData;
   }
 }
