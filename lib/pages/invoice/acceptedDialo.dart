@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
-import '../../provider/invoice_provider.dart';
 
 class AcceptedDialo extends StatelessWidget {
   final DataLists dataLists = DataLists();
 
   @override
   Widget build(BuildContext context) {
-    final invoiceProvider = Provider.of<InvoiceProvider>(context);
+    //  final invoiceProvider = Provider.of<InvoiceProvider>(context);
 // Fetch the cached data using the provided docId
 
     return AlertDialog(

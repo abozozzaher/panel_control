@@ -135,13 +135,11 @@ class _ScanItemQrState extends State<ScanItemQr> {
       final provider = Provider.of<ScanItemProvider>(context, listen: false);
       if (!provider.scannedData.contains(code)) {
         if (code.contains('https://panel-control-company-zaher.web.app/')) {
-          setState(() {
-            provider
-                .addScannedData(code); // حفظ الكود في قائمة الكودات الممسوحة
-            provider.addCodeDetails(code);
-          });
-
+          //  setState(() {});
+          provider.addScannedData(code); // حفظ الكود في قائمة الكودات الممسوحة
+          provider.addCodeDetails(code);
           scanItemService.playSound('assets/sound/beep.mp3');
+
           scanItemService.fetchDataFromFirebase(code).then((data) {
             if (data != null) {
               setState(() {
@@ -245,135 +243,142 @@ class _ScanItemQrState extends State<ScanItemQr> {
       ),
       drawer: AppDrawer(
           toggleTheme: widget.toggleTheme, toggleLocale: widget.toggleLocale),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          kIsWeb
-              ? Container()
-              : SizedBox(
-                  height: 300,
-                  child: QRView(
-                    key: qrKey,
-                    onQRViewCreated: _onQRViewCreated,
+      body: SizedBox(
+        width: 600,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              kIsWeb
+                  ? Container()
+                  : SizedBox(
+                      height: 300,
+                      child: QRView(
+                        key: qrKey,
+                        onQRViewCreated: _onQRViewCreated,
+                      ),
+                    ),
+              Container(
+                color: Colors.red,
+                height: 100, // لتحديد ارتفاع ثابت
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        //ا القسم الأول لعدد والكمية
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                  '${S().total_codes_scanned} : ${provider.scannedData.length} ${S().unit}',
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 13)),
+                              Text(
+                                  '${S().total_quantity} : $totalQuantity ${S().pcs}',
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 13)),
+                            ],
+                          ),
+                        ),
+                        // ا  القسم الثاني لامتار و الوزن
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('${S().total_length} : $totalLength MT',
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 13)),
+                              Text('${S().total_weight} :  $totalWeight Kg',
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 13)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    // القسم الثالث رسالة التاكيد
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Center(
+                                        child: Text(S()
+                                            .long_press_to_activate_the_button)),
+                                    duration: const Duration(seconds: 2)));
+                              },
+                              onLongPress: provider.scannedData.isNotEmpty &&
+                                      userData!.work == true
+                                  ? () {
+                                      showConfirmDialog(userData);
+                                    }
+                                  : () {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Center(
+                                              child: Text(S().no_data_to_send)),
+                                          duration: const Duration(seconds: 2),
+                                        ),
+                                      );
+                                    },
+                              child: Text(S().save_and_send_data),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 150,
+                color: Colors.green,
+                child: SingleChildScrollView(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: provider.scannedData.length,
+                    itemBuilder: (context, index) {
+                      final code = provider.scannedData[index];
+
+                      var urlLength =
+                          'https://panel-control-company-zaher.web.app/'.length;
+                      final displayCode = code.length > urlLength + 8
+                          ? code.substring(urlLength + 8)
+                          : code;
+
+                      return ListTile(
+                        title: Text(displayCode),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              provider.removeData(code);
+                            });
+                          },
+                        ),
+                        onTap: () async {
+                          // طلب البيانات اولا من قاعدة البيانات
+                          final data = provider.codeDetails[code];
+                          scanItemDialogs.showDetailsDialog(
+                              context, code, data);
+                        },
+                      );
+                    },
                   ),
                 ),
-          Container(
-            color: Colors.red,
-            height: 100, // لتحديد ارتفاع ثابت
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    //ا القسم الأول لعدد والكمية
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                              '${S().total_codes_scanned} : ${provider.scannedData.length} ${S().unit}',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 13)),
-                          Text(
-                              '${S().total_quantity} : $totalQuantity ${S().pcs}',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 13)),
-                        ],
-                      ),
-                    ),
-                    // ا  القسم الثاني لامتار و الوزن
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('${S().total_length} : $totalLength MT',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 13)),
-                          Text('${S().total_weight} :  $totalWeight Kg',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 13)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                // القسم الثالث رسالة التاكيد
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Center(
-                                    child: Text(
-                                        S().long_press_to_activate_the_button)),
-                                duration: const Duration(seconds: 2)));
-                          },
-                          onLongPress: provider.scannedData.isNotEmpty &&
-                                  userData!.work == true
-                              ? () {
-                                  showConfirmDialog(userData);
-                                }
-                              : () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Center(
-                                          child: Text(S().no_data_to_send)),
-                                      duration: const Duration(seconds: 2),
-                                    ),
-                                  );
-                                },
-                          child: Text(S().save_and_send_data),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 150,
-            color: Colors.green,
-            child: SingleChildScrollView(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: provider.scannedData.length,
-                itemBuilder: (context, index) {
-                  final code = provider.scannedData[index];
-
-                  var urlLength =
-                      'https://panel-control-company-zaher.web.app/'.length;
-                  final displayCode = code.length > urlLength + 8
-                      ? code.substring(urlLength + 8)
-                      : code;
-                  return ListTile(
-                    title: Text(displayCode),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          provider.removeData(code);
-                        });
-                      },
-                    ),
-                    onTap: () async {
-                      // طلب البيانات اولا من قاعدة البيانات
-                      final data = provider.codeDetails[code];
-
-                      scanItemDialogs.showDetailsDialog(context, code, data);
-                    },
-                  );
-                },
               ),
-            ),
+              scanDataTableWidgets.scrollViewScannedDataTableWidget(context),
+            ],
           ),
-          scanDataTableWidgets.scrollViewScannedDataTableWidget(context),
-        ],
+        ),
       ),
     );
   }

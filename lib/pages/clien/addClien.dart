@@ -1,14 +1,11 @@
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
-import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
 import '../../service/upperCase.dart'; // لتوليد الكود الموحد من تاريخ اليوم
 
@@ -74,12 +71,14 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
 
   @override
   Widget build(BuildContext context) {
+    /*
     String country = countryController.text;
     String state = stateController.text;
     String city = cityController.text;
     final userProvider =
         Provider.of<UserProvider>(context); // Replace with actual user provider
     final user = userProvider.user; // Assuming you have currentUser
+    */
     final String todayDate =
         DateFormat('dd/MM/yyyy').format(DateTime.now()); // صيغة التاريخ
     bool isMobile = MediaQuery.of(context).size.width < 600;
@@ -106,7 +105,8 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('${S().todays_date} : $todayDate'),
+                Text(
+                    '${S().todays_date} : ${convertArabicToEnglish(todayDate)}'),
                 SizedBox(height: 20),
                 Text('${S().clien_id} :  $clienId',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -133,7 +133,6 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                             return null;
                           },
                         ),
-
                         // إدخال الاسم بالإنجليزية
                         TextFormField(
                           controller: fullNameEnglishController,
@@ -376,7 +375,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                           },
                           child: Text(S().add_clien),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 40),
                       ],
                     ),
                   ),

@@ -7,23 +7,24 @@ class YarnData {
   String color;
   double weight;
   String userId;
-  String firstName;
-  String lastName;
+  String nameUserAddData;
   DateTime createdAt;
   String codeIdYarn;
+  double priceYarn;
+  double goodsPrice;
 
-  YarnData({
-    required this.yarnNumber,
-    required this.yarnType,
-    required this.yarnSupplier,
-    required this.color,
-    required this.weight,
-    required this.userId,
-    required this.firstName,
-    required this.lastName,
-    required this.createdAt,
-    required this.codeIdYarn,
-  });
+  YarnData(
+      {required this.yarnNumber,
+      required this.yarnType,
+      required this.yarnSupplier,
+      required this.color,
+      required this.weight,
+      required this.userId,
+      required this.nameUserAddData,
+      required this.createdAt,
+      required this.codeIdYarn,
+      required this.priceYarn,
+      required this.goodsPrice});
 
   Map<String, dynamic> toMap(double? exchangeRateTR) {
     String formattedCreatedAt =
@@ -36,12 +37,12 @@ class YarnData {
       'color': color,
       'weight': weight,
       'userId': userId,
-      'firstName': firstName,
-      'lastName': lastName,
+      'nameUserAddData': nameUserAddData,
       'createdAt': formattedCreatedAt,
       'code': codeIdYarn,
-      formattedCreatedAt: '+ $codeIdYarn',
       'exchangeRate': '$exchangeRateTR TRY',
+      'priceYarn': priceYarn,
+      'goodsPrice': goodsPrice,
     };
   }
 }

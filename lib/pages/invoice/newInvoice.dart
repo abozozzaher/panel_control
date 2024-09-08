@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:panel_control/pages/invoice/TraderDropdown.dart';
 import 'package:panel_control/pages/invoice/dataTabelFetcher.dart';
 import 'package:provider/provider.dart';
-import '../../data/dataBase.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/invoice_provider.dart';
@@ -25,7 +24,7 @@ class InvoiceNewAdd extends StatefulWidget {
 
 class _InvoiceNewAddState extends State<InvoiceNewAdd> {
   final DialogInvoice dialogInvoice = DialogInvoice();
-  final DatabaseHelper _dbHelper = DatabaseHelper();
+//  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   String? invoiceCode;
   List<String> scannedData = [];

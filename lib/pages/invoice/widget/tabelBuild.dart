@@ -1,13 +1,10 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../provider/invoice_provider.dart';
 import '../../../provider/trader_provider.dart';
-import '../../../service/account_service.dart';
 import '../../../service/invoice_service.dart';
 import '../pdf_Inv.dart';
 
@@ -95,25 +92,6 @@ Directionality tableBuilld(
                   final shippingFees = shippingFeesNotifier.value;
                   final total =
                       (grandTotalPriceTaxs + shippingFees) - previousDebts;
-/*
-                  // تسجيل البيانات في Firebase
-                  await invoiceService.saveData(
-                      aggregatedData,
-                      total,
-                      trader,
-                      grandTotalPrice,
-                      grandTotalPriceTaxs,
-                      taxs,
-                      previousDebts,
-                      shippingFees,
-                      invoiceCode);
-
-                  final valueAccount =
-                      (grandTotalPriceTaxs + shippingFees) * -1;
-
-                  accountService.saveValueToFirebase(
-                      trader!.codeIdClien, valueAccount, invoiceCode!);
-*/
 
                   // إنشاء وعرض ملف الـ PDF
                   await generatePdf(

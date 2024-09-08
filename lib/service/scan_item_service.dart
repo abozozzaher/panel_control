@@ -3,11 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../data/dataBase.dart';
-
 class ScanItemService {
   final AudioPlayer audioPlayer = AudioPlayer();
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
+//  final DatabaseHelper _databaseHelper = DatabaseHelper();
 
   Future<void> requestCameraPermission() async {
     var status = await Permission.camera.status;
@@ -37,7 +35,21 @@ class ScanItemService {
           .collection(monthFolder)
           .doc(productId)
           .get();
-      return document.exists ? document.data() as Map<String, dynamic>? : null;
+
+      if (document.exists) {
+        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+        if (data['sale_status'] != false) {
+          print('11113 Error fetching data: ');
+
+          return null; // or throw an exception, depending on your requirements
+        } else {
+          return data;
+        }
+      } else {
+        print('11112 Error fetching data: ');
+
+        return null;
+      }
     } catch (e) {
       print('11111 Error fetching data: $e');
       return null;

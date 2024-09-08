@@ -89,7 +89,6 @@ dependencies:
   fluttertoast: ^8.2.8
   country_state_city_pro: ^0.0.6
   http: ^1.2.2
-  pdf_image_renderer: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -108,6 +107,8 @@ flutter_icons:
   image_path: "assets/img/logo.png"
   android: true
   ios: true
+  web:
+    image_path: "assets/img/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -74,7 +74,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       );
                       // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
                     },
-                    child: Text(S().add_clien),
+                    child: Text(S().add_clien, textAlign: TextAlign.center),
                   ),
                 ),
 
@@ -93,7 +93,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       );
                     },
                     //// 454545
-                    child: Text('Account page'),
+                    child: Text('Account page', textAlign: TextAlign.center),
                   ),
                 ),
                 SizedBox(width: 16), // مساحة بين الأزرار
@@ -110,7 +110,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
-                    child: Text(S().add_yarn),
+                    child: Text(S().add_yarn, textAlign: TextAlign.center),
                   ),
                 ),
               ],
@@ -184,16 +184,22 @@ class _AdminHomePageState extends State<AdminHomePage> {
             ),
             SizedBox(height: 16), // مساحة بين الصفوف
 
-            // زر اظهار حساب كل تاجر
+            // زر عمل فاتورة اولية
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      _showNoInvoiceToast();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TradersAccount(
+                              toggleTheme: widget.toggleTheme,
+                              toggleLocale: widget.toggleTheme),
+                        ),
+                      );
                     },
                     //// 454545
-                    child: Text('test'),
+                    child: Text('Proforma invoice'),
                   ),
                 ),
               ],

@@ -133,6 +133,7 @@ class _TradersAccountState extends State<TradersAccount> {
                     Container(
                         color: Colors.amber,
                         //    height: 100,
+                        // 454545
                         child: Text('هذا لتحويله الى بحث',
                             textAlign: TextAlign.center)),
                     Expanded(

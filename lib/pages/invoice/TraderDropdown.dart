@@ -143,22 +143,12 @@ class _TraderDropdownState extends State<TraderDropdown> {
                       codeIdClien: '',
                     ),
                   );
+                  // حفظ بيانات العميل في Provider
+                  provider.setTrader(selectedClient);
 
-                  if (selectedClient != null) {
-                    print(
-                        'Client found: ${selectedClient.fullNameEnglish}'); // التحقق من العثور على العميل
-
-                    // حفظ بيانات العميل في Provider
-                    provider.setTrader(selectedClient);
-                    print(
-                        'Provider data: ${provider.trader!.addressArabic} = ${provider.trader!.addressEnglish} = ${provider.trader!.codeIdClien}= ${provider.trader!.fullNameArabic}= ${provider.trader!.fullNameEnglish}');
-
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Center(
-                            child: Text(S().client_saved_successfully))));
-                  } else {
-                    print('Client not found'); // في حالة عدم العثور على العميل
-                  }
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                          Center(child: Text(S().client_saved_successfully))));
                 }
               }),
         );

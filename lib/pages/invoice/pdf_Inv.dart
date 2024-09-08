@@ -42,12 +42,20 @@ Future<void> generatePdf(
 
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
+  final outputFile = await doc.save();
+
+  // تحميل الملف إلى Firebase Storage
+  final storageRef = FirebaseStorage.instance.ref().child(
+      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/$invoiceCode.pdf');
+  await storageRef.putData(outputFile);
+  // الحصول على رابط لتنزيل الملف من Firebase Storage
+  final downloadUrlPdf = await storageRef.getDownloadURL();
   doc.addPage(
     pw.MultiPage(
       pageTheme: _buildTheme(
-          context, svgFooter, fontTajBold, fontTajRegular, invoiceCode),
-      header: (context) =>
-          _buildHeader(context, imageLogo, invoiceCode), // تمرير البيانات هنا
+          context, svgFooter, fontTajBold, fontTajRegular, downloadUrlPdf),
+      header: (context) => _buildHeader(context, imageLogo, downloadUrlPdf,
+          invoiceCode), // تمرير البيانات هنا
 
       footer: _buildFooter,
       build: (context) => [
@@ -65,14 +73,7 @@ Future<void> generatePdf(
   // Return the PDF file content
   await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => doc.save());
-  final outputFile = await doc.save();
 
-  // تحميل الملف إلى Firebase Storage
-  final storageRef = FirebaseStorage.instance.ref().child(
-      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/$invoiceCode.pdf');
-  await storageRef.putData(outputFile);
-  // الحصول على رابط لتنزيل الملف من Firebase Storage
-  final downloadUrlPdf = await storageRef.getDownloadURL();
   final valueAccount = (grandTotalPriceTaxs + shippingFees) * -1;
 
   accountService.saveValueToFirebase(
@@ -93,7 +94,7 @@ Future<void> generatePdf(
 
 // تصميم شكل الصفحة
 pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
-    pw.Font fontTajBold, pw.Font fontTajRegular, String invoiceCode) {
+    pw.Font fontTajBold, pw.Font fontTajRegular, String downloadUrlPdf) {
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
   double heighPdf = 50;
   double widthPdf = heighPdf * 3;
@@ -119,7 +120,7 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
           right: 70, // adjust the left position as needed
           child: pw.BarcodeWidget(
             barcode: pw.Barcode.pdf417(),
-            data: invoiceCode,
+            data: downloadUrlPdf,
             drawText: false,
             height: heighPdf,
             width: widthPdf,
@@ -133,8 +134,8 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
 }
 
 // راس الفاتورة
-pw.Widget _buildHeader(
-    pw.Context context, Uint8List imageLogo, String invoiceCode) {
+pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
+    String downloadUrlPdf, String invoiceCode) {
   return pw.Column(
     children: [
       pw.Row(
@@ -219,7 +220,7 @@ pw.Widget _buildHeader(
                       child: pw.BarcodeWidget(
                         barcode: pw.Barcode.qrCode(),
                         data:
-                            invoiceCode, // يمكنك استبدال هذا بالرابط الذي تريده
+                            downloadUrlPdf, // يمكنك استبدال هذا بالرابط الذي تريده
                         width: 72,
                         height: 72,
                       ),
