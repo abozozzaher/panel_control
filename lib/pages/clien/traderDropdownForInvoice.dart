@@ -8,12 +8,13 @@ import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/trader_provider.dart';
 
-class TraderDropdown extends StatefulWidget {
+class TraderDropdownForInvoice extends StatefulWidget {
   @override
-  State<TraderDropdown> createState() => _TraderDropdownState();
+  State<TraderDropdownForInvoice> createState() =>
+      _TraderDropdownForInvoiceState();
 }
 
-class _TraderDropdownState extends State<TraderDropdown> {
+class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
   final DatabaseHelper databaseHelper = DatabaseHelper();
 
   List<ClienData> clients = [];

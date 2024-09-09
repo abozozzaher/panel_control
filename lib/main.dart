@@ -16,6 +16,7 @@ import 'pages/home_page.dart';
 import 'pages/addNewProduct/NewItem.dart';
 import 'pages/product/ProductPage.dart';
 import 'pages/scan/ScanItem.dart';
+import 'provider/data_table_model.dart';
 import 'provider/invoice_provider.dart';
 import 'provider/scan_item_provider.dart';
 import 'provider/trader_provider.dart';
@@ -119,6 +120,8 @@ add novigator. push . context.go('/'); اريد بناء هذا الشكل
             create: (_) => ScanItemProvider()),
         ChangeNotifierProvider<TraderProvider>(create: (_) => TraderProvider()),
         ChangeNotifierProvider(create: (_) => InvoiceProvider()),
+        ChangeNotifierProvider<TableDataProvider>(
+            create: (_) => TableDataProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),

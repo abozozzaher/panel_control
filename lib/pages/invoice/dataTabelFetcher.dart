@@ -41,8 +41,6 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
       ValueNotifier<double>(0.0); // المجموع السعر مع الدين
   final ValueNotifier<double> shippingFeesNotifier = ValueNotifier<double>(0.0);
 
-  // المجموع السعر مع الدين و اجور الشحن
-
   /// تحويل الأرقام العربية إلى أرقام إنجليزية
   String convertArabicToEnglish(String text) {
     return text.replaceAllMapped(

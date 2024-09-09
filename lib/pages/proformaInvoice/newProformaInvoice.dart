@@ -1,29 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:panel_control/pages/invoice/dataTabelFetcher.dart';
+import 'package:panel_control/pages/clien/traderDropdownForInvoice.dart';
 import 'package:provider/provider.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/invoice_provider.dart';
 import '../../provider/trader_provider.dart';
 import '../../service/invoice_service.dart';
-import '../clien/traderDropdownForInvoice.dart';
-import 'dialosForCodeScannSalers.dart';
+import 'dataTabelFetcherForProInv.dart';
 
-class InvoiceNewAdd extends StatefulWidget {
+class NewProformaInvoiceAdd extends StatefulWidget {
   final VoidCallback toggleTheme;
   final VoidCallback toggleLocale;
 
-  const InvoiceNewAdd(
+  const NewProformaInvoiceAdd(
       {super.key, required this.toggleTheme, required this.toggleLocale});
 
   @override
-  State<InvoiceNewAdd> createState() => _InvoiceNewAddState();
+  State<NewProformaInvoiceAdd> createState() => _NewProformaInvoiceAddState();
 }
 
-class _InvoiceNewAddState extends State<InvoiceNewAdd> {
-  final DialogInvoice dialogInvoice = DialogInvoice();
+class _NewProformaInvoiceAddState extends State<NewProformaInvoiceAdd> {
 //  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   String? invoiceCode;
@@ -67,21 +65,9 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
               SizedBox(height: 20),
               TraderDropdownForInvoice(),
               SizedBox(height: 20),
-              // مندسلة الطلبات التي تم مسحها من قبل العامل
-              trader == null
-                  ? Center(child: Text(S().no_trader_selected))
-                  : ElevatedButton.icon(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => DialogInvoice(),
-                        );
-                      },
-                      icon: Icon(Icons.list),
-                      label: Text(S().select_items)),
-              SizedBox(height: 20),
               // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
-              DataTabelFetcher(invoiceCode),
+              //   trader == null                  ? Center(child: Text(S().no_trader_selected))                  :
+              DataTabelFetcherForProInv(invoiceCode),
             ],
           ),
         ),

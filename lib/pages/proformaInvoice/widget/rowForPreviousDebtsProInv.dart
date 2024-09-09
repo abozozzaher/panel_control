@@ -4,7 +4,7 @@ import 'package:panel_control/service/invoice_service.dart';
 import '../../../generated/l10n.dart';
 import '../../../service/trader_service.dart';
 
-DataRow rowForPreviousDebts(
+DataRow rowForPreviousDebtsProInv(
     double grandTotalPriceTaxs,
     TextEditingController previousDebtController,
     String Function(String text) convertArabicToEnglish,

@@ -31,6 +31,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("Add customer data"),
         "add_new_item": MessageLookupByLibrary.simpleMessage("Yeni öğe ekle"),
+        "add_to_table":
+            MessageLookupByLibrary.simpleMessage("\"Add to Table\""),
         "add_yarn": MessageLookupByLibrary.simpleMessage("Add Yarn"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "Türkiye Gaziantep Sanayi MAH. 60092"),
@@ -77,6 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "date": MessageLookupByLibrary.simpleMessage("Tarih"),
         "details": MessageLookupByLibrary.simpleMessage("Detaylar"),
         "duplicate_code": MessageLookupByLibrary.simpleMessage("Yinelenen kod"),
+        "edit": MessageLookupByLibrary.simpleMessage("edit"),
         "email": MessageLookupByLibrary.simpleMessage("E -posta"),
         "email_sent":
             MessageLookupByLibrary.simpleMessage("e -posta gönderildi"),

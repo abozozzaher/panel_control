@@ -9,6 +9,7 @@ import 'account/tradersAccount.dart';
 import 'clien/addClien.dart';
 import 'inventory/Inventory.dart';
 import 'invoice/newInvoice.dart';
+import 'proformaInvoice/newProformaInvoice.dart';
 import 'yarn/addNewYarn.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -192,7 +193,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => TradersAccount(
+                          builder: (context) => NewProformaInvoiceAdd(
                               toggleTheme: widget.toggleTheme,
                               toggleLocale: widget.toggleTheme),
                         ),

@@ -31,6 +31,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("إضافة بيانات العميل"),
         "add_new_item": MessageLookupByLibrary.simpleMessage("إضافة عنصر جديد"),
+        "add_to_table":
+            MessageLookupByLibrary.simpleMessage("\"Add to Table\""),
         "add_yarn": MessageLookupByLibrary.simpleMessage("إضافة غزل"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "تركيا غازي عنتاب حي الصناعي 60092"),
@@ -81,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "date": MessageLookupByLibrary.simpleMessage("تاريخ"),
         "details": MessageLookupByLibrary.simpleMessage("تفاصيل"),
         "duplicate_code": MessageLookupByLibrary.simpleMessage("كود مكرر"),
+        "edit": MessageLookupByLibrary.simpleMessage("edit"),
         "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
         "email_sent":
             MessageLookupByLibrary.simpleMessage("تم إرسال البريد الإلكتروني"),

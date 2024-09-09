@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("Add customer data"),
         "add_new_item": MessageLookupByLibrary.simpleMessage("Add new item"),
+        "add_to_table": MessageLookupByLibrary.simpleMessage("Add to Table"),
         "add_yarn": MessageLookupByLibrary.simpleMessage("Add Yarn"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "Türkiye Gaziantep Sanayi MAH. 60092"),
@@ -80,9 +81,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark_green": MessageLookupByLibrary.simpleMessage("Dark Green"),
         "data": MessageLookupByLibrary.simpleMessage("Data"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
+        "delett": MessageLookupByLibrary.simpleMessage(" delet"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
         "duplicate_code":
             MessageLookupByLibrary.simpleMessage("Duplicate Code"),
+        "edit": MessageLookupByLibrary.simpleMessage("edit"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "email_sent": MessageLookupByLibrary.simpleMessage("email sent"),
         "enter_code": MessageLookupByLibrary.simpleMessage("Enter Code"),

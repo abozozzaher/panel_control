@@ -169,5 +169,8 @@
     "todays_date": "Today\\s Date",
     "confirm_the_process": "Confirm the process",
     "are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file_": "Are you sure you want to record the data and view the PDF file ?",
-    "no_trader_selected": "No trader selected"
+    "no_trader_selected": "No trader selected",
+    "add_to_table": "\"Add to Table\"",
+    "edit": "edit",
+    "_delet": " delet"
 }

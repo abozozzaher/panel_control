@@ -6,7 +6,7 @@ import '../../../generated/l10n.dart';
 import '../../../provider/invoice_provider.dart';
 import '../../../provider/trader_provider.dart';
 import '../../../service/invoice_service.dart';
-import '../pdf_Inv.dart';
+import '../pdf_ProInv.dart';
 
 Directionality tableBuilld(
     List<DataColumn> columns,
@@ -37,10 +37,10 @@ Directionality tableBuilld(
                 color: Colors.amberAccent,
                 decorationThickness: 100),
             headingRowColor:
-                WidgetStateProperty.resolveWith((states) => Colors.blueGrey),
+                WidgetStateProperty.resolveWith((states) => Colors.black),
             dataTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.blue,
+                color: Colors.black,
                 decorationThickness: 100),
           ),
           SizedBox(height: 20),
@@ -94,7 +94,7 @@ Directionality tableBuilld(
                       (grandTotalPriceTaxs + shippingFees) - previousDebts;
 
                   // إنشاء وعرض ملف الـ PDF
-                  await generatePdf(
+                  await generatePdfProInv(
                       context,
                       aggregatedData,
                       grandTotalPrice,

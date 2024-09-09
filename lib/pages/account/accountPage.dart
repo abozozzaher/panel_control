@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../generated/l10n.dart';
 import '../../provider/trader_provider.dart';
 import '../../service/account_service.dart';
-import '../invoice/TraderDropdown.dart';
+import '../clien/traderDropdownForInvoice.dart';
 
 class AccountPages extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -48,7 +48,7 @@ class _AccountPagesState extends State<AccountPages> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // بيانات التاجر منسدلة اختيار التاجر
-                TraderDropdown(),
+                TraderDropdownForInvoice(),
                 SizedBox(height: 20),
                 // اختيار نوع العملية
                 trader == null

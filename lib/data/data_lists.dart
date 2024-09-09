@@ -43,18 +43,6 @@ class DataLists {
     ['1200', '1200'],
   ];
 
-  List<List<String>> yarnTypes = [
-    ['Polyester', S().polyester],
-    ['Propylene', S().propylene],
-    ['Cotton', S().cotton],
-  ];
-
-  List<List<String>> yarnSupplier = [
-    ['Haron', 'Haron'],
-    ['Malih', 'Malih'],
-    ['Onder', 'Onder'],
-  ];
-
   List<List<String>> quantity = [
     ['10', '10'],
     ['20', '20'],
@@ -81,6 +69,18 @@ class DataLists {
     ['Silver', S().silver],
   ];
 
+  List<List<String>> yarnTypes = [
+    ['Polyester', S().polyester],
+    ['Propylene', S().propylene],
+    ['Cotton', S().cotton],
+  ];
+
+  List<List<String>> yarnSupplier = [
+    ['Haron', 'Haron'],
+    ['Malih', 'Malih'],
+    ['Onder', 'Onder'],
+  ];
+
 // قائمة الشفتات (النوبات)
 
   List<List<String>> shift = [
@@ -99,6 +99,19 @@ class DataLists {
     S().quantity,
     S().price,
     S().total_price,
+  ];
+  List<String> columnTitlesForProInv = [
+    S().type,
+    S().color,
+    S().yarn_number,
+    S().length,
+    '${S().weight} ${S().total}',
+    S().unit,
+    S().quantity,
+    S().price,
+    S().total_price,
+    S().edit,
+    S().delett,
   ];
 
 // قائمة الاشهر لاستيرادها

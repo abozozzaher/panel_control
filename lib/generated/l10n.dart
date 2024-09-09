@@ -1739,6 +1739,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Add to Table`
+  String get add_to_table {
+    return Intl.message(
+      'Add to Table',
+      name: 'add_to_table',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `edit`
+  String get edit {
+    return Intl.message(
+      'edit',
+      name: 'edit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` delet`
+  String get delett {
+    return Intl.message(
+      ' delet',
+      name: 'delett',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
