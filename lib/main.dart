@@ -15,6 +15,7 @@ import 'pages/auth/login_page.dart';
 import 'pages/home_page.dart';
 import 'pages/addNewProduct/NewItem.dart';
 import 'pages/product/ProductPage.dart';
+import 'pages/product/proInvPage.dart';
 import 'pages/scan/ScanItem.dart';
 import 'provider/data_table_model.dart';
 import 'provider/invoice_provider.dart';
@@ -38,15 +39,16 @@ void main() async {
 
 python3 update_translations.py
 flutter pub run intl_utils:generate
+اصلاح الكلمات باللغة العربية في الفاتورة pdf
 
+// اصلاح شكلها للفاتورة الاولية لعرضها كشكل جدول واضافة زر شير
+// 000000
 
 اضافة في منسدلة التجار بحث للبحث عن اسم تاجر
 ويكون البحث لمت له فقط لعشر خيارات لتوفير عدد القراءات من الفايربيس
 
 تعديل البيانات الظاهرة بعد مسح الكود للمنتج
 
-اصلاح الكلمات باللغة العربية في الفاتورة pdf
-تعديل كلمات الدين في الفاتورة والجدول بيناء على قيمة الدين 
 
 دعم طباعة الفواتير أو إرسالها عبر البريد الإلكتروني. والمشاركة مع الرابط
 دعم مشاركة رابط الفاتورة وتحويلها الى صورة
@@ -86,6 +88,7 @@ flutter pub run intl_utils:generate
 
 
 وعند المسح في حال كان تم مسحه مسبقاً تنبيه العامل (تجربة هذا الشرط على الموبيل لم تزبط التجربة تحتاج اصلاح)
+في طباعة الفاتورة وضع رابط الفاتورة فوراً دون تنزيله 
 
 اضافة طلب فاتورة ويقوم العامل باختيار اكمال الطلب ووكل عملية مسح يقوم بمسح من المتطلبات ويظهر لدي في قائمة الفواتير
 
@@ -232,6 +235,13 @@ class _MyAppState extends State<MyApp> {
           toggleTheme: _toggleTheme,
           toggleLocale: _toggleLocale,
         ),
+      ),
+      GoRoute(
+        path: '/pro-invoices/:invoiceId',
+        builder: (context, state) {
+          final invoiceId = state.pathParameters['invoiceId'];
+          return ProInvoicePage(invoiceId: invoiceId);
+        },
       ),
       GoRoute(
         path: '/:monthFolder/:productId',

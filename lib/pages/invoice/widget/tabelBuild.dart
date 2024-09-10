@@ -30,19 +30,10 @@ Directionality tableBuilld(
       child: Column(
         children: [
           DataTable(
-            columns: columns,
-            rows: dataRows,
-            headingTextStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.amberAccent,
-                decorationThickness: 100),
-            headingRowColor:
-                WidgetStateProperty.resolveWith((states) => Colors.blueGrey),
-            dataTextStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-                decorationThickness: 100),
-          ),
+              columns: columns,
+              rows: dataRows,
+              headingRowColor: WidgetStateProperty.resolveWith(
+                  (states) => Colors.amberAccent)),
           SizedBox(height: 20),
           // عمل شكل فاتورة
 

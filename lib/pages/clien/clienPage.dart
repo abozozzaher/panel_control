@@ -128,6 +128,7 @@ class ClienPage extends StatelessWidget {
                             if (invoiceCode != 'No invoice' &&
                                 downloadUrlPdf != null) {
                               _launchURL(downloadUrlPdf);
+                              print('Print invoice available');
                             } else {
                               // يمكنك إضافة إشعار أو رسالة هنا إذا كان رقم الفاتورة غير موجود
                               print('No invoice available');

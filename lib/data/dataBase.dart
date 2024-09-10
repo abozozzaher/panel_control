@@ -179,7 +179,7 @@ class DatabaseHelper {
       join(await getDatabasesPath(), 'traders_database.db'), // اسم القاعدة هنا
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE traders(fullNameArabic TEXT, fullNameEnglish TEXT, address TEXT, phoneNumber TEXT, createdAt TEXT, codeIdClien TEXT PRIMARY KEY)',
+          'CREATE TABLE traders(fullNameArabic TEXT, fullNameEnglish TEXT, country TEXT, state TEXT, city TEXT, address TEXT, phoneNumber TEXT, createdAt TEXT, codeIdClien TEXT PRIMARY KEY)',
         );
       },
       version: 1,

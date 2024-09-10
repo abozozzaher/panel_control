@@ -101,7 +101,7 @@ class _TradersAccountState extends State<TradersAccount> {
           }
 
           for (var client in clientsFromFirebase) {
-            await databaseHelper.saveClientToDatabaseTraders(client);
+            databaseHelper.saveClientToDatabaseTraders(client);
           }
 
           setState(() {

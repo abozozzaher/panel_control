@@ -26,11 +26,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
                 "Access Denied. You do not have the required role."),
+        "account_page": MessageLookupByLibrary.simpleMessage("Account page"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "add_clien": MessageLookupByLibrary.simpleMessage("add Clien"),
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("Add customer data"),
         "add_new_item": MessageLookupByLibrary.simpleMessage("Add new item"),
+        "add_proforma_invoice":
+            MessageLookupByLibrary.simpleMessage("add Proforma Invoice"),
         "add_to_table": MessageLookupByLibrary.simpleMessage("Add to Table"),
         "add_yarn": MessageLookupByLibrary.simpleMessage("Add Yarn"),
         "addres": MessageLookupByLibrary.simpleMessage(
@@ -78,10 +81,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "custom": MessageLookupByLibrary.simpleMessage("Custom"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("Customer added successfully"),
+        "customer_balance":
+            MessageLookupByLibrary.simpleMessage("customer balance"),
         "dark_green": MessageLookupByLibrary.simpleMessage("Dark Green"),
         "data": MessageLookupByLibrary.simpleMessage("Data"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
-        "delett": MessageLookupByLibrary.simpleMessage(" delet"),
+        "delett": MessageLookupByLibrary.simpleMessage("delet"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
         "duplicate_code":
             MessageLookupByLibrary.simpleMessage("Duplicate Code"),
@@ -95,6 +100,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter Custom Value"),
         "enter_new_item":
             MessageLookupByLibrary.simpleMessage("Enter new item"),
+        "enter_weight": MessageLookupByLibrary.simpleMessage("Enter Weight"),
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "error_404": MessageLookupByLibrary.simpleMessage("Error 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("Error Code"),
@@ -103,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "evening": MessageLookupByLibrary.simpleMessage("Evening"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Failed to upload image"),
+        "final_total": MessageLookupByLibrary.simpleMessage("Final Total"),
         "first_name": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
@@ -153,8 +160,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_data_to_send":
             MessageLookupByLibrary.simpleMessage("No data to send"),
         "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
-        "no_previous_religion":
-            MessageLookupByLibrary.simpleMessage("No previous religion"),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
@@ -192,6 +197,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "product_id": MessageLookupByLibrary.simpleMessage("Product ID"),
         "products_table":
             MessageLookupByLibrary.simpleMessage("Products Table"),
+        "proforma_invoice":
+            MessageLookupByLibrary.simpleMessage("Proforma invoice"),
         "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "red": MessageLookupByLibrary.simpleMessage("red"),
@@ -226,6 +233,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "silver": MessageLookupByLibrary.simpleMessage("Silver"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
         "sub_total": MessageLookupByLibrary.simpleMessage("Sub Total"),
+        "switch_to_quantity":
+            MessageLookupByLibrary.simpleMessage("Switch to quantity"),
+        "switch_to_weight":
+            MessageLookupByLibrary.simpleMessage("Switch to weight"),
         "tax": MessageLookupByLibrary.simpleMessage("Tax"),
         "terms_conditions":
             MessageLookupByLibrary.simpleMessage("Terms & Conditions"),
@@ -244,6 +255,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_quantity":
             MessageLookupByLibrary.simpleMessage("Total Quantity"),
         "total_weight": MessageLookupByLibrary.simpleMessage("Total Weight"),
+        "traders_accounts":
+            MessageLookupByLibrary.simpleMessage("Traders Accounts"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
         "unit": MessageLookupByLibrary.simpleMessage("Unit"),

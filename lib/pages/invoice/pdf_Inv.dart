@@ -22,7 +22,7 @@ Future<void> generatePdf(
     double shippingFees, // اجور الشحن
     List<double> prices, //سعر السطر
     List<double> totalLinePrices, // كل مجموع الاسعار
-    double total, // الاجور النهائية
+    double finalTotal, // الاجور النهائية
     double taxs, // الضريبة
     String invoiceCode,
     InvoiceService invoiceService,
@@ -42,28 +42,20 @@ Future<void> generatePdf(
 
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
-  final outputFile = await doc.save();
-
-  // تحميل الملف إلى Firebase Storage
-  final storageRef = FirebaseStorage.instance.ref().child(
-      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/$invoiceCode.pdf');
-  await storageRef.putData(outputFile);
-  // الحصول على رابط لتنزيل الملف من Firebase Storage
-  final downloadUrlPdf = await storageRef.getDownloadURL();
   doc.addPage(
     pw.MultiPage(
       pageTheme: _buildTheme(
-          context, svgFooter, fontTajBold, fontTajRegular, downloadUrlPdf),
-      header: (context) => _buildHeader(context, imageLogo, downloadUrlPdf,
-          invoiceCode), // تمرير البيانات هنا
+          context, svgFooter, fontTajBold, fontTajRegular, invoiceCode),
+      header: (context) => _buildHeader(
+          context, imageLogo, invoiceCode, invoiceCode), // تمرير البيانات هنا
 
       footer: _buildFooter,
       build: (context) => [
-        _contentHeader(context, total, isRTL, trader),
+        _contentHeader(context, finalTotal, isRTL, trader),
         _contentTable(context, aggregatedData, prices, totalLinePrices),
         pw.SizedBox(height: 20),
-        _contentFooter(
-            context, total, taxs, grandTotalPrice, previousDebts, shippingFees),
+        _contentFooter(context, finalTotal, taxs, grandTotalPrice,
+            previousDebts, shippingFees),
         pw.SizedBox(height: 20),
         _termsAndConditions(context, fontTajBold),
       ],
@@ -76,12 +68,20 @@ Future<void> generatePdf(
 
   final valueAccount = (grandTotalPriceTaxs + shippingFees) * -1;
 
+  final outputFile = await doc.save();
+
+  // تحميل الملف إلى Firebase Storage
+  final storageRef = FirebaseStorage.instance.ref().child(
+      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/$invoiceCode.pdf');
+  await storageRef.putData(outputFile);
+  // الحصول على رابط لتنزيل الملف من Firebase Storage
+  final downloadUrlPdf = await storageRef.getDownloadURL();
   accountService.saveValueToFirebase(
       trader.codeIdClien, valueAccount, invoiceCode, downloadUrlPdf);
 
   await invoiceService.saveData(
       aggregatedData,
-      total,
+      finalTotal,
       trader,
       grandTotalPrice,
       grandTotalPriceTaxs,
@@ -94,7 +94,7 @@ Future<void> generatePdf(
 
 // تصميم شكل الصفحة
 pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
-    pw.Font fontTajBold, pw.Font fontTajRegular, String downloadUrlPdf) {
+    pw.Font fontTajBold, pw.Font fontTajRegular, String invoiceCode) {
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
   double heighPdf = 50;
   double widthPdf = heighPdf * 3;
@@ -120,7 +120,7 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
           right: 70, // adjust the left position as needed
           child: pw.BarcodeWidget(
             barcode: pw.Barcode.pdf417(),
-            data: downloadUrlPdf,
+            data: invoiceCode,
             drawText: false,
             height: heighPdf,
             width: widthPdf,
@@ -139,8 +139,6 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
   return pw.Column(
     children: [
       pw.Row(
-        //  crossAxisAlignment: pw.CrossAxisAlignment.end,
-        //    mainAxisAlignment: pw.MainAxisAlignment.center,
         children: [
           //كلمة الفاتورة والتاريخ ورقم الفاتورة
           pw.Expanded(
@@ -220,7 +218,7 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
                       child: pw.BarcodeWidget(
                         barcode: pw.Barcode.qrCode(),
                         data:
-                            downloadUrlPdf, // يمكنك استبدال هذا بالرابط الذي تريده
+                            invoiceCode, // يمكنك استبدال هذا بالرابط الذي تريده
                         width: 72,
                         height: 72,
                       ),
@@ -257,7 +255,7 @@ pw.Widget _buildFooter(pw.Context context) {
 
 // الراس معلومات
 pw.Widget _contentHeader(
-    pw.Context context, total, bool isRTL, ClienData? trader) {
+    pw.Context context, finalTotal, bool isRTL, ClienData? trader) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -268,7 +266,7 @@ pw.Widget _contentHeader(
           height: 40,
           child: pw.FittedBox(
             child: pw.Text(
-              '${S().total} : ${_formatCurrency(total)}',
+              '${S().final_total} : ${_formatCurrency(finalTotal)}',
               style: pw.TextStyle(
                 color: PdfColors.teal,
                 fontStyle: pw.FontStyle.italic,
@@ -399,7 +397,7 @@ pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
 }
 
 // الذيل معلومات
-pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
+pw.Widget _contentFooter(pw.Context context, finalTotal, taxs, grandTotalPrice,
     previousDebts, shippingFees) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -475,7 +473,7 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
                       ? '${S().no_dues} :'
                       : previousDebts > -1
                           ? '${S().previous_debt} :'
-                          : '${S().no_previous_religion} :'),
+                          : '${S().customer_balance} :'),
                   pw.Text(_formatCurrency(previousDebts)),
                 ],
               ),
@@ -489,8 +487,8 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
                 child: pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('${S().total} :'),
-                    pw.Text(_formatCurrency(total)),
+                    pw.Text('${S().final_total} :'),
+                    pw.Text(_formatCurrency(finalTotal)),
                   ],
                 ),
               ),

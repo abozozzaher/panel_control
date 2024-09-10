@@ -108,9 +108,8 @@ class DataLists {
     '${S().weight} ${S().total}',
     S().unit,
     S().quantity,
-    S().price,
+    '${S().price}  ${S().pcs}',
     S().total_price,
-    S().edit,
     S().delett,
   ];
 

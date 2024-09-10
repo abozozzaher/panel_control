@@ -19,7 +19,7 @@ class InvoiceService {
     final String formattedDate =
         '${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.year.toString().substring(2)}';
 
-    return 'INV-$formattedDate';
+    return formattedDate;
   }
 
   Map<String, dynamic> prepareData(
@@ -126,7 +126,7 @@ class InvoiceService {
 
   Future<void> saveData(
       Map<String, dynamic> aggregatedData,
-      double total,
+      double finalTotal,
       ClienData? trader,
       double grandTotalPrice,
       double grandTotalPriceTaxs,
@@ -166,7 +166,7 @@ class InvoiceService {
       await clientDocument.collection('invoices').doc(invoiceCode).set({
         'aggregatedData': aggregatedData,
         'separateData': separateData, // استخدام البيانات المنفصلة هنا
-        'total': total,
+        'finalTotal': finalTotal,
         'grandTotalPrice': grandTotalPrice,
         'grandTotalPriceTaxs': grandTotalPriceTaxs,
         'taxs': taxs,

@@ -58,9 +58,16 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
       try {
         List<Map<String, dynamic>> existingClients =
             await databaseHelper.checkClientsInDatabaseTraders();
+        print('ssss3 ${existingClients}');
+
         if (existingClients.isNotEmpty) {
           // إذا كانت البيانات موجودة في قاعدة البيانات المحلية
-          //   setState(() {            clients = existingClients                .map((client) => ClienData.fromMap(client))                .toList();          isLoading = false; });
+          setState(() {
+            clients = existingClients
+                .map((client) => ClienData.fromMap(client))
+                .toList();
+            isLoading = false;
+          });
           List<ClienData> clientsFromDb = existingClients.map((client) {
             return ClienData.fromMap(client);
           }).toList();
@@ -72,13 +79,17 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
           // إذا لم تكن البيانات موجودة في قاعدة البيانات المحلية، احضرها من Firebase
           QuerySnapshot snapshot =
               await FirebaseFirestore.instance.collection('cliens').get();
+          print('snapshot: $snapshot'); // تحقق من وجود البيانات
           List<ClienData> clientsFromFirebase = snapshot.docs.map((doc) {
+            print('doc: $doc'); // تحقق من وجود البيانات في كل مستند
+
             return ClienData.fromMap(doc.data() as Map<String, dynamic>);
           }).toList();
-
+          print('ssss2 ');
           // احفظ البيانات في قاعدة البيانات المحلية
           for (var client in clientsFromFirebase) {
-            await databaseHelper.saveClientToDatabaseTraders(client);
+            databaseHelper.saveClientToDatabaseTraders(client);
+            print('ssss1 ${client}');
           }
 
           setState(() {
@@ -113,9 +124,10 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
               isExpanded: true,
               value: _selectedCode,
               items: clients.map((client) {
+                print('displayName $client');
                 String displayName =
                     isRtl ? client.fullNameArabic : client.fullNameEnglish;
-
+                print('displayName $displayName');
                 return DropdownMenuItem<String>(
                   value: client.codeIdClien,
                   child: Text(displayName, textAlign: TextAlign.center),

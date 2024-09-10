@@ -26,11 +26,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
                 "Erişim engellendi.Gerekli rolünüz yok."),
+        "account_page": MessageLookupByLibrary.simpleMessage("Account page"),
         "add": MessageLookupByLibrary.simpleMessage("Eklemek"),
         "add_clien": MessageLookupByLibrary.simpleMessage("add Clien"),
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("Add customer data"),
         "add_new_item": MessageLookupByLibrary.simpleMessage("Yeni öğe ekle"),
+        "add_proforma_invoice":
+            MessageLookupByLibrary.simpleMessage("add Proforma Invoice"),
         "add_to_table":
             MessageLookupByLibrary.simpleMessage("\"Add to Table\""),
         "add_yarn": MessageLookupByLibrary.simpleMessage("Add Yarn"),
@@ -74,6 +77,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "custom": MessageLookupByLibrary.simpleMessage("Gelenek"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("Customer added successfully"),
+        "customer_balance":
+            MessageLookupByLibrary.simpleMessage("customer balance"),
         "dark_green": MessageLookupByLibrary.simpleMessage("Koyu yeşil"),
         "data": MessageLookupByLibrary.simpleMessage("Veri"),
         "date": MessageLookupByLibrary.simpleMessage("Tarih"),
@@ -90,6 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Özel Değer Girin"),
         "enter_new_item":
             MessageLookupByLibrary.simpleMessage("Yeni öğe girin"),
+        "enter_weight": MessageLookupByLibrary.simpleMessage("Enter Weight"),
         "error": MessageLookupByLibrary.simpleMessage("Hata"),
         "error_404": MessageLookupByLibrary.simpleMessage("Hata 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("Hata kodu"),
@@ -97,6 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "evening": MessageLookupByLibrary.simpleMessage("Akşam"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Görüntü yükleyemedi"),
+        "final_total": MessageLookupByLibrary.simpleMessage("Final Total"),
         "first_name": MessageLookupByLibrary.simpleMessage("İlk adı"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Parolanızı mı unuttunuz"),
@@ -148,8 +155,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_data_to_send":
             MessageLookupByLibrary.simpleMessage("Gönderecek veri yok"),
         "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
-        "no_previous_religion":
-            MessageLookupByLibrary.simpleMessage("No previous religion"),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("TAMAM"),
@@ -187,6 +192,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "product_id": MessageLookupByLibrary.simpleMessage("Ürün kimliği"),
         "products_table":
             MessageLookupByLibrary.simpleMessage("Products Table"),
+        "proforma_invoice":
+            MessageLookupByLibrary.simpleMessage("Proforma invoice"),
         "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Miktar"),
         "red": MessageLookupByLibrary.simpleMessage("kırmızı"),
@@ -221,6 +228,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "silver": MessageLookupByLibrary.simpleMessage("Gümüş"),
         "sold": MessageLookupByLibrary.simpleMessage("Satılmış"),
         "sub_total": MessageLookupByLibrary.simpleMessage("Alt Toplam"),
+        "switch_to_quantity":
+            MessageLookupByLibrary.simpleMessage("Switch to quantity"),
+        "switch_to_weight":
+            MessageLookupByLibrary.simpleMessage("Switch to weight"),
         "tax": MessageLookupByLibrary.simpleMessage("Vergi"),
         "terms_conditions":
             MessageLookupByLibrary.simpleMessage("Şartlar ve Koşullar"),
@@ -237,6 +248,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_price": MessageLookupByLibrary.simpleMessage("Toplam fiyat"),
         "total_quantity": MessageLookupByLibrary.simpleMessage("Toplam miktar"),
         "total_weight": MessageLookupByLibrary.simpleMessage("Toplam ağırlık"),
+        "traders_accounts":
+            MessageLookupByLibrary.simpleMessage("Traders Accounts"),
         "translate": MessageLookupByLibrary.simpleMessage("tercüme etmek"),
         "type": MessageLookupByLibrary.simpleMessage("Tip"),
         "unit": MessageLookupByLibrary.simpleMessage("Birim"),

@@ -49,7 +49,7 @@ class ProductPage extends StatelessWidget {
               var productData = snapshot.data!.data() as Map<String, dynamic>;
               print(monthFolder);
               print(productId);
-
+// تزبيط شكل عرض صفحة المنتج بشكل افضل والفاتورة فورم
               // استخدام البيانات المستردة لعرضها
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -66,10 +66,7 @@ class ProductPage extends StatelessWidget {
                       style: const TextStyle(fontSize: 18)),
                   Text('${S().yarn_number} : ${productData['yarn_number']}',
                       style: const TextStyle(fontSize: 18)),
-                  Text('${S().data} : ${productData['date'].toDate()}',
-                      style: const TextStyle(fontSize: 18)),
-                  Text('${S().shift} : ${productData['shift']}',
-                      style: const TextStyle(fontSize: 18)),
+                  //    Text('${S().data} : ${productData['createdAt'].toDate()}',                      style: const TextStyle(fontSize: 18)),
                   Text(
                       '${S().sale_status} : ${productData['sale_status'] ? S().sold : S().available}',
                       style: const TextStyle(fontSize: 18)),

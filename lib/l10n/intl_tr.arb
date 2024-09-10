@@ -31,7 +31,6 @@
     "thank_you_for_your_business": "Thank you for your business",
     "paymentinfo": "payment_info",
     "invoice_amount_due": "invoice amount due",
-    "no_previous_religion": "No previous religion",
     "no_dues": "No dues",
     "invoice_to": "Invoice to",
     "terms__conditions": "Terms & Conditions",
@@ -194,5 +193,14 @@
     "no_trader_selected": "No trader selected",
     "add_to_table": "\"Add to Table\"",
     "edit": "edit",
-    "_delet": " delet"
+    "_delet": " delet",
+    "final_total": "Final Total",
+    "enter_weight": "Enter Weight",
+    "switch_to_quantity": "Switch to quantity",
+    "switch_to_weight": "Switch to weight",
+    "account_page": "Account page",
+    "traders_accounts": "Traders Accounts",
+    "pro_invoice": "Pro invoice",
+    "customer_balance": "customer balance",
+    "add_proforma_invoice": "add Proforma Invoice"
 }

@@ -26,13 +26,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
                 "تم رفض الوصول. ليس لديك الدور المطلوب."),
+        "account_page": MessageLookupByLibrary.simpleMessage("Account page"),
         "add": MessageLookupByLibrary.simpleMessage("إضافة"),
         "add_clien": MessageLookupByLibrary.simpleMessage("إضافة عميل"),
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("إضافة بيانات العميل"),
         "add_new_item": MessageLookupByLibrary.simpleMessage("إضافة عنصر جديد"),
-        "add_to_table":
-            MessageLookupByLibrary.simpleMessage("\"Add to Table\""),
+        "add_proforma_invoice":
+            MessageLookupByLibrary.simpleMessage("add Proforma Invoice"),
+        "add_to_table": MessageLookupByLibrary.simpleMessage("Add to Table"),
         "add_yarn": MessageLookupByLibrary.simpleMessage("إضافة غزل"),
         "addres": MessageLookupByLibrary.simpleMessage(
             "تركيا غازي عنتاب حي الصناعي 60092"),
@@ -78,6 +80,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "custom": MessageLookupByLibrary.simpleMessage("مخصص"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة العميل بنجاح"),
+        "customer_balance":
+            MessageLookupByLibrary.simpleMessage("customer balance"),
         "dark_green": MessageLookupByLibrary.simpleMessage("عسكري"),
         "data": MessageLookupByLibrary.simpleMessage("التاريخ"),
         "date": MessageLookupByLibrary.simpleMessage("تاريخ"),
@@ -94,6 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("أدخل قيمة مخصصة"),
         "enter_new_item":
             MessageLookupByLibrary.simpleMessage("أدخل عنصرًا جديدًا"),
+        "enter_weight": MessageLookupByLibrary.simpleMessage("Enter Weight"),
         "error": MessageLookupByLibrary.simpleMessage("خطأ"),
         "error_404": MessageLookupByLibrary.simpleMessage("خطأ 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("كود خطأ"),
@@ -101,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "evening": MessageLookupByLibrary.simpleMessage("مسائي"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("فشل في رفع الصورة"),
+        "final_total": MessageLookupByLibrary.simpleMessage("Final Total"),
         "first_name": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور"),
@@ -152,8 +158,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_data_to_send":
             MessageLookupByLibrary.simpleMessage("لا توجد بيانات للإرسال"),
         "no_dues": MessageLookupByLibrary.simpleMessage("لا مستحقات"),
-        "no_previous_religion":
-            MessageLookupByLibrary.simpleMessage("لا دين سابق"),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("حسنًا"),
@@ -190,6 +194,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تفاصيل المنتج"),
         "product_id": MessageLookupByLibrary.simpleMessage("Id المنتج"),
         "products_table": MessageLookupByLibrary.simpleMessage("جدول المنتجات"),
+        "proforma_invoice":
+            MessageLookupByLibrary.simpleMessage("Proforma invoice"),
         "propylene": MessageLookupByLibrary.simpleMessage("بولي بروبيلين"),
         "quantity": MessageLookupByLibrary.simpleMessage("الكمية"),
         "red": MessageLookupByLibrary.simpleMessage("حمري"),
@@ -222,13 +228,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "silver": MessageLookupByLibrary.simpleMessage("فضي"),
         "sold": MessageLookupByLibrary.simpleMessage("تم البيع"),
         "sub_total": MessageLookupByLibrary.simpleMessage("المجموع الفرعي"),
+        "switch_to_quantity":
+            MessageLookupByLibrary.simpleMessage("Switch to quantity"),
+        "switch_to_weight":
+            MessageLookupByLibrary.simpleMessage("Switch to weight"),
         "tax": MessageLookupByLibrary.simpleMessage("ضريبة"),
         "terms_conditions":
             MessageLookupByLibrary.simpleMessage("الشروط والأحكام"),
         "thank_you_for_your_business":
             MessageLookupByLibrary.simpleMessage("شكرًا لك على عملك"),
         "the_code": MessageLookupByLibrary.simpleMessage("الكود"),
-        "todays_date": MessageLookupByLibrary.simpleMessage("Today\\s Date"),
+        "todays_date": MessageLookupByLibrary.simpleMessage("Today\'s Date"),
         "toggle_language": MessageLookupByLibrary.simpleMessage("تبديل اللغة"),
         "toggle_theme": MessageLookupByLibrary.simpleMessage("تبديل الوضع"),
         "total": MessageLookupByLibrary.simpleMessage("الإجمالي"),
@@ -238,6 +248,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_price": MessageLookupByLibrary.simpleMessage("السعر الإجمالي"),
         "total_quantity": MessageLookupByLibrary.simpleMessage("إجمالي الكمية"),
         "total_weight": MessageLookupByLibrary.simpleMessage("إجمالي الوزن"),
+        "traders_accounts":
+            MessageLookupByLibrary.simpleMessage("Traders Accounts"),
         "translate": MessageLookupByLibrary.simpleMessage("ترجمة"),
         "type": MessageLookupByLibrary.simpleMessage("النوع"),
         "unit": MessageLookupByLibrary.simpleMessage("وحدة"),

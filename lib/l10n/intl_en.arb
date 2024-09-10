@@ -131,7 +131,6 @@
     "view_invoice": "View Invoice",
     "save_invoice": "Save Invoice",
     "invoice_amount_due": "invoice amount due",
-    "no_previous_religion": "No previous religion",
     "no_dues": "No dues",
     "invoice_to": "Invoice to",
     "terms_conditions": "Terms & Conditions",
@@ -170,5 +169,14 @@
     "search_client": "Search Client",
     "add_to_table": "Add to Table",
     "edit": "edit",
-    "delett": "delet"
+    "delett": "delet",
+    "final_total": "Final Total",
+    "enter_weight": "Enter Weight",
+    "switch_to_quantity": "Switch to quantity",
+    "switch_to_weight": "Switch to weight",
+    "account_page": "Account page",
+    "traders_accounts": "Traders Accounts",
+    "pro_invoice": "Pro invoice",
+    "customer_balance": "customer balance",
+    "add_proforma_invoice": "add Proforma Invoice"
 }

@@ -1370,16 +1370,6 @@ class S {
     );
   }
 
-  /// `No previous religion`
-  String get no_previous_religion {
-    return Intl.message(
-      'No previous religion',
-      name: 'no_previous_religion',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `No dues`
   String get no_dues {
     return Intl.message(
@@ -1760,11 +1750,101 @@ class S {
     );
   }
 
-  /// ` delet`
+  /// `delet`
   String get delett {
     return Intl.message(
-      ' delet',
+      'delet',
       name: 'delett',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Final Total`
+  String get final_total {
+    return Intl.message(
+      'Final Total',
+      name: 'final_total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Weight`
+  String get enter_weight {
+    return Intl.message(
+      'Enter Weight',
+      name: 'enter_weight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch to quantity`
+  String get switch_to_quantity {
+    return Intl.message(
+      'Switch to quantity',
+      name: 'switch_to_quantity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch to weight`
+  String get switch_to_weight {
+    return Intl.message(
+      'Switch to weight',
+      name: 'switch_to_weight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account page`
+  String get account_page {
+    return Intl.message(
+      'Account page',
+      name: 'account_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traders Accounts`
+  String get traders_accounts {
+    return Intl.message(
+      'Traders Accounts',
+      name: 'traders_accounts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pro invoice`
+  String get pro_invoice {
+    return Intl.message(
+      'Pro invoice',
+      name: 'pro_invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `customer balance`
+  String get customer_balance {
+    return Intl.message(
+      'customer balance',
+      name: 'customer_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `add Proforma Invoice`
+  String get add_proforma_invoice {
+    return Intl.message(
+      'add Proforma Invoice',
+      name: 'add_proforma_invoice',
       desc: '',
       args: [],
     );

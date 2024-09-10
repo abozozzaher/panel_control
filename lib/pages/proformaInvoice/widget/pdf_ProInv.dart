@@ -3,7 +3,6 @@ import 'package:flutter/material.dart' as mat;
 
 import 'package:panel_control/generated/l10n.dart';
 import 'package:panel_control/model/clien.dart';
-import 'package:panel_control/service/invoice_service.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -11,25 +10,24 @@ import 'package:printing/printing.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:provider/provider.dart';
 
-import '../../provider/trader_provider.dart';
-import '../../service/account_service.dart';
+import '../../../provider/trader_provider.dart';
+import '../../../service/pro_inv_service.dart';
 
 Future<void> generatePdfProInv(
-    context,
-    Map<String, dynamic> aggregatedData,
-    double grandTotalPrice, // مجموع سعر البضاعة فقط
-    double previousDebts, // الدين على العميل
-    double shippingFees, // اجور الشحن
-    List<double> prices, //سعر السطر
-    List<double> totalLinePrices, // كل مجموع الاسعار
-    double total, // الاجور النهائية
-    double taxs, // الضريبة
-    String invoiceCode,
-    InvoiceService invoiceService,
-    double grandTotalPriceTaxs) async {
+  context,
+  List<Map<String, dynamic>> tableData,
+  invoiceCode,
+  double totalPrices,
+  String tax,
+  double taxWthiPrice,
+  double shippingFees,
+  double dues,
+  double finalTotal,
+) async {
   final fontTajBold = await PdfGoogleFonts.tajawalBold();
   final fontTajRegular = await PdfGoogleFonts.tajawalRegular();
-
+  String linkUrl =
+      "https://panel-control-company-zaher.web.app/pro-invoices/$invoiceCode";
   final svgFooter = await rootBundle.loadString('assets/img/footer.svg');
   final Uint8List imageLogo = await rootBundle
       .load('assets/img/logo.png')
@@ -38,32 +36,24 @@ Future<void> generatePdfProInv(
   // Create a PDF document.
   final doc = pw.Document();
   final trader = Provider.of<TraderProvider>(context, listen: false).trader;
-  final AccountService accountService = AccountService();
+//  final AccountService accountService = AccountService();
 
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
-  final outputFile = await doc.save();
-
-  // تحميل الملف إلى Firebase Storage
-  final storageRef = FirebaseStorage.instance.ref().child(
-      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/$invoiceCode.pdf');
-  await storageRef.putData(outputFile);
-  // الحصول على رابط لتنزيل الملف من Firebase Storage
-  final downloadUrlPdf = await storageRef.getDownloadURL();
   doc.addPage(
     pw.MultiPage(
-      pageTheme: _buildTheme(
-          context, svgFooter, fontTajBold, fontTajRegular, downloadUrlPdf),
-      header: (context) => _buildHeader(context, imageLogo, downloadUrlPdf,
-          invoiceCode), // تمرير البيانات هنا
+      pageTheme:
+          _buildTheme(context, svgFooter, fontTajBold, fontTajRegular, linkUrl),
+      header: (context) => _buildHeader(
+          context, imageLogo, linkUrl, invoiceCode), // تمرير البيانات هنا
 
       footer: _buildFooter,
       build: (context) => [
-        _contentHeader(context, total, isRTL, trader),
-        _contentTable(context, aggregatedData, prices, totalLinePrices),
+        _contentHeader(context, finalTotal, isRTL, trader),
+        _contentTable(context, tableData),
         pw.SizedBox(height: 20),
         _contentFooter(
-            context, total, taxs, grandTotalPrice, previousDebts, shippingFees),
+            context, finalTotal, tax, totalPrices, dues, shippingFees),
         pw.SizedBox(height: 20),
         _termsAndConditions(context, fontTajBold),
       ],
@@ -74,27 +64,22 @@ Future<void> generatePdfProInv(
   await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => doc.save());
 
-  final valueAccount = (grandTotalPriceTaxs + shippingFees) * -1;
+  final outputFile = await doc.save();
 
-  accountService.saveValueToFirebase(
-      trader.codeIdClien, valueAccount, invoiceCode, downloadUrlPdf);
+  // تحميل الملف إلى Firebase Storage
+  final storageRef = FirebaseStorage.instance.ref().child(
+      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/INV-$invoiceCode.pdf');
+  await storageRef.putData(outputFile);
+  // الحصول على رابط لتنزيل الملف من Firebase Storage
+  final downloadUrlPdf = await storageRef.getDownloadURL();
 
-  await invoiceService.saveData(
-      aggregatedData,
-      total,
-      trader,
-      grandTotalPrice,
-      grandTotalPriceTaxs,
-      taxs,
-      previousDebts,
-      shippingFees,
-      invoiceCode,
-      downloadUrlPdf);
+  await saveDataProInv(tableData, finalTotal, trader, totalPrices, taxWthiPrice,
+      tax, dues, shippingFees, invoiceCode, downloadUrlPdf);
 }
 
 // تصميم شكل الصفحة
 pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
-    pw.Font fontTajBold, pw.Font fontTajRegular, String downloadUrlPdf) {
+    pw.Font fontTajBold, pw.Font fontTajRegular, String linkUrl) {
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
   double heighPdf = 50;
   double widthPdf = heighPdf * 3;
@@ -120,7 +105,7 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
           right: 70, // adjust the left position as needed
           child: pw.BarcodeWidget(
             barcode: pw.Barcode.pdf417(),
-            data: downloadUrlPdf,
+            data: linkUrl,
             drawText: false,
             height: heighPdf,
             width: widthPdf,
@@ -134,13 +119,11 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
 }
 
 // راس الفاتورة
-pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
-    String downloadUrlPdf, String invoiceCode) {
+pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo, String linkUrl,
+    String invoiceCode) {
   return pw.Column(
     children: [
       pw.Row(
-        //  crossAxisAlignment: pw.CrossAxisAlignment.end,
-        //    mainAxisAlignment: pw.MainAxisAlignment.center,
         children: [
           //كلمة الفاتورة والتاريخ ورقم الفاتورة
           pw.Expanded(
@@ -153,7 +136,7 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
                   padding: const pw.EdgeInsets.only(left: 20, right: 20),
                   //      alignment: pw.Alignment.centerLeft,
                   child: pw.Text(
-                    S().invoice,
+                    S().pro_invoice,
                     style: pw.Theme.of(context).header0.copyWith(fontSize: 40),
                   ),
                 ),
@@ -172,7 +155,7 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
                       crossAxisCount: 2,
                       children: [
                         pw.Text(S().invoice),
-                        pw.Text(invoiceCode),
+                        pw.Text('INV-$invoiceCode'),
                         pw.Text(S().data),
                         pw.Text(_formatDate(DateTime.now())),
                       ],
@@ -219,8 +202,7 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
                       height: 72,
                       child: pw.BarcodeWidget(
                         barcode: pw.Barcode.qrCode(),
-                        data:
-                            downloadUrlPdf, // يمكنك استبدال هذا بالرابط الذي تريده
+                        data: linkUrl,
                         width: 72,
                         height: 72,
                       ),
@@ -257,7 +239,7 @@ pw.Widget _buildFooter(pw.Context context) {
 
 // الراس معلومات
 pw.Widget _contentHeader(
-    pw.Context context, total, bool isRTL, ClienData? trader) {
+    pw.Context context, finalTotal, bool isRTL, ClienData? trader) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -268,7 +250,7 @@ pw.Widget _contentHeader(
           height: 40,
           child: pw.FittedBox(
             child: pw.Text(
-              '${S().total} : ${_formatCurrency(total)}',
+              '${S().final_total} : ${_formatCurrency(finalTotal)}',
               style: pw.TextStyle(
                 color: PdfColors.teal,
                 fontStyle: pw.FontStyle.italic,
@@ -344,9 +326,8 @@ pw.Widget _contentHeader(
   );
 }
 
-// عنوين راس الجدول
-pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
-    List<double> prices, List<double> totalLinePrices) {
+pw.Widget _contentTable(
+    pw.Context context, List<Map<String, dynamic>> tableDataList) {
   final tableHeaders = [
     S().type,
     S().color,
@@ -359,21 +340,21 @@ pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
     S().total_price,
   ];
 
-  // استخراج البيانات من aggregatedData
-  final data = aggregatedData.entries.map((entry) {
-    final productData = entry.value as Map<String, dynamic>;
-    int index = aggregatedData.keys.toList().indexOf(entry.key);
+  // استخراج البيانات من tableDataList
+  final data = tableDataList.asMap().entries.map((entry) {
+    // final index = entry.key;
+    final productData = entry.value;
 
     return [
       productData['type'].toString(),
       productData['color'].toString(),
-      '${productData['yarn_number'].toString()}D',
-      '${productData['length'].toString()}Mt',
-      '${productData['total_weight'].toString()}Kg',
-      '${productData['scanned_data'].toString()} ${S().unit}',
-      _formatCurrency(prices[index]),
-      '${productData['quantity'].toString()} ${S().pcs}',
-      _formatCurrency(totalLinePrices[index]),
+      '${productData['yarnNumber'].toString()}D',
+      '${productData['totalLength'].toStringAsFixed(0)}Mt',
+      '${productData['totalWeight'].toStringAsFixed(2)}Kg',
+      '${productData['totalUnit'].toStringAsFixed(0)} ${S().unit}',
+      '${productData['allQuantity'].toString()} ${S().pcs}',
+      '\$${productData['price'].toStringAsFixed(2)}',
+      '\$${productData['totalPrice'].toStringAsFixed(2)}',
     ];
   }).toList();
 
@@ -399,8 +380,8 @@ pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
 }
 
 // الذيل معلومات
-pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
-    previousDebts, shippingFees) {
+pw.Widget _contentFooter(
+    pw.Context context, finalTotal, tax, totalPrices, dues, shippingFees) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -448,7 +429,7 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
                   pw.Text('${S().sub_total} :'),
-                  pw.Text(_formatCurrency(grandTotalPrice)),
+                  pw.Text(_formatCurrency(totalPrices)),
                 ],
               ),
               pw.SizedBox(height: 5),
@@ -456,7 +437,7 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
                   pw.Text('${S().tax} :'),
-                  pw.Text('${(taxs * 100).toStringAsFixed(1)}%'),
+                  pw.Text('${tax}%'),
                 ],
               ),
               pw.SizedBox(height: 5),
@@ -471,12 +452,12 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
-                  pw.Text(previousDebts == 0
+                  pw.Text(dues == 0
                       ? '${S().no_dues} :'
-                      : previousDebts > -1
+                      : dues > -1
                           ? '${S().previous_debt} :'
-                          : '${S().no_previous_religion} :'),
-                  pw.Text(_formatCurrency(previousDebts)),
+                          : '${S().customer_balance} :'),
+                  pw.Text(_formatCurrency(dues)),
                 ],
               ),
               pw.Divider(color: PdfColors.blueGrey900),
@@ -489,8 +470,8 @@ pw.Widget _contentFooter(pw.Context context, total, taxs, grandTotalPrice,
                 child: pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('${S().total} :'),
-                    pw.Text(_formatCurrency(total)),
+                    pw.Text('${S().final_total} :'),
+                    pw.Text(_formatCurrency(finalTotal)),
                   ],
                 ),
               ),
@@ -536,8 +517,8 @@ pw.Widget _termsAndConditions(pw.Context context, pw.Font fontTajBold) {
   );
 }
 
-String _formatCurrency(double amount) {
-  return '\$${amount.toStringAsFixed(2)}';
+String _formatCurrency(double? amount) {
+  return '\$${amount!.toStringAsFixed(2)}';
 }
 
 DateTime now = DateTime.now();

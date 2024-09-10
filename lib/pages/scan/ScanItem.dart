@@ -448,7 +448,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
                     // تحقق من حالة sale_status لكل مستند
                     salesStatusFalseDocs.forEach((key, value) {
                       //555
-                      if (value is Map<String, dynamic> &&
+                      //    if (value is Map<String, dynamic> &&
+                      if (
+                          //
                           value.containsKey('sale_status')) {
                         bool saleStatus = value['sale_status'];
                         if (saleStatus != false) {

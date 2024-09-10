@@ -93,8 +93,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
-                    //// 454545
-                    child: Text('Account page', textAlign: TextAlign.center),
+                    child: Text(S().account_page, textAlign: TextAlign.center),
                   ),
                 ),
                 SizedBox(width: 16), // مساحة بين الأزرار
@@ -177,8 +176,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
-                    //// 454545
-                    child: Text('Traders Accounts'),
+                    child: Text(S().traders_accounts),
                   ),
                 ),
               ],
@@ -199,8 +197,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
-                    //// 454545
-                    child: Text('Proforma invoice'),
+                    child: Text(S().pro_invoice),
                   ),
                 ),
               ],

@@ -66,8 +66,9 @@ class _NewProformaInvoiceAddState extends State<NewProformaInvoiceAdd> {
               TraderDropdownForInvoice(),
               SizedBox(height: 20),
               // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
-              //   trader == null                  ? Center(child: Text(S().no_trader_selected))                  :
-              DataTabelFetcherForProInv(invoiceCode),
+              trader == null
+                  ? Center(child: Text(S().no_trader_selected))
+                  : DataTabelFetcherForProInv(invoiceCode),
             ],
           ),
         ),

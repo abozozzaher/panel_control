@@ -1,0 +1,69 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../model/clien.dart';
+
+Future<void> saveDataProInv(
+    List<Map<String, dynamic>> tableDataList,
+    double finalTotal,
+    ClienData? trader,
+    double totalPrices,
+    double taxWthiPrice,
+    String tax,
+    double dues,
+    double shippingFees,
+    String invoiceCode,
+    String downloadUrlPdf) async {
+  // استخراج البيانات من tableDataList
+  final tableData = tableDataList.map((productData) {
+    return [
+      productData['type'].toString(),
+      productData['color'].toString(),
+      productData['yarnNumber'].toString(),
+      productData['totalLength'].toStringAsFixed(0),
+      productData['totalWeight'].toStringAsFixed(2),
+      productData['totalUnit'].toStringAsFixed(0),
+      productData['allQuantity'].toString(),
+      productData['price'].toStringAsFixed(2),
+      productData['totalPrice'].toStringAsFixed(2),
+    ];
+  }).toList();
+
+  // تحديد مرجع للمجموعة حيث تريد حفظ البيانات
+  DocumentReference<Map<String, dynamic>> invoices =
+      FirebaseFirestore.instance.collection('pro-invoices').doc(invoiceCode);
+
+  // بناء مستند جديد بالبيانات المطلوبة
+  try {
+    await invoices.set({
+      'invoiceCode': invoiceCode,
+      'codeIdClien': trader!.codeIdClien,
+      'fullNameArabic': trader.fullNameArabic,
+      'fullNameEnglish': trader.fullNameEnglish,
+      'finalTotal': finalTotal.toStringAsFixed(2),
+      'totalPrices': totalPrices.toStringAsFixed(2),
+      'taxWthiPrice': taxWthiPrice.toStringAsFixed(2),
+      'tax': tax,
+      'dues': dues.toStringAsFixed(2),
+      'shippingFees': shippingFees.toStringAsFixed(2),
+      'downloadUrlPdf': downloadUrlPdf,
+      'products': tableData
+          .map((product) => {
+                'type': product[0],
+                'color': product[1],
+                'yarnNumber': product[2],
+                'totalLength': product[3],
+                'totalWeight': product[4],
+                'totalUnit': product[5],
+                'allQuantity': product[6],
+                'price': product[7],
+                'totalPrice': product[8],
+              })
+          .toList(),
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+
+    print("Data saved successfully");
+  } catch (e) {
+    print("Failed to save data: $e");
+  }
+}

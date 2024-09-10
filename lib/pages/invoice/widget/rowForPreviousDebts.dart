@@ -29,7 +29,7 @@ DataRow rowForPreviousDebts(
               ? S().no_dues
               : previousDebtsNotifier.value < -1
                   ? S().previous_debt
-                  : S().no_previous_religion,
+                  : S().customer_balance,
           textAlign: TextAlign.center,
           style: TextStyle(
               color: previousDebtsNotifier.value == 0

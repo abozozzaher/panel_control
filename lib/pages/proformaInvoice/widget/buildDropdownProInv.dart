@@ -20,13 +20,15 @@ Widget buildDropdownProInv(
       if (newValue == "Add New") {
         String? newItem = await _showAddItemDialog(context);
         if (newItem != null && newItem.isNotEmpty) {
-          //       setState(() {            itemsList.add([newItem, newItem]);            onChanged(newItem);          });
-          itemsList.add([newItem, newItem]);
-          onChanged(newItem);
+          setState(() {
+            itemsList.add([newItem, newItem]);
+            onChanged(newItem);
+          });
         }
       } else {
-        // setState(() {          onChanged(newValue);        });
-        onChanged(newValue);
+        setState(() {
+          onChanged(newValue);
+        });
       }
     },
     items: [

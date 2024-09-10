@@ -82,7 +82,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     length = dataLists.length;
     setState(() {
       selectedType = types!.isNotEmpty ? types![0][0] : null;
-
       selectedWidth = widths!.isNotEmpty ? widths![6][0] : null;
       selectedWeight = weights!.isNotEmpty ? weights![0][0] : null;
       selectedColor = colors!.isNotEmpty ? colors![0][0] : null;
