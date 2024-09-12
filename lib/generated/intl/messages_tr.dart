@@ -192,8 +192,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Lütfen e -postanızı girin"),
         "please_fill_all_fields": MessageLookupByLibrary.simpleMessage(
             "Lütfen tüm alanları doldurun"),
-        "please_select_a_type":
-            MessageLookupByLibrary.simpleMessage("Lütfen bir tür seçin."),
+        "please_select_a_color":
+            MessageLookupByLibrary.simpleMessage("Lütfen bir Renk seçin."),
         "polyester": MessageLookupByLibrary.simpleMessage("Polyester"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("Önceki borç"),
         "price": MessageLookupByLibrary.simpleMessage("Fiyat"),

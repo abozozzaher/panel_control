@@ -195,8 +195,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("يرجى إدخال بريدك الإلكتروني"),
         "please_fill_all_fields":
             MessageLookupByLibrary.simpleMessage("يرجى ملء جميع الحقول"),
-        "please_select_a_type":
-            MessageLookupByLibrary.simpleMessage("يرجى اختيار نوع."),
+        "please_select_a_color":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار اللون."),
         "polyester": MessageLookupByLibrary.simpleMessage("بوليستر"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("الدين السابق"),
         "price": MessageLookupByLibrary.simpleMessage("السعر"),
@@ -245,7 +245,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "terms_conditions":
             MessageLookupByLibrary.simpleMessage("الشروط والأحكام"),
         "thank_you_for_your_business":
-            MessageLookupByLibrary.simpleMessage("شكرًا لك على عملك"),
+            MessageLookupByLibrary.simpleMessage("شكرًا لك على عملك معنا"),
         "the_code": MessageLookupByLibrary.simpleMessage("الكود"),
         "todays_date": MessageLookupByLibrary.simpleMessage("تاريخ اليوم"),
         "toggle_language": MessageLookupByLibrary.simpleMessage("تبديل اللغة"),

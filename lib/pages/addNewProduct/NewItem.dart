@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -350,17 +351,31 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
   Future<String> uploadImageToStorage(XFile? image) async {
     String englishYearMonth = convertArabicToEnglishForMonth(yearMonth);
-
     String englishProductId = convertArabicToEnglish(productId);
     String day = '${DateTime.now().day}';
 
-    Reference storageReference = FirebaseStorage.instance.ref().child(
-        'products/$englishYearMonth/$day/${image != null ? '$englishProductId.jpg' : '$englishProductId.jpg'}');
+    Reference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('products/$englishYearMonth/$day/${englishProductId}.jpg');
     SettableMetadata metadata = SettableMetadata(contentType: 'image/jpeg');
 
     UploadTask uploadTask;
+
     if (image != null) {
-      uploadTask = storageReference.putFile(File(image.path), metadata);
+      // قراءة الصورة كـ Uint8List لتتمكن من ضغطها
+      Uint8List imageBytes = await image.readAsBytes();
+
+      // تصغير الصورة
+      Uint8List? compressedImageBytes =
+          await FlutterImageCompress.compressWithList(
+        imageBytes,
+        minHeight: 800,
+        minWidth: 800,
+        quality: 85,
+      );
+
+      // رفع الصورة المصغرة
+      uploadTask = storageReference.putData(compressedImageBytes, metadata);
     } else {
       uploadTask = storageReference.putData(webImage!, metadata);
     }

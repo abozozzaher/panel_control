@@ -197,8 +197,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter your email"),
         "please_fill_all_fields":
             MessageLookupByLibrary.simpleMessage("Please fill all fields"),
-        "please_select_a_type":
-            MessageLookupByLibrary.simpleMessage("Please select a type."),
+        "please_select_a_color":
+            MessageLookupByLibrary.simpleMessage("Please select a Color."),
         "polyester": MessageLookupByLibrary.simpleMessage("Polyester"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("Previous Debt"),
         "price": MessageLookupByLibrary.simpleMessage("Price"),

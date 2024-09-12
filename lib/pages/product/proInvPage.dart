@@ -388,8 +388,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                               ),
                             ),
                             Text(
-                              '4509 Wiseman Street\nKnoxville, Tennessee(TN), 37929\n865-372-0425',
-                              style: TextStyle(fontSize: 8, wordSpacing: 5),
+                              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n9961355399\nZIP CODE: 27110',
+                              style: TextStyle(fontSize: 12, wordSpacing: 5),
                             ),
                           ],
                         ),
@@ -436,12 +436,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(data['dues'] == 0
-                                      ? '${S().no_dues} :'
-                                      : data['dues'] < 0
-                                          ? '${S().previous_debt} :'
-                                          : '${S().customer_balance} :'),
-                                  Text('\$${data['dues'].toStringAsFixed(2)}',
+                                  Text('${S().customer_balance} :'),
+                                  Text('\$${data['dues']}',
                                       textDirection: TextDirection.ltr),
                                 ],
                               ),
@@ -449,7 +445,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                               DefaultTextStyle(
                                 style: TextStyle(
                                   color: Colors.teal,
-                                  // fontSize: 14,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 child: Row(

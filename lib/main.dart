@@ -42,13 +42,16 @@ python3 update_translations.py
 flutter pub run intl_utils:generate
 
 
-http://localhost:62722/pro-invoices/0912043124
+http://localhost:56330/pro-invoices/0912173624
 
-http://localhost:56226/240009000500040001/invoices/0911215424
+http://localhost:56330/240009001200040029/invoices/0912174824
+
+اعادة الرفع بستخدام هذه الاكواد فقط
+flutter clean
+flutter build web --web-renderer html --release
+firebase deploy
 
 عمل صفحة كشف حساب لكل تاجر ماهي البضاعة التي قام بسحبها
-اصلاح معلومات الدفع وكتابتها بالعربي والتركي والانكليزي
-تصغير الصور المصورة عند رفعها الى الفاير بيس
 
 
 

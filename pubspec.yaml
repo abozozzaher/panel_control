@@ -90,6 +90,7 @@ dependencies:
   country_state_city_pro: ^0.0.6
   http: ^1.2.2
   share_plus: ^10.0.0
+  flutter_image_compress: ^2.3.0
 
 dev_dependencies:
   flutter_test:

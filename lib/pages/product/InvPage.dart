@@ -393,8 +393,8 @@ class _InvoicePageState extends State<InvoicePage> {
                               ),
                             ),
                             Text(
-                              '4509 Wiseman Street\nKnoxville, Tennessee(TN), 37929\n865-372-0425',
-                              style: TextStyle(fontSize: 8, wordSpacing: 5),
+                              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n9961355399\nZIP CODE: 27110',
+                              style: TextStyle(fontSize: 12, wordSpacing: 5),
                             ),
                           ],
                         ),
@@ -455,7 +455,7 @@ class _InvoicePageState extends State<InvoicePage> {
                               DefaultTextStyle(
                                 style: TextStyle(
                                   color: Colors.teal,
-                                  // fontSize: 14,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 child: Row(

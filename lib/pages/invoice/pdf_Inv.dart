@@ -35,7 +35,8 @@ Future<void> generatePdf(
   final Uint8List imageLogo = await rootBundle
       .load('assets/img/logo.png')
       .then((data) => data.buffer.asUint8List());
-
+  final fontBeiruti =
+      pw.Font.ttf(await rootBundle.load('assets/fonts/Beiruti.ttf'));
   // Create a PDF document.
   final doc = pw.Document();
   final trader = Provider.of<TraderProvider>(context, listen: false).trader;
@@ -65,7 +66,7 @@ Future<void> generatePdf(
         _contentTable(context, aggregatedData, prices, totalLinePrices, isRTL),
         pw.SizedBox(height: 20),
         _contentFooter(context, finalTotal, taxs, grandTotalPrice,
-            previousDebts, shippingFees),
+            previousDebts, shippingFees, fontBeiruti),
         pw.SizedBox(height: 20),
         _termsAndConditions(context, fontTajBold),
       ],
@@ -411,7 +412,7 @@ pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
 
 // الذيل معلومات
 pw.Widget _contentFooter(pw.Context context, finalTotal, taxs, grandTotalPrice,
-    previousDebts, shippingFees) {
+    previousDebts, shippingFees, pw.Font fontBeiruti) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -438,8 +439,9 @@ pw.Widget _contentFooter(pw.Context context, finalTotal, taxs, grandTotalPrice,
               ),
             ),
             pw.Text(
-              '4509 Wiseman Street\nKnoxville, Tennessee(TN), 37929\n865-372-0425',
-              style: pw.TextStyle(fontSize: 8, lineSpacing: 5),
+              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n9961355399\nZIP CODE: 27110',
+              style:
+                  pw.TextStyle(fontSize: 8, lineSpacing: 5, font: fontBeiruti),
             ),
           ],
         ),

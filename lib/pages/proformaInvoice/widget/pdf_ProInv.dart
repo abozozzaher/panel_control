@@ -33,6 +33,8 @@ Future<void> generatePdfProInv(
   final Uint8List imageLogo = await rootBundle
       .load('assets/img/logo.png')
       .then((data) => data.buffer.asUint8List());
+  final fontBeiruti =
+      pw.Font.ttf(await rootBundle.load('assets/fonts/Beiruti.ttf'));
 
   // Create a PDF document.
   final doc = pw.Document();
@@ -60,7 +62,7 @@ Future<void> generatePdfProInv(
         _contentTable(context, tableData, isRTL, fontTajBold),
         pw.SizedBox(height: 20),
         _contentFooter(context, finalTotal, tax, totalPrices, dues,
-            shippingFees, fontTajRegular, isRTL),
+            shippingFees, fontBeiruti, isRTL),
         pw.SizedBox(height: 20),
         _termsAndConditions(context, fontTajBold),
       ],
@@ -396,7 +398,7 @@ pw.Widget _contentTable(pw.Context context,
 
 // الذيل معلومات
 pw.Widget _contentFooter(pw.Context context, finalTotal, tax, totalPrices, dues,
-    shippingFees, pw.Font fontTajRegular, bool isRTL) {
+    shippingFees, pw.Font fontBeiruti, bool isRTL) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -408,23 +410,20 @@ pw.Widget _contentFooter(pw.Context context, finalTotal, tax, totalPrices, dues,
           children: [
             pw.Text(
               S().thank_you_for_your_business,
-              style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold, font: fontTajRegular),
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
             ),
             pw.Container(
               margin: const pw.EdgeInsets.only(top: 20, bottom: 8),
               child: pw.Text(
                 '${S().payment_info} :',
                 style: pw.TextStyle(
-                    color: PdfColors.teal,
-                    fontWeight: pw.FontWeight.bold,
-                    font: fontTajRegular),
+                    color: PdfColors.teal, fontWeight: pw.FontWeight.bold),
               ),
             ),
             pw.Text(
-              '4509 Wiseman Street\nKnoxville, Tennessee(TN), 37929\n865-372-0425',
-              style: pw.TextStyle(
-                  fontSize: 8, lineSpacing: 5, font: fontTajRegular),
+              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n9961355399\nZIP CODE: 27110',
+              style:
+                  pw.TextStyle(fontSize: 8, lineSpacing: 5, font: fontBeiruti),
             ),
           ],
         ),
@@ -479,14 +478,13 @@ pw.Widget _contentFooter(pw.Context context, finalTotal, tax, totalPrices, dues,
               pw.DefaultTextStyle(
                 style: pw.TextStyle(
                   color: PdfColors.teal,
-                  // fontSize: 14,
+                  fontSize: 14,
                   fontWeight: pw.FontWeight.bold,
                 ),
                 child: pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('${S().final_total} :',
-                        style: pw.TextStyle(font: fontTajRegular)),
+                    pw.Text('${S().final_total} :'),
                     pw.Text(_formatCurrency(finalTotal)),
                   ],
                 ),
