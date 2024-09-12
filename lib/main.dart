@@ -46,12 +46,26 @@ http://localhost:56330/pro-invoices/0912173624
 
 http://localhost:56330/240009001200040029/invoices/0912174824
 
+نعديل الترجمة في كل التطبيق
+تعديل اسم الموقع
+https://panel-control-company-zaher.web.app/
+الى
+https://admin.bluedukkan.com/
+
+
+
+
+
+عمل تجربة ثم تحديث بنية التطبيق في الويب
+
 اعادة الرفع بستخدام هذه الاكواد فقط
 flutter clean
 flutter build web --web-renderer html --release
 firebase deploy
 
+
 عمل صفحة كشف حساب لكل تاجر ماهي البضاعة التي قام بسحبها
+
 
 
 
@@ -408,21 +422,39 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp.router(
         title: S().blue_textiles,
         theme: ThemeData(
-          appBarTheme: AppBarTheme(
-              color: Colors.transparent,
-              iconTheme: IconThemeData(color: Colors.black),
-              titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
-              centerTitle: true),
           brightness: Brightness.light,
           fontFamily: 'Beiruti',
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.black, brightness: Brightness.light),
+          appBarTheme: const AppBarTheme(
+              color: Colors.transparent,
+              iconTheme: IconThemeData(color: Colors.black87),
+              titleTextStyle: TextStyle(color: Colors.black87, fontSize: 20),
+              centerTitle: true),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.blueGrey, // لاستخدام تدرجات الرمادي
+            brightness: Brightness.light,
+          ).copyWith(
+            primary: Colors.black87, // اللون الرئيسي هو الأسود
+            secondary: Colors.white70, // اللون الثانوي هو الأبيض
+            surface: Colors.white70, // لون الأسطح (مثل الـCard) هو الأبيض
+          ),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: 'Beiruti',
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.white, brightness: Brightness.dark),
+          appBarTheme: const AppBarTheme(
+            color: Colors.transparent, // لون شريط التطبيق
+            iconTheme: IconThemeData(color: Colors.black87),
+            titleTextStyle: TextStyle(color: Colors.black87, fontSize: 20),
+            centerTitle: true,
+          ),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.grey, // لاستخدام تدرجات الرمادي
+            brightness: Brightness.dark,
+          ).copyWith(
+            primary: Colors.white70, // اللون الرئيسي هو الأبيض
+            secondary: Colors.black87, // اللون الثانوي هو الأسود
+            surface: Colors.black87, // لون الأسطح (مثل الـCard) هو الأسود
+          ),
         ),
         themeMode: _themeMode,
         locale: _locale,
