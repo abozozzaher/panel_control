@@ -9,8 +9,13 @@ import '../../provider/trader_provider.dart';
 import '../../service/trader_service.dart';
 
 import 'widget/buildDropdownProInv.dart';
+import 'widget/duesForProInv.dart';
+import 'widget/finalTotalForProInv.dart';
 import 'widget/firastRowLine.dart';
 import 'widget/pdf_ProInv.dart';
+import 'widget/shippingFeesForProInv.dart';
+import 'widget/subTotalPriceForProInv.dart';
+import 'widget/taxForProInv.dart';
 
 class DataTabelFetcherForProInv extends StatefulWidget {
   final String? invoiceCode;
@@ -48,6 +53,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
   TextEditingController shippingController = TextEditingController();
   ValueNotifier<double> previousDebtsController = ValueNotifier<double>(0.0);
 
+  int lineCounter = 1;
   double price = 0.0;
   String? allQuantity = '0';
   bool isManualWeightEntry = false;
@@ -227,12 +233,14 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                   child: TextField(
                     controller: allQuantityController,
                     textAlign: TextAlign.center,
+                    textDirection: TextDirection.ltr,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      labelText: isManualWeightEntry
-                          ? S().enter_weight
-                          : S().total_quantity,
-                    ),
+                        labelText: isManualWeightEntry
+                            ? S().enter_weight
+                            : S().total_quantity,
+                        hintTextDirection: TextDirection.ltr,
+                        floatingLabelAlignment: FloatingLabelAlignment.center),
                     onChanged: (value) {
                       setState(() {
                         allQuantity = value;
@@ -246,8 +254,12 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                   child: TextField(
                     controller: priceController,
                     textAlign: TextAlign.center,
+                    textDirection: TextDirection.ltr,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: S().price),
+                    decoration: InputDecoration(
+                        labelText: S().price,
+                        hintTextDirection: TextDirection.ltr,
+                        floatingLabelAlignment: FloatingLabelAlignment.center),
                     onChanged: (value) {
                       setState(() {
                         price = double.tryParse(value) ?? 0.0;
@@ -262,7 +274,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                       tableData.add({
                         'type': selectedType,
                         'color': selectedColor,
-                        'yarnNumber': selectedYarnNumber,
+                        'yarn_number': selectedYarnNumber,
                         'totalLength': totalLength,
                         'totalWeight': totalWight,
                         'totalUnit': totalUnit,
@@ -271,17 +283,9 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                         'totalPrice': price *
                             (double.tryParse(allQuantity.toString()) ?? 0),
                       });
-
-                      selectedType = null;
-                      selectedColor = null;
-                      selectedYarnNumber = null;
-                      selectedLength = null;
-                      selectedWeight = null;
-                      selectedQuantity = null;
                       allQuantityController.clear();
                       priceController.clear();
-                    });
-                    setState(() {
+
                       selectedType = types!.isNotEmpty ? types![0][0] : null;
                       selectedWeight =
                           weights!.isNotEmpty ? weights![0][0] : null;
@@ -311,42 +315,76 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                     selectedYarnNumber,
                     allQuantity,
                     price),
-                ...tableData.map((rowData) {
+                ...tableData.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final rowData = entry.value;
                   return DataRow(cells: [
                     DataCell(Center(
-                        child: Text(rowData['type'] ?? "",
-                            textAlign: TextAlign.center, maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(rowData['color'] ?? "",
-                            textAlign: TextAlign.center, maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(rowData['yarnNumber'] ?? "",
-                            textAlign: TextAlign.center, maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            '${rowData['totalLength'].toStringAsFixed(0)} Mt',
+                        child: Text((index + 1).toString(),
                             textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
                             maxLines: 1))),
                     DataCell(Center(
                         child: Text(
-                            '${rowData['totalWeight'].toStringAsFixed(2)} Kg',
+                            dataLists.translateType(rowData['type'].toString()),
                             textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
                             maxLines: 1))),
                     DataCell(Center(
                         child: Text(
-                            '${rowData['totalUnit'].toStringAsFixed(0)} ${S().unit}',
+                            dataLists
+                                .translateType(rowData['color'].toString()),
                             textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
                             maxLines: 1))),
                     DataCell(Center(
-                        child: Text('${rowData['allQuantity']} ${S().pcs}',
-                            textAlign: TextAlign.center, maxLines: 1))),
-                    DataCell(Center(
-                        child: Text('\$${rowData['price'].toStringAsFixed(2)}',
-                            textAlign: TextAlign.center, maxLines: 1))),
+                        child: Text(
+                            dataLists.translateType(
+                                '${rowData['yarn_number'].toString()}D'),
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
+                            maxLines: 1))),
                     DataCell(Center(
                         child: Text(
-                            '\$${rowData['totalPrice'].toStringAsFixed(2)}',
+                            dataLists.translateType(
+                                '${rowData['totalLength'].toStringAsFixed(0)} Mt'),
                             textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
+                            maxLines: 1))),
+                    DataCell(Center(
+                        child: Text(
+                            dataLists.translateType(
+                                '${rowData['totalWeight'].toStringAsFixed(2)} Kg'),
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
+                            maxLines: 1))),
+                    DataCell(Center(
+                        child: Text(
+                            dataLists.translateType(
+                                '${rowData['totalUnit'].toStringAsFixed(0)} ${S().unit}'),
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
+                            maxLines: 1))),
+                    DataCell(Center(
+                        child: Text(
+                            dataLists.translateType(
+                                '${rowData['allQuantity']} ${S().pcs}'),
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
+                            maxLines: 1))),
+                    DataCell(Center(
+                        child: Text(
+                            dataLists.translateType(
+                                '\$${rowData['price'].toStringAsFixed(2)}'),
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
+                            maxLines: 1))),
+                    DataCell(Center(
+                        child: Text(
+                            dataLists.translateType(
+                                '\$${rowData['totalPrice'].toStringAsFixed(2)}'),
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.ltr,
                             maxLines: 1))),
                     DataCell(IconButton(
                       icon: Icon(Icons.delete),
@@ -358,171 +396,19 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                     )),
                   ]);
                 }).toList(),
+
                 // إضافة صفوف الحسابات
-                DataRow(cells: [
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Center(child: Text(S().total_price))),
-                  DataCell(Text('')),
-                  DataCell(Center(child: Text('\$${totalPrices.toString()}'))),
-                  DataCell(Text('')),
-                ]),
+                subTotalPriceForProInv(totalPrices),
 
-                DataRow(cells: [
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Center(child: Text('${S().tax} (%)'))),
-                  DataCell(Center(
-                    child: Container(
-                      width: 50,
-                      child: TextField(
-                        controller: taxController,
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  )),
-                  DataCell(Center(child: Text('\$${tax.toStringAsFixed(2)}'))),
-                  DataCell(Text('')),
-                ]),
-                DataRow(cells: [
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Center(child: Text(S().shipping_fees))),
-                  DataCell(Center(
-                    child: Container(
-                      width: 100,
-                      child: TextField(
-                        controller: shippingController,
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  )),
-                  DataCell(Center(
-                      child: Text(
-                          '\$${totalPricesAndTaxAndShippingFee.toStringAsFixed(2)}'))),
-                  DataCell(Text('')),
-                ]),
+                taxForProInv(tax, taxController),
+                shippingFeesForProInv(
+                    totalPricesAndTaxAndShippingFee, shippingController),
 
-                DataRow(
-                  cells: [
-                    DataCell(Center(child: Text(''))),
-                    DataCell(Center(child: Text(''))),
-                    DataCell(Center(child: Text(''))),
-                    DataCell(Center(child: Text(''))),
-                    DataCell(Center(child: Text(''))),
-                    DataCell(Center(child: Text(''))),
-                    DataCell(
-                      Center(
-                          child: Text(
-                        previousDebtsController.value == 0
-                            ? S().no_dues
-                            : previousDebtsController.value < -1
-                                ? S().previous_debt
-                                : S().customer_balance,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: previousDebtsController.value == 0
-                                ? Colors.black
-                                : previousDebtsController.value < 1
-                                    ? Colors.redAccent
-                                    : Colors.green),
-                      )),
-                    ),
-                    DataCell(
-                      Center(
-                        child: FutureBuilder<double>(
-                          future:
-                              traderService.fetchLastDues(trader!.codeIdClien),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return CircularProgressIndicator.adaptive();
-                            } else if (snapshot.hasError) {
-                              return Text(S().error);
-                            } else {
-                              double lastDues = snapshot.data ?? 0.0;
-                              previousDebtsController.value = lastDues;
+                duesForProInv(trader, previousDebtsController),
 
-                              return Text(
-                                '\$${lastDues.toStringAsFixed(2)}',
-                                style: TextStyle(
-                                    color: lastDues == 0
-                                        ? Colors.black
-                                        : lastDues < 0
-                                            ? Colors.redAccent
-                                            : Colors.green,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: ValueListenableBuilder<double>(
-                          valueListenable: previousDebtsController,
-                          builder: (context, value, child) {
-                            return Text(
-                              '\$ ${value != 0 ? (value).toStringAsFixed(2) : 0}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: value == 0
-                                      ? Colors.black
-                                      : value < -1
-                                          ? Colors.redAccent
-                                          : Colors.green),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    DataCell(Text('')),
-                  ],
-                ),
-
-                DataRow(cells: [
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Text('')),
-                  DataCell(Center(
-                      child: Text(S().final_total,
-                          style: TextStyle(
-                              color: Colors.redAccent,
-                              fontWeight: FontWeight.bold)))),
-                  DataCell(Text('')),
-                  DataCell(Center(
-                      child: Text('\$${finalTotal.toStringAsFixed(2)}',
-                          style: TextStyle(
-                              color: Colors.redAccent,
-                              fontWeight: FontWeight.bold)))),
-                  DataCell(Text('')),
-                ]),
+                finalTotalForProInv(finalTotal, () {
+                  setState(() {});
+                }),
               ],
               headingRowColor: MaterialStateProperty.resolveWith(
                   (states) => Colors.amberAccent),
@@ -556,7 +442,8 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
               },
               label: Text(S().add_proforma_invoice),
               icon: Icon(Icons.print_outlined),
-            )
+            ),
+            SizedBox(height: 50)
           ],
         ),
       ),

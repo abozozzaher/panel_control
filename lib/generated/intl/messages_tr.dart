@@ -55,6 +55,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "button": MessageLookupByLibrary.simpleMessage("Düğme"),
         "camel": MessageLookupByLibrary.simpleMessage("deve"),
         "cancel": MessageLookupByLibrary.simpleMessage("İptal etmek"),
+        "check_out_my_invoice":
+            MessageLookupByLibrary.simpleMessage("check out my invoice"),
         "click_to_calculate":
             MessageLookupByLibrary.simpleMessage("Click to calculate"),
         "clien_id": MessageLookupByLibrary.simpleMessage("Kimlik müşterisi"),
@@ -101,6 +103,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "error_code": MessageLookupByLibrary.simpleMessage("Hata kodu"),
         "error_occurred": MessageLookupByLibrary.simpleMessage("hata oluştu"),
         "evening": MessageLookupByLibrary.simpleMessage("Akşam"),
+        "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(
+            "Failed to load invoice details"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Görüntü yükleyemedi"),
         "final_total": MessageLookupByLibrary.simpleMessage("Final Total"),
@@ -122,6 +126,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalid_code_scanned_and_removed":
             MessageLookupByLibrary.simpleMessage(
                 "Geçersiz kod tarandı ve kaldırıldı"),
+        "invalid_invoice":
+            MessageLookupByLibrary.simpleMessage("Invalid Invoice"),
         "invalid_items":
             MessageLookupByLibrary.simpleMessage("Geçersiz öğeler"),
         "invoice": MessageLookupByLibrary.simpleMessage("Fatura"),
@@ -137,6 +143,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "long_press_to_activate_the_button":
             MessageLookupByLibrary.simpleMessage(
                 "Düğmeyi etkinleştirmek için uzun basın"),
+        "look_what_i_have":
+            MessageLookupByLibrary.simpleMessage("Look what I have!"),
         "mahjara": MessageLookupByLibrary.simpleMessage("Taş ocağı"),
         "menu": MessageLookupByLibrary.simpleMessage("Menü"),
         "morning": MessageLookupByLibrary.simpleMessage("Sabah"),
@@ -155,6 +163,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_data_to_send":
             MessageLookupByLibrary.simpleMessage("Gönderecek veri yok"),
         "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
+        "no_invoice_id_provided":
+            MessageLookupByLibrary.simpleMessage("No Invoice ID provided"),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("TAMAM"),
@@ -187,13 +197,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "polyester": MessageLookupByLibrary.simpleMessage("Polyester"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("Önceki borç"),
         "price": MessageLookupByLibrary.simpleMessage("Fiyat"),
+        "pro_invoice": MessageLookupByLibrary.simpleMessage("Pro invoice"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("Ürün detayları"),
         "product_id": MessageLookupByLibrary.simpleMessage("Ürün kimliği"),
         "products_table":
             MessageLookupByLibrary.simpleMessage("Products Table"),
-        "proforma_invoice":
-            MessageLookupByLibrary.simpleMessage("Proforma invoice"),
         "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Miktar"),
         "red": MessageLookupByLibrary.simpleMessage("kırmızı"),

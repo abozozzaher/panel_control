@@ -38,7 +38,7 @@
     "details": "Details",
     "image_uploaded_successfully": "Image uploaded successfully",
     "failed_to_upload_image": "Failed to upload image",
-    "please_select_a_type": "Please select a type.",
+    "please_select_a_color": "Please select a Color.",
     "error": "Error",
     "scan": "Scan",
     "scanned": "Scanned",
@@ -178,5 +178,10 @@
     "traders_accounts": "Traders Accounts",
     "pro_invoice": "Pro invoice",
     "customer_balance": "customer balance",
-    "add_proforma_invoice": "add Proforma Invoice"
+    "add_proforma_invoice": "add Proforma Invoice",
+    "check_out_my_invoice": "check out my invoice",
+    "look_what_i_have": "Look what I have!",
+    "invalid_invoice": "Invalid Invoice",
+    "no_invoice_id_provided": "No Invoice ID provided",
+    "failed_to_load_invoice_details": "Failed to load invoice details"
 }

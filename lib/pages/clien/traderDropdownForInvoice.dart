@@ -124,10 +124,8 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
               isExpanded: true,
               value: _selectedCode,
               items: clients.map((client) {
-                print('displayName $client');
                 String displayName =
                     isRtl ? client.fullNameArabic : client.fullNameEnglish;
-                print('displayName $displayName');
                 return DropdownMenuItem<String>(
                   value: client.codeIdClien,
                   child: Text(displayName, textAlign: TextAlign.center),

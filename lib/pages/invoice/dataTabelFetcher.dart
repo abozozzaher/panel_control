@@ -88,8 +88,7 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                     final index = aggregatedData.keys
                         .toList()
                         .indexOf(groupKey); // احصل على الفهرس هنا
-
-// تحديث حالة التحديد بناءً على البروفيدر
+                    // تحديث حالة التحديد بناءً على البروفيدر
                     _selectedItem = aggregatedData.keys.map((key) {
                       return invoiceProvider.getSelectionState(key) ?? false;
                     }).toList();
@@ -160,11 +159,9 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
 
                   //   print('ssss $TotalAllMoney');
                   // Add a row for all totals قيمة الفاتورة
-                  dataRows.add(
-                    rowForAllTotals(totalAllMoney, () {
-                      setState(() {});
-                    }),
-                  );
+                  dataRows.add(rowForAllTotals(totalAllMoney, () {
+                    setState(() {});
+                  }));
                   return tableBuilld(
                       columns,
                       dataRows,

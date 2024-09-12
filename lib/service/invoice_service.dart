@@ -174,7 +174,9 @@ class InvoiceService {
         'shippingFees': shippingFees,
         'createdAt':
             DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(DateTime.now()),
-        'downloadUrlPdf': downloadUrlPdf
+        'downloadUrlPdf': downloadUrlPdf,
+        'invoiceCode': invoiceCode,
+        'trader': trader.toMap(),
       });
       separateData.values.forEach((innerMap) {
         final productId = innerMap['product_id'];

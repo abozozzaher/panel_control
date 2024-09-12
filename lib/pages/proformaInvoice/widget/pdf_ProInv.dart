@@ -10,6 +10,7 @@ import 'package:printing/printing.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:provider/provider.dart';
 
+import '../../../data/data_lists.dart';
 import '../../../provider/trader_provider.dart';
 import '../../../service/pro_inv_service.dart';
 
@@ -36,24 +37,30 @@ Future<void> generatePdfProInv(
   // Create a PDF document.
   final doc = pw.Document();
   final trader = Provider.of<TraderProvider>(context, listen: false).trader;
-//  final AccountService accountService = AccountService();
 
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
   doc.addPage(
     pw.MultiPage(
-      pageTheme:
-          _buildTheme(context, svgFooter, fontTajBold, fontTajRegular, linkUrl),
-      header: (context) => _buildHeader(
-          context, imageLogo, linkUrl, invoiceCode), // تمرير البيانات هنا
-
-      footer: _buildFooter,
+      pageTheme: _buildTheme(
+        context,
+        svgFooter,
+        fontTajBold,
+        fontTajRegular,
+        isRTL,
+        await PdfGoogleFonts.tajawalRegular(),
+        await PdfGoogleFonts.tajawalBold(),
+        await PdfGoogleFonts.robotoItalic(),
+      ),
+      header: (context) =>
+          _buildHeader(context, imageLogo, linkUrl, invoiceCode),
+      footer: (context) => _buildFooter(context, linkUrl),
       build: (context) => [
-        _contentHeader(context, finalTotal, isRTL, trader),
-        _contentTable(context, tableData),
+        _contentHeader(context, finalTotal, isRTL, trader, fontTajRegular),
+        _contentTable(context, tableData, isRTL, fontTajBold),
         pw.SizedBox(height: 20),
-        _contentFooter(
-            context, finalTotal, tax, totalPrices, dues, shippingFees),
+        _contentFooter(context, finalTotal, tax, totalPrices, dues,
+            shippingFees, fontTajRegular, isRTL),
         pw.SizedBox(height: 20),
         _termsAndConditions(context, fontTajBold),
       ],
@@ -78,13 +85,22 @@ Future<void> generatePdfProInv(
 }
 
 // تصميم شكل الصفحة
-pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
-    pw.Font fontTajBold, pw.Font fontTajRegular, String linkUrl) {
-  final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
-  double heighPdf = 50;
-  double widthPdf = heighPdf * 3;
+pw.PageTheme _buildTheme(
+    mat.BuildContext context,
+    String svgFooter,
+    pw.Font fontTajBold,
+    pw.Font fontTajRegular,
+    bool isRTL,
+    pw.Font base,
+    pw.Font bold,
+    pw.Font italic) {
   return pw.PageTheme(
-    theme: pw.ThemeData.withFont(base: fontTajBold).copyWith(
+    pageFormat: PdfPageFormat(
+      PdfPageFormat.mm * 220,
+      PdfPageFormat.mm * 280,
+    ),
+    theme:
+        pw.ThemeData.withFont(base: base, bold: bold, italic: italic).copyWith(
       defaultTextStyle:
           pw.TextStyle(font: fontTajBold, fontFallback: [fontTajRegular]),
       header0: pw.TextStyle(
@@ -93,26 +109,8 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
           color: PdfColors.teal,
           fontWeight: pw.FontWeight.bold),
     ),
-    buildBackground: (context) => pw.FullPage(
-      ignoreMargins: true,
-      // child: pw.SvgImage(svg: svgFooter),
-      child: pw.Stack(alignment: pw.Alignment.bottomCenter, children: [
-        pw.SvgImage(svg: svgFooter),
-        // الباركود ال بي دي اف
-
-        pw.Positioned(
-          bottom: 10, // adjust the top position as needed
-          right: 70, // adjust the left position as needed
-          child: pw.BarcodeWidget(
-            barcode: pw.Barcode.pdf417(),
-            data: linkUrl,
-            drawText: false,
-            height: heighPdf,
-            width: widthPdf,
-          ),
-        ),
-      ]),
-    ),
+    buildBackground: (context) =>
+        pw.FullPage(ignoreMargins: true, child: pw.SvgImage(svg: svgFooter)),
     textDirection: isRTL ? pw.TextDirection.rtl : pw.TextDirection.ltr,
     margin: pw.EdgeInsets.all(20),
   );
@@ -220,26 +218,39 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo, String linkUrl,
 }
 
 // الذيل
-pw.Widget _buildFooter(pw.Context context) {
+pw.Widget _buildFooter(pw.Context context, String linkUrl) {
+  double heighPdf = 50;
+  double widthPdf = heighPdf * 5;
   return pw.Row(
     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: pw.CrossAxisAlignment.center,
+    crossAxisAlignment: pw.CrossAxisAlignment.end,
     children: [
-      //  رقم الصفحة
-      pw.Text(
-        '${S().page} ${context.pageNumber}/${context.pagesCount}',
-        style: const pw.TextStyle(
-          fontSize: 12,
-          color: PdfColors.white,
+      pw.Container(
+        height: heighPdf,
+        width: widthPdf,
+        child: pw.BarcodeWidget(
+          barcode: pw.Barcode.pdf417(),
+          data: linkUrl,
+          drawText: false,
         ),
       ),
+      if (context.pagesCount < 2)
+        pw.Text('')
+      else
+        pw.Text(
+          '${S().page} ${context.pageNumber}/${context.pagesCount}',
+          style: const pw.TextStyle(
+            fontSize: 12,
+            color: PdfColors.white,
+          ),
+        )
     ],
   );
 }
 
 // الراس معلومات
-pw.Widget _contentHeader(
-    pw.Context context, finalTotal, bool isRTL, ClienData? trader) {
+pw.Widget _contentHeader(pw.Context context, finalTotal, bool isRTL,
+    ClienData? trader, pw.Font fontTajRegular) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -250,11 +261,11 @@ pw.Widget _contentHeader(
           height: 40,
           child: pw.FittedBox(
             child: pw.Text(
-              '${S().final_total} : ${_formatCurrency(finalTotal)}',
+              ' ${S().final_total} : ${_formatCurrency(finalTotal)}',
               style: pw.TextStyle(
-                color: PdfColors.teal,
-                fontStyle: pw.FontStyle.italic,
-              ),
+                  color: PdfColors.teal,
+                  fontStyle: pw.FontStyle.italic,
+                  font: fontTajRegular),
             ),
           ),
         ),
@@ -269,9 +280,9 @@ pw.Widget _contentHeader(
               child: pw.Text(
                 '${S().invoice_to} :',
                 style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  // fontSize: 12,
-                ),
+                    fontWeight: pw.FontWeight.bold,
+                    // fontSize: 12,
+                    font: fontTajRegular),
               ),
             ),
             pw.Expanded(
@@ -283,9 +294,9 @@ pw.Widget _contentHeader(
                             ? trader!.fullNameArabic
                             : trader!.fullNameEnglish,
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.bold,
-                          fontSize: 12,
-                        ),
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 12,
+                            font: fontTajRegular),
                         children: [
                       const pw.TextSpan(
                         text: '\n',
@@ -297,9 +308,9 @@ pw.Widget _contentHeader(
                         text:
                             '${trader.country}, ${trader.state}, ${trader.city},',
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.normal,
-                          fontSize: 10,
-                        ),
+                            fontWeight: pw.FontWeight.normal,
+                            fontSize: 10,
+                            font: fontTajRegular),
                       ),
                       const pw.TextSpan(
                         text: '\n',
@@ -312,9 +323,9 @@ pw.Widget _contentHeader(
                             ? trader.addressArabic
                             : trader.addressEnglish,
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.normal,
-                          fontSize: 10,
-                        ),
+                            fontWeight: pw.FontWeight.normal,
+                            fontSize: 10,
+                            font: fontTajRegular),
                       ),
                     ])),
               ),
@@ -326,36 +337,40 @@ pw.Widget _contentHeader(
   );
 }
 
-pw.Widget _contentTable(
-    pw.Context context, List<Map<String, dynamic>> tableDataList) {
-  final tableHeaders = [
-    S().type,
-    S().color,
-    S().yarn_number,
-    S().length,
-    S().total_weight,
-    S().unit,
-    S().price,
-    S().quantity,
-    S().total_price,
-  ];
+pw.Widget _contentTable(pw.Context context,
+    List<Map<String, dynamic>> tableDataList, bool isRTL, pw.Font fontTajBold) {
+  final tableHeaders = DataLists().tableHeaders;
 
+  final headers = isRTL ? tableHeaders.reversed.toList() : tableHeaders;
+  // متغير لعداد الأسطر
+  int lineCounter = 1;
   // استخراج البيانات من tableDataList
   final data = tableDataList.asMap().entries.map((entry) {
     // final index = entry.key;
     final productData = entry.value;
 
-    return [
-      productData['type'].toString(),
-      productData['color'].toString(),
-      '${productData['yarnNumber'].toString()}D',
-      '${productData['totalLength'].toStringAsFixed(0)}Mt',
-      '${productData['totalWeight'].toStringAsFixed(2)}Kg',
-      '${productData['totalUnit'].toStringAsFixed(0)} ${S().unit}',
-      '${productData['allQuantity'].toString()} ${S().pcs}',
-      '\$${productData['price'].toStringAsFixed(2)}',
-      '\$${productData['totalPrice'].toStringAsFixed(2)}',
+    final row = [
+      lineCounter.toString(), // إضافة عداد الأسطر هنا
+      DataLists().translateType(productData['type'].toString()),
+      DataLists().translateType(
+        productData['color'].toString(),
+      ),
+      DataLists().translateType('${productData['yarn_number'].toString()}D'),
+      DataLists()
+          .translateType('${productData['totalLength'].toStringAsFixed(0)}Mt'),
+      DataLists()
+          .translateType('${productData['totalWeight'].toStringAsFixed(2)}Kg'),
+      DataLists().translateType(
+          '${productData['totalUnit'].toStringAsFixed(0)} ${S().unit}'),
+      DataLists()
+          .translateType('${productData['allQuantity'].toString()} ${S().pcs}'),
+      DataLists().translateType('\$${productData['price'].toStringAsFixed(2)}'),
+      DataLists()
+          .translateType('\$${productData['totalPrice'].toStringAsFixed(2)}'),
     ];
+    // زيادة عداد الأسطر بعد كل سطر
+    lineCounter++;
+    return isRTL ? row.reversed.toList() : row;
   }).toList();
 
   return pw.TableHelper.fromTextArray(
@@ -366,22 +381,22 @@ pw.Widget _contentTable(
       color: PdfColors.teal,
     ),
     headerStyle: pw.TextStyle(
-        color: PdfColors.white, fontSize: 10, fontWeight: pw.FontWeight.bold),
+        color: PdfColors.white,
+        fontSize: 10,
+        fontWeight: pw.FontWeight.bold,
+        font: fontTajBold),
     cellStyle: const pw.TextStyle(fontSize: 10),
     rowDecoration: pw.BoxDecoration(
       border: pw.Border(bottom: pw.BorderSide(width: .5)),
     ),
-    headers: List<String>.generate(
-      tableHeaders.length,
-      (col) => tableHeaders[col],
-    ),
+    headers: headers,
     data: data,
   );
 }
 
 // الذيل معلومات
-pw.Widget _contentFooter(
-    pw.Context context, finalTotal, tax, totalPrices, dues, shippingFees) {
+pw.Widget _contentFooter(pw.Context context, finalTotal, tax, totalPrices, dues,
+    shippingFees, pw.Font fontTajRegular, bool isRTL) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -394,22 +409,22 @@ pw.Widget _contentFooter(
             pw.Text(
               S().thank_you_for_your_business,
               style: pw.TextStyle(
-                fontWeight: pw.FontWeight.bold,
-              ),
+                  fontWeight: pw.FontWeight.bold, font: fontTajRegular),
             ),
             pw.Container(
               margin: const pw.EdgeInsets.only(top: 20, bottom: 8),
               child: pw.Text(
                 '${S().payment_info} :',
                 style: pw.TextStyle(
-                  color: PdfColors.teal,
-                  fontWeight: pw.FontWeight.bold,
-                ),
+                    color: PdfColors.teal,
+                    fontWeight: pw.FontWeight.bold,
+                    font: fontTajRegular),
               ),
             ),
             pw.Text(
               '4509 Wiseman Street\nKnoxville, Tennessee(TN), 37929\n865-372-0425',
-              style: pw.TextStyle(fontSize: 8, lineSpacing: 5),
+              style: pw.TextStyle(
+                  fontSize: 8, lineSpacing: 5, font: fontTajRegular),
             ),
           ],
         ),
@@ -470,7 +485,8 @@ pw.Widget _contentFooter(
                 child: pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
-                    pw.Text('${S().final_total} :'),
+                    pw.Text('${S().final_total} :',
+                        style: pw.TextStyle(font: fontTajRegular)),
                     pw.Text(_formatCurrency(finalTotal)),
                   ],
                 ),

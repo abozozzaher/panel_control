@@ -84,7 +84,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       selectedType = types!.isNotEmpty ? types![0][0] : null;
       selectedWidth = widths!.isNotEmpty ? widths![6][0] : null;
       selectedWeight = weights!.isNotEmpty ? weights![0][0] : null;
-      selectedColor = colors!.isNotEmpty ? colors![0][0] : null;
+      selectedColor = colors!.isNotEmpty ? null : null;
       selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
       selectedShift = shift!.isNotEmpty ? shift![0][0] : null;
       selectedLength = length!.isNotEmpty ? length![2][0] : null;
@@ -133,8 +133,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(S().error),
-            content: Text(selectedType == null
-                ? S().please_select_a_type
+            content: Text(selectedColor == null
+                ? S().please_select_a_color
                 : S().please_fill_all_fields),
             actions: <Widget>[
               TextButton(
@@ -295,8 +295,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                             widths!.isNotEmpty ? widths![6][0] : null;
                         selectedWeight =
                             weights!.isNotEmpty ? weights![0][0] : null;
-                        selectedColor =
-                            colors!.isNotEmpty ? colors![0][0] : null;
+                        selectedColor = colors!.isNotEmpty ? null : null;
                         selectedYarnNumber =
                             yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
                         selectedShift = shift!.isNotEmpty ? shift![0][0] : null;

@@ -14,6 +14,7 @@ import 'pages/adminHome.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/home_page.dart';
 import 'pages/addNewProduct/NewItem.dart';
+import 'pages/product/InvPage.dart';
 import 'pages/product/ProductPage.dart';
 import 'pages/product/proInvPage.dart';
 import 'pages/scan/ScanItem.dart';
@@ -39,10 +40,17 @@ void main() async {
 
 python3 update_translations.py
 flutter pub run intl_utils:generate
-اصلاح الكلمات باللغة العربية في الفاتورة pdf
 
-// اصلاح شكلها للفاتورة الاولية لعرضها كشكل جدول واضافة زر شير
-// 000000
+
+http://localhost:62722/pro-invoices/0912043124
+
+http://localhost:56226/240009000500040001/invoices/0911215424
+
+عمل صفحة كشف حساب لكل تاجر ماهي البضاعة التي قام بسحبها
+اصلاح معلومات الدفع وكتابتها بالعربي والتركي والانكليزي
+تصغير الصور المصورة عند رفعها الى الفاير بيس
+
+
 
 اضافة في منسدلة التجار بحث للبحث عن اسم تاجر
 ويكون البحث لمت له فقط لعشر خيارات لتوفير عدد القراءات من الفايربيس
@@ -78,10 +86,6 @@ flutter pub run intl_utils:generate
 تتبع المواد الخام المطلوبة للإنتاج.
 إدارة عمليات طلب المواد الخام.
 
-تصليخ الوان الجدول كلها اسود في وضع المظلم
-حل مشكلة اللغة العربية في الفاتورة pdf
-تشغيل زر الجدول الترتيب على كل كلمة مثل المثال يلي شفته
-اضافة زر حذف بعض العناصر من الفاتورة
 
 
 
@@ -105,7 +109,6 @@ add novigator. push . context.go('/'); اريد بناء هذا الشكل
 
 تعديل السناك بار الى توست flutter pub add fluttertoast
 
-يجب حفظ الضريبة والدين واجور الشحن في البروفيدر خطة مستقبلية
 
 اضافة شرط في حال كان الكود ممسوح بقائمة ثانية يعطي تنبيه ولا يضاف الى الجدول الا واحد (عمل هذا الشرط لاحقا)
 
@@ -227,7 +230,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   late final GoRouter _router = GoRouter(
-    initialLocation: widget.isLoggedIn ? '/' : '/register',
+    initialLocation: widget.isLoggedIn ? '/' : '/login',
     routes: [
       GoRoute(
         path: '/',
@@ -237,10 +240,10 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       GoRoute(
-        path: '/pro-invoices/:invoiceId',
+        path: '/pro-invoices/:invoiceCode',
         builder: (context, state) {
-          final invoiceId = state.pathParameters['invoiceId'];
-          return ProInvoicePage(invoiceId: invoiceId);
+          final invoiceCode = state.pathParameters['invoiceCode'];
+          return ProInvoicePage(invoiceCode: invoiceCode);
         },
       ),
       GoRoute(
@@ -252,6 +255,15 @@ class _MyAppState extends State<MyApp> {
             monthFolder: monthFolder,
             productId: productId,
           );
+        },
+      ),
+      GoRoute(
+        path: '/:codeIdClien/invoices/:invoiceCode',
+        builder: (context, state) {
+          final codeIdClien = state.pathParameters['codeIdClien'];
+          final invoiceCode = state.pathParameters['invoiceCode'];
+          return InvoicePage(
+              codeIdClien: codeIdClien, invoiceCode: invoiceCode);
         },
       ),
       GoRoute(
@@ -393,6 +405,11 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp.router(
         title: S().blue_textiles,
         theme: ThemeData(
+          appBarTheme: AppBarTheme(
+              color: Colors.transparent,
+              iconTheme: IconThemeData(color: Colors.black),
+              titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+              centerTitle: true),
           brightness: Brightness.light,
           fontFamily: 'Beiruti',
           colorScheme: ColorScheme.fromSeed(

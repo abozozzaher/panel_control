@@ -59,6 +59,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "button": MessageLookupByLibrary.simpleMessage("Button"),
         "camel": MessageLookupByLibrary.simpleMessage("camel"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "check_out_my_invoice":
+            MessageLookupByLibrary.simpleMessage("check out my invoice"),
         "click_to_calculate":
             MessageLookupByLibrary.simpleMessage("Click to calculate"),
         "clien_id": MessageLookupByLibrary.simpleMessage("Clien Id "),
@@ -107,6 +109,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "error_occurred":
             MessageLookupByLibrary.simpleMessage("error occurred"),
         "evening": MessageLookupByLibrary.simpleMessage("Evening"),
+        "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(
+            "Failed to load invoice details"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Failed to upload image"),
         "final_total": MessageLookupByLibrary.simpleMessage("Final Total"),
@@ -129,6 +133,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invalid_code_scanned_and_removed":
             MessageLookupByLibrary.simpleMessage(
                 "Invalid code scanned and removed"),
+        "invalid_invoice":
+            MessageLookupByLibrary.simpleMessage("Invalid Invoice"),
         "invalid_items": MessageLookupByLibrary.simpleMessage("Invalid Items"),
         "invoice": MessageLookupByLibrary.simpleMessage("Invoice"),
         "invoice_amount_due":
@@ -143,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "long_press_to_activate_the_button":
             MessageLookupByLibrary.simpleMessage(
                 "Long press to activate the button"),
+        "look_what_i_have":
+            MessageLookupByLibrary.simpleMessage("Look what I have!"),
         "mahjara": MessageLookupByLibrary.simpleMessage("Quarry"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
         "morning": MessageLookupByLibrary.simpleMessage("Morning"),
@@ -160,6 +168,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_data_to_send":
             MessageLookupByLibrary.simpleMessage("No data to send"),
         "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
+        "no_invoice_id_provided":
+            MessageLookupByLibrary.simpleMessage("No Invoice ID provided"),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
@@ -192,13 +202,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "polyester": MessageLookupByLibrary.simpleMessage("Polyester"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("Previous Debt"),
         "price": MessageLookupByLibrary.simpleMessage("Price"),
+        "pro_invoice": MessageLookupByLibrary.simpleMessage("Pro invoice"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("Product Details"),
         "product_id": MessageLookupByLibrary.simpleMessage("Product ID"),
         "products_table":
             MessageLookupByLibrary.simpleMessage("Products Table"),
-        "proforma_invoice":
-            MessageLookupByLibrary.simpleMessage("Proforma invoice"),
         "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "red": MessageLookupByLibrary.simpleMessage("red"),

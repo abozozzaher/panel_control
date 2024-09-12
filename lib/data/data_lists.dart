@@ -31,7 +31,7 @@ class DataLists {
   List<List<String>> weights = [
     ['650', '650'],
     ['700', '700'],
-    ['350', '350'],
+    ['750', '750'],
   ];
 
   List<List<String>> yarnNumbers = [
@@ -89,6 +89,20 @@ class DataLists {
     ['Evening', S().evening],
   ];
 // اسماء الاعمدة في جدول الفاتورة
+  List<String> tableHeaders = [
+    '#',
+    S().type,
+    S().color,
+    S().yarn_number,
+    S().length,
+    S().total_weight,
+    S().unit,
+    S().quantity,
+    S().price,
+    S().total_price,
+  ];
+
+  // اسماء الاعمدة في جدول الفاتورة
   List<String> columnTitles = [
     S().type,
     S().color,
@@ -101,6 +115,7 @@ class DataLists {
     S().total_price,
   ];
   List<String> columnTitlesForProInv = [
+    '#',
     S().type,
     S().color,
     S().yarn_number,

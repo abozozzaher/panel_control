@@ -5,24 +5,29 @@ import 'package:share_plus/share_plus.dart';
 import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
 
-class ProInvoicePage extends StatefulWidget {
+class InvoicePage extends StatefulWidget {
+  final String? codeIdClien;
   final String? invoiceCode;
 
-  const ProInvoicePage({Key? key, required this.invoiceCode}) : super(key: key);
+  InvoicePage({required this.codeIdClien, required this.invoiceCode});
 
   @override
-  State<ProInvoicePage> createState() => _ProInvoicePageState();
+  State<InvoicePage> createState() => _InvoicePageState();
 }
 
-class _ProInvoicePageState extends State<ProInvoicePage> {
-  String _formatCurrency(String amount) {
-    return '\$${amount}';
+class _InvoicePageState extends State<InvoicePage> {
+  String _formatCurrency(double amount) {
+    return '\$${amount.toStringAsFixed(2)}';
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
   }
 
   @override
   Widget build(BuildContext context) {
     String linkUrl =
-        "https://panel-control-company-zaher.web.app/pro-invoices/${widget.invoiceCode}";
+        "https://panel-control-company-zaher.web.app/${widget.codeIdClien}/invoices/${widget.invoiceCode}";
     final isRTL = Directionality.of(context) == TextDirection.rtl;
     List<DataColumn> columns = DataLists().tableHeaders.map((title) {
       return DataColumn(
@@ -37,10 +42,9 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
         body: Center(child: Text(S().no_invoice_id_provided)),
       );
     }
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pro Invoice Details'),
+        title: Text('${S().invoice} ${S().details}'),
         leading: IconButton(
           icon: Icon(Icons.share),
           onPressed: () {
@@ -51,7 +55,9 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
-            .collection('pro-invoices')
+            .collection('cliens')
+            .doc(widget.codeIdClien)
+            .collection('invoices')
             .doc(widget.invoiceCode)
             .get(),
         builder: (context, snapshot) {
@@ -66,13 +72,11 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
 
           // استرجاع البيانات من المستند
           var data = snapshot.data!.data() as Map<String, dynamic>;
-          final aggregatedDataList = data["products"] as List<dynamic>;
-          Timestamp? timestamp = data['createdAt'];
 
-          DateTime dateTime = timestamp!.toDate();
-
-          String formattedDate =
-              '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+// Extract each inner map
+          var traderMap = data["trader"] as Map<String, dynamic>;
+          var aggregatedDataMap =
+              data["aggregatedData"] as Map<String, dynamic>;
 
           return Container(
             alignment: Alignment.topCenter,
@@ -113,7 +117,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                               padding: EdgeInsets.only(
                                   left: 40, top: 10, bottom: 10, right: 40),
                               alignment: Alignment.center,
-                              height: 60,
+                              height: 50,
                               child: DefaultTextStyle(
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 12),
@@ -126,7 +130,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(S().data),
-                                        Text(formattedDate)
+                                        Text(_formatDate(
+                                            DateTime.parse(data['createdAt'])))
                                       ],
                                     ),
                                     Column(
@@ -192,8 +197,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                           height: 40,
                           child: FittedBox(
                             child: Text(
-                              ' ${S().final_total} : \$${data['finalTotal']}',
-                              textDirection: TextDirection.ltr,
+                              ' ${S().final_total} : ${_formatCurrency(data['finalTotal'])}',
                               style: TextStyle(
                                   color: Colors.teal,
                                   fontStyle: FontStyle.italic),
@@ -221,8 +225,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                 child: RichText(
                                     text: TextSpan(
                                         text: isRTL
-                                            ? '${data['fullNameArabic'][0]}*****'
-                                            : '${data['fullNameEnglish'][0]}*****',
+                                            ? traderMap['fullNameArabic']
+                                            : traderMap['fullNameEnglish'],
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color:
@@ -237,7 +241,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                         style: TextStyle(fontSize: 5),
                                       ),
                                       TextSpan(
-                                        text: '${data['country']}',
+                                        text:
+                                            '${traderMap['country']}, ${traderMap['state']}, ${traderMap['city']},',
                                         style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color:
@@ -253,8 +258,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                       ),
                                       TextSpan(
                                         text: isRTL
-                                            ? '${data['fullNameArabic'][2]}*****'
-                                            : '${data['fullNameEnglish'][1]}*****',
+                                            ? traderMap['addressArabic']
+                                            : traderMap['addressEnglish'],
                                         style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color:
@@ -284,8 +289,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                           fontWeight: FontWeight.bold),
                       columns: columns,
                       rows: [
-                        ...aggregatedDataList.map((rowData) {
-                          // final rowData = entry.value;
+                        ...aggregatedDataMap.entries.map((entry) {
+                          final rowData = entry.value;
                           return DataRow(cells: [
                             DataCell(Center(
                                 child: Text((++index).toString(),
@@ -316,28 +321,28 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                             DataCell(Center(
                                 child: Text(
                                     DataLists().translateType(
-                                        '${rowData['totalLength']} Mt'),
+                                        '${rowData['length']} Mt'),
                                     textAlign: TextAlign.center,
                                     textDirection: TextDirection.ltr,
                                     maxLines: 1))),
                             DataCell(Center(
                                 child: Text(
                                     DataLists().translateType(
-                                        '${_formatCurrency(rowData['totalWeight'])} Kg'),
+                                        '${rowData['total_weight'].toStringAsFixed(2)} Kg'),
                                     textAlign: TextAlign.center,
                                     textDirection: TextDirection.ltr,
                                     maxLines: 1))),
                             DataCell(Center(
                                 child: Text(
                                     DataLists().translateType(
-                                        '${rowData['totalUnit']} ${S().unit}'),
+                                        '${rowData['scanned_data']} ${S().unit}'),
                                     textAlign: TextAlign.center,
                                     textDirection: TextDirection.ltr,
                                     maxLines: 1))),
                             DataCell(Center(
                                 child: Text(
                                     DataLists().translateType(
-                                        '${rowData['allQuantity']} ${S().pcs}'),
+                                        '${rowData['quantity']} ${S().pcs}'),
                                     textAlign: TextAlign.center,
                                     textDirection: TextDirection.ltr,
                                     maxLines: 1))),
@@ -350,13 +355,13 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                     maxLines: 1))),
                             DataCell(Center(
                                 child: Text(
-                                    DataLists().translateType(
-                                        _formatCurrency(rowData['totalPrice'])),
+                                    DataLists().translateType(_formatCurrency(
+                                        rowData['totalLinePrices'])),
                                     textAlign: TextAlign.center,
                                     textDirection: TextDirection.ltr,
                                     maxLines: 1))),
                           ]);
-                        }),
+                        }).toList(),
                       ],
                     ),
                   ),
@@ -398,7 +403,10 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                       Expanded(
                         flex: 1,
                         child: DefaultTextStyle(
-                          style: const TextStyle(fontSize: 10),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            // color: Colors.red,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -407,8 +415,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('${S().sub_total} :'),
-                                  Text(_formatCurrency(data['totalPrices']),
-                                      textDirection: TextDirection.ltr),
+                                  Text(
+                                      _formatCurrency(data['grandTotalPrice'])),
                                 ],
                               ),
                               SizedBox(height: 5),
@@ -417,8 +425,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('${S().tax} :'),
-                                  Text('${(data['tax'])}%',
-                                      textDirection: TextDirection.ltr)
+                                  Text(
+                                      '${(data['taxs'] * 100).toStringAsFixed(1)}%'),
                                 ],
                               ),
                               SizedBox(height: 5),
@@ -427,8 +435,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('${S().shipping_fees}:'),
-                                  Text(_formatCurrency(data['shippingFees']),
-                                      textDirection: TextDirection.ltr),
+                                  Text(_formatCurrency(data['shippingFees'])),
                                 ],
                               ),
                               SizedBox(height: 5),
@@ -436,13 +443,12 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(data['dues'] == 0
+                                  Text(data['previousDebts'] == 0
                                       ? '${S().no_dues} :'
-                                      : data['dues'] < 0
+                                      : data['previousDebts'] > -1
                                           ? '${S().previous_debt} :'
                                           : '${S().customer_balance} :'),
-                                  Text('\$${data['dues'].toStringAsFixed(2)}',
-                                      textDirection: TextDirection.ltr),
+                                  Text(_formatCurrency(data['previousDebts'])),
                                 ],
                               ),
                               Divider(color: Colors.blueGrey),
@@ -457,8 +463,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('${S().final_total} :'),
-                                    Text(_formatCurrency(data['finalTotal']),
-                                        textDirection: TextDirection.ltr),
+                                    Text(_formatCurrency(data['finalTotal'])),
                                   ],
                                 ),
                               ),

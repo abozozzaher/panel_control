@@ -13,6 +13,7 @@ DataRow firastRowLine(
     String? allQuantity,
     double price) {
   return DataRow(cells: [
+    DataCell(Text('0')),
     DataCell(Center(
         child: Text(selectedType ?? "",
             textAlign: TextAlign.center,
@@ -26,45 +27,52 @@ DataRow firastRowLine(
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
-        child: Text(selectedYarnNumber ?? "",
+        child: Text('${selectedYarnNumber}D' ?? "",
             textAlign: TextAlign.center,
             maxLines: 1,
+            textDirection: TextDirection.ltr,
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
         child: Text('${totalLength.toStringAsFixed(0)} Mt',
             textAlign: TextAlign.center,
             maxLines: 1,
+            textDirection: TextDirection.ltr,
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
         child: Text('${totalWight.toStringAsFixed(2)} Kg',
             textAlign: TextAlign.center,
             maxLines: 1,
+            textDirection: TextDirection.ltr,
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
         child: Text('${totalUnit.toStringAsFixed(0)} ${S().unit}',
             textAlign: TextAlign.center,
             maxLines: 1,
+            textDirection: TextDirection.ltr,
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
         child: Text('$allQuantity ${S().pcs}',
             textAlign: TextAlign.center,
             maxLines: 1,
+            textDirection: TextDirection.ltr,
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
         child: Text('\$${price.toStringAsFixed(2)}',
             textAlign: TextAlign.center,
-            maxLines: 2,
+            maxLines: 1,
+            textDirection: TextDirection.ltr,
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
         child: Text('\$$totalPrice',
             textAlign: TextAlign.center,
             maxLines: 1,
+            textDirection: TextDirection.ltr,
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
 

@@ -440,11 +440,11 @@ class S {
     );
   }
 
-  /// `Please select a type.`
-  String get please_select_a_type {
+  /// `Please select a Color.`
+  String get please_select_a_color {
     return Intl.message(
-      'Please select a type.',
-      name: 'please_select_a_type',
+      'Please select a Color.',
+      name: 'please_select_a_color',
       desc: '',
       args: [],
     );
@@ -1845,6 +1845,56 @@ class S {
     return Intl.message(
       'add Proforma Invoice',
       name: 'add_proforma_invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `check out my invoice`
+  String get check_out_my_invoice {
+    return Intl.message(
+      'check out my invoice',
+      name: 'check_out_my_invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Look what I have!`
+  String get look_what_i_have {
+    return Intl.message(
+      'Look what I have!',
+      name: 'look_what_i_have',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid Invoice`
+  String get invalid_invoice {
+    return Intl.message(
+      'Invalid Invoice',
+      name: 'invalid_invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Invoice ID provided`
+  String get no_invoice_id_provided {
+    return Intl.message(
+      'No Invoice ID provided',
+      name: 'no_invoice_id_provided',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load invoice details`
+  String get failed_to_load_invoice_details {
+    return Intl.message(
+      'Failed to load invoice details',
+      name: 'failed_to_load_invoice_details',
       desc: '',
       args: [],
     );

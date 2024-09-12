@@ -31,7 +31,7 @@ class YarnData {
         DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(createdAt);
 
     return {
-      'yarnNumber': yarnNumber,
+      'yarn_number': yarnNumber,
       'yarnType': yarnType,
       'yarnSupplier': yarnSupplier,
       'color': color,

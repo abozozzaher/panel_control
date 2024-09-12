@@ -11,6 +11,7 @@ import 'package:printing/printing.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:provider/provider.dart';
 
+import '../../data/data_lists.dart';
 import '../../provider/trader_provider.dart';
 import '../../service/account_service.dart';
 
@@ -40,19 +41,28 @@ Future<void> generatePdf(
   final trader = Provider.of<TraderProvider>(context, listen: false).trader;
   final AccountService accountService = AccountService();
 
+  String linkUrl =
+      "https://panel-control-company-zaher.web.app/${trader!.codeIdClien}/invoices/$invoiceCode";
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
   doc.addPage(
     pw.MultiPage(
       pageTheme: _buildTheme(
-          context, svgFooter, fontTajBold, fontTajRegular, invoiceCode),
-      header: (context) => _buildHeader(
-          context, imageLogo, invoiceCode, invoiceCode), // تمرير البيانات هنا
-
-      footer: _buildFooter,
+        context,
+        svgFooter,
+        fontTajBold,
+        fontTajRegular,
+        isRTL,
+        await PdfGoogleFonts.tajawalRegular(),
+        await PdfGoogleFonts.tajawalBold(),
+        await PdfGoogleFonts.robotoItalic(),
+      ),
+      header: (context) =>
+          _buildHeader(context, imageLogo, linkUrl, invoiceCode),
+      footer: (context) => _buildFooter(context, linkUrl),
       build: (context) => [
-        _contentHeader(context, finalTotal, isRTL, trader),
-        _contentTable(context, aggregatedData, prices, totalLinePrices),
+        _contentHeader(context, finalTotal, isRTL, trader, fontTajRegular),
+        _contentTable(context, aggregatedData, prices, totalLinePrices, isRTL),
         pw.SizedBox(height: 20),
         _contentFooter(context, finalTotal, taxs, grandTotalPrice,
             previousDebts, shippingFees),
@@ -72,10 +82,12 @@ Future<void> generatePdf(
 
   // تحميل الملف إلى Firebase Storage
   final storageRef = FirebaseStorage.instance.ref().child(
-      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/$invoiceCode.pdf');
+      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/INV-$invoiceCode.pdf');
+
   await storageRef.putData(outputFile);
   // الحصول على رابط لتنزيل الملف من Firebase Storage
   final downloadUrlPdf = await storageRef.getDownloadURL();
+
   accountService.saveValueToFirebase(
       trader.codeIdClien, valueAccount, invoiceCode, downloadUrlPdf);
 
@@ -93,13 +105,22 @@ Future<void> generatePdf(
 }
 
 // تصميم شكل الصفحة
-pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
-    pw.Font fontTajBold, pw.Font fontTajRegular, String invoiceCode) {
-  final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
-  double heighPdf = 50;
-  double widthPdf = heighPdf * 3;
+pw.PageTheme _buildTheme(
+    mat.BuildContext context,
+    String svgFooter,
+    pw.Font fontTajBold,
+    pw.Font fontTajRegular,
+    bool isRTL,
+    pw.Font base,
+    pw.Font bold,
+    pw.Font italic) {
   return pw.PageTheme(
-    theme: pw.ThemeData.withFont(base: fontTajBold).copyWith(
+    pageFormat: PdfPageFormat(
+      PdfPageFormat.mm * 220,
+      PdfPageFormat.mm * 280,
+    ),
+    theme:
+        pw.ThemeData.withFont(base: base, bold: bold, italic: italic).copyWith(
       defaultTextStyle:
           pw.TextStyle(font: fontTajBold, fontFallback: [fontTajRegular]),
       header0: pw.TextStyle(
@@ -108,34 +129,16 @@ pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
           color: PdfColors.teal,
           fontWeight: pw.FontWeight.bold),
     ),
-    buildBackground: (context) => pw.FullPage(
-      ignoreMargins: true,
-      // child: pw.SvgImage(svg: svgFooter),
-      child: pw.Stack(alignment: pw.Alignment.bottomCenter, children: [
-        pw.SvgImage(svg: svgFooter),
-        // الباركود ال بي دي اف
-
-        pw.Positioned(
-          bottom: 10, // adjust the top position as needed
-          right: 70, // adjust the left position as needed
-          child: pw.BarcodeWidget(
-            barcode: pw.Barcode.pdf417(),
-            data: invoiceCode,
-            drawText: false,
-            height: heighPdf,
-            width: widthPdf,
-          ),
-        ),
-      ]),
-    ),
+    buildBackground: (context) =>
+        pw.FullPage(ignoreMargins: true, child: pw.SvgImage(svg: svgFooter)),
     textDirection: isRTL ? pw.TextDirection.rtl : pw.TextDirection.ltr,
     margin: pw.EdgeInsets.all(20),
   );
 }
 
 // راس الفاتورة
-pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
-    String downloadUrlPdf, String invoiceCode) {
+pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo, String linkUrl,
+    String invoiceCode) {
   return pw.Column(
     children: [
       pw.Row(
@@ -217,8 +220,7 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
                       height: 72,
                       child: pw.BarcodeWidget(
                         barcode: pw.Barcode.qrCode(),
-                        data:
-                            invoiceCode, // يمكنك استبدال هذا بالرابط الذي تريده
+                        data: linkUrl, // يمكنك استبدال هذا بالرابط الذي تريده
                         width: 72,
                         height: 72,
                       ),
@@ -236,26 +238,39 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo,
 }
 
 // الذيل
-pw.Widget _buildFooter(pw.Context context) {
+pw.Widget _buildFooter(pw.Context context, String linkUrl) {
+  double heighPdf = 50;
+  double widthPdf = heighPdf * 5;
   return pw.Row(
     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: pw.CrossAxisAlignment.center,
+    crossAxisAlignment: pw.CrossAxisAlignment.end,
     children: [
-      //  رقم الصفحة
-      pw.Text(
-        '${S().page} ${context.pageNumber}/${context.pagesCount}',
-        style: const pw.TextStyle(
-          fontSize: 12,
-          color: PdfColors.white,
+      pw.Container(
+        height: heighPdf,
+        width: widthPdf,
+        child: pw.BarcodeWidget(
+          barcode: pw.Barcode.pdf417(),
+          data: linkUrl,
+          drawText: false,
         ),
       ),
+      if (context.pagesCount < 2)
+        pw.Text('')
+      else
+        pw.Text(
+          '${S().page} ${context.pageNumber}/${context.pagesCount}',
+          style: const pw.TextStyle(
+            fontSize: 12,
+            color: PdfColors.white,
+          ),
+        )
     ],
   );
 }
 
 // الراس معلومات
-pw.Widget _contentHeader(
-    pw.Context context, finalTotal, bool isRTL, ClienData? trader) {
+pw.Widget _contentHeader(pw.Context context, finalTotal, bool isRTL,
+    ClienData? trader, pw.Font fontTajRegular) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -266,11 +281,11 @@ pw.Widget _contentHeader(
           height: 40,
           child: pw.FittedBox(
             child: pw.Text(
-              '${S().final_total} : ${_formatCurrency(finalTotal)}',
+              ' ${S().final_total} : ${_formatCurrency(finalTotal)}',
               style: pw.TextStyle(
-                color: PdfColors.teal,
-                fontStyle: pw.FontStyle.italic,
-              ),
+                  color: PdfColors.teal,
+                  fontStyle: pw.FontStyle.italic,
+                  font: fontTajRegular),
             ),
           ),
         ),
@@ -344,35 +359,36 @@ pw.Widget _contentHeader(
 
 // عنوين راس الجدول
 pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
-    List<double> prices, List<double> totalLinePrices) {
-  final tableHeaders = [
-    S().type,
-    S().color,
-    S().yarn_number,
-    S().length,
-    S().total_weight,
-    S().unit,
-    S().price,
-    S().quantity,
-    S().total_price,
-  ];
+    List<double> prices, List<double> totalLinePrices, bool isRTL) {
+  final tableHeaders = DataLists().tableHeaders;
+  final headers = isRTL ? tableHeaders.reversed.toList() : tableHeaders;
+  int lineCounter = 1;
 
   // استخراج البيانات من aggregatedData
   final data = aggregatedData.entries.map((entry) {
     final productData = entry.value as Map<String, dynamic>;
     int index = aggregatedData.keys.toList().indexOf(entry.key);
 
-    return [
-      productData['type'].toString(),
-      productData['color'].toString(),
-      '${productData['yarn_number'].toString()}D',
-      '${productData['length'].toString()}Mt',
-      '${productData['total_weight'].toString()}Kg',
-      '${productData['scanned_data'].toString()} ${S().unit}',
+    final row = [
+      lineCounter.toString(), // إضافة عداد الأسطر هنا
+      DataLists().translateType(productData['type'].toString()),
+      DataLists().translateType(
+        productData['color'].toString(),
+      ),
+      DataLists().translateType('${productData['yarn_number'].toString()}D'),
+      DataLists()
+          .translateType('${productData['length'].toStringAsFixed(0)}Mt'),
+      DataLists()
+          .translateType('${productData['total_weight'].toStringAsFixed(2)}Kg'),
+      DataLists().translateType(
+          '${productData['scanned_data'].toStringAsFixed(0)} ${S().unit}'),
+      DataLists()
+          .translateType('${productData['quantity'].toString()} ${S().pcs}'),
       _formatCurrency(prices[index]),
-      '${productData['quantity'].toString()} ${S().pcs}',
       _formatCurrency(totalLinePrices[index]),
     ];
+    lineCounter++;
+    return isRTL ? row.reversed.toList() : row;
   }).toList();
 
   return pw.TableHelper.fromTextArray(
@@ -388,10 +404,7 @@ pw.Widget _contentTable(pw.Context context, Map<String, dynamic> aggregatedData,
     rowDecoration: pw.BoxDecoration(
       border: pw.Border(bottom: pw.BorderSide(width: .5)),
     ),
-    headers: List<String>.generate(
-      tableHeaders.length,
-      (col) => tableHeaders[col],
-    ),
+    headers: headers,
     data: data,
   );
 }

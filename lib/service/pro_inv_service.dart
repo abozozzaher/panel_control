@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/clien.dart';
 
+DateTime now = DateTime.now();
+
 Future<void> saveDataProInv(
     List<Map<String, dynamic>> tableDataList,
     double finalTotal,
@@ -18,7 +20,7 @@ Future<void> saveDataProInv(
     return [
       productData['type'].toString(),
       productData['color'].toString(),
-      productData['yarnNumber'].toString(),
+      productData['yarn_number'].toString(),
       productData['totalLength'].toStringAsFixed(0),
       productData['totalWeight'].toStringAsFixed(2),
       productData['totalUnit'].toStringAsFixed(0),
@@ -39,6 +41,7 @@ Future<void> saveDataProInv(
       'codeIdClien': trader!.codeIdClien,
       'fullNameArabic': trader.fullNameArabic,
       'fullNameEnglish': trader.fullNameEnglish,
+      'country': trader.country,
       'finalTotal': finalTotal.toStringAsFixed(2),
       'totalPrices': totalPrices.toStringAsFixed(2),
       'taxWthiPrice': taxWthiPrice.toStringAsFixed(2),
@@ -50,7 +53,7 @@ Future<void> saveDataProInv(
           .map((product) => {
                 'type': product[0],
                 'color': product[1],
-                'yarnNumber': product[2],
+                'yarn_number': product[2],
                 'totalLength': product[3],
                 'totalWeight': product[4],
                 'totalUnit': product[5],
@@ -59,7 +62,8 @@ Future<void> saveDataProInv(
                 'totalPrice': product[8],
               })
           .toList(),
-      'timestamp': FieldValue.serverTimestamp(),
+      'createdAt': FieldValue.serverTimestamp(),
+      // 'createdAt': DateFormat('yyyy-MM-dd HH:mm:ss', 'en')
     });
 
     print("Data saved successfully");
