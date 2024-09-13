@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../generated/l10n.dart';
 import '../../service/scan_item_service.dart';
+import '../../service/toasts.dart';
 
 class ScanItemDialogs {
   bool _isDialogShowing = false;
@@ -12,7 +13,8 @@ class ScanItemDialogs {
     if (_isDialogShowing) return;
     _isDialogShowing = true;
     scanItemService.playSound('assets/sound/ripiito.mp3');
-    print('error duplicate code');
+    showToast('error duplicate code');
+
     showDialog(
       context: context,
       builder: (BuildContext context) {

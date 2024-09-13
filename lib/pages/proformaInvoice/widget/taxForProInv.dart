@@ -21,6 +21,7 @@ DataRow taxForProInv(double tax, TextEditingController taxController) {
         width: 50,
         child: TextField(
           controller: taxController,
+          textDirection: TextDirection.ltr,
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
           onChanged: (value) {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:panel_control/service/toasts.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/dataBase.dart';
@@ -128,7 +129,7 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
                     isRtl ? client.fullNameArabic : client.fullNameEnglish;
                 return DropdownMenuItem<String>(
                   value: client.codeIdClien,
-                  child: Text(displayName, textAlign: TextAlign.center),
+                  child: Center(child: Text(displayName)),
                 );
               }).toList(),
               onChanged: (String? selectedCode) async {
@@ -156,10 +157,7 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
                   );
                   // حفظ بيانات العميل في Provider
                   provider.setTrader(selectedClient);
-
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content:
-                          Center(child: Text(S().client_saved_successfully))));
+                  showToast(S().client_saved_successfully);
                 }
               }),
         );

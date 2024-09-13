@@ -2,6 +2,7 @@ import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:panel_control/service/toasts.dart';
 import 'dart:ui' as ui;
 
 import '../../generated/l10n.dart';
@@ -339,26 +340,14 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                                                     phoneNumberController
                                                         .clear();
                                                   });
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                        content: Center(
-                                                      child: Text(S()
-                                                          .customer_added_successfully),
-                                                    )),
-                                                  );
 
+                                                  showToast(S()
+                                                      .customer_added_successfully);
                                                   Navigator.of(context)
                                                       .pop(); // إغلاق مربع الحوار بعد التأكيد
                                                 }).catchError((error) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                        content: Center(
-                                                      child: Text(
-                                                          '${S().an_error_occurred_while_adding} : $error'),
-                                                    )),
-                                                  );
+                                                  showToast(
+                                                      '${S().an_error_occurred_while_adding} : $error');
                                                   Navigator.of(context)
                                                       .pop(); // إغلاق مربع الحوار عند حدوث خطأ
                                                 });

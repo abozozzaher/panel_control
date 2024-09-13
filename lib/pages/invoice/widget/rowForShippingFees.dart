@@ -29,6 +29,7 @@ DataRow rowForShippingFees(
                     ? Colors.redAccent
                     : Colors.green,
                 fontWeight: FontWeight.bold),
+            textDirection: TextDirection.ltr,
             textAlign: TextAlign.center,
             onChanged: (text) {
               if (text.isNotEmpty) {

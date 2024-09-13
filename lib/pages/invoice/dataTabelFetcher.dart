@@ -123,7 +123,6 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                       },
                     );
                   }).toList();
-
                   // Add a row for totals المجموع الاول
                   dataRows.add(rowForTotals(totalLength, totalWeight,
                       totalScannedData, totalQuantity, grandTotalPrice));
@@ -157,7 +156,6 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                       shippingFeesNotifier.value -
                       previousDebtsNotifier.value;
 
-                  //   print('ssss $TotalAllMoney');
                   // Add a row for all totals قيمة الفاتورة
                   dataRows.add(rowForAllTotals(totalAllMoney, () {
                     setState(() {});

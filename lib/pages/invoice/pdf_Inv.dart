@@ -43,7 +43,7 @@ Future<void> generatePdf(
   final AccountService accountService = AccountService();
 
   String linkUrl =
-      "https://panel-control-company-zaher.web.app/${trader!.codeIdClien}/invoices/$invoiceCode";
+      "https://admin.bluedukkan.com/${trader!.codeIdClien}/invoices/$invoiceCode";
   final isRTL = mat.Directionality.of(context) == mat.TextDirection.rtl;
 
   doc.addPage(
@@ -83,7 +83,7 @@ Future<void> generatePdf(
 
   // تحميل الملف إلى Firebase Storage
   final storageRef = FirebaseStorage.instance.ref().child(
-      'invoices/${trader!.codeIdClien}/invoice_${DateTime.now().year}/INV-$invoiceCode.pdf');
+      'invoices/${trader.codeIdClien}/invoice_${DateTime.now().year}/INV-$invoiceCode.pdf');
 
   await storageRef.putData(outputFile);
   // الحصول على رابط لتنزيل الملف من Firebase Storage
@@ -242,31 +242,33 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo, String linkUrl,
 pw.Widget _buildFooter(pw.Context context, String linkUrl) {
   double heighPdf = 50;
   double widthPdf = heighPdf * 5;
-  return pw.Row(
-    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: pw.CrossAxisAlignment.end,
-    children: [
-      pw.Container(
-        height: heighPdf,
-        width: widthPdf,
-        child: pw.BarcodeWidget(
-          barcode: pw.Barcode.pdf417(),
-          data: linkUrl,
-          drawText: false,
-        ),
-      ),
-      if (context.pagesCount < 2)
-        pw.Text('')
-      else
-        pw.Text(
-          '${S().page} ${context.pageNumber}/${context.pagesCount}',
-          style: const pw.TextStyle(
-            fontSize: 12,
-            color: PdfColors.white,
+  return pw.Directionality(
+      textDirection: pw.TextDirection.rtl,
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: pw.CrossAxisAlignment.end,
+        children: [
+          pw.Container(
+            height: heighPdf,
+            width: widthPdf,
+            child: pw.BarcodeWidget(
+              barcode: pw.Barcode.pdf417(),
+              data: linkUrl,
+              drawText: false,
+            ),
           ),
-        )
-    ],
-  );
+          if (context.pagesCount < 2)
+            pw.Text('')
+          else
+            pw.Text(
+              '${S().page} ${context.pageNumber}/${context.pagesCount}',
+              style: const pw.TextStyle(
+                fontSize: 12,
+                color: PdfColors.white,
+              ),
+            )
+        ],
+      ));
 }
 
 // الراس معلومات
@@ -439,7 +441,7 @@ pw.Widget _contentFooter(pw.Context context, finalTotal, taxs, grandTotalPrice,
               ),
             ),
             pw.Text(
-              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n9961355399\nZIP CODE: 27110',
+              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
               style:
                   pw.TextStyle(fontSize: 8, lineSpacing: 5, font: fontBeiruti),
             ),
@@ -534,10 +536,9 @@ pw.Widget _termsAndConditions(pw.Context context, pw.Font fontTajBold) {
               ),
             ),
             pw.Text(
-              pw.LoremText().paragraph(40),
+              S().terms_and_conditions,
               textAlign: pw.TextAlign.justify,
-              style:
-                  pw.TextStyle(fontSize: 6, lineSpacing: 2, font: fontTajBold),
+              style: pw.TextStyle(fontSize: 4, lineSpacing: 1),
             ),
           ],
         ),

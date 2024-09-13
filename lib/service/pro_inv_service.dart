@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:panel_control/service/toasts.dart';
 
+import '../generated/l10n.dart';
 import '../model/clien.dart';
 
 DateTime now = DateTime.now();
@@ -65,9 +67,10 @@ Future<void> saveDataProInv(
       'createdAt': FieldValue.serverTimestamp(),
       // 'createdAt': DateFormat('yyyy-MM-dd HH:mm:ss', 'en')
     });
-
+    showToast(S().data_pro_invoice_saved_successfully);
     print("Data saved successfully");
   } catch (e) {
+    showToast('${S().failed_to_save_data} $e');
     print("Failed to save data: $e");
   }
 }

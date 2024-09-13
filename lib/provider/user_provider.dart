@@ -20,7 +20,7 @@ class UserProvider with ChangeNotifier {
     final lastName = prefs.getString('lastName');
     final email = prefs.getString('email');
     final phone = prefs.getString('phone');
-    final image = prefs.getString('image') ?? 'assets/img/user.jpg';
+    final image = prefs.getString('image') ?? 'assets/img/user.png';
     final work = prefs.getBool('work') ?? false;
     final admin = prefs.getBool('admin') ?? false;
 

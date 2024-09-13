@@ -101,8 +101,7 @@ class _DialogInvoiceState extends State<DialogInvoice> {
               onPressed: () {
                 // حفظ التحديد في البروفيدر
                 invoiceProvider.setSelectionState(selectionState, itemsData);
-                print(selectionState);
-                print(itemsData);
+
                 Navigator.of(context).pop();
               },
               child: Text(S().save_and_send_data),

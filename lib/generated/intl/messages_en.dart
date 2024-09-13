@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
                 "Access Denied. You do not have the required role."),
+        "account": MessageLookupByLibrary.simpleMessage("account"),
         "account_page": MessageLookupByLibrary.simpleMessage("Account page"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "add_clien": MessageLookupByLibrary.simpleMessage("add Clien"),
@@ -36,8 +37,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("add Proforma Invoice"),
         "add_to_table": MessageLookupByLibrary.simpleMessage("Add to Table"),
         "add_yarn": MessageLookupByLibrary.simpleMessage("Add Yarn"),
-        "addres": MessageLookupByLibrary.simpleMessage(
-            "Türkiye Gaziantep Sanayi MAH. 60092"),
         "addressArabic": MessageLookupByLibrary.simpleMessage("Address Arabic"),
         "addressEnglish":
             MessageLookupByLibrary.simpleMessage("Address English"),
@@ -69,8 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Client saved successfully"),
         "code_invoice": MessageLookupByLibrary.simpleMessage("code invoice"),
         "color": MessageLookupByLibrary.simpleMessage("Color"),
-        "company_name": MessageLookupByLibrary.simpleMessage(
-            "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ"),
+        "company_payment_info": MessageLookupByLibrary.simpleMessage(
+            "Garanti BBVA Bank Swift Code Details - TGBATRIS982\nTRY TR97 0006 2000 5050 0006 2909 74 \nUSD TR51 0006 2000 5050 0009 0845 29"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "confirm_customer_data":
             MessageLookupByLibrary.simpleMessage("Confirm customer data"),
@@ -85,11 +84,19 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Customer added successfully"),
         "customer_balance":
             MessageLookupByLibrary.simpleMessage("customer balance"),
+        "customer_list": MessageLookupByLibrary.simpleMessage("Customer List"),
         "dark_green": MessageLookupByLibrary.simpleMessage("Dark Green"),
         "data": MessageLookupByLibrary.simpleMessage("Data"),
+        "data_pro_invoice_saved_successfully":
+            MessageLookupByLibrary.simpleMessage(
+                "Data pro invoice saved successfully"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "delett": MessageLookupByLibrary.simpleMessage("delet"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
+        "download_a_copy_of_the_invoice_in_pdf":
+            MessageLookupByLibrary.simpleMessage(
+                "Download a copy of the invoice in PDF"),
+        "dues": MessageLookupByLibrary.simpleMessage("Dues"),
         "duplicate_code":
             MessageLookupByLibrary.simpleMessage("Duplicate Code"),
         "edit": MessageLookupByLibrary.simpleMessage("edit"),
@@ -102,6 +109,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter Custom Value"),
         "enter_new_item":
             MessageLookupByLibrary.simpleMessage("Enter new item"),
+        "enter_value_minus":
+            MessageLookupByLibrary.simpleMessage("Enter value Minus"),
+        "enter_value_plus":
+            MessageLookupByLibrary.simpleMessage("Enter value Plus"),
         "enter_weight": MessageLookupByLibrary.simpleMessage("Enter Weight"),
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "error_404": MessageLookupByLibrary.simpleMessage("Error 404"),
@@ -111,8 +122,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "evening": MessageLookupByLibrary.simpleMessage("Evening"),
         "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(
             "Failed to load invoice details"),
+        "failed_to_save_data":
+            MessageLookupByLibrary.simpleMessage("Failed to save data:"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Failed to upload image"),
+        "falcons_red": MessageLookupByLibrary.simpleMessage("Falcons Red"),
         "final_total": MessageLookupByLibrary.simpleMessage("Final Total"),
         "first_name": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgot_password":
@@ -123,6 +137,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Full Name (English)"),
         "go_to_page":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
+        "grye": MessageLookupByLibrary.simpleMessage("grye"),
         "habl": MessageLookupByLibrary.simpleMessage("pregnancy"),
         "has_already_been_scanned":
             MessageLookupByLibrary.simpleMessage("has already been scanned."),
@@ -130,6 +145,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "id": MessageLookupByLibrary.simpleMessage("ID"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("Image uploaded successfully"),
+        "input": MessageLookupByLibrary.simpleMessage("Input"),
         "invalid_code_scanned_and_removed":
             MessageLookupByLibrary.simpleMessage(
                 "Invalid code scanned and removed"),
@@ -159,20 +175,26 @@ class MessageLookup extends MessageLookupByLibrary {
         "name_in_english":
             MessageLookupByLibrary.simpleMessage("Name in English"),
         "navy_blue": MessageLookupByLibrary.simpleMessage("Navy Blue"),
+        "negative_value":
+            MessageLookupByLibrary.simpleMessage("Negative Value"),
         "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("Dont have an account?"),
+        "no_clients": MessageLookupByLibrary.simpleMessage("No clients"),
         "no_data_found": MessageLookupByLibrary.simpleMessage("No data found."),
         "no_data_found_for_this_code": MessageLookupByLibrary.simpleMessage(
             "No data found for this code."),
         "no_data_to_send":
             MessageLookupByLibrary.simpleMessage("No data to send"),
         "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
+        "no_invoice_available":
+            MessageLookupByLibrary.simpleMessage("No invoice available"),
         "no_invoice_id_provided":
             MessageLookupByLibrary.simpleMessage("No Invoice ID provided"),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
+        "output": MessageLookupByLibrary.simpleMessage("Output"),
         "page": MessageLookupByLibrary.simpleMessage("Page"),
         "page_not_found":
             MessageLookupByLibrary.simpleMessage("Page not found"),
@@ -210,7 +232,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Products Table"),
         "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
-        "red": MessageLookupByLibrary.simpleMessage("red"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "riza": MessageLookupByLibrary.simpleMessage("Riza"),
         "sablah": MessageLookupByLibrary.simpleMessage("Siblings"),
@@ -218,6 +239,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "save_and_send_data":
             MessageLookupByLibrary.simpleMessage("Save and send data"),
         "save_invoice": MessageLookupByLibrary.simpleMessage("Save Invoice"),
+        "save_value": MessageLookupByLibrary.simpleMessage("Save Value"),
         "saved_successfully_with": MessageLookupByLibrary.simpleMessage(
             "item saved successfully with ID :"),
         "scan": MessageLookupByLibrary.simpleMessage("Scan"),
@@ -233,13 +255,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_client": MessageLookupByLibrary.simpleMessage("Select Client"),
         "select_items": MessageLookupByLibrary.simpleMessage("Select Items"),
         "select_months": MessageLookupByLibrary.simpleMessage("Select Months"),
+        "select_operation_type":
+            MessageLookupByLibrary.simpleMessage("Select Operation Type"),
         "send": MessageLookupByLibrary.simpleMessage("Send"),
         "shanta": MessageLookupByLibrary.simpleMessage("bag"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
         "shipping_fees": MessageLookupByLibrary.simpleMessage("Shipping Fees"),
         "show_full_repository_content": MessageLookupByLibrary.simpleMessage(
             "Show full repository content"),
-        "silver": MessageLookupByLibrary.simpleMessage("Silver"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
         "sub_total": MessageLookupByLibrary.simpleMessage("Sub Total"),
         "switch_to_quantity":
@@ -247,11 +270,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "switch_to_weight":
             MessageLookupByLibrary.simpleMessage("Switch to weight"),
         "tax": MessageLookupByLibrary.simpleMessage("Tax"),
+        "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
+            "Quality Assurance: The Company guarantees the quality of textile products (textile tape) for a period of 7 days from the date of their exit from the factory, provided that it is proven that the goods are issued by our factory. In the event of any quality problems, they must be reported immediately and within the warranty period. Warranty Exclusions: The Company shall not be liable for damages resulting from misuse, improper storage, or modifications made to the product after its delivery. This includes any modification or change to the product made after its receipt by the customer. Quality Claims: The Factory reserves the right to reject any claims related to quality or conformity after the expiry of the aforementioned warranty period. Claims submitted after the warranty period will not be considered. Commissioning and Quotations: Quotations are valid for 7 days from the date of invoice. After this period, the Company reserves the right to adjust prices according to market or cost changes. Proforma Invoice: Please note that the proforma invoice is for demonstration purposes only"),
         "terms_conditions":
             MessageLookupByLibrary.simpleMessage("Terms & Conditions"),
         "thank_you_for_your_business":
             MessageLookupByLibrary.simpleMessage("Thank you for your business"),
         "the_code": MessageLookupByLibrary.simpleMessage("The Code"),
+        "the_invoice_will_be_recorded_in_the_database":
+            MessageLookupByLibrary.simpleMessage(
+                "The invoice will be recorded in the database"),
+        "this_value_will_be_added_to_the_customers_account":
+            MessageLookupByLibrary.simpleMessage(
+                "This value will be added to the customer\\s account"),
         "todays_date": MessageLookupByLibrary.simpleMessage("Today\\s Date"),
         "toggle_language":
             MessageLookupByLibrary.simpleMessage("Toggle Language"),
@@ -264,6 +295,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_quantity":
             MessageLookupByLibrary.simpleMessage("Total Quantity"),
         "total_weight": MessageLookupByLibrary.simpleMessage("Total Weight"),
+        "trader_name": MessageLookupByLibrary.simpleMessage("trader Name"),
         "traders_accounts":
             MessageLookupByLibrary.simpleMessage("Traders Accounts"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
@@ -272,9 +304,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "user": MessageLookupByLibrary.simpleMessage("user"),
         "user_data_not_found":
             MessageLookupByLibrary.simpleMessage("User data not found"),
+        "value": MessageLookupByLibrary.simpleMessage("Value"),
+        "value_added_successfully":
+            MessageLookupByLibrary.simpleMessage("Value added successfully"),
         "view_invoice": MessageLookupByLibrary.simpleMessage("View Invoice"),
+        "visit_our_website_and_search_fornmore_modern_designs_and_models":
+            MessageLookupByLibrary.simpleMessage(
+                "Visit our website and search for\\nmore modern designs and models"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),
+        "yarn_added_successfully":
+            MessageLookupByLibrary.simpleMessage("Yarn added successfully!"),
         "yarn_id": MessageLookupByLibrary.simpleMessage("Yarn Id"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number"),
         "yarn_supplier": MessageLookupByLibrary.simpleMessage("Yarn Supplier"),

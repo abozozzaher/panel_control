@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
@@ -27,7 +28,7 @@ class _InvoicePageState extends State<InvoicePage> {
   @override
   Widget build(BuildContext context) {
     String linkUrl =
-        "https://panel-control-company-zaher.web.app/${widget.codeIdClien}/invoices/${widget.invoiceCode}";
+        "https://admin.bluedukkan.com/${widget.codeIdClien}/invoices/${widget.invoiceCode}";
     final isRTL = Directionality.of(context) == TextDirection.rtl;
     List<DataColumn> columns = DataLists().tableHeaders.map((title) {
       return DataColumn(
@@ -393,7 +394,7 @@ class _InvoicePageState extends State<InvoicePage> {
                               ),
                             ),
                             Text(
-                              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n9961355399\nZIP CODE: 27110',
+                              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
                               style: TextStyle(fontSize: 12, wordSpacing: 5),
                             ),
                           ],
@@ -476,10 +477,27 @@ class _InvoicePageState extends State<InvoicePage> {
                   ),
                   SizedBox(height: 50),
                   ElevatedButton.icon(
+                    onPressed: () async {
+                      final Uri url =
+                          Uri.parse('https://textile.bluedukkan.com');
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },
+                    label: Text(
+                      S().visit_our_website_and_search_fornmore_modern_designs_and_models,
+                      textAlign: TextAlign.center,
+                    ),
+                    icon: Icon(Icons.plagiarism_outlined),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton.icon(
                     onPressed: () {
                       data['downloadUrlPdf'];
                     },
-                    label: Text('Download a copy of the invoice in PDF'),
+                    label: Text(S().download_a_copy_of_the_invoice_in_pdf),
                     icon: Icon(Icons.print),
                   ),
                   SizedBox(height: 50)

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
+
 import 'package:url_launcher/url_launcher.dart'; // تأكد من إضافة هذه الحزمة في pubspec.yaml
 
+import '../../generated/l10n.dart';
 import '../../model/clien.dart';
+import '../../service/toasts.dart';
 
 class ClienPage extends StatelessWidget {
   final ClienData client;
@@ -21,24 +22,26 @@ class ClienPage extends StatelessWidget {
     }
   }
 
-  // دالة لعرض رسالة Toast عند عدم وجود فاتورة
-  void _showNoInvoiceToast() {
-    Fluttertoast.showToast(
-        msg: 'No invoice available', toastLength: Toast.LENGTH_SHORT);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${client.fullNameArabic} ,  ${dues.toStringAsFixed(0)}',
+          client.fullNameArabic,
           textAlign: TextAlign.center,
         ),
       ),
-      ////45454545
       body: Column(
         children: [
+          dues < 0
+              ? Container(
+                  alignment: Alignment.center,
+                  height: 30,
+                  color: dues < 1 ? Colors.redAccent : Colors.greenAccent,
+                  child: Text('\$${dues.toStringAsFixed(2)}',
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr))
+              : Container(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
             child: Row(
@@ -46,27 +49,27 @@ class ClienPage extends StatelessWidget {
               children: [
                 Expanded(
                     flex: 2,
-                    child: Text('Date',
+                    child: Text(S().data,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
-                    child: Text('Value',
+                    child: Text(S().value,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
-                    child: Text('Negative Value',
+                    child: Text(S().negative_value,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
-                    child: Text('Dues',
+                    child: Text(S().dues,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
-                    child: Text('Invoice Code',
+                    child: Text(S().invoice_code,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold))),
               ],
@@ -84,8 +87,7 @@ class ClienPage extends StatelessWidget {
                 });
 
                 final clienDataAll = sortedData[index];
-                final createdAt = DateFormat('dd/MM/yyyy')
-                    .format(DateTime.parse(clienDataAll['createdAt']));
+                //   final createdAt = DateFormat('dd/MM/yyyy') .format(DateTime.parse(clienDataAll['createdAt']));
                 final positiveValue =
                     clienDataAll['value'] >= 0 ? clienDataAll['value'] : null;
                 final negativeValue =
@@ -102,13 +104,16 @@ class ClienPage extends StatelessWidget {
                     children: [
                       Expanded(
                           flex: 2,
-                          child: Text(createdAt, textAlign: TextAlign.center)),
+                          child: Text(clienDataAll['createdAt'],
+                              textDirection: TextDirection.ltr,
+                              textAlign: TextAlign.center)),
                       Expanded(
                           flex: 2,
                           child: Text(
                               positiveValue != null
                                   ? positiveValue.toStringAsFixed(2)
                                   : '',
+                              textDirection: TextDirection.ltr,
                               textAlign: TextAlign.center)),
                       Expanded(
                           flex: 2,
@@ -116,10 +121,12 @@ class ClienPage extends StatelessWidget {
                               negativeValue != null
                                   ? negativeValue.toStringAsFixed(2)
                                   : '',
+                              textDirection: TextDirection.ltr,
                               textAlign: TextAlign.center)),
                       Expanded(
                           flex: 2,
                           child: Text(dues.toStringAsFixed(2),
+                              textDirection: TextDirection.ltr,
                               textAlign: TextAlign.center)),
                       Expanded(
                         flex: 2,
@@ -127,16 +134,15 @@ class ClienPage extends StatelessWidget {
                           onTap: () {
                             if (invoiceCode != 'No invoice' &&
                                 downloadUrlPdf != null) {
+                              showToast('You are directed to the invoice');
                               _launchURL(downloadUrlPdf);
-                              print('Print invoice available');
                             } else {
-                              // يمكنك إضافة إشعار أو رسالة هنا إذا كان رقم الفاتورة غير موجود
-                              print('No invoice available');
-                              _showNoInvoiceToast();
+                              showToast(S().no_invoice_available);
                             }
                           },
                           child: Text(
                             invoiceCode,
+                            textDirection: TextDirection.ltr,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.blue,

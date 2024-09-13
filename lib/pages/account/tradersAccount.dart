@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../data/dataBase.dart';
+import '../../generated/l10n.dart';
 import '../../model/clien.dart';
+import '../../service/toasts.dart';
 import '../../service/trader_service.dart';
 import '../clien/clienPage.dart';
 
@@ -110,7 +112,7 @@ class _TradersAccountState extends State<TradersAccount> {
           });
         }
       } catch (e) {
-        print('Error fetching clients: $e');
+        showToast('Error fetching clients $e');
         setState(() {
           isLoading = false;
         });
@@ -118,15 +120,14 @@ class _TradersAccountState extends State<TradersAccount> {
     }
   }
 
-  /// 454545
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('قائمة العملاء')),
+      appBar: AppBar(title: Text(S().customer_list)),
       body: isLoading
           ? Center(child: CircularProgressIndicator.adaptive())
           : clients.isEmpty
-              ? Center(child: Text('لا يوجد عملاء'))
+              ? Center(child: Text(S().no_clients))
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -141,6 +142,10 @@ class _TradersAccountState extends State<TradersAccount> {
                         shrinkWrap: true,
                         itemCount: clients.length,
                         itemBuilder: (context, index) {
+                          clients.sort((a, b) =>
+                              (clientDues[a.codeIdClien] ?? 0.0)
+                                  .compareTo(clientDues[b.codeIdClien] ?? 0.0));
+
                           final client = clients[index];
                           final dues = clientDues[client.codeIdClien] ?? 0.0;
                           final allData =
@@ -148,10 +153,10 @@ class _TradersAccountState extends State<TradersAccount> {
 
                           return ListTile(
                             title: Text(client.fullNameArabic,
-                                textAlign: TextAlign.center),
+                                textAlign: TextAlign.start),
                             subtitle: Text(
                                 '${client.country},${client.state},${client.city}',
-                                textAlign: TextAlign.center),
+                                textAlign: TextAlign.start),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -165,8 +170,11 @@ class _TradersAccountState extends State<TradersAccount> {
                               );
                             },
                             trailing: Text(
-                              'Dues: ${dues.toStringAsFixed(2)}',
-                              style: TextStyle(color: Colors.amber),
+                              '${S().dues}: ${dues.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                  color: Colors.amber,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
                             ),
                           );
                         },

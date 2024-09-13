@@ -16,28 +16,49 @@ DataRow itemForTabel(
   return DataRow(
     cells: [
       DataCell(Center(
-        child: Text(DataLists().translateType(itemData['type'].toString())),
+        child: Text(DataLists().translateType(itemData['type'].toString()),
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            maxLines: 1),
       )),
       DataCell(Center(
-        child: Text(DataLists().translateType(itemData['color'].toString())),
-      )),
-      DataCell(Center(
-        child: Text(
-            '${DataLists().translateType(itemData['yarn_number'].toString())} D'),
-      )),
-      DataCell(Center(
-        child: Text(
-            '${DataLists().translateType(itemData['length'].toString())} Mt'),
-      )),
-      DataCell(Center(
-        child: Text('${itemData['total_weight']} Kg'),
-      )),
-      DataCell(Center(
-        child: Text('${itemData['scanned_data']} ${S().unit}'),
+        child: Text(DataLists().translateType(itemData['color'].toString()),
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            maxLines: 1),
       )),
       DataCell(Center(
         child: Text(
-            '${DataLists().translateType(itemData['quantity'].toString())} ${S().pcs}'),
+            '${DataLists().translateType(itemData['yarn_number'].toString())} D',
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            maxLines: 1),
+      )),
+      DataCell(Center(
+        child: Text(
+            '${DataLists().translateType(itemData['length'].toString())} Mt',
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            maxLines: 1),
+      )),
+      DataCell(Center(
+        child: Text('${itemData['total_weight']} Kg',
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            maxLines: 1),
+      )),
+      DataCell(Center(
+        child: Text('${itemData['scanned_data']} ${S().unit}',
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            maxLines: 1),
+      )),
+      DataCell(Center(
+        child: Text(
+            '${DataLists().translateType(itemData['quantity'].toString())} ${S().pcs}',
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            maxLines: 1),
       )),
       DataCell(Center(
         child: TextField(
@@ -45,6 +66,7 @@ DataRow itemForTabel(
           style:
               TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
           keyboardType: TextInputType.number,
+          textDirection: TextDirection.ltr,
           textAlign: TextAlign.center,
           onChanged: (text) {
             double price = double.tryParse(text) ?? 0.00;

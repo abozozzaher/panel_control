@@ -44,6 +44,7 @@ class DataLists {
   ];
 
   List<List<String>> quantity = [
+    ['06', '06'],
     ['10', '10'],
     ['20', '20'],
     ['35', '35'],
@@ -55,18 +56,17 @@ class DataLists {
     ['35', '35'],
     ['50', '50'],
     ['70', '70'],
-    ['100', '100'],
   ];
 // قائمة الألوان
   List<List<String>> colors = [
     ['Black', S().black],
-    ['Burnt Brown', S().burnt_brown],
+    ['Dark Brown', S().burnt_brown],
     ['Brown', S().brown],
     ['camli', S().camel],
-    ['Red', S().red],
+    ['Falcons Red', S().falcons_red],
     ['Navy Blue', S().navy_blue],
     ['Dark Green', S().dark_green],
-    ['Silver', S().silver],
+    ['Grye', S().grye],
   ];
 
   List<List<String>> yarnTypes = [
@@ -131,8 +131,6 @@ class DataLists {
 // قائمة الاشهر لاستيرادها
   List<String> months = [
     // 2024
-    "2024-08",
-
     "2024-09", "2024-10", "2024-11", "2024-12",
 
     // 2025

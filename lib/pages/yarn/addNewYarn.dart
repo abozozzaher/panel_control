@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:panel_control/service/toasts.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
@@ -290,12 +291,8 @@ class _AddYarnState extends State<AddYarn> {
                                               .set(yarnData
                                                   .toMap(exchangeRateTR));
 
-                                          ///454545
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Center(
-                                                      child: Text(
-                                                          'Yarn added successfully!'))));
+                                          showToast(
+                                              S().yarn_added_successfully);
 
                                           // Clear the form
                                           setState(() {
@@ -319,9 +316,7 @@ class _AddYarnState extends State<AddYarn> {
                           },
                         );
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(S().please_fill_all_fields),
-                        ));
+                        showToast(S().please_fill_all_fields);
                       }
                     },
                     child: Text(S().add_yarn),

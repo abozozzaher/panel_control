@@ -13,24 +13,36 @@ DataRow rowForTotals(int totalLength, double totalWeight, int totalScannedData,
       DataCell(Center(
         child: Text(
           '$totalLength Mt',
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       )),
       DataCell(Center(
         child: Text(
           '$totalWeight Kg',
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       )),
       DataCell(Center(
         child: Text(
           '$totalScannedData ${S().unit}',
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       )),
       DataCell(Center(
         child: Text(
           '$totalQuantity ${S().pcs}',
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       )),
@@ -38,6 +50,9 @@ DataRow rowForTotals(int totalLength, double totalWeight, int totalScannedData,
       DataCell(Center(
         child: Text(
           '\$ ${grandTotalPrice.toStringAsFixed(2)}',
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
           style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.redAccent,

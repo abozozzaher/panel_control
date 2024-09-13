@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
+import '../generated/l10n.dart';
 import 'exchangeRate_service.dart';
 
 class AccountService {
@@ -15,7 +16,7 @@ class AccountService {
   String formattedCreatedAt =
       DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(DateTime.now());
   // التاريخ سعر الصرف هل القيمة ايجابية او سلبية
-  ///55555
+  ///55555 تخفيف عدد مرات القراءة
   Future<void> saveValueToFirebase(String traderId, double value,
       String invoiceCode, String downloadUrlPdf) async {
     double? exchangeRateTR = await fetchExchangeRateTR();
@@ -23,7 +24,7 @@ class AccountService {
     final traderAccountCollection = FirebaseFirestore.instance
         .collection('cliens')
         .doc(traderId)
-        .collection('account');
+        .collection(S().account);
 
     // البحث عن المستند الأخير بناءً على حقل dues
     final lastDuesSnapshot = await traderAccountCollection

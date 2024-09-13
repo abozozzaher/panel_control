@@ -18,6 +18,7 @@ DataRow shippingFeesForProInv(double totalPricesAndTaxAndShippingFee,
         width: 100,
         child: TextField(
           controller: shippingController,
+          textDirection: TextDirection.ltr,
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
           onChanged: (value) {

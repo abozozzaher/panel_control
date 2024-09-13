@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
                 "Erişim engellendi.Gerekli rolünüz yok."),
+        "account": MessageLookupByLibrary.simpleMessage("account"),
         "account_page": MessageLookupByLibrary.simpleMessage("Account page"),
         "add": MessageLookupByLibrary.simpleMessage("Eklemek"),
         "add_clien": MessageLookupByLibrary.simpleMessage("add Clien"),
@@ -37,8 +38,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_to_table":
             MessageLookupByLibrary.simpleMessage("\"Add to Table\""),
         "add_yarn": MessageLookupByLibrary.simpleMessage("Add Yarn"),
-        "addres": MessageLookupByLibrary.simpleMessage(
-            "Türkiye Gaziantep Sanayi MAH. 60092"),
         "administration_page":
             MessageLookupByLibrary.simpleMessage("Administration page"),
         "afternoon": MessageLookupByLibrary.simpleMessage("Öğleden sonra"),
@@ -46,6 +45,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "An error occurred while adding"),
         "application_management_page":
             MessageLookupByLibrary.simpleMessage("Application management page"),
+        "are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file":
+            MessageLookupByLibrary.simpleMessage(
+                "Are you sure you want to record the data and view the PDF file ?"),
         "available": MessageLookupByLibrary.simpleMessage("Mevcut"),
         "black": MessageLookupByLibrary.simpleMessage("Siyah"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Mavi tekstil"),
@@ -65,8 +67,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Client saved successfully"),
         "code_invoice": MessageLookupByLibrary.simpleMessage("code invoice"),
         "color": MessageLookupByLibrary.simpleMessage("Renk"),
-        "company_name": MessageLookupByLibrary.simpleMessage(
-            "ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ"),
+        "company_payment_info": MessageLookupByLibrary.simpleMessage(
+            "Garanti BBVA Bank Swift Code Details - TGBATRIS982\nTRY TR97 0006 2000 5050 0006 2909 74 \nUSD TR51 0006 2000 5050 0009 0845 29"),
         "confirm": MessageLookupByLibrary.simpleMessage("Onaylamak"),
         "confirm_customer_data":
             MessageLookupByLibrary.simpleMessage("Confirm customer data"),
@@ -81,10 +83,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Customer added successfully"),
         "customer_balance":
             MessageLookupByLibrary.simpleMessage("customer balance"),
+        "customer_list": MessageLookupByLibrary.simpleMessage("Customer List"),
         "dark_green": MessageLookupByLibrary.simpleMessage("Koyu yeşil"),
         "data": MessageLookupByLibrary.simpleMessage("Veri"),
+        "data_pro_invoice_saved_successfully":
+            MessageLookupByLibrary.simpleMessage(
+                "Data pro invoice saved successfully"),
         "date": MessageLookupByLibrary.simpleMessage("Tarih"),
         "details": MessageLookupByLibrary.simpleMessage("Detaylar"),
+        "download_a_copy_of_the_invoice_in_pdf":
+            MessageLookupByLibrary.simpleMessage(
+                "Download a copy of the invoice in PDF"),
+        "dues": MessageLookupByLibrary.simpleMessage("Dues"),
         "duplicate_code": MessageLookupByLibrary.simpleMessage("Yinelenen kod"),
         "edit": MessageLookupByLibrary.simpleMessage("edit"),
         "email": MessageLookupByLibrary.simpleMessage("E -posta"),
@@ -97,6 +107,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Özel Değer Girin"),
         "enter_new_item":
             MessageLookupByLibrary.simpleMessage("Yeni öğe girin"),
+        "enter_value_minus":
+            MessageLookupByLibrary.simpleMessage("Enter value Minus"),
+        "enter_value_plus":
+            MessageLookupByLibrary.simpleMessage("Enter value Plus"),
         "enter_weight": MessageLookupByLibrary.simpleMessage("Enter Weight"),
         "error": MessageLookupByLibrary.simpleMessage("Hata"),
         "error_404": MessageLookupByLibrary.simpleMessage("Hata 404"),
@@ -105,8 +119,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "evening": MessageLookupByLibrary.simpleMessage("Akşam"),
         "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(
             "Failed to load invoice details"),
+        "failed_to_save_data":
+            MessageLookupByLibrary.simpleMessage("Failed to save data:"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("Görüntü yükleyemedi"),
+        "falcons_red": MessageLookupByLibrary.simpleMessage("kırmızı"),
         "final_total": MessageLookupByLibrary.simpleMessage("Final Total"),
         "first_name": MessageLookupByLibrary.simpleMessage("İlk adı"),
         "forgot_password":
@@ -116,6 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "full_name_english":
             MessageLookupByLibrary.simpleMessage("Full Name (English)"),
         "go_to_page": MessageLookupByLibrary.simpleMessage("Ana sayfaya git"),
+        "grye": MessageLookupByLibrary.simpleMessage("Gümüş"),
         "habl": MessageLookupByLibrary.simpleMessage("gebelik"),
         "has_already_been_scanned":
             MessageLookupByLibrary.simpleMessage("zaten tarandı."),
@@ -123,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "id": MessageLookupByLibrary.simpleMessage("İD"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("Resim başarıyla yüklendi"),
+        "input": MessageLookupByLibrary.simpleMessage("Input"),
         "invalid_code_scanned_and_removed":
             MessageLookupByLibrary.simpleMessage(
                 "Geçersiz kod tarandı ve kaldırıldı"),
@@ -153,9 +172,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "name_in_english":
             MessageLookupByLibrary.simpleMessage("Name in English"),
         "navy_blue": MessageLookupByLibrary.simpleMessage("Lacivert"),
+        "negative_value":
+            MessageLookupByLibrary.simpleMessage("Negative Value"),
         "new1": MessageLookupByLibrary.simpleMessage("Yeni"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("Hesabınız yok mu?"),
+        "no_clients": MessageLookupByLibrary.simpleMessage("No clients"),
         "no_data_found":
             MessageLookupByLibrary.simpleMessage("Veri bulunamadı."),
         "no_data_found_for_this_code": MessageLookupByLibrary.simpleMessage(
@@ -163,11 +185,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_data_to_send":
             MessageLookupByLibrary.simpleMessage("Gönderecek veri yok"),
         "no_dues": MessageLookupByLibrary.simpleMessage("No dues"),
+        "no_invoice_available":
+            MessageLookupByLibrary.simpleMessage("No invoice available"),
         "no_invoice_id_provided":
             MessageLookupByLibrary.simpleMessage("No Invoice ID provided"),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("TAMAM"),
+        "output": MessageLookupByLibrary.simpleMessage("Output"),
         "page": MessageLookupByLibrary.simpleMessage("Sayfa"),
         "page_not_found":
             MessageLookupByLibrary.simpleMessage("Sayfa bulunamadı"),
@@ -205,7 +230,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Products Table"),
         "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Miktar"),
-        "red": MessageLookupByLibrary.simpleMessage("kırmızı"),
         "register": MessageLookupByLibrary.simpleMessage("Kayıt olmak"),
         "riza": MessageLookupByLibrary.simpleMessage("Riza"),
         "sablah": MessageLookupByLibrary.simpleMessage("Kardeşler"),
@@ -213,6 +237,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "save_and_send_data":
             MessageLookupByLibrary.simpleMessage("Veri Kaydet ve Gönder"),
         "save_invoice": MessageLookupByLibrary.simpleMessage("Fatura Kaydet"),
+        "save_value": MessageLookupByLibrary.simpleMessage("Save Value"),
         "saved_successfully_with": MessageLookupByLibrary.simpleMessage(
             "Kimlik ile başarıyla kaydedilen öğe:"),
         "scan": MessageLookupByLibrary.simpleMessage("Taramak"),
@@ -227,6 +252,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_client": MessageLookupByLibrary.simpleMessage("Select Client"),
         "select_items": MessageLookupByLibrary.simpleMessage("Select Items"),
         "select_months": MessageLookupByLibrary.simpleMessage("Select Months"),
+        "select_operation_type":
+            MessageLookupByLibrary.simpleMessage("Select Operation Type"),
         "send": MessageLookupByLibrary.simpleMessage("Göndermek"),
         "shanta": MessageLookupByLibrary.simpleMessage("çanta"),
         "shift": MessageLookupByLibrary.simpleMessage("Vardiya"),
@@ -234,7 +261,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Nakliye ücretleri"),
         "show_full_repository_content": MessageLookupByLibrary.simpleMessage(
             "Show full repository content"),
-        "silver": MessageLookupByLibrary.simpleMessage("Gümüş"),
         "sold": MessageLookupByLibrary.simpleMessage("Satılmış"),
         "sub_total": MessageLookupByLibrary.simpleMessage("Alt Toplam"),
         "switch_to_quantity":
@@ -242,11 +268,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "switch_to_weight":
             MessageLookupByLibrary.simpleMessage("Switch to weight"),
         "tax": MessageLookupByLibrary.simpleMessage("Vergi"),
+        "terms_and_conditions": MessageLookupByLibrary.simpleMessage(
+            "Kalite Garantisi: Şirket, tekstil ürünlerinin (dokuma şerit) fabrikadan çıkış tarihinden itibaren 7 gün boyunca kalitesini garanti eder, ancak ürünün fabrikamızdan çıktığını kanıtlamanız şarttır. Kaliteyle ilgili herhangi bir sorun durumunda, şikayetlerin garanti süresi içinde hemen bildirilmesi gerekmektedir.\nGaranti İstisnaları: Şirket, kötü kullanım, uygun olmayan depolama veya teslimattan sonra üründe yapılan değişikliklerden kaynaklanan hasarları sorumlu değildir. Bu, müşteri tarafından teslim alındıktan sonra üründe yapılan herhangi bir değişikliği içerir.\nKalite Şikayetleri: Fabrika, garanti süresi sona erdikten sonra kalite veya uyumlulukla ilgili herhangi bir talebi reddetme hakkını saklı tutar. Garanti süresi sonrasında yapılan talepler değerlendirilmeyecektir.\nTeklif ve Fiyatlar: Teklifler, fatura tarihinden itibaren 7 gün geçerlidir. Bu süre sonrasında, şirket piyasa değişiklikleri veya maliyetlere göre fiyatları değiştirme hakkını saklı tutar.\nÖn Fatura: Lütfen ön faturanın sadece teklif amaçlı olduğunu unutmayınız."),
         "terms_conditions":
             MessageLookupByLibrary.simpleMessage("Şartlar ve Koşullar"),
         "thank_you_for_your_business":
             MessageLookupByLibrary.simpleMessage("Thank you for your business"),
         "the_code": MessageLookupByLibrary.simpleMessage("Kod"),
+        "the_invoice_will_be_recorded_in_the_database":
+            MessageLookupByLibrary.simpleMessage(
+                "The invoice will be recorded in the database"),
+        "this_value_will_be_added_to_the_customers_account":
+            MessageLookupByLibrary.simpleMessage(
+                "This value will be added to the customer\\s account"),
         "todays_date": MessageLookupByLibrary.simpleMessage("Today\\s Date"),
         "toggle_language": MessageLookupByLibrary.simpleMessage("Dili geçiş"),
         "toggle_theme": MessageLookupByLibrary.simpleMessage("Toggle teması"),
@@ -257,6 +291,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_price": MessageLookupByLibrary.simpleMessage("Toplam fiyat"),
         "total_quantity": MessageLookupByLibrary.simpleMessage("Toplam miktar"),
         "total_weight": MessageLookupByLibrary.simpleMessage("Toplam ağırlık"),
+        "trader_name": MessageLookupByLibrary.simpleMessage("trader Name"),
         "traders_accounts":
             MessageLookupByLibrary.simpleMessage("Traders Accounts"),
         "translate": MessageLookupByLibrary.simpleMessage("tercüme etmek"),
@@ -265,10 +300,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "user": MessageLookupByLibrary.simpleMessage("kullanıcı"),
         "user_data_not_found": MessageLookupByLibrary.simpleMessage(
             "Kullanıcı verileri bulunamadı"),
+        "value": MessageLookupByLibrary.simpleMessage("Value"),
+        "value_added_successfully":
+            MessageLookupByLibrary.simpleMessage("Value added successfully"),
         "view_invoice":
             MessageLookupByLibrary.simpleMessage("Faturayı Görüntüle"),
+        "visit_our_website_and_search_fornmore_modern_designs_and_models":
+            MessageLookupByLibrary.simpleMessage(
+                "Visit our website and search for\\nmore modern designs and models"),
         "weight": MessageLookupByLibrary.simpleMessage("Ağırlık"),
         "width": MessageLookupByLibrary.simpleMessage("Genişlik"),
+        "yarn_added_successfully":
+            MessageLookupByLibrary.simpleMessage("Yarn added successfully!"),
         "yarn_id": MessageLookupByLibrary.simpleMessage("Yarn Id"),
         "yarn_number": MessageLookupByLibrary.simpleMessage("İplik numarası"),
         "yarn_supplier":

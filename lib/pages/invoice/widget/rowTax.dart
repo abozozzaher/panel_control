@@ -22,6 +22,7 @@ DataRow rowTax(
             controller: taxController,
             keyboardType: TextInputType.number,
             style: TextStyle(fontWeight: FontWeight.bold),
+            textDirection: TextDirection.ltr,
             textAlign: TextAlign.center,
             onChanged: (text) {
               if (text.isNotEmpty) {

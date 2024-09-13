@@ -49,10 +49,8 @@ class DatabaseHelper {
     final result =
         await db.query('code_details', where: 'code = ?', whereArgs: [code]);
     if (result.isNotEmpty) {
-      print('Data found: ${result.first}');
       return result.first;
     } else {
-      print('No data found');
       return null;
     }
   }

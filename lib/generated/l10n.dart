@@ -560,26 +560,6 @@ class S {
     );
   }
 
-  /// `ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ`
-  String get company_name {
-    return Intl.message(
-      'ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ',
-      name: 'company_name',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Türkiye Gaziantep Sanayi MAH. 60092`
-  String get addres {
-    return Intl.message(
-      'Türkiye Gaziantep Sanayi MAH. 60092',
-      name: 'addres',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Scan a code`
   String get scan_a_code {
     return Intl.message(
@@ -960,11 +940,11 @@ class S {
     );
   }
 
-  /// `red`
-  String get red {
+  /// `Falcons Red`
+  String get falcons_red {
     return Intl.message(
-      'red',
-      name: 'red',
+      'Falcons Red',
+      name: 'falcons_red',
       desc: '',
       args: [],
     );
@@ -980,11 +960,11 @@ class S {
     );
   }
 
-  /// `Silver`
-  String get silver {
+  /// `grye`
+  String get grye {
     return Intl.message(
-      'Silver',
-      name: 'silver',
+      'grye',
+      name: 'grye',
       desc: '',
       args: [],
     );
@@ -1890,11 +1870,251 @@ class S {
     );
   }
 
+  /// `Garanti BBVA Bank Swift Code Details - TGBATRIS982\nTRY TR97 0006 2000 5050 0006 2909 74 \nUSD TR51 0006 2000 5050 0009 0845 29`
+  String get company_payment_info {
+    return Intl.message(
+      'Garanti BBVA Bank Swift Code Details - TGBATRIS982\nTRY TR97 0006 2000 5050 0006 2909 74 \nUSD TR51 0006 2000 5050 0009 0845 29',
+      name: 'company_payment_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quality Assurance: The Company guarantees the quality of textile products (textile tape) for a period of 7 days from the date of their exit from the factory, provided that it is proven that the goods are issued by our factory. In the event of any quality problems, they must be reported immediately and within the warranty period. Warranty Exclusions: The Company shall not be liable for damages resulting from misuse, improper storage, or modifications made to the product after its delivery. This includes any modification or change to the product made after its receipt by the customer. Quality Claims: The Factory reserves the right to reject any claims related to quality or conformity after the expiry of the aforementioned warranty period. Claims submitted after the warranty period will not be considered. Commissioning and Quotations: Quotations are valid for 7 days from the date of invoice. After this period, the Company reserves the right to adjust prices according to market or cost changes. Proforma Invoice: Please note that the proforma invoice is for demonstration purposes only`
+  String get terms_and_conditions {
+    return Intl.message(
+      'Quality Assurance: The Company guarantees the quality of textile products (textile tape) for a period of 7 days from the date of their exit from the factory, provided that it is proven that the goods are issued by our factory. In the event of any quality problems, they must be reported immediately and within the warranty period. Warranty Exclusions: The Company shall not be liable for damages resulting from misuse, improper storage, or modifications made to the product after its delivery. This includes any modification or change to the product made after its receipt by the customer. Quality Claims: The Factory reserves the right to reject any claims related to quality or conformity after the expiry of the aforementioned warranty period. Claims submitted after the warranty period will not be considered. Commissioning and Quotations: Quotations are valid for 7 days from the date of invoice. After this period, the Company reserves the right to adjust prices according to market or cost changes. Proforma Invoice: Please note that the proforma invoice is for demonstration purposes only',
+      name: 'terms_and_conditions',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Failed to load invoice details`
   String get failed_to_load_invoice_details {
     return Intl.message(
       'Failed to load invoice details',
       name: 'failed_to_load_invoice_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download a copy of the invoice in PDF`
+  String get download_a_copy_of_the_invoice_in_pdf {
+    return Intl.message(
+      'Download a copy of the invoice in PDF',
+      name: 'download_a_copy_of_the_invoice_in_pdf',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Visit our website and search for\nmore modern designs and models`
+  String get visit_our_website_and_search_fornmore_modern_designs_and_models {
+    return Intl.message(
+      'Visit our website and search for\\nmore modern designs and models',
+      name: 'visit_our_website_and_search_fornmore_modern_designs_and_models',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Operation Type`
+  String get select_operation_type {
+    return Intl.message(
+      'Select Operation Type',
+      name: 'select_operation_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Input`
+  String get input {
+    return Intl.message(
+      'Input',
+      name: 'input',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Output`
+  String get output {
+    return Intl.message(
+      'Output',
+      name: 'output',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter value Plus`
+  String get enter_value_plus {
+    return Intl.message(
+      'Enter value Plus',
+      name: 'enter_value_plus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter value Minus`
+  String get enter_value_minus {
+    return Intl.message(
+      'Enter value Minus',
+      name: 'enter_value_minus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This value will be added to the customer\s account`
+  String get this_value_will_be_added_to_the_customers_account {
+    return Intl.message(
+      'This value will be added to the customer\\s account',
+      name: 'this_value_will_be_added_to_the_customers_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `trader Name`
+  String get trader_name {
+    return Intl.message(
+      'trader Name',
+      name: 'trader_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `account`
+  String get account {
+    return Intl.message(
+      'account',
+      name: 'account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Value added successfully`
+  String get value_added_successfully {
+    return Intl.message(
+      'Value added successfully',
+      name: 'value_added_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Value`
+  String get save_value {
+    return Intl.message(
+      'Save Value',
+      name: 'save_value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer List`
+  String get customer_list {
+    return Intl.message(
+      'Customer List',
+      name: 'customer_list',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No clients`
+  String get no_clients {
+    return Intl.message(
+      'No clients',
+      name: 'no_clients',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dues`
+  String get dues {
+    return Intl.message(
+      'Dues',
+      name: 'dues',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No invoice available`
+  String get no_invoice_available {
+    return Intl.message(
+      'No invoice available',
+      name: 'no_invoice_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Value`
+  String get value {
+    return Intl.message(
+      'Value',
+      name: 'value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Negative Value`
+  String get negative_value {
+    return Intl.message(
+      'Negative Value',
+      name: 'negative_value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yarn added successfully!`
+  String get yarn_added_successfully {
+    return Intl.message(
+      'Yarn added successfully!',
+      name: 'yarn_added_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The invoice will be recorded in the database`
+  String get the_invoice_will_be_recorded_in_the_database {
+    return Intl.message(
+      'The invoice will be recorded in the database',
+      name: 'the_invoice_will_be_recorded_in_the_database',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data pro invoice saved successfully`
+  String get data_pro_invoice_saved_successfully {
+    return Intl.message(
+      'Data pro invoice saved successfully',
+      name: 'data_pro_invoice_saved_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to save data:`
+  String get failed_to_save_data {
+    return Intl.message(
+      'Failed to save data:',
+      name: 'failed_to_save_data',
       desc: '',
       args: [],
     );

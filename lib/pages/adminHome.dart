@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:panel_control/pages/account/accountPage.dart';
 
@@ -23,19 +22,6 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-  // دالة لعرض رسالة Toast عند عدم وجود فاتورة
-  void _showNoInvoiceToast() {
-    Fluttertoast.showToast(
-      msg: 'No invoice available',
-      //  toastLength: Toast.LENGTH_SHORT,
-      //  gravity: ToastGravity.BOTTOM,
-      // timeInSecForIosWeb: 1,
-
-      // backgroundColor: Colors.red,
-      //  textColor: Colors.white,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     bool isMobile = MediaQuery.of(context).size.width < 600;

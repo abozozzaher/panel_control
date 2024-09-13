@@ -21,7 +21,7 @@ class ScanItemService {
 
   Future<Map<String, dynamic>?> fetchDataFromFirebase(String url) async {
     try {
-      String baseUrl = 'https://panel-control-company-zaher.web.app/';
+      String baseUrl = 'https://admin.bluedukkan.com/';
       if (!url.startsWith(baseUrl)) {
         throw const FormatException('Invalid URL format');
       }
@@ -59,7 +59,7 @@ class ScanItemService {
   Future<List<Map<String, dynamic>?>?> fetchDataFromFirebaseForInvoice(
       String url) async {
     try {
-      String baseUrl = 'https://panel-control-company-zaher.web.app/';
+      String baseUrl = 'https://admin.bluedukkan.com/';
       if (!url.startsWith(baseUrl)) {
         throw const FormatException('Invalid URL format');
       }

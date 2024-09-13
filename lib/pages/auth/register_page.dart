@@ -89,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
         password: _passwordController.text,
       );
 
-      String imageUrl = 'assets/img/user.jpg';
+      String imageUrl = 'assets/img/user.png';
       if (_image != null || _webImage != null) {
         // Upload image to Firebase Storage
         final storageRef = FirebaseStorage.instance

@@ -7,6 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:panel_control/service/toasts.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -38,9 +39,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
 //  final AddNewItemService addNewItemService = AddNewItemService();
   String? selectedType;
+  String? selectedColor;
   String? selectedWidth;
   String? selectedWeight;
-  String? selectedColor;
   String? selectedYarnNumber;
   String? selectedShift;
   String? selectedQuantity;
@@ -50,9 +51,9 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Uint8List? webImage;
 
   List<List<String>>? types;
+  List<List<String>>? colors;
   List<List<String>>? widths;
   List<List<String>>? weights;
-  List<List<String>>? colors;
   List<List<String>>? yarnNumbers;
   List<List<String>>? shift;
   List<List<String>>? quantity;
@@ -74,22 +75,22 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     // Set default values from Firestore or local defaults if Firestore is empty
     // Load default values from data_lists.dart
     types = dataLists.types;
+    colors = dataLists.colors;
     widths = dataLists.widths;
     weights = dataLists.weights;
-    colors = dataLists.colors;
     yarnNumbers = dataLists.yarnNumbers;
     shift = dataLists.shift;
     quantity = dataLists.quantity;
     length = dataLists.length;
     setState(() {
       selectedType = types!.isNotEmpty ? types![0][0] : null;
+      selectedColor = colors!.isNotEmpty ? null : null;
       selectedWidth = widths!.isNotEmpty ? widths![6][0] : null;
       selectedWeight = weights!.isNotEmpty ? weights![0][0] : null;
-      selectedColor = colors!.isNotEmpty ? null : null;
       selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
       selectedShift = shift!.isNotEmpty ? shift![0][0] : null;
       selectedLength = length!.isNotEmpty ? length![2][0] : null;
-      selectedQuantity = quantity!.isNotEmpty ? quantity![0][0] : null;
+      selectedQuantity = quantity!.isNotEmpty ? quantity![2][0] : null;
 
       productId = generateCode();
     });
@@ -114,16 +115,14 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
   Future<void> addItem() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final userData = userProvider.user;
-    print(userData!.id);
-    print('3333');
     String? imageUrl;
     bool isUploading = false;
     // Check if selectedType is null
     String englishProductId = convertArabicToEnglish(productId);
     if (selectedType == null ||
+        selectedColor == null ||
         selectedWidth == null ||
         selectedWeight == null ||
-        selectedColor == null ||
         selectedYarnNumber == null ||
         selectedShift == null ||
         selectedQuantity == null ||
@@ -172,13 +171,13 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               Text(
                   '${S().type} : ${types!.firstWhere((element) => element[0] == selectedType)[1]}'),
               Text(
+                  '${S().color} : ${colors!.firstWhere((element) => element[0] == selectedColor)[1]}'),
+              Text(
                   '${S().width} : ${widths!.firstWhere((element) => element[0] == selectedWidth)[1]}'
                   'mm'),
               Text(
                   '${S().weight} : ${weights!.firstWhere((element) => element[0] == selectedWeight)[1]}'
                   'g'),
-              Text(
-                  '${S().color} : ${colors!.firstWhere((element) => element[0] == selectedColor)[1]}'),
               Text(
                   '${S().yarn_number} : ${yarnNumbers!.firstWhere((element) => element[0] == selectedYarnNumber)[1]}'
                   'D'),
@@ -221,21 +220,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           // تأخير لمدة 2 ثانية قبل إظهار Snackbar
                           //     await Future.delayed(Duration(seconds: 2));
 
-                          // Show snackbar if image upload succeeds
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Center(
-                                    child:
-                                        Text(S().image_uploaded_successfully))),
-                          );
+                          showToast(S().image_uploaded_successfully);
                         } catch (e) {
                           // Display error message to the user if image upload fails
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Center(
-                                    child: Text(
-                                        '${S().failed_to_upload_image} : $e'))),
-                          );
+
+                          showToast('${S().failed_to_upload_image} : $e');
                           setState(() {
                             isUploading = false;
                           });
@@ -255,13 +244,13 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           .doc(documentPath)
                           .set({
                         'type': selectedType,
+                        'color': selectedColor,
                         'width': selectedWidth,
                         'weight': selectedWeight,
                         'total_weight':
                             (double.parse(selectedWeight.toString()) *
                                     double.parse(selectedQuantity.toString())) /
                                 1000,
-                        'color': selectedColor,
                         'yarn_number': selectedYarnNumber,
                         'productId': englishProductId,
                         'createdAt': DateFormat('yyyy-MM-dd HH:mm:ss', 'en')
@@ -269,11 +258,11 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         'shift': selectedShift,
                         'quantity': selectedQuantity,
                         'length': selectedLength,
-                        'created_by': userData.id,
+                        'created_by': userData!.id,
                         'sale_status': false,
                         if (imageUrl != null) 'image_url': imageUrl,
                         //444
-                        if (imageUrl == null) 'image_url': '',
+                        //  if (imageUrl == null) 'image_url': '',
                       });
 
                       // Generate and print PDF
@@ -283,28 +272,22 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       // تأخير لمدة 2 ثانية قبل إظهار Snackbar
                       //    await Future.delayed(Duration(seconds: 2));
 
-                      // Show a snackbar with the new product ID
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Center(
-                        child: Text(
-                            '${S().saved_successfully_with} $englishProductId'),
-                      )));
+                      showToast(
+                          '${S().saved_successfully_with} $englishProductId');
                       setState(() {
                         selectedType = types!.isNotEmpty ? types![0][0] : null;
-
+                        selectedColor = colors!.isNotEmpty ? null : null;
                         selectedWidth =
                             widths!.isNotEmpty ? widths![6][0] : null;
                         selectedWeight =
                             weights!.isNotEmpty ? weights![0][0] : null;
-                        selectedColor = colors!.isNotEmpty ? null : null;
                         selectedYarnNumber =
                             yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
                         selectedShift = shift!.isNotEmpty ? shift![0][0] : null;
                         selectedQuantity =
-                            quantity!.isNotEmpty ? quantity![0][0] : null;
+                            quantity!.isNotEmpty ? quantity![2][0] : null;
                         selectedLength =
                             length!.isNotEmpty ? length![2][0] : null;
-
                         selectedImage = null;
                         webImage = null;
                         productId = generateCode();
@@ -389,7 +372,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     String englishProductId = convertArabicToEnglish(productId);
     final pdf = pw.Document();
     String productUrl =
-        "https://panel-control-company-zaher.web.app/$englishYearMonth/$englishProductId"; // Replace with your product URL
+        "https://admin.bluedukkan.com/$englishYearMonth/$englishProductId"; // Replace with your product URL
 
     final ttfTr = await rootBundle.load("assets/fonts/Beiruti.ttf");
     final fontBe = pw.Font.ttf(ttfTr);
@@ -520,13 +503,32 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                       children: [
                         pw.Text('Tip : ', style: pw.TextStyle(font: fontBe)),
                         pw.Text(
-                          '$selectedType',
+                          DataLists().translateType('$selectedType'.toString()),
                           textDirection: pw.TextDirection.rtl,
+                          textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(font: fontRo),
                         ),
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'النوع :',
+                          style: pw.TextStyle(font: fontBe),
+                        ),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Renk : ', style: pw.TextStyle(font: fontBe)),
+                        pw.Text(
+                          DataLists()
+                              .translateType('$selectedColor'.toString()),
+                          textDirection: pw.TextDirection.rtl,
+                          textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(font: fontRo),
+                        ),
+                        pw.Text(
+                          textDirection: pw.TextDirection.rtl,
+                          'اللون :',
                           style: pw.TextStyle(font: fontBe),
                         ),
                       ],
@@ -565,22 +567,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         pw.Text(
                           textDirection: pw.TextDirection.rtl,
                           'الوزن :',
-                          style: pw.TextStyle(font: fontBe),
-                        ),
-                      ],
-                    ),
-                    pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pw.Text('Renk : ', style: pw.TextStyle(font: fontBe)),
-                        pw.Text(
-                          '$selectedColor',
-                          textDirection: pw.TextDirection.rtl,
-                          style: pw.TextStyle(font: fontRo),
-                        ),
-                        pw.Text(
-                          textDirection: pw.TextDirection.rtl,
-                          'اللون :',
                           style: pw.TextStyle(font: fontBe),
                         ),
                       ],
@@ -671,7 +657,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               pw.Divider(thickness: 0.2),
               pw.Center(
                 child: pw.Text(
-                  S().company_name,
+                  'ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ',
                   style: pw.TextStyle(
                       font: fontBe,
                       fontSize: 8,
@@ -680,7 +666,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               ),
               pw.Center(
                 child: pw.Text(
-                  S().addres,
+                  'Türkiye Gaziantep Sanayi MAH. 60092',
                   style: pw.TextStyle(
                     fontSize: 6,
                     font: fontBe,
@@ -809,6 +795,20 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 ),
                 buildDropdown(
                   context,
+                  '${S().select} ${S().color}',
+                  selectedColor,
+                  colors!,
+                  (value) {
+                    setState(() {
+                      selectedColor = value;
+                    });
+                  },
+                  '${S().select} ${S().color}',
+                  //     isNumeric: false,
+                  allowAddNew: true, // enable "Add new item" option
+                ),
+                buildDropdown(
+                  context,
                   '${S().select} ${S().width}',
                   selectedWidth,
                   widths!,
@@ -835,20 +835,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                   '${S().select} ${S().weight}',
                   suffixText: 'g', // يمكنك إضافة النص الذي تريده هنا
                   isNumeric: true,
-                  allowAddNew: true, // enable "Add new item" option
-                ),
-                buildDropdown(
-                  context,
-                  '${S().select} ${S().color}',
-                  selectedColor,
-                  colors!,
-                  (value) {
-                    setState(() {
-                      selectedColor = value;
-                    });
-                  },
-                  '${S().select} ${S().color}',
-                  //     isNumeric: false,
                   allowAddNew: true, // enable "Add new item" option
                 ),
                 buildDropdown(

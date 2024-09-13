@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
+import '../../service/toasts.dart';
 
 class ProductPage extends StatelessWidget {
   final String? productId;
@@ -20,8 +23,14 @@ class ProductPage extends StatelessWidget {
         leading: IconButton(
           // زر في الطرف الأيسر
           icon: const Icon(Icons.web),
-          onPressed: () {
-            _launchURL('https://textile.bluedukkan.com'); // تحديد الرابط هنا
+          onPressed: () async {
+            final Uri url = Uri.parse('https://textile.bluedukkan.com');
+            if (await canLaunchUrl(url)) {
+              await launchUrl(url);
+            } else {
+              showToast('Could not launch Url $url');
+              throw 'Could not launch $url';
+            }
           },
         ),
       ),
@@ -56,22 +65,24 @@ class ProductPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text('${S().product_id} : ${productData['productId'] ?? ''}'),
-                  Text('${S().type} : ${productData['type'] ?? ''}',
-                      style: const TextStyle(fontSize: 18)),
-                  Text('${S().width} : ${productData['width']}',
-                      style: const TextStyle(fontSize: 18)),
-                  Text('${S().weight} : ${productData['weight']}',
-                      style: const TextStyle(fontSize: 18)),
-                  Text('${S().color} : ${productData['color']}',
-                      style: const TextStyle(fontSize: 18)),
-                  Text('${S().yarn_number} : ${productData['yarn_number']}',
-                      style: const TextStyle(fontSize: 18)),
-                  //    Text('${S().data} : ${productData['createdAt'].toDate()}',                      style: const TextStyle(fontSize: 18)),
                   Text(
-                      '${S().sale_status} : ${productData['sale_status'] ? S().sold : S().available}',
-                      style: const TextStyle(fontSize: 18)),
-                  Image.network(
-                      productData['image_url'] ?? 'assets/img/loading.gif'),
+                      '${S().type} : ${DataLists().translateType(productData['type'].toString())}'),
+                  Text('${S().width} : ${productData['width']}'),
+                  Text('${S().weight} : ${productData['weight']}'),
+                  Text(
+                      '${S().color} : ${DataLists().translateType(productData['color'].toString())}'),
+                  Text('${S().yarn_number} : ${productData['yarn_number']}D'),
+                  Text(
+                      '${S().sale_status} : ${productData['sale_status'] ? S().sold : S().available}'),
+                  //  Image.network(productData['image_url'] == ''  ? 'assets/img/user.png': productData['image_url']),
+
+                  CachedNetworkImage(
+                    imageUrl: productData['image_url'] ?? '',
+                    placeholder: (context, url) =>
+                        Image.asset('assets/img/user.png'),
+                    errorWidget: (context, url, error) =>
+                        Image.asset('assets/img/user.png'),
+                  ),
                 ],
               );
             },
@@ -79,14 +90,5 @@ class ProductPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  // دالة لفتح رابط الويب
-  void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }

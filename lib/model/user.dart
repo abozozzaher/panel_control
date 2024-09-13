@@ -38,7 +38,7 @@ class UserData {
       lastName: data['lastName']?.toString() ?? '',
       email: data['email']?.toString() ?? '',
       phone: data['phone']?.toString() ?? '',
-      image: data['image']?.toString() ?? 'assets/img/user.jpg',
+      image: data['image']?.toString() ?? 'assets/img/user.png',
       work: data['work']!.toString() == 'true' ? true : false,
       admin: data['admin']!.toString() == 'true' ? true : false,
     );

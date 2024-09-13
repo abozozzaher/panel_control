@@ -19,7 +19,7 @@ Widget buildDropdown(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     mainAxisSize: MainAxisSize.max,
     children: [
-      Text(hintText, style: const TextStyle(color: Colors.grey)),
+      Text(hintText),
       allowAddNew == true
           ? DropdownButton<String>(
               alignment: Alignment.center,
@@ -28,7 +28,6 @@ Widget buildDropdown(
               onChanged: (value) {
                 if (value == 'add_new') {
                   showAddNewDialog(context, (newItem) {
-                    // Add the new item to the list and update the dropdown
                     if (newItem.isNotEmpty && !items.contains(newItem)) {
                       items.add([newItem, newItem]);
                       onChanged(newItem);
@@ -72,8 +71,6 @@ Widget buildDropdown(
                         ? item[1]
                         : item[0];
 
-                print('dddd');
-                print(item);
                 return DropdownMenuItem(
                   value: item[0], // القيمة الأساسية باللغة الإنجليزية
                   child: Center(
@@ -104,6 +101,8 @@ void showAddNewDialog(
         title: Text(S().add_new_item, textAlign: TextAlign.center),
         content: TextField(
           controller: _controller,
+          textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center,
           keyboardType: isNumeric
               ? TextInputType.number
               : TextInputType.text, // فتح لوحة الأرقام أو لوحة النصوص

@@ -14,7 +14,7 @@ Widget buildDropdownProInv(
     required List<List<String>> itemsList,
     required ValueChanged<String?> onChanged}) {
   return DropdownButton<String>(
-    hint: Text(hint, textAlign: TextAlign.center),
+    hint: Center(child: Text(hint)),
     value: selectedValue,
     onChanged: (String? newValue) async {
       if (newValue == "Add New") {
@@ -34,15 +34,13 @@ Widget buildDropdownProInv(
     items: [
       ...itemsList.map((item) {
         return DropdownMenuItem<String>(
-          alignment: Alignment.center,
           value: item[0],
-          child: Text(item[1]),
+          child: Center(child: Text(item[1])),
         );
       }).toList(),
       DropdownMenuItem<String>(
         value: "Add New",
-        child:
-            Center(child: Text(S().add_new_item, textAlign: TextAlign.center)),
+        child: Center(child: Text(S().add_new_item)),
       ),
     ],
   );
@@ -58,13 +56,13 @@ Future<String?> _showAddItemDialog(BuildContext context) async {
         alignment: Alignment.center,
         title: Text(S().add_new_item, textAlign: TextAlign.center),
         content: TextField(
+          textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center,
           onChanged: (value) {
             newItem = value;
           },
           decoration: InputDecoration(hintText: S().enter_new_item),
         ),
-
-        //00000
         actions: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

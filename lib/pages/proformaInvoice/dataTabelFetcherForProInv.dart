@@ -96,7 +96,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
       selectedColor = colors!.isNotEmpty ? colors![0][0] : null;
       selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
       selectedLength = length!.isNotEmpty ? length![2][0] : null;
-      selectedQuantity = quantity!.isNotEmpty ? quantity![1][0] : null;
+      selectedQuantity = quantity!.isNotEmpty ? quantity![2][0] : null;
     });
   }
 
@@ -124,329 +124,338 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
     String totalPrice = (price * (double.tryParse(allQuantity.toString()) ?? 0))
         .toStringAsFixed(2);
     final totalPricesAndTaxAndShippingFee = tax + shippingFees;
-    return Center(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            // عناصر الإدخال
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                buildDropdownProInv(
-                  context,
-                  setState,
-                  hint: '${S().select} ${S().type}',
-                  selectedValue: selectedType,
-                  itemsList: dataLists.types,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedType = value;
-                    });
-                  },
-                ),
-                buildDropdownProInv(
-                  context,
-                  setState,
-                  hint: '${S().select} ${S().color}',
-                  selectedValue: selectedColor,
-                  itemsList: dataLists.colors,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedColor = value;
-                    });
-                  },
-                ),
-                buildDropdownProInv(
-                  context,
-                  setState,
-                  hint: '${S().select} ${S().yarn_number}',
-                  selectedValue: selectedYarnNumber,
-                  itemsList: dataLists.yarnNumbers,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedYarnNumber = value;
-                    });
-                  },
-                ),
-                buildDropdownProInv(
-                  context,
-                  setState,
-                  hint: '${S().select} ${S().length}',
-                  selectedValue: selectedLength,
-                  itemsList: dataLists.length,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedLength = value;
-                    });
-                  },
-                ),
-                buildDropdownProInv(
-                  context,
-                  setState,
-                  hint: '${S().select} ${S().weight}',
-                  selectedValue: selectedWeight,
-                  itemsList: dataLists.weights,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedWeight = value;
-                    });
-                  },
-                ),
-                buildDropdownProInv(
-                  context,
-                  setState,
-                  hint: '${S().select} ${S().quantity}',
-                  selectedValue: selectedQuantity,
-                  itemsList: dataLists.quantity,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedQuantity = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isManualWeightEntry = !isManualWeightEntry;
-                    });
-                  },
-                  child: Text(isManualWeightEntry
-                      ? S().switch_to_quantity
-                      : S().switch_to_weight),
-                ),
-                SizedBox(width: 10),
-                Container(
-                  width: 100,
-                  child: TextField(
-                    controller: allQuantityController,
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.ltr,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        labelText: isManualWeightEntry
-                            ? S().enter_weight
-                            : S().total_quantity,
-                        hintTextDirection: TextDirection.ltr,
-                        floatingLabelAlignment: FloatingLabelAlignment.center),
-                    onChanged: (value) {
-                      setState(() {
-                        allQuantity = value;
-                      });
-                    },
+    return trader == null
+        ? Center(child: Text(S().no_trader_selected))
+        : Center(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  // عناصر الإدخال
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      buildDropdownProInv(
+                        context,
+                        setState,
+                        hint: '${S().select} ${S().type}',
+                        selectedValue: selectedType,
+                        itemsList: dataLists.types,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedType = value;
+                          });
+                        },
+                      ),
+                      buildDropdownProInv(
+                        context,
+                        setState,
+                        hint: '${S().select} ${S().color}',
+                        selectedValue: selectedColor,
+                        itemsList: dataLists.colors,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedColor = value;
+                          });
+                        },
+                      ),
+                      buildDropdownProInv(
+                        context,
+                        setState,
+                        hint: '${S().select} ${S().yarn_number}',
+                        selectedValue: selectedYarnNumber,
+                        itemsList: dataLists.yarnNumbers,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedYarnNumber = value;
+                          });
+                        },
+                      ),
+                      buildDropdownProInv(
+                        context,
+                        setState,
+                        hint: '${S().select} ${S().length}',
+                        selectedValue: selectedLength,
+                        itemsList: dataLists.length,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedLength = value;
+                          });
+                        },
+                      ),
+                      buildDropdownProInv(
+                        context,
+                        setState,
+                        hint: '${S().select} ${S().weight}',
+                        selectedValue: selectedWeight,
+                        itemsList: dataLists.weights,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedWeight = value;
+                          });
+                        },
+                      ),
+                      buildDropdownProInv(
+                        context,
+                        setState,
+                        hint: '${S().select} ${S().quantity}',
+                        selectedValue: selectedQuantity,
+                        itemsList: dataLists.quantity,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedQuantity = value;
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(width: 10),
-                Container(
-                  width: 100,
-                  child: TextField(
-                    controller: priceController,
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.ltr,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        labelText: S().price,
-                        hintTextDirection: TextDirection.ltr,
-                        floatingLabelAlignment: FloatingLabelAlignment.center),
-                    onChanged: (value) {
-                      setState(() {
-                        price = double.tryParse(value) ?? 0.0;
-                      });
-                    },
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            isManualWeightEntry = !isManualWeightEntry;
+                          });
+                        },
+                        child: Text(isManualWeightEntry
+                            ? S().switch_to_quantity
+                            : S().switch_to_weight),
+                      ),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: allQuantityController,
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.ltr,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              labelText: isManualWeightEntry
+                                  ? S().enter_weight
+                                  : S().total_quantity,
+                              hintTextDirection: TextDirection.ltr,
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center),
+                          onChanged: (value) {
+                            setState(() {
+                              allQuantity = value;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: priceController,
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.ltr,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              labelText: S().price,
+                              hintTextDirection: TextDirection.ltr,
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center),
+                          onChanged: (value) {
+                            setState(() {
+                              price = double.tryParse(value) ?? 0.0;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            tableData.add({
+                              'type': selectedType,
+                              'color': selectedColor,
+                              'yarn_number': selectedYarnNumber,
+                              'totalLength': totalLength,
+                              'totalWeight': totalWight,
+                              'totalUnit': totalUnit,
+                              'allQuantity': allQuantity,
+                              'price': price,
+                              'totalPrice': price *
+                                  (double.tryParse(allQuantity.toString()) ??
+                                      0),
+                            });
+                            allQuantityController.clear();
+                            priceController.clear();
+
+                            selectedType =
+                                types!.isNotEmpty ? types![0][0] : null;
+                            selectedWeight =
+                                weights!.isNotEmpty ? weights![0][0] : null;
+                            selectedColor =
+                                colors!.isNotEmpty ? colors![0][0] : null;
+                            selectedYarnNumber = yarnNumbers!.isNotEmpty
+                                ? yarnNumbers![1][0]
+                                : null;
+                            selectedLength =
+                                length!.isNotEmpty ? length![2][0] : null;
+                            selectedQuantity =
+                                quantity!.isNotEmpty ? quantity![2][0] : null;
+                          });
+                        },
+                        child: Text(S().add_to_table),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      tableData.add({
-                        'type': selectedType,
-                        'color': selectedColor,
-                        'yarn_number': selectedYarnNumber,
-                        'totalLength': totalLength,
-                        'totalWeight': totalWight,
-                        'totalUnit': totalUnit,
-                        'allQuantity': allQuantity,
-                        'price': price,
-                        'totalPrice': price *
-                            (double.tryParse(allQuantity.toString()) ?? 0),
+                  DataTable(
+                    columns: columns,
+                    rows: [
+                      firastRowLine(
+                          totalLength,
+                          totalWight,
+                          totalUnit,
+                          totalPrice,
+                          selectedType,
+                          selectedColor,
+                          selectedYarnNumber,
+                          allQuantity,
+                          price),
+                      ...tableData.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final rowData = entry.value;
+                        return DataRow(cells: [
+                          DataCell(Center(
+                              child: Text((index + 1).toString(),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      rowData['type'].toString()),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      rowData['color'].toString()),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      '${rowData['yarn_number'].toString()}D'),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      '${rowData['totalLength'].toStringAsFixed(0)} Mt'),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      '${rowData['totalWeight'].toStringAsFixed(2)} Kg'),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      '${rowData['totalUnit'].toStringAsFixed(0)} ${S().unit}'),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      '${rowData['allQuantity']} ${S().pcs}'),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      '\$${rowData['price'].toStringAsFixed(2)}'),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(Center(
+                              child: Text(
+                                  dataLists.translateType(
+                                      '\$${rowData['totalPrice'].toStringAsFixed(2)}'),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 1))),
+                          DataCell(IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              setState(() {
+                                tableData.remove(rowData);
+                              });
+                            },
+                          )),
+                        ]);
+                      }).toList(),
+
+                      // إضافة صفوف الحسابات
+                      subTotalPriceForProInv(totalPrices),
+
+                      taxForProInv(tax, taxController),
+                      shippingFeesForProInv(
+                          totalPricesAndTaxAndShippingFee, shippingController),
+
+                      duesForProInv(trader, previousDebtsController),
+
+                      finalTotalForProInv(finalTotal, () {
+                        setState(() {});
+                      }),
+                    ],
+                    headingRowColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.amberAccent),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      await generatePdfProInv(
+                          context,
+                          tableData,
+                          widget.invoiceCode,
+                          totalPrices,
+                          taxController.text,
+                          tax,
+                          shippingFees,
+                          previousDebtsController.value,
+                          finalTotal);
+                      setState(() {
+                        selectedType = null;
+                        selectedColor = null;
+                        selectedYarnNumber = null;
+                        selectedLength = null;
+                        selectedWeight = null;
+                        selectedQuantity = null;
+                        allQuantityController.clear();
+                        priceController.clear();
+                        taxController.clear();
+                        shippingController.clear();
+                        tableData.clear();
                       });
-                      allQuantityController.clear();
-                      priceController.clear();
-
-                      selectedType = types!.isNotEmpty ? types![0][0] : null;
-                      selectedWeight =
-                          weights!.isNotEmpty ? weights![0][0] : null;
-                      selectedColor = colors!.isNotEmpty ? colors![0][0] : null;
-                      selectedYarnNumber =
-                          yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
-                      selectedLength =
-                          length!.isNotEmpty ? length![2][0] : null;
-                      selectedQuantity =
-                          quantity!.isNotEmpty ? quantity![1][0] : null;
-                    });
-                  },
-                  child: Text(S().add_to_table),
-                ),
-              ],
+                      context.go('/');
+                    },
+                    label: Text(S().add_proforma_invoice),
+                    icon: Icon(Icons.print_outlined),
+                  ),
+                  SizedBox(height: 50)
+                ],
+              ),
             ),
-            DataTable(
-              columns: columns,
-              rows: [
-                firastRowLine(
-                    totalLength,
-                    totalWight,
-                    totalUnit,
-                    totalPrice,
-                    selectedType,
-                    selectedColor,
-                    selectedYarnNumber,
-                    allQuantity,
-                    price),
-                ...tableData.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final rowData = entry.value;
-                  return DataRow(cells: [
-                    DataCell(Center(
-                        child: Text((index + 1).toString(),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists.translateType(rowData['type'].toString()),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists
-                                .translateType(rowData['color'].toString()),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists.translateType(
-                                '${rowData['yarn_number'].toString()}D'),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists.translateType(
-                                '${rowData['totalLength'].toStringAsFixed(0)} Mt'),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists.translateType(
-                                '${rowData['totalWeight'].toStringAsFixed(2)} Kg'),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists.translateType(
-                                '${rowData['totalUnit'].toStringAsFixed(0)} ${S().unit}'),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists.translateType(
-                                '${rowData['allQuantity']} ${S().pcs}'),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists.translateType(
-                                '\$${rowData['price'].toStringAsFixed(2)}'),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(Center(
-                        child: Text(
-                            dataLists.translateType(
-                                '\$${rowData['totalPrice'].toStringAsFixed(2)}'),
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.ltr,
-                            maxLines: 1))),
-                    DataCell(IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          tableData.remove(rowData);
-                        });
-                      },
-                    )),
-                  ]);
-                }).toList(),
-
-                // إضافة صفوف الحسابات
-                subTotalPriceForProInv(totalPrices),
-
-                taxForProInv(tax, taxController),
-                shippingFeesForProInv(
-                    totalPricesAndTaxAndShippingFee, shippingController),
-
-                duesForProInv(trader, previousDebtsController),
-
-                finalTotalForProInv(finalTotal, () {
-                  setState(() {});
-                }),
-              ],
-              headingRowColor: MaterialStateProperty.resolveWith(
-                  (states) => Colors.amberAccent),
-            ),
-            ElevatedButton.icon(
-              onPressed: () async {
-                await generatePdfProInv(
-                    context,
-                    tableData,
-                    widget.invoiceCode,
-                    totalPrices,
-                    taxController.text,
-                    tax,
-                    shippingFees,
-                    previousDebtsController.value,
-                    finalTotal);
-                setState(() {
-                  selectedType = null;
-                  selectedColor = null;
-                  selectedYarnNumber = null;
-                  selectedLength = null;
-                  selectedWeight = null;
-                  selectedQuantity = null;
-                  allQuantityController.clear();
-                  priceController.clear();
-                  taxController.clear();
-                  shippingController.clear();
-                  tableData.clear();
-                });
-                context.go('/');
-              },
-              label: Text(S().add_proforma_invoice),
-              icon: Icon(Icons.print_outlined),
-            ),
-            SizedBox(height: 50)
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

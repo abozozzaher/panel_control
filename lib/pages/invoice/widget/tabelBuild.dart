@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:panel_control/service/toasts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
@@ -48,13 +49,42 @@ Directionality tableBuilld(
                     content: Text(S()
                         .are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file),
                     actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: Text(S().cancel),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: Text(S().confirm),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.redAccent),
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: Text(
+                                S().cancel,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 5, width: 5),
+                          Expanded(
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.greenAccent),
+                              child: Text(S().confirm,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black)),
+                              onPressed: () async {
+                                Navigator.of(context)
+                                    .pop(true); // Close the dialog
+                                showToast(
+                                    S().the_invoice_will_be_recorded_in_the_database);
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   );
@@ -107,9 +137,8 @@ Directionality tableBuilld(
                   // إعادة بناء الواجهة لتحديث الجدول
                 } catch (e) {
                   // التعامل مع الأخطاء
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Center(child: Text('${S().error} : $e'))),
-                  );
+
+                  showToast('${S().error} : $e');
                 }
               }
             },

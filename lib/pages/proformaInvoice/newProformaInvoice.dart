@@ -8,6 +8,7 @@ import '../../model/clien.dart';
 import '../../provider/invoice_provider.dart';
 import '../../provider/trader_provider.dart';
 import '../../service/invoice_service.dart';
+import '../clien/addClien.dart';
 import 'dataTabelFetcherForProInv.dart';
 
 class NewProformaInvoiceAdd extends StatefulWidget {
@@ -55,22 +56,36 @@ class _NewProformaInvoiceAddState extends State<NewProformaInvoiceAdd> {
             icon: Icon(Icons.home))
       ]),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('${S().invoice_code}: $invoiceCode'),
-              // بيانات التاجر منسدلة اختيار التاجر
-              SizedBox(height: 20),
-              TraderDropdownForInvoice(),
-              SizedBox(height: 20),
-              // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
-              trader == null
-                  ? Center(child: Text(S().no_trader_selected))
-                  : DataTabelFetcherForProInv(invoiceCode),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('${S().invoice_code}: $invoiceCode'),
+            // بيانات التاجر منسدلة اختيار التاجر
+            SizedBox(height: 20),
+            TraderDropdownForInvoice(),
+            SizedBox(height: 20),
+            // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
+            trader == null
+                ? // زر إضافة عميل
+                Center(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          // الانتقال إلى صفحة ClientEntryPage
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ClienEntryPage(
+                                  toggleTheme: widget.toggleTheme,
+                                  toggleLocale: widget.toggleTheme),
+                            ),
+                          );
+                          // هنا تضيف الكود الذي سيتم تنفيذه عند الضغط على الزر
+                        },
+                        child:
+                            Text(S().add_clien, textAlign: TextAlign.center)),
+                  )
+                : DataTabelFetcherForProInv(invoiceCode),
+          ],
         ),
       ),
     );

@@ -11,6 +11,7 @@ import '../../provider/scan_item_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
 import '../../service/scan_item_service.dart';
+import '../../service/toasts.dart';
 import 'Dialogs.dart';
 import 'Scanned_data_table_widgets.dart';
 
@@ -68,8 +69,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                     onPressed: codeController.text.length == 20 &&
                             codeController.text.isNotEmpty
                         ? () {
-                            String baseUrl =
-                                'https://panel-control-company-zaher.web.app/';
+                            String baseUrl = 'https://admin.bluedukkan.com/';
                             String code =
                                 '$baseUrl${codeController.text.substring(0, 4)}-${codeController.text.substring(4, 6)}/${codeController.text}';
 
@@ -95,6 +95,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
                                   scanItemService
                                       .playSound('assets/sound/beep.mp3');
+
+                                  ///555555
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(
@@ -134,7 +136,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
       final String code = scanData.code!;
       final provider = Provider.of<ScanItemProvider>(context, listen: false);
       if (!provider.scannedData.contains(code)) {
-        if (code.contains('https://panel-control-company-zaher.web.app/')) {
+        if (code.contains('https://admin.bluedukkan.com/')) {
           //  setState(() {});
           provider.addScannedData(code); // حفظ الكود في قائمة الكودات الممسوحة
           provider.addCodeDetails(code);
@@ -148,8 +150,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
               provider.saveCodeDetails(code, data); // Save data to the database
 
               // لعرض الكود مختصر بدون الرابط والشهر
-              var urlLength =
-                  'https://panel-control-company-zaher.web.app/'.length;
+              var urlLength = 'https://admin.bluedukkan.com/'.length;
               final displayCode = code.length > urlLength + 8
                   ? code.substring(urlLength + 8)
                   : code;
@@ -162,6 +163,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
                       : Colors.blue,
                 ),
               );
+              // تحتاج تفكير555555
+              showToast('${S().scanned} $displayCode');
             }
           });
         } else {
@@ -243,141 +246,125 @@ class _ScanItemQrState extends State<ScanItemQr> {
       ),
       drawer: AppDrawer(
           toggleTheme: widget.toggleTheme, toggleLocale: widget.toggleLocale),
-      body: SizedBox(
-        width: 600,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              kIsWeb
-                  ? Container()
-                  : SizedBox(
-                      height: 300,
-                      child: QRView(
-                        key: qrKey,
-                        onQRViewCreated: _onQRViewCreated,
-                      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            kIsWeb
+                ? Container()
+                : SizedBox(
+                    height: 300,
+                    child: QRView(
+                      key: qrKey,
+                      onQRViewCreated: _onQRViewCreated,
                     ),
-              Container(
-                color: Colors.red,
-                height: 100, // لتحديد ارتفاع ثابت
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        //ا القسم الأول لعدد والكمية
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                  '${S().total_codes_scanned} : ${provider.scannedData.length} ${S().unit}',
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 13)),
-                              Text(
-                                  '${S().total_quantity} : $totalQuantity ${S().pcs}',
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 13)),
-                            ],
-                          ),
-                        ),
-                        // ا  القسم الثاني لامتار و الوزن
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('${S().total_length} : $totalLength MT',
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 13)),
-                              Text('${S().total_weight} :  $totalWeight Kg',
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 13)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    // القسم الثالث رسالة التاكيد
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                    content: Center(
-                                        child: Text(S()
-                                            .long_press_to_activate_the_button)),
-                                    duration: const Duration(seconds: 2)));
-                              },
-                              onLongPress: provider.scannedData.isNotEmpty &&
-                                      userData!.work == true
-                                  ? () {
-                                      showConfirmDialog(userData);
-                                    }
-                                  : () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Center(
-                                              child: Text(S().no_data_to_send)),
-                                          duration: const Duration(seconds: 2),
-                                        ),
-                                      );
-                                    },
-                              child: Text(S().save_and_send_data),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 150,
-                color: Colors.green,
-                child: SingleChildScrollView(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: provider.scannedData.length,
-                    itemBuilder: (context, index) {
-                      final code = provider.scannedData[index];
-
-                      var urlLength =
-                          'https://panel-control-company-zaher.web.app/'.length;
-                      final displayCode = code.length > urlLength + 8
-                          ? code.substring(urlLength + 8)
-                          : code;
-
-                      return ListTile(
-                        title: Text(displayCode),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              provider.removeData(code);
-                            });
-                          },
-                        ),
-                        onTap: () async {
-                          // طلب البيانات اولا من قاعدة البيانات
-                          final data = provider.codeDetails[code];
-                          scanItemDialogs.showDetailsDialog(
-                              context, code, data);
-                        },
-                      );
-                    },
                   ),
+            Container(
+              color: Colors.red,
+              height: 100, // لتحديد ارتفاع ثابت
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      //ا القسم الأول لعدد والكمية
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                                '${S().total_codes_scanned} : ${provider.scannedData.length} ${S().unit}',
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 13)),
+                            Text(
+                                '${S().total_quantity} : $totalQuantity ${S().pcs}',
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 13)),
+                          ],
+                        ),
+                      ),
+                      // ا  القسم الثاني لامتار و الوزن
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('${S().total_length} : $totalLength MT',
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 13)),
+                            Text('${S().total_weight} :  $totalWeight Kg',
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 13)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  // القسم الثالث رسالة التاكيد
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              showToast(S().long_press_to_activate_the_button);
+                            },
+                            onLongPress: provider.scannedData.isNotEmpty &&
+                                    userData!.work == true
+                                ? () {
+                                    showConfirmDialog(userData);
+                                  }
+                                : () {
+                                    showToast(S().no_data_to_send);
+                                  },
+                            child: Text(S().save_and_send_data),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: 150,
+              color: Colors.green,
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: provider.scannedData.length,
+                  itemBuilder: (context, index) {
+                    final code = provider.scannedData[index];
+
+                    var urlLength = 'https://admin.bluedukkan.com/'.length;
+                    final displayCode = code.length > urlLength + 8
+                        ? code.substring(urlLength + 8)
+                        : code;
+
+                    return ListTile(
+                      title: Text(displayCode),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          setState(() {
+                            provider.removeData(code);
+                          });
+                        },
+                      ),
+                      onTap: () async {
+                        // طلب البيانات اولا من قاعدة البيانات
+                        final data = provider.codeDetails[code];
+                        scanItemDialogs.showDetailsDialog(context, code, data);
+                      },
+                    );
+                  },
                 ),
               ),
-              scanDataTableWidgets.scrollViewScannedDataTableWidget(context),
-            ],
-          ),
+            ),
+            scanDataTableWidgets.scrollViewScannedDataTableWidget(context),
+          ],
         ),
       ),
     );
@@ -408,9 +395,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
         .fold(0, (sum, item) => sum + (item as double));
 
     for (var code in provider.scannedData) {
-      if (code.startsWith('https://panel-control-company-zaher.web.app/')) {
-        String formattedCode = code.replaceFirst(
-            'https://panel-control-company-zaher.web.app/', '');
+      if (code.startsWith('https://admin.bluedukkan.com/')) {
+        String formattedCode =
+            code.replaceFirst('https://admin.bluedukkan.com/', '');
         formattedCode =
             formattedCode.substring(8); // remove the first 7 characters
         formattedScannedData.add(formattedCode);
@@ -447,7 +434,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
                     // تحقق من حالة sale_status لكل مستند
                     salesStatusFalseDocs.forEach((key, value) {
-                      //555
+                      //555 يوجد مشكلة التاكد ان ازالة السطر التالي لم  يعمل مشكلة في الكود
                       //    if (value is Map<String, dynamic> &&
                       if (
                           //
@@ -483,30 +470,6 @@ class _ScanItemQrState extends State<ScanItemQr> {
                         'created_by': userData!.id,
                         'not_attached_to_client': false
                       });
-                      print('666666');
-                      /* تعديل حالة المنتج من فولس الى ترو
-                      // Update sale_status field in each document
-                      formattedScannedData.forEach((remainingPath) {
-                        String monthFolder =
-                            '${remainingPath.substring(0, 4)}-${remainingPath.substring(4, 6)}';
-                        print(monthFolder);
-                        String productId = remainingPath.substring(0);
-                        FirebaseFirestore.instance
-                            .collection('products')
-                            .doc('productsForAllMonths')
-                            .collection(monthFolder)
-                            .where('productId', isEqualTo: productId)
-                            .get()
-                            .then((querySnapshot) {
-                          querySnapshot.docs.forEach((doc) {
-                            doc.reference.update({'sale_status': true});
-                          });
-                        });
-                      });
-                      */
-                      print('111111');
-                      print(formattedScannedData);
-                      print(invalidDocuments);
 
                       setState(() {
                         provider.scannedData.clear();

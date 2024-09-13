@@ -27,7 +27,7 @@ DataRow firastRowLine(
             style: TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
-        child: Text('${selectedYarnNumber}D' ?? "",
+        child: Text('${selectedYarnNumber}D',
             textAlign: TextAlign.center,
             maxLines: 1,
             textDirection: TextDirection.ltr,
