@@ -183,14 +183,6 @@ class InvoiceProvider with ChangeNotifier {
 
   // Clear all controllers and notifiers (if needed)
   void clear() {
-    print('Before clearing1:');
-    print('Price controllers: ${_priceControllers.keys}');
-    print('Total price notifiers: ${_totalPriceNotifiers.keys}');
-    print('Items data: $itemsData');
-    print('Selected item data: $selectedItemData');
-    print('Selection state: $_selectionState');
-    print('Selection state1: $selectionState');
-    print('Prices: $_prices');
     _priceControllers.clear();
     _totalPriceNotifiers.clear();
     itemsData.clear();

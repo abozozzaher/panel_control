@@ -79,8 +79,8 @@ Directionality tableBuilld(
                               onPressed: () async {
                                 Navigator.of(context)
                                     .pop(true); // Close the dialog
-                                showToast(
-                                    S().the_invoice_will_be_recorded_in_the_database);
+                                showToast(S()
+                                    .the_invoice_will_be_recorded_in_the_database);
                               },
                             ),
                           ),
