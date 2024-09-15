@@ -19,6 +19,7 @@ class ScanItemService {
     }
   }
 
+  ///999
   Future<Map<String, dynamic>?> fetchDataFromFirebase(String url) async {
     try {
       String baseUrl = 'https://admin.bluedukkan.com/';

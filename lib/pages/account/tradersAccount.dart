@@ -33,6 +33,7 @@ class _TradersAccountState extends State<TradersAccount> {
     fetchClientsFromFirebase();
   }
 
+  ///9998
   Future<void> fetchClientsFromFirebase() async {
     if (kIsWeb) {
       try {
@@ -66,6 +67,8 @@ class _TradersAccountState extends State<TradersAccount> {
       try {
         List<Map<String, dynamic>> existingClients =
             await databaseHelper.checkClientsInDatabaseTraders();
+        print('sss asas $existingClients');
+
         if (existingClients.isNotEmpty) {
           List<ClienData> clientsFromDb = existingClients.map((client) {
             return ClienData.fromMap(client);
@@ -113,6 +116,7 @@ class _TradersAccountState extends State<TradersAccount> {
         }
       } catch (e) {
         showToast('Error fetching clients $e');
+        print('Error fetching clients $e');
         setState(() {
           isLoading = false;
         });

@@ -200,8 +200,6 @@
     "no_clients": "No clients",
     "dues": "Dues",
     "no_invoice_available": "No invoice available",
-    "value": "Value",
-    "negative_value": "Negative Value",
     "yarn_added_successfully": "Yarn added successfully!",
     "the_invoice_will_be_recorded_in_the_database": "The invoice will be recorded in the database",
     "data_pro_invoice_saved_successfully": "Data pro invoice saved successfully",

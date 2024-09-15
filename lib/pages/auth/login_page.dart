@@ -49,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextField(
                 controller: _passwordController,
-                textAlign: TextAlign.center,
                 decoration: InputDecoration(labelText: S().password),
                 obscureText: true,
               ),

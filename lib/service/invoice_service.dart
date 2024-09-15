@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:panel_control/model/clien.dart';
+import 'package:panel_control/service/toasts.dart';
 
 import '../data/data_lists.dart';
 import '../provider/invoice_provider.dart';
@@ -199,11 +200,13 @@ class InvoiceService {
           .toList();
 
       for (String id in selectedIds) {
-        _firestore.collection('seles').doc(id).update({
-          'not_attached_to_client': true,
-        });
+        _firestore
+            .collection('seles')
+            .doc(id)
+            .update({'not_attached_to_client': true});
       }
     } catch (e) {
+      showToast('Error saving data to Firestore: $e');
       print('Error saving data to Firestore: $e');
       throw e; // أعيد الخطأ للتعامل معه لاحقًا
     }

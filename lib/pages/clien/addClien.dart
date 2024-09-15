@@ -72,14 +72,6 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    /*
-    String country = countryController.text;
-    String state = stateController.text;
-    String city = cityController.text;
-    final userProvider =
-        Provider.of<UserProvider>(context); // Replace with actual user provider
-    final user = userProvider.user; // Assuming you have currentUser
-    */
     final String todayDate =
         DateFormat('dd/MM/yyyy').format(DateTime.now()); // صيغة التاريخ
     bool isMobile = MediaQuery.of(context).size.width < 600;

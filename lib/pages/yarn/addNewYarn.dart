@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:panel_control/service/toasts.dart';
 import 'package:provider/provider.dart';
@@ -303,9 +304,9 @@ class _AddYarnState extends State<AddYarn> {
                                             weightController.clear();
                                             priceController.clear();
                                           });
-
                                           Navigator.of(context)
                                               .pop(); // Close the dialog
+                                          context.go('/');
                                         },
                                       ),
                                     ),

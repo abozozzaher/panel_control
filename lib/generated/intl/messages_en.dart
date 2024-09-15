@@ -175,8 +175,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "name_in_english":
             MessageLookupByLibrary.simpleMessage("Name in English"),
         "navy_blue": MessageLookupByLibrary.simpleMessage("Navy Blue"),
-        "negative_value":
-            MessageLookupByLibrary.simpleMessage("Negative Value"),
         "new1": MessageLookupByLibrary.simpleMessage("New"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("Dont have an account?"),
@@ -304,7 +302,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "user": MessageLookupByLibrary.simpleMessage("user"),
         "user_data_not_found":
             MessageLookupByLibrary.simpleMessage("User data not found"),
-        "value": MessageLookupByLibrary.simpleMessage("Value"),
         "value_added_successfully":
             MessageLookupByLibrary.simpleMessage("Value added successfully"),
         "view_invoice": MessageLookupByLibrary.simpleMessage("View Invoice"),

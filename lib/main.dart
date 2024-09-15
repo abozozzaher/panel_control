@@ -47,18 +47,20 @@ http://localhost:56330/pro-invoices/0912173624
 http://localhost:56330/240009001200040029/invoices/0912174824
 
 
-عمل تجربة للتطبيق قبل الرفع لاني في التعديلات يلي عملتها في المكتب لم تظهر هون
 الوغو الغاء اشارة حماية الملكية
 
 
-عمل تجربة ثم تحديث بنية التطبيق في الويب
 
 اعادة الرفع بستخدام هذه الاكواد فقط
 flutter clean
 flutter build web --web-renderer html --release
 firebase deploy
 
+  ///9997 , 999 تحتاج حفظ البيانات لوكال موبيل وويب
+  ///9998 يعني الويب فقط نحتاج حفظ البيانات في الداتا بيس لوكال
+  ///9999
 تخفيف عدد القراءات من الفايربيس
+
 
 عمل صفحة كشف حساب لكل تاجر ماهي البضاعة التي قام بسحبها
 عمل صفحة يقوم العامل بادخال مدة الانتاج اليومي واقوم بتحديد الساعات المتاحة التي يظهر فيها اضافة 
@@ -122,7 +124,6 @@ add novigator. push . context.go('/'); اريد بناء هذا الشكل
 اضافة نقريتين للخروج
 عمل رول وتاكيد من صلاحية الوصول وعمل روابط بشكل افضل للصفحات
 
-تعديل السناك بار الى توست flutter pub add fluttertoast
 
 
 اضافة شرط في حال كان الكود ممسوح بقائمة ثانية يعطي تنبيه ولا يضاف الى الجدول الا واحد (عمل هذا الشرط لاحقا)
@@ -441,8 +442,8 @@ class _MyAppState extends State<MyApp> {
           fontFamily: 'Beiruti',
           appBarTheme: const AppBarTheme(
             color: Colors.transparent, // لون شريط التطبيق
-            iconTheme: IconThemeData(color: Colors.black87),
-            titleTextStyle: TextStyle(color: Colors.black87, fontSize: 20),
+            iconTheme: IconThemeData(color: Colors.white70),
+            titleTextStyle: TextStyle(color: Colors.white70, fontSize: 20),
             centerTitle: true,
           ),
           colorScheme: ColorScheme.fromSwatch(

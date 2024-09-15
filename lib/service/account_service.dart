@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-import '../generated/l10n.dart';
 import 'exchangeRate_service.dart';
 
 class AccountService {
@@ -24,7 +23,7 @@ class AccountService {
     final traderAccountCollection = FirebaseFirestore.instance
         .collection('cliens')
         .doc(traderId)
-        .collection(S().account);
+        .collection('account');
 
     // البحث عن المستند الأخير بناءً على حقل dues
     final lastDuesSnapshot = await traderAccountCollection

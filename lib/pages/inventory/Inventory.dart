@@ -37,6 +37,7 @@ class _InventoryState extends State<Inventory> {
   String? selectedLength;
 
 // تعديل دالة الفاتش
+  ///9998
   Future<void> fetchProductsData(List<String> months) async {
     try {
       Map<String, Map<String, dynamic>> allProducts = {};
@@ -49,7 +50,6 @@ class _InventoryState extends State<Inventory> {
         // يمكن إنشاء مفتاح فريد لكل مستند بناءً على بيانات المنتج
         keysToCheck.add('$month-key');
       }
-      print('ssss1 $months');
 
       // إذا كان التطبيق يعمل على الويب، نفذ عملية الفاتش مباشرة
       if (kIsWeb) {
@@ -60,7 +60,6 @@ class _InventoryState extends State<Inventory> {
               .collection(month)
               .where('sale_status', isEqualTo: false)
               .get();
-          print('ssssa');
           List<Map<String, dynamic>> monthProducts = snapshot.docs
               .map((doc) => doc.data() as Map<String, dynamic>)
               .toList();
@@ -118,7 +117,6 @@ class _InventoryState extends State<Inventory> {
         existingProducts.forEach((product) {
           allProducts[product['id']] = product;
         });
-        print('ssss2 $existingProducts');
 
         for (String month in months) {
           QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -127,7 +125,6 @@ class _InventoryState extends State<Inventory> {
               .collection(month)
               .where('sale_status', isEqualTo: false)
               .get();
-          print('ssssa');
           List<Map<String, dynamic>> monthProducts = snapshot.docs
               .map((doc) => doc.data() as Map<String, dynamic>)
               .toList();
@@ -334,58 +331,51 @@ class _InventoryState extends State<Inventory> {
                           cells: [
                             DataCell(Center(
                               child: Text(
-                                DataLists()
-                                    .translateType(itemData['type'].toString()),
-                                style: TextStyle(color: Colors.black),
-                              ),
+                                  DataLists().translateType(
+                                      itemData['type'].toString()),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
                             )),
                             DataCell(Center(
                               child: Text(
-                                DataLists().translateType(
-                                    itemData['color'].toString()),
-                                style: TextStyle(color: Colors.black),
-                              ),
+                                  DataLists().translateType(
+                                      itemData['color'].toString()),
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
                             )),
                             DataCell(Center(
                               child: Text(
-                                '${DataLists().translateType(itemData['width'].toString())} mm',
-                                textDirection: TextDirection.ltr,
-                                style: TextStyle(color: Colors.black),
-                              ),
+                                  '${DataLists().translateType(itemData['width'].toString())} mm',
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
                             )),
                             DataCell(Center(
                               child: Text(
-                                '${DataLists().translateType(itemData['yarn_number'].toString())} D',
-                                textDirection: TextDirection.ltr,
-                                style: TextStyle(color: Colors.black),
-                              ),
+                                  '${DataLists().translateType(itemData['yarn_number'].toString())} D',
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
                             )),
                             DataCell(Center(
                               child: Text(
-                                '${DataLists().translateType(itemData['quantity'].toString())} ${S().pcs}',
-                                textDirection: TextDirection.ltr,
-                                style: TextStyle(color: Colors.black),
-                              ),
+                                  '${DataLists().translateType(itemData['quantity'].toString())} ${S().pcs}',
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
                             )),
                             DataCell(Center(
                               child: Text(
-                                '${DataLists().translateType(itemData['length'].toString())} Mt',
-                                textDirection: TextDirection.ltr,
-                                style: TextStyle(color: Colors.black),
-                              ),
+                                  '${DataLists().translateType(itemData['length'].toString())} Mt',
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
                             )),
                             DataCell(Center(
-                              child: Text(
-                                '${itemData['total_weight']} Kg',
-                                textDirection: TextDirection.ltr,
-                                style: TextStyle(color: Colors.black),
-                              ),
+                              child: Text('${itemData['total_weight']} Kg',
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
                             )),
                             DataCell(Center(
-                              child: Text(
-                                '${itemData['scanned_data']}',
-                                style: TextStyle(color: Colors.black),
-                              ),
+                              child: Text('${itemData['scanned_data']}',
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
                             )),
                           ],
                         );

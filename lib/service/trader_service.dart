@@ -5,9 +5,8 @@ import '../data/dataBase.dart';
 class TraderService {
   final DatabaseHelper databaseHelper = DatabaseHelper();
 
-  /// 5555
-  ///
-  ///
+  /// 9997
+
 // لجلب الدين المستحق تم تسجيله فقط في اخر مستند
   Future<double> fetchLastDues(String codeIdClien) async {
     final traderAccountCollection = FirebaseFirestore.instance
@@ -22,13 +21,14 @@ class TraderService {
 
     if (lastDuesSnapshot.docs.isNotEmpty) {
       final lastDuesDoc = lastDuesSnapshot.docs.first;
-      return lastDuesDoc.data()['dues'] ?? 0.0;
+      return (lastDuesDoc.data()['dues'] as num?)?.toDouble() ?? 0.0;
     }
 
     return 0.0;
   }
 
 // لجلب كل بيانات العميل
+  ///9997
   Future<List<Map<String, dynamic>>> fetchAllDues(String codeIdClien) async {
     final traderAccountCollection = FirebaseFirestore.instance
         .collection('cliens')

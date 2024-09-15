@@ -2060,26 +2060,6 @@ class S {
     );
   }
 
-  /// `Value`
-  String get value {
-    return Intl.message(
-      'Value',
-      name: 'value',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Negative Value`
-  String get negative_value {
-    return Intl.message(
-      'Negative Value',
-      name: 'negative_value',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Yarn added successfully!`
   String get yarn_added_successfully {
     return Intl.message(

@@ -140,7 +140,6 @@ class DatabaseHelper {
         where: 'id = ?',
         whereArgs: [key],
       );
-      print('sssss4 $queryResult');
       results.addAll(queryResult);
     }
 

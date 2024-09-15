@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
 import '../../provider/scan_item_provider.dart';
 import '../../service/scan_item_service.dart';
@@ -27,27 +28,43 @@ class ScanDataTableWidgets {
             columns: [
               DataColumn(
                   label: Text(S().type,
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(color: Colors.greenAccent))),
               DataColumn(
                   label: Text(S().color,
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(color: Colors.greenAccent))),
               DataColumn(
                   label: Text(S().width,
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(color: Colors.greenAccent))),
               DataColumn(
                   label: Text(S().yarn_number,
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(color: Colors.greenAccent))),
               DataColumn(
                   label: Text(S().quantity,
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(color: Colors.greenAccent))),
               DataColumn(
                   label: Text(S().length,
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(color: Colors.greenAccent))),
               DataColumn(
                   label: Text('${S().weight} ${S().total}',
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(color: Colors.greenAccent))),
               DataColumn(
                   label: Text('${S().scanned}',
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
                       style: TextStyle(color: Colors.greenAccent))),
             ],
             rows: buildRows(codeDetailes),
@@ -93,31 +110,37 @@ class ScanDataTableWidgets {
       var data = entry.value;
       return DataRow(cells: [
         DataCell(Center(
-          child: Text(data['type'].toString(),
-              style: const TextStyle(color: Colors.black)),
+          child: Text(DataLists().translateType(data['type'].toString()),
+              textAlign: TextAlign.center, textDirection: TextDirection.ltr),
         )),
         DataCell(Center(
-          child: Text(data['color'].toString(),
-              style: const TextStyle(color: Colors.black)),
+          child: Text(DataLists().translateType(data['color'].toString()),
+              textAlign: TextAlign.center, textDirection: TextDirection.ltr),
         )),
         DataCell(Center(
             child: Text('${data['width']} mm',
-                style: const TextStyle(color: Colors.black)))),
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr))),
         DataCell(Center(
             child: Text('${data['yarn_number']} D',
-                style: const TextStyle(color: Colors.black)))),
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr))),
         DataCell(Center(
             child: Text('${data['quantity']} ${S().pcs}',
-                style: const TextStyle(color: Colors.black)))),
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr))),
         DataCell(Center(
             child: Text('${data['length']} Mt',
-                style: const TextStyle(color: Colors.black)))),
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr))),
         DataCell(Center(
             child: Text('${data['total_weight']} Kg',
-                style: const TextStyle(color: Colors.black)))),
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr))),
         DataCell(Center(
             child: Text(data['scanned_data'].toString(),
-                style: const TextStyle(color: Colors.black)))),
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr))),
       ]);
     }).toList();
   }

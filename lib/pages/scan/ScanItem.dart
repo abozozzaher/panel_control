@@ -95,14 +95,9 @@ class _ScanItemQrState extends State<ScanItemQr> {
 
                                   scanItemService
                                       .playSound('assets/sound/beep.mp3');
+                                  showToast(
+                                      '${S().add} ${S().the_code} ${codeController.text}');
 
-                                  ///555555
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            '${S().add} ${S().the_code} ${codeController.text}'),
-                                        backgroundColor: Colors.green),
-                                  );
                                   Navigator.of(context).pop();
                                 }
                               } else {
@@ -157,7 +152,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
               // هذه نهاية الامر السابق لعرض الرابط مختصر
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${S().scanned} $displayCode'),
+                  content: Center(child: Text('${S().scanned} $displayCode')),
                   backgroundColor: scanData.format == BarcodeFormat.qrcode
                       ? Colors.green
                       : Colors.blue,
@@ -273,10 +268,12 @@ class _ScanItemQrState extends State<ScanItemQr> {
                           children: [
                             Text(
                                 '${S().total_codes_scanned} : ${provider.scannedData.length} ${S().unit}',
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 13)),
                             Text(
                                 '${S().total_quantity} : $totalQuantity ${S().pcs}',
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 13)),
                           ],
@@ -288,9 +285,11 @@ class _ScanItemQrState extends State<ScanItemQr> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text('${S().total_length} : $totalLength MT',
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 13)),
                             Text('${S().total_weight} :  $totalWeight Kg',
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 13)),
                           ],

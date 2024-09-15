@@ -172,8 +172,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "name_in_english":
             MessageLookupByLibrary.simpleMessage("Name in English"),
         "navy_blue": MessageLookupByLibrary.simpleMessage("Lacivert"),
-        "negative_value":
-            MessageLookupByLibrary.simpleMessage("Negative Value"),
         "new1": MessageLookupByLibrary.simpleMessage("Yeni"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("Hesabınız yok mu?"),
@@ -300,7 +298,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "user": MessageLookupByLibrary.simpleMessage("kullanıcı"),
         "user_data_not_found": MessageLookupByLibrary.simpleMessage(
             "Kullanıcı verileri bulunamadı"),
-        "value": MessageLookupByLibrary.simpleMessage("Value"),
         "value_added_successfully":
             MessageLookupByLibrary.simpleMessage("Value added successfully"),
         "view_invoice":

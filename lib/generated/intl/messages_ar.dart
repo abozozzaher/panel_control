@@ -145,7 +145,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "id": MessageLookupByLibrary.simpleMessage("ID"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("تم رفع الصورة بنجاح"),
-        "input": MessageLookupByLibrary.simpleMessage("إدخال"),
+        "input": MessageLookupByLibrary.simpleMessage("وارد"),
         "invalid_code_scanned_and_removed":
             MessageLookupByLibrary.simpleMessage(
                 "تم مسح كود غير صالح وتمت إزالته"),
@@ -175,7 +175,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "name_in_english":
             MessageLookupByLibrary.simpleMessage("الاسم بالإنجليزية"),
         "navy_blue": MessageLookupByLibrary.simpleMessage("كحلي"),
-        "negative_value": MessageLookupByLibrary.simpleMessage("قيمة سالبة"),
         "new1": MessageLookupByLibrary.simpleMessage("جديد"),
         "no_account_register":
             MessageLookupByLibrary.simpleMessage("لا تملك حساب؟"),
@@ -194,7 +193,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("لم يتم اختيار تاجر"),
         "ok": MessageLookupByLibrary.simpleMessage("حسنًا"),
-        "output": MessageLookupByLibrary.simpleMessage("إخراج"),
+        "output": MessageLookupByLibrary.simpleMessage("صادر"),
         "page": MessageLookupByLibrary.simpleMessage("صفحة"),
         "page_not_found":
             MessageLookupByLibrary.simpleMessage("الصفحة غير موجودة"),
@@ -299,7 +298,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "user": MessageLookupByLibrary.simpleMessage("مستخدم"),
         "user_data_not_found": MessageLookupByLibrary.simpleMessage(
             "لم يتم العثور على بيانات المستخدم"),
-        "value": MessageLookupByLibrary.simpleMessage("قيمة"),
         "value_added_successfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة القيمة بنجاح"),
         "view_invoice": MessageLookupByLibrary.simpleMessage("عرض الفاتورة"),

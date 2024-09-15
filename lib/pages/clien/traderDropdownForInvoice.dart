@@ -35,6 +35,7 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
     });
   }
 
+////9998
   Future<void> fetchClientsFromFirebase() async {
     if (kIsWeb) {
       // إذا كان المستخدم على الويب
@@ -59,7 +60,6 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
       try {
         List<Map<String, dynamic>> existingClients =
             await databaseHelper.checkClientsInDatabaseTraders();
-        print('ssss3 ${existingClients}');
 
         if (existingClients.isNotEmpty) {
           // إذا كانت البيانات موجودة في قاعدة البيانات المحلية
@@ -86,11 +86,9 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
 
             return ClienData.fromMap(doc.data() as Map<String, dynamic>);
           }).toList();
-          print('ssss2 ');
           // احفظ البيانات في قاعدة البيانات المحلية
           for (var client in clientsFromFirebase) {
             databaseHelper.saveClientToDatabaseTraders(client);
-            print('ssss1 ${client}');
           }
 
           setState(() {

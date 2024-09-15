@@ -18,6 +18,7 @@ class ClienPage extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
+      showToast('Could not launch $url');
       throw 'Could not launch $url';
     }
   }
@@ -26,11 +27,7 @@ class ClienPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          client.fullNameArabic,
-          textAlign: TextAlign.center,
-        ),
-      ),
+          title: Text(client.fullNameArabic, textAlign: TextAlign.center)),
       body: Column(
         children: [
           dues < 0
@@ -54,12 +51,12 @@ class ClienPage extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
-                    child: Text(S().value,
+                    child: Text(S().input,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
-                    child: Text(S().negative_value,
+                    child: Text(S().output,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
@@ -87,7 +84,6 @@ class ClienPage extends StatelessWidget {
                 });
 
                 final clienDataAll = sortedData[index];
-                //   final createdAt = DateFormat('dd/MM/yyyy') .format(DateTime.parse(clienDataAll['createdAt']));
                 final positiveValue =
                     clienDataAll['value'] >= 0 ? clienDataAll['value'] : null;
                 final negativeValue =
@@ -111,10 +107,13 @@ class ClienPage extends StatelessWidget {
                           flex: 2,
                           child: Text(
                               positiveValue != null
-                                  ? positiveValue.toStringAsFixed(2)
+                                  ? '+${positiveValue.toStringAsFixed(2)}'
                                   : '',
                               textDirection: TextDirection.ltr,
-                              textAlign: TextAlign.center)),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold))),
                       Expanded(
                           flex: 2,
                           child: Text(
@@ -122,12 +121,16 @@ class ClienPage extends StatelessWidget {
                                   ? negativeValue.toStringAsFixed(2)
                                   : '',
                               textDirection: TextDirection.ltr,
-                              textAlign: TextAlign.center)),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold))),
                       Expanded(
                           flex: 2,
                           child: Text(dues.toStringAsFixed(2),
                               textDirection: TextDirection.ltr,
-                              textAlign: TextAlign.center)),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold))),
                       Expanded(
                         flex: 2,
                         child: InkWell(
