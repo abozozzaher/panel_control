@@ -63,6 +63,7 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
 
         if (existingClients.isNotEmpty) {
           // إذا كانت البيانات موجودة في قاعدة البيانات المحلية
+          showToast('حصل على البيانات من القاعدة الهاتف');
           setState(() {
             clients = existingClients
                 .map((client) => ClienData.fromMap(client))
@@ -97,6 +98,7 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
           });
         }
       } catch (e) {
+        showToast('Error fetching clients: $e');
         print('Error fetching clients: $e');
         setState(() {
           isLoading = false;
@@ -117,7 +119,7 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
         }
 
         return Container(
-          width: 200,
+          width: 300,
           child: DropdownButton<String>(
               hint: Center(child: Text(S().select_client)),
               isExpanded: true,

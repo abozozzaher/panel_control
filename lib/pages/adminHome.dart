@@ -79,7 +79,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
-                    child: Text(S().account_page, textAlign: TextAlign.center),
+                    child: Text(S().account_page,
+                        textAlign: TextAlign.center, maxLines: 1),
                   ),
                 ),
                 SizedBox(width: 16), // مساحة بين الأزرار

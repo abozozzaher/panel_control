@@ -174,7 +174,8 @@ class _TradersAccountState extends State<TradersAccount> {
                               );
                             },
                             trailing: Text(
-                              '${S().dues}: ${dues.toStringAsFixed(2)}',
+                              '\$${S().dues}: ${dues.toStringAsFixed(2)}',
+                              textDirection: TextDirection.ltr,
                               style: TextStyle(
                                   color: Colors.amber,
                                   fontSize: 18,
