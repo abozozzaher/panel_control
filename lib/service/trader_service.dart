@@ -3,9 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../data/dataBase.dart';
 
 class TraderService {
-  final DatabaseHelper databaseHelper = DatabaseHelper();
-
-  /// 9997
+//  final DatabaseHelper databaseHelper = DatabaseHelper();
 
 // لجلب الدين المستحق تم تسجيله فقط في اخر مستند
   Future<double> fetchLastDues(String codeIdClien) async {
@@ -28,7 +26,7 @@ class TraderService {
   }
 
 // لجلب كل بيانات العميل
-  ///9997
+
   Future<List<Map<String, dynamic>>> fetchAllDues(String codeIdClien) async {
     final traderAccountCollection = FirebaseFirestore.instance
         .collection('cliens')

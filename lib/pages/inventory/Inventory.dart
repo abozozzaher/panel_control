@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:panel_control/generated/l10n.dart';
+import 'package:panel_control/service/toasts.dart';
 
-import '../../data/dataBase.dart';
 import '../../data/data_lists.dart';
 import 'DropdownButton.dart';
 import 'SelectedMonthsDialog.dart'; // Assuming you are using localization strings
-
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Inventory extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -21,7 +19,7 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
-  final DatabaseHelper databaseHelper = DatabaseHelper();
+  // final DatabaseHelper databaseHelper = DatabaseHelper();
   final DataLists dataLists = DataLists();
 
   List<String> selectedMonths = [];
@@ -43,7 +41,6 @@ class _InventoryState extends State<Inventory> {
       Map<String, Map<String, dynamic>> allProducts = {};
       List<String> headers = [];
       List<String> keysToCheck = [];
-      print('ssss0 $keysToCheck');
 
       // إنشاء المفاتيح التي يجب التحقق منها في قاعدة البيانات
       for (String month in months) {
@@ -52,127 +49,57 @@ class _InventoryState extends State<Inventory> {
       }
 
       // إذا كان التطبيق يعمل على الويب، نفذ عملية الفاتش مباشرة
-      if (kIsWeb) {
-        for (String month in months) {
-          QuerySnapshot snapshot = await FirebaseFirestore.instance
-              .collection('products')
-              .doc('productsForAllMonths')
-              .collection(month)
-              .where('sale_status', isEqualTo: false)
-              .get();
-          List<Map<String, dynamic>> monthProducts = snapshot.docs
-              .map((doc) => doc.data() as Map<String, dynamic>)
-              .toList();
+      for (String month in months) {
+        QuerySnapshot snapshot = await FirebaseFirestore.instance
+            .collection('products')
+            .doc('productsForAllMonths')
+            .collection(month)
+            .where('sale_status', isEqualTo: false)
+            .get();
+        List<Map<String, dynamic>> monthProducts = snapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
 
-          if (monthProducts.isNotEmpty && headers.isEmpty) {
-            headers = [
-              (S().type),
-              (S().color),
-              (S().width),
-              (S().yarn_number),
-              (S().quantity),
-              (S().length),
-              (S().total_weight),
-              (S().scanned)
-            ];
-          }
-
-          for (var product in monthProducts) {
-            String key =
-                '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}';
-
-            if (!allProducts.containsKey(key)) {
-              // لم يتم العثور على المنتج في قاعدة البيانات، لذا احضره من Firebase وقم بحفظه في SQLite
-              allProducts[key] = {
-                'yarn_number': product['yarn_number'],
-                'type': product['type'],
-                'color': product['color'],
-                'width': product['width'],
-                'total_weight': 0.0,
-                'quantity': 0,
-                'length': 0,
-                'scanned_data': 0,
-              };
-
-              // تخزين المنتج في SQLite مباشرة إذا كان على الويب
-              databaseHelper.saveProductToDatabaseInventory(
-                  allProducts[key]!, key);
-            }
-
-            allProducts[key]!['total_weight'] +=
-                double.tryParse(product['total_weight'].toString()) ?? 0.0;
-            allProducts[key]!['quantity'] += product['quantity'] is int
-                ? product['quantity']
-                : int.tryParse(product['quantity'].toString()) ?? 0;
-            allProducts[key]!['length'] += product['length'] is int
-                ? product['length']
-                : int.tryParse(product['length'].toString()) ?? 0;
-            allProducts[key]!['scanned_data'] += 1;
-          }
+        if (monthProducts.isNotEmpty && headers.isEmpty) {
+          headers = [
+            (S().type),
+            (S().color),
+            (S().width),
+            (S().yarn_number),
+            (S().quantity),
+            (S().length),
+            (S().total_weight),
+            (S().scanned)
+          ];
         }
-      } else {
-        // إذا لم يكن على الويب، تحقق من وجود البيانات في SQLite
-        List<Map<String, dynamic>> existingProducts =
-            await databaseHelper.checkProductsInDatabaseInventory(keysToCheck);
-        existingProducts.forEach((product) {
-          allProducts[product['id']] = product;
-        });
 
-        for (String month in months) {
-          QuerySnapshot snapshot = await FirebaseFirestore.instance
-              .collection('products')
-              .doc('productsForAllMonths')
-              .collection(month)
-              .where('sale_status', isEqualTo: false)
-              .get();
-          List<Map<String, dynamic>> monthProducts = snapshot.docs
-              .map((doc) => doc.data() as Map<String, dynamic>)
-              .toList();
+        for (var product in monthProducts) {
+          String key =
+              '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}';
 
-          if (monthProducts.isNotEmpty && headers.isEmpty) {
-            headers = [
-              (S().type),
-              (S().color),
-              (S().width),
-              (S().yarn_number),
-              (S().quantity),
-              (S().length),
-              (S().total_weight),
-              (S().scanned)
-            ];
+          if (!allProducts.containsKey(key)) {
+            // لم يتم العثور على المنتج في قاعدة البيانات، لذا احضره من Firebase وقم بحفظه في SQLite
+            allProducts[key] = {
+              'yarn_number': product['yarn_number'],
+              'type': product['type'],
+              'color': product['color'],
+              'width': product['width'],
+              'total_weight': 0.0,
+              'quantity': 0,
+              'length': 0,
+              'scanned_data': 0,
+            };
           }
 
-          for (var product in monthProducts) {
-            String key =
-                '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}';
-
-            if (!allProducts.containsKey(key)) {
-              // لم يتم العثور على المنتج في قاعدة البيانات، لذا احضره من Firebase وقم بحفظه في SQLite
-              allProducts[key] = {
-                'yarn_number': product['yarn_number'],
-                'type': product['type'],
-                'color': product['color'],
-                'width': product['width'],
-                'total_weight': 0.0,
-                'quantity': 0,
-                'length': 0,
-                'scanned_data': 0,
-              };
-
-              databaseHelper.saveProductToDatabaseInventory(
-                  allProducts[key]!, key);
-            }
-
-            allProducts[key]!['total_weight'] +=
-                double.tryParse(product['total_weight'].toString()) ?? 0.0;
-            allProducts[key]!['quantity'] += product['quantity'] is int
-                ? product['quantity']
-                : int.tryParse(product['quantity'].toString()) ?? 0;
-            allProducts[key]!['length'] += product['length'] is int
-                ? product['length']
-                : int.tryParse(product['length'].toString()) ?? 0;
-            allProducts[key]!['scanned_data'] += 1;
-          }
+          allProducts[key]!['total_weight'] +=
+              double.tryParse(product['total_weight'].toString()) ?? 0.0;
+          allProducts[key]!['quantity'] += product['quantity'] is int
+              ? product['quantity']
+              : int.tryParse(product['quantity'].toString()) ?? 0;
+          allProducts[key]!['length'] += product['length'] is int
+              ? product['length']
+              : int.tryParse(product['length'].toString()) ?? 0;
+          allProducts[key]!['scanned_data'] += 1;
         }
       }
 
@@ -181,6 +108,7 @@ class _InventoryState extends State<Inventory> {
         columnHeaders = headers;
       });
     } catch (e) {
+      showToast('Error fetching products: 301');
       print('Error fetching products: $e');
     }
   }
@@ -295,20 +223,20 @@ class _InventoryState extends State<Inventory> {
                   )),
             ),
             if (selectedMonths.isEmpty)
-              const Expanded(
+              Expanded(
                 child: Center(
-                  child: Text('Please select months to see the products.',
+                  child: Text(S().please_select_months_to_see_the_products,
                       textAlign: TextAlign.center),
                 ),
               )
             else if (columnHeaders.isEmpty)
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Selected months have no data.',
+                  Text(S().selected_months_have_no_data,
                       textAlign: TextAlign.center),
-                  Text('Please select different months.',
+                  Text(S().please_select_different_months,
                       textAlign: TextAlign.center),
                 ],
               )

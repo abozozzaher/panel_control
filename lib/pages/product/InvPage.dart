@@ -47,7 +47,7 @@ class _InvoicePageState extends State<InvoicePage> {
       appBar: AppBar(
         title: Text('${S().invoice} ${S().details}'),
         leading: IconButton(
-          icon: Icon(Icons.share),
+          icon: const Icon(Icons.share),
           onPressed: () {
             Share.share('${S().check_out_my_invoice} $linkUrl',
                 subject: S().look_what_i_have);
@@ -63,7 +63,7 @@ class _InvoicePageState extends State<InvoicePage> {
             .get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError ||
               !snapshot.hasData ||
@@ -81,7 +81,7 @@ class _InvoicePageState extends State<InvoicePage> {
 
           return Container(
             alignment: Alignment.topCenter,
-            margin: EdgeInsets.symmetric(horizontal: 50),
+            margin: const EdgeInsets.symmetric(horizontal: 50),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -104,23 +104,22 @@ class _InvoicePageState extends State<InvoicePage> {
                               // alignment: Alignment.centerLeft,
                               child: Text(
                                 S().invoice,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.teal,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 40),
                               ),
                             ),
                             Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(2)),
                                   color: Colors.blueGrey),
-                              padding: EdgeInsets.only(
-                                  left: 40, top: 10, bottom: 10, right: 40),
+                              padding: const EdgeInsets.all(10),
                               alignment: Alignment.center,
-                              height: 50,
+                              height: 60,
                               child: DefaultTextStyle(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 12),
                                 child: Row(
                                   mainAxisAlignment:
@@ -158,14 +157,14 @@ class _InvoicePageState extends State<InvoicePage> {
                           children: [
                             // إضافةنص و خط فاصل
                             Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   border: Border(bottom: BorderSide())),
                               padding:
                                   const EdgeInsets.only(top: 10, bottom: 4),
                               child: Text(
                                 S().blue_textiles,
-                                style:
-                                    TextStyle(fontSize: 20, color: Colors.teal),
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.teal),
                               ),
                             ),
                             Row(
@@ -178,7 +177,7 @@ class _InvoicePageState extends State<InvoicePage> {
                                     padding: const EdgeInsets.only(
                                         bottom: 8, left: 30),
                                     height: 100,
-                                    child: Image(
+                                    child: const Image(
                                         image:
                                             AssetImage('assets/img/logo.png'))),
                               ],
@@ -199,7 +198,7 @@ class _InvoicePageState extends State<InvoicePage> {
                           child: FittedBox(
                             child: Text(
                               ' ${S().final_total} : ${_formatCurrency(data['finalTotal'])}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.teal,
                                   fontStyle: FontStyle.italic),
                             ),
@@ -216,7 +215,7 @@ class _InvoicePageState extends State<InvoicePage> {
                               height: 70,
                               child: Text(
                                 '${S().invoice_to} :',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 12),
                               ),
                             ),
@@ -367,10 +366,9 @@ class _InvoicePageState extends State<InvoicePage> {
                     ),
                   ),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      SizedBox(width: 50),
                       // رسالة الشكر في نهاية الفاتورة
                       Expanded(
                         flex: 2,
@@ -379,7 +377,7 @@ class _InvoicePageState extends State<InvoicePage> {
                           children: [
                             Text(
                               S().thank_you_for_your_business,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -387,7 +385,7 @@ class _InvoicePageState extends State<InvoicePage> {
                               margin: const EdgeInsets.only(top: 20, bottom: 8),
                               child: Text(
                                 '${S().payment_info} :',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.teal,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -395,7 +393,8 @@ class _InvoicePageState extends State<InvoicePage> {
                             ),
                             Text(
                               'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
-                              style: TextStyle(fontSize: 12, wordSpacing: 5),
+                              style:
+                                  const TextStyle(fontSize: 12, wordSpacing: 5),
                             ),
                           ],
                         ),
@@ -404,10 +403,7 @@ class _InvoicePageState extends State<InvoicePage> {
                       Expanded(
                         flex: 1,
                         child: DefaultTextStyle(
-                          style: const TextStyle(
-                            fontSize: 10,
-                            // color: Colors.red,
-                          ),
+                          style: const TextStyle(fontSize: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -420,7 +416,7 @@ class _InvoicePageState extends State<InvoicePage> {
                                       _formatCurrency(data['grandTotalPrice'])),
                                 ],
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -430,7 +426,7 @@ class _InvoicePageState extends State<InvoicePage> {
                                       '${(data['taxs'] * 100).toStringAsFixed(1)}%'),
                                 ],
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -439,7 +435,7 @@ class _InvoicePageState extends State<InvoicePage> {
                                   Text(_formatCurrency(data['shippingFees'])),
                                 ],
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -452,18 +448,21 @@ class _InvoicePageState extends State<InvoicePage> {
                                   Text(_formatCurrency(data['previousDebts'])),
                                 ],
                               ),
-                              Divider(color: Colors.blueGrey),
+                              const Divider(color: Colors.blueGrey),
                               DefaultTextStyle(
-                                style: TextStyle(
-                                  color: Colors.teal,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: const TextStyle(
+                                    color: Colors.teal,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('${S().final_total} :'),
+                                    Text('${S().final_total} :',
+                                        style: TextStyle(
+                                            color: Colors.teal,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
                                     Text(_formatCurrency(data['finalTotal'])),
                                   ],
                                 ),
@@ -472,10 +471,9 @@ class _InvoicePageState extends State<InvoicePage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 50),
                     ],
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   ElevatedButton.icon(
                     onPressed: () async {
                       final Uri url =
@@ -487,20 +485,20 @@ class _InvoicePageState extends State<InvoicePage> {
                       }
                     },
                     label: Text(
-                      S().visit_our_website_and_search_fornmore_modern_designs_and_models,
+                      S().visit_our_website_and_search_for_more_modern_designs_and_models,
                       textAlign: TextAlign.center,
                     ),
-                    icon: Icon(Icons.plagiarism_outlined),
+                    icon: const Icon(Icons.plagiarism_outlined),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
                       data['downloadUrlPdf'];
                     },
                     label: Text(S().download_a_copy_of_the_invoice_in_pdf),
-                    icon: Icon(Icons.print),
+                    icon: const Icon(Icons.print),
                   ),
-                  SizedBox(height: 50)
+                  const SizedBox(height: 50)
                 ],
               ),
             ),

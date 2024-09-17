@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:panel_control/service/toasts.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../generated/l10n.dart';
 
 class ScanItemService {
   final AudioPlayer audioPlayer = AudioPlayer();
@@ -11,7 +14,8 @@ class ScanItemService {
     var status = await Permission.camera.status;
     if (status.isDenied) {
       if (await Permission.camera.request().isGranted) {
-        print('Camera permission granted');
+        print(S().camera_permission_granted);
+        showToast(S().camera_permission_granted);
       }
     }
     if (status.isPermanentlyDenied) {
@@ -111,6 +115,7 @@ class ScanItemService {
       await audioPlayer.setAsset(path);
       await audioPlayer.play();
     } catch (e) {
+      showToast('Error playing sound');
       print('Error playing sound: $e');
     }
   }

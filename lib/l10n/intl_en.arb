@@ -185,7 +185,7 @@
     "terms_and_conditions": "Quality Assurance: The Company guarantees the quality of textile products (textile tape) for a period of 7 days from the date of their exit from the factory, provided that it is proven that the goods are issued by our factory. In the event of any quality problems, they must be reported immediately and within the warranty period. Warranty Exclusions: The Company shall not be liable for damages resulting from misuse, improper storage, or modifications made to the product after its delivery. This includes any modification or change to the product made after its receipt by the customer. Quality Claims: The Factory reserves the right to reject any claims related to quality or conformity after the expiry of the aforementioned warranty period. Claims submitted after the warranty period will not be considered. Commissioning and Quotations: Quotations are valid for 7 days from the date of invoice. After this period, the Company reserves the right to adjust prices according to market or cost changes. Proforma Invoice: Please note that the proforma invoice is for demonstration purposes only",
     "failed_to_load_invoice_details": "Failed to load invoice details",
     "download_a_copy_of_the_invoice_in_pdf": "Download a copy of the invoice in PDF",
-    "visit_our_website_and_search_fornmore_modern_designs_and_models": "Visit our website and search for\\nmore modern designs and models",
+    "visit_our_website_and_search_for_more_modern_designs_and_models": "Visit our website and search for more modern designs and models",
     "select_operation_type": "Select Operation Type",
     "input": "Input",
     "output": "Output",
@@ -203,5 +203,17 @@
     "yarn_added_successfully": "Yarn added successfully!",
     "the_invoice_will_be_recorded_in_the_database": "The invoice will be recorded in the database",
     "data_pro_invoice_saved_successfully": "Data pro invoice saved successfully",
-    "failed_to_save_data": "Failed to save data:"
+    "failed_to_save_data": "Failed to save data:",
+    "get_data_from_phone_base": "Get data from phone base",
+    "error_fetching_clients": "Error fetching clients:",
+    "got_data_from_firebase": "got data from firebase",
+    "you_are_directed_to_the_invoice": "You are directed to the invoice",
+    "data_requested_from_firebase_successfully": "Data requested from Firebase successfully",
+    "data_will_be_recorded_when_internet_connection_is_restored": "Data will be recorded when internet connection is restored.",
+    "an_error_occurred_while_adding_data": "An error occurred while adding data:",
+    "pro_invoice_details": "Pro Invoice Details",
+    "please_select_months_to_see_the_products": "Please select months to see the products.",
+    "selected_months_have_no_data": "Selected months have no data.",
+    "please_select_different_months": "Please select different months.",
+    "camera_permission_granted": "Camera permission granted"
 }

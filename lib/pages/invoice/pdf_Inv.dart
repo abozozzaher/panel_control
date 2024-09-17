@@ -28,15 +28,17 @@ Future<void> generatePdf(
     String invoiceCode,
     InvoiceService invoiceService,
     double grandTotalPriceTaxs) async {
-  final fontTajBold = await PdfGoogleFonts.tajawalBold();
-  final fontTajRegular = await PdfGoogleFonts.tajawalRegular();
-
   final svgFooter = await rootBundle.loadString('assets/img/footer.svg');
   final Uint8List imageLogo = await rootBundle
       .load('assets/img/logo.png')
       .then((data) => data.buffer.asUint8List());
   final fontBeiruti =
       pw.Font.ttf(await rootBundle.load('assets/fonts/Beiruti.ttf'));
+  final fontTajBold = pw.Font.ttf(
+      await rootBundle.load('assets/fonts/Tajawal/Tajawal-Bold.ttf'));
+
+  final fontTajRegular = pw.Font.ttf(
+      await rootBundle.load('assets/fonts/Tajawal/Tajawal-Regular.ttf'));
   // Create a PDF document.
   final doc = pw.Document();
   final trader = Provider.of<TraderProvider>(context, listen: false).trader;
@@ -48,16 +50,8 @@ Future<void> generatePdf(
 
   doc.addPage(
     pw.MultiPage(
-      pageTheme: _buildTheme(
-        context,
-        svgFooter,
-        fontTajBold,
-        fontTajRegular,
-        isRTL,
-        await PdfGoogleFonts.tajawalRegular(),
-        await PdfGoogleFonts.tajawalBold(),
-        await PdfGoogleFonts.robotoItalic(),
-      ),
+      pageTheme:
+          _buildTheme(context, svgFooter, fontTajBold, fontTajRegular, isRTL),
       header: (context) =>
           _buildHeader(context, imageLogo, linkUrl, invoiceCode),
       footer: (context) => _buildFooter(context, linkUrl),
@@ -106,32 +100,23 @@ Future<void> generatePdf(
 }
 
 // تصميم شكل الصفحة
-pw.PageTheme _buildTheme(
-    mat.BuildContext context,
-    String svgFooter,
-    pw.Font fontTajBold,
-    pw.Font fontTajRegular,
-    bool isRTL,
-    pw.Font base,
-    pw.Font bold,
-    pw.Font italic) {
+pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
+    pw.Font fontTajBold, pw.Font fontTajRegular, bool isRTL) {
   return pw.PageTheme(
-    pageFormat: PdfPageFormat(
-      PdfPageFormat.mm * 220,
-      PdfPageFormat.mm * 280,
-    ),
-    theme:
-        pw.ThemeData.withFont(base: base, bold: bold, italic: italic).copyWith(
-      defaultTextStyle:
-          pw.TextStyle(font: fontTajBold, fontFallback: [fontTajRegular]),
-      header0: pw.TextStyle(
-          font: fontTajBold,
-          fontFallback: [fontTajRegular],
-          color: PdfColors.teal,
-          fontWeight: pw.FontWeight.bold),
-    ),
-    buildBackground: (context) =>
-        pw.FullPage(ignoreMargins: true, child: pw.SvgImage(svg: svgFooter)),
+    pageFormat: PdfPageFormat.a4,
+    theme: pw.ThemeData.withFont(base: fontTajRegular, bold: fontTajBold)
+        .copyWith(
+            defaultTextStyle:
+                pw.TextStyle(font: fontTajBold, fontFallback: [fontTajRegular]),
+            header0: pw.TextStyle(
+                font: fontTajBold,
+                fontFallback: [fontTajRegular],
+                color: PdfColors.teal,
+                fontWeight: pw.FontWeight.bold)),
+    buildBackground: (context) => pw.FullPage(
+        ignoreMargins: true,
+        child:
+            pw.SvgImage(svg: svgFooter, alignment: pw.Alignment.bottomCenter)),
     textDirection: isRTL ? pw.TextDirection.rtl : pw.TextDirection.ltr,
     margin: pw.EdgeInsets.all(20),
   );

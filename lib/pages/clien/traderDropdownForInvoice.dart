@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panel_control/service/toasts.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/dataBase.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/trader_provider.dart';
@@ -16,7 +14,7 @@ class TraderDropdownForInvoice extends StatefulWidget {
 }
 
 class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
-  final DatabaseHelper databaseHelper = DatabaseHelper();
+  // final DatabaseHelper databaseHelper = DatabaseHelper();
 
   List<ClienData> clients = [];
   bool isLoading = true;
@@ -35,75 +33,24 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
     });
   }
 
-////9998
   Future<void> fetchClientsFromFirebase() async {
-    if (kIsWeb) {
-      // إذا كان المستخدم على الويب
-      try {
-        QuerySnapshot snapshot =
-            await FirebaseFirestore.instance.collection('cliens').get();
-        setState(() {
-          clients = snapshot.docs.map((doc) {
-            return ClienData.fromMap(doc.data() as Map<String, dynamic>);
-          }).toList();
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('cliens').get();
+      setState(() {
+        clients = snapshot.docs.map((doc) {
+          return ClienData.fromMap(doc.data() as Map<String, dynamic>);
+        }).toList();
+        isLoading = false;
+      });
 
-          isLoading = false;
-        });
-      } catch (e) {
-        print('Error fetching clients: $e');
-        setState(() {
-          isLoading = false;
-        });
-      }
-    } else {
-      // إذا كان المستخدم على الموبايل
-      try {
-        List<Map<String, dynamic>> existingClients =
-            await databaseHelper.checkClientsInDatabaseTraders();
-
-        if (existingClients.isNotEmpty) {
-          // إذا كانت البيانات موجودة في قاعدة البيانات المحلية
-          showToast('حصل على البيانات من القاعدة الهاتف');
-          setState(() {
-            clients = existingClients
-                .map((client) => ClienData.fromMap(client))
-                .toList();
-            isLoading = false;
-          });
-          List<ClienData> clientsFromDb = existingClients.map((client) {
-            return ClienData.fromMap(client);
-          }).toList();
-          setState(() {
-            clients = clientsFromDb;
-            isLoading = false;
-          });
-        } else {
-          // إذا لم تكن البيانات موجودة في قاعدة البيانات المحلية، احضرها من Firebase
-          QuerySnapshot snapshot =
-              await FirebaseFirestore.instance.collection('cliens').get();
-          print('snapshot: $snapshot'); // تحقق من وجود البيانات
-          List<ClienData> clientsFromFirebase = snapshot.docs.map((doc) {
-            print('doc: $doc'); // تحقق من وجود البيانات في كل مستند
-
-            return ClienData.fromMap(doc.data() as Map<String, dynamic>);
-          }).toList();
-          // احفظ البيانات في قاعدة البيانات المحلية
-          for (var client in clientsFromFirebase) {
-            databaseHelper.saveClientToDatabaseTraders(client);
-          }
-
-          setState(() {
-            clients = clientsFromFirebase;
-            isLoading = false;
-          });
-        }
-      } catch (e) {
-        showToast('Error fetching clients: $e');
-        print('Error fetching clients: $e');
-        setState(() {
-          isLoading = false;
-        });
-      }
+      showToast(S().data_requested_from_firebase_successfully);
+    } catch (e) {
+      showToast('${S().error_fetching_clients}: $e');
+      print('${S().error_fetching_clients}: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

@@ -91,6 +91,8 @@ class ClienPage extends StatelessWidget {
                 final dues = clienDataAll['dues'];
                 final invoiceCode = clienDataAll['invoiceCode'];
                 final downloadUrlPdf = clienDataAll['downloadUrlPdf'];
+                String linkUrl =
+                    "https://admin.bluedukkan.com/${client.codeIdClien}/invoices/$invoiceCode";
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -137,7 +139,16 @@ class ClienPage extends StatelessWidget {
                           onTap: () {
                             if (invoiceCode != 'No invoice' &&
                                 downloadUrlPdf != null) {
-                              showToast('You are directed to the invoice');
+                              showToast(S().you_are_directed_to_the_invoice);
+                              _launchURL(linkUrl);
+                            } else {
+                              showToast(S().no_invoice_available);
+                            }
+                          },
+                          onLongPress: () {
+                            if (invoiceCode != 'No invoice' &&
+                                downloadUrlPdf != null) {
+                              showToast(S().you_are_directed_to_the_invoice);
                               _launchURL(downloadUrlPdf);
                             } else {
                               showToast(S().no_invoice_available);

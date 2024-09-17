@@ -261,16 +261,16 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         'created_by': userData!.id,
                         'sale_status': false,
                         if (imageUrl != null) 'image_url': imageUrl,
-                        //444
-                        //  if (imageUrl == null) 'image_url': '',
                       });
-
+                      // التحقق من حالة الشبكة
+                      bool isOnline = await isNetworkAvailable();
+                      if (!isOnline) {
+                        showToast(S()
+                            .data_will_be_recorded_when_internet_connection_is_restored);
+                      }
                       // Generate and print PDF
                       await generateAndPrintPDF(
                           englishProductId, imageUrl, englishYearMonth);
-
-                      // تأخير لمدة 2 ثانية قبل إظهار Snackbar
-                      //    await Future.delayed(Duration(seconds: 2));
 
                       showToast(
                           '${S().saved_successfully_with} $englishProductId');
@@ -376,7 +376,8 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
     final ttfTr = await rootBundle.load("assets/fonts/Beiruti.ttf");
     final fontBe = pw.Font.ttf(ttfTr);
-    final fontRo = await PdfGoogleFonts.tajawalBold();
+    final fontRo = pw.Font.ttf(
+        await rootBundle.load('assets/fonts/Tajawal/Tajawal-Bold.ttf'));
 
     DateTime now = DateTime.now();
 

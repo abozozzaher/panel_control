@@ -45,6 +45,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "afternoon": MessageLookupByLibrary.simpleMessage("Afternoon"),
         "an_error_occurred_while_adding": MessageLookupByLibrary.simpleMessage(
             "An error occurred while adding"),
+        "an_error_occurred_while_adding_data":
+            MessageLookupByLibrary.simpleMessage(
+                "An error occurred while adding data:"),
         "application_management_page":
             MessageLookupByLibrary.simpleMessage("Application management page"),
         "are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file":
@@ -57,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "burnt_brown": MessageLookupByLibrary.simpleMessage("Burnt Brown"),
         "button": MessageLookupByLibrary.simpleMessage("Button"),
         "camel": MessageLookupByLibrary.simpleMessage("camel"),
+        "camera_permission_granted":
+            MessageLookupByLibrary.simpleMessage("Camera permission granted"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "check_out_my_invoice":
             MessageLookupByLibrary.simpleMessage("check out my invoice"),
@@ -90,6 +95,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "data_pro_invoice_saved_successfully":
             MessageLookupByLibrary.simpleMessage(
                 "Data pro invoice saved successfully"),
+        "data_requested_from_firebase_successfully":
+            MessageLookupByLibrary.simpleMessage(
+                "Data requested from Firebase successfully"),
+        "data_will_be_recorded_when_internet_connection_is_restored":
+            MessageLookupByLibrary.simpleMessage(
+                "Data will be recorded when internet connection is restored."),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "delett": MessageLookupByLibrary.simpleMessage("delet"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
@@ -117,6 +128,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "error_404": MessageLookupByLibrary.simpleMessage("Error 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("Error Code"),
+        "error_fetching_clients":
+            MessageLookupByLibrary.simpleMessage("Error fetching clients:"),
         "error_occurred":
             MessageLookupByLibrary.simpleMessage("error occurred"),
         "evening": MessageLookupByLibrary.simpleMessage("Evening"),
@@ -135,8 +148,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Full Name (Arabic)"),
         "full_name_english":
             MessageLookupByLibrary.simpleMessage("Full Name (English)"),
+        "get_data_from_phone_base":
+            MessageLookupByLibrary.simpleMessage("Get data from phone base"),
         "go_to_page":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
+        "got_data_from_firebase":
+            MessageLookupByLibrary.simpleMessage("got data from firebase"),
         "grye": MessageLookupByLibrary.simpleMessage("grye"),
         "habl": MessageLookupByLibrary.simpleMessage("pregnancy"),
         "has_already_been_scanned":
@@ -219,10 +236,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please fill all fields"),
         "please_select_a_color":
             MessageLookupByLibrary.simpleMessage("Please select a Color."),
+        "please_select_different_months": MessageLookupByLibrary.simpleMessage(
+            "Please select different months."),
+        "please_select_months_to_see_the_products":
+            MessageLookupByLibrary.simpleMessage(
+                "Please select months to see the products."),
         "polyester": MessageLookupByLibrary.simpleMessage("Polyester"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("Previous Debt"),
         "price": MessageLookupByLibrary.simpleMessage("Price"),
         "pro_invoice": MessageLookupByLibrary.simpleMessage("Pro invoice"),
+        "pro_invoice_details":
+            MessageLookupByLibrary.simpleMessage("Pro Invoice Details"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("Product Details"),
         "product_id": MessageLookupByLibrary.simpleMessage("Product ID"),
@@ -255,6 +279,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_months": MessageLookupByLibrary.simpleMessage("Select Months"),
         "select_operation_type":
             MessageLookupByLibrary.simpleMessage("Select Operation Type"),
+        "selected_months_have_no_data": MessageLookupByLibrary.simpleMessage(
+            "Selected months have no data."),
         "send": MessageLookupByLibrary.simpleMessage("Send"),
         "shanta": MessageLookupByLibrary.simpleMessage("bag"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
@@ -305,9 +331,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "value_added_successfully":
             MessageLookupByLibrary.simpleMessage("Value added successfully"),
         "view_invoice": MessageLookupByLibrary.simpleMessage("View Invoice"),
-        "visit_our_website_and_search_fornmore_modern_designs_and_models":
+        "visit_our_website_and_search_for_more_modern_designs_and_models":
             MessageLookupByLibrary.simpleMessage(
-                "Visit our website and search for\\nmore modern designs and models"),
+                "Visit our website and search for more modern designs and models"),
         "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "width": MessageLookupByLibrary.simpleMessage("Width"),
         "yarn_added_successfully":
@@ -316,6 +342,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "yarn_number": MessageLookupByLibrary.simpleMessage("Yarn number"),
         "yarn_supplier": MessageLookupByLibrary.simpleMessage("Yarn Supplier"),
         "yarn_type": MessageLookupByLibrary.simpleMessage("Yarn Type"),
+        "you_are_directed_to_the_invoice": MessageLookupByLibrary.simpleMessage(
+            "You are directed to the invoice"),
         "you_have_some_items_marked_as_sold_out":
             MessageLookupByLibrary.simpleMessage(
                 "You have some items marked as sold out :")

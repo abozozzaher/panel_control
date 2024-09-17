@@ -42,7 +42,8 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pro Invoice Details'),
+        ///454545
+        title: Text(S().pro_invoice_details),
         leading: IconButton(
           icon: Icon(Icons.share),
           onPressed: () {
@@ -58,7 +59,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
             .get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator.adaptive());
           }
           if (snapshot.hasError ||
               !snapshot.hasData ||
@@ -481,7 +482,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                       }
                     },
                     label: Text(
-                      S().visit_our_website_and_search_fornmore_modern_designs_and_models,
+                      S().visit_our_website_and_search_for_more_modern_designs_and_models,
                       textAlign: TextAlign.center,
                     ),
                     icon: Icon(Icons.plagiarism_outlined),

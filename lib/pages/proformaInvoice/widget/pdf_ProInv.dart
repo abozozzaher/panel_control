@@ -25,8 +25,6 @@ Future<void> generatePdfProInv(
   double dues,
   double finalTotal,
 ) async {
-  final fontTajBold = await PdfGoogleFonts.tajawalBold();
-  final fontTajRegular = await PdfGoogleFonts.tajawalRegular();
   String linkUrl = "https://admin.bluedukkan.com/pro-invoices/$invoiceCode";
   final svgFooter = await rootBundle.loadString('assets/img/footer.svg');
   final Uint8List imageLogo = await rootBundle
@@ -34,6 +32,11 @@ Future<void> generatePdfProInv(
       .then((data) => data.buffer.asUint8List());
   final fontBeiruti =
       pw.Font.ttf(await rootBundle.load('assets/fonts/Beiruti.ttf'));
+  final fontTajBold = pw.Font.ttf(
+      await rootBundle.load('assets/fonts/Tajawal/Tajawal-Bold.ttf'));
+
+  final fontTajRegular = pw.Font.ttf(
+      await rootBundle.load('assets/fonts/Tajawal/Tajawal-Regular.ttf'));
 
   // Create a PDF document.
   final doc = pw.Document();
@@ -43,16 +46,8 @@ Future<void> generatePdfProInv(
 
   doc.addPage(
     pw.MultiPage(
-      pageTheme: _buildTheme(
-        context,
-        svgFooter,
-        fontTajBold,
-        fontTajRegular,
-        isRTL,
-        await PdfGoogleFonts.tajawalRegular(),
-        await PdfGoogleFonts.tajawalBold(),
-        await PdfGoogleFonts.robotoItalic(),
-      ),
+      pageTheme:
+          _buildTheme(context, svgFooter, fontTajBold, fontTajRegular, isRTL),
       header: (context) =>
           _buildHeader(context, imageLogo, linkUrl, invoiceCode),
       footer: (context) => _buildFooter(context, linkUrl),
@@ -86,34 +81,25 @@ Future<void> generatePdfProInv(
 }
 
 // تصميم شكل الصفحة
-pw.PageTheme _buildTheme(
-    mat.BuildContext context,
-    String svgFooter,
-    pw.Font fontTajBold,
-    pw.Font fontTajRegular,
-    bool isRTL,
-    pw.Font base,
-    pw.Font bold,
-    pw.Font italic) {
+pw.PageTheme _buildTheme(mat.BuildContext context, String svgFooter,
+    pw.Font fontTajBold, pw.Font fontTajRegular, bool isRTL) {
   return pw.PageTheme(
-    pageFormat: PdfPageFormat(
-      PdfPageFormat.mm * 220,
-      PdfPageFormat.mm * 280,
-    ),
-    theme:
-        pw.ThemeData.withFont(base: base, bold: bold, italic: italic).copyWith(
-      defaultTextStyle:
-          pw.TextStyle(font: fontTajBold, fontFallback: [fontTajRegular]),
-      header0: pw.TextStyle(
-          font: fontTajBold,
-          fontFallback: [fontTajRegular],
-          color: PdfColors.teal,
-          fontWeight: pw.FontWeight.bold),
-    ),
-    buildBackground: (context) =>
-        pw.FullPage(ignoreMargins: true, child: pw.SvgImage(svg: svgFooter)),
+    pageFormat: PdfPageFormat.a4,
+    theme: pw.ThemeData.withFont(base: fontTajRegular, bold: fontTajBold)
+        .copyWith(
+            defaultTextStyle:
+                pw.TextStyle(font: fontTajBold, fontFallback: [fontTajRegular]),
+            header0: pw.TextStyle(
+                font: fontTajBold,
+                fontFallback: [fontTajRegular],
+                color: PdfColors.teal,
+                fontWeight: pw.FontWeight.bold)),
+    buildBackground: (context) => pw.FullPage(
+        ignoreMargins: true,
+        child:
+            pw.SvgImage(svg: svgFooter, alignment: pw.Alignment.bottomCenter)),
     textDirection: isRTL ? pw.TextDirection.rtl : pw.TextDirection.ltr,
-    margin: pw.EdgeInsets.all(20),
+    margin: const pw.EdgeInsets.all(20),
   );
 }
 
@@ -140,15 +126,15 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo, String linkUrl,
                   ),
                 ),
                 pw.Container(
-                  decoration: pw.BoxDecoration(
+                  decoration: const pw.BoxDecoration(
                       borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
                       color: PdfColors.blueGrey900),
-                  padding: pw.EdgeInsets.only(
-                      left: 40, top: 10, bottom: 10, right: 40),
+                  padding: const pw.EdgeInsets.all(10),
                   alignment: pw.Alignment.center,
                   height: 50,
                   child: pw.DefaultTextStyle(
-                    style: pw.TextStyle(color: PdfColors.white, fontSize: 12),
+                    style: const pw.TextStyle(
+                        color: PdfColors.white, fontSize: 12),
                     child: pw.GridView(
                       direction: pw.Axis.horizontal,
                       crossAxisCount: 2,
@@ -171,12 +157,13 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo, String linkUrl,
               children: [
                 // إضافةنص و خط فاصل
                 pw.Container(
-                  decoration: pw.BoxDecoration(
+                  decoration: const pw.BoxDecoration(
                       border: pw.Border(bottom: pw.BorderSide())),
                   padding: const pw.EdgeInsets.only(top: 10, bottom: 4),
                   child: pw.Text(
                     S().blue_textiles,
-                    style: pw.TextStyle(fontSize: 20, color: PdfColors.teal),
+                    style:
+                        const pw.TextStyle(fontSize: 20, color: PdfColors.teal),
                   ),
                 ),
                 pw.Row(
@@ -379,8 +366,8 @@ pw.Widget _contentTable(pw.Context context,
   return pw.TableHelper.fromTextArray(
     border: null,
     cellAlignment: pw.Alignment.center,
-    headerDecoration: pw.BoxDecoration(
-      borderRadius: const pw.BorderRadius.all(pw.Radius.circular(2)),
+    headerDecoration: const pw.BoxDecoration(
+      borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
       color: PdfColors.teal,
     ),
     headerStyle: pw.TextStyle(
@@ -389,7 +376,7 @@ pw.Widget _contentTable(pw.Context context,
         fontWeight: pw.FontWeight.bold,
         font: fontTajBold),
     cellStyle: const pw.TextStyle(fontSize: 10),
-    rowDecoration: pw.BoxDecoration(
+    rowDecoration: const pw.BoxDecoration(
       border: pw.Border(bottom: pw.BorderSide(width: .5)),
     ),
     headers: headers,
@@ -508,8 +495,8 @@ pw.Widget _termsAndConditions(pw.Context context, pw.Font fontTajBold) {
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.Container(
-              decoration:
-                  pw.BoxDecoration(border: pw.Border(top: pw.BorderSide())),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(top: pw.BorderSide())),
               padding: const pw.EdgeInsets.only(top: 10, bottom: 4),
               child: pw.Text(
                 S().terms_conditions,
@@ -519,7 +506,7 @@ pw.Widget _termsAndConditions(pw.Context context, pw.Font fontTajBold) {
             pw.Text(
               S().terms_and_conditions,
               textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(fontSize: 4, lineSpacing: 1),
+              style: const pw.TextStyle(fontSize: 4, lineSpacing: 1),
             ),
           ],
         ),

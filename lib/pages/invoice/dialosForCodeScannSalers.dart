@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:panel_control/generated/l10n.dart';
+import 'package:panel_control/service/toasts.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/dataBase.dart';
 import '../../provider/invoice_provider.dart';
 
 class DialogInvoice extends StatefulWidget {
@@ -12,7 +12,7 @@ class DialogInvoice extends StatefulWidget {
 }
 
 class _DialogInvoiceState extends State<DialogInvoice> {
-  final DatabaseHelper databaseHelper = DatabaseHelper();
+  // final DatabaseHelper databaseHelper = DatabaseHelper();
 
   List<Map<String, dynamic>> items = [];
   Map<String, bool> selectionState = {};
@@ -23,7 +23,6 @@ class _DialogInvoiceState extends State<DialogInvoice> {
     _fetchItems();
   }
 
-//9999
   Future<void> _fetchItems() async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -50,7 +49,8 @@ class _DialogInvoiceState extends State<DialogInvoice> {
         itemsData = {for (var item in items) item['codeSales'] as String: item};
       });
     } catch (e) {
-      print('Error fetching items: $e');
+      showToast('${S().error_fetching_clients}: $e');
+      print('${S().error_fetching_clients}: $e');
     }
   }
 

@@ -20,7 +20,7 @@ class TradersAccount extends StatefulWidget {
 
 class _TradersAccountState extends State<TradersAccount> {
   final TraderService traderService = TraderService();
-  final DatabaseHelper databaseHelper = DatabaseHelper();
+// final DatabaseHelper databaseHelper = DatabaseHelper();
 
   List<ClienData> clients = [];
   bool isLoading = true;
@@ -35,6 +35,7 @@ class _TradersAccountState extends State<TradersAccount> {
 
   ///9998
   Future<void> fetchClientsFromFirebase() async {
+    /*
     if (kIsWeb) {
       try {
         QuerySnapshot snapshot =
@@ -57,8 +58,10 @@ class _TradersAccountState extends State<TradersAccount> {
           clients = fetchedClients;
           isLoading = false;
         });
+        showToast(S().data_requested_from_firebase_successfully);
       } catch (e) {
-        print('Error fetching clients: $e');
+        showToast('${S().error_fetching_clients} $e');
+        print('${S().error_fetching_clients} $e');
         setState(() {
           isLoading = false;
         });
@@ -70,6 +73,8 @@ class _TradersAccountState extends State<TradersAccount> {
         print('sss asas $existingClients');
 
         if (existingClients.isNotEmpty) {
+          showToast(S().get_data_from_phone_base);
+
           List<ClienData> clientsFromDb = existingClients.map((client) {
             return ClienData.fromMap(client);
           }).toList();
@@ -115,12 +120,43 @@ class _TradersAccountState extends State<TradersAccount> {
           });
         }
       } catch (e) {
-        showToast('Error fetching clients $e');
-        print('Error fetching clients $e');
+        showToast('${S().error_fetching_clients} $e');
+        print('${S().error_fetching_clients} $e');
+
         setState(() {
           isLoading = false;
         });
       }
+    }
+    */
+    try {
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('cliens').get();
+      List<ClienData> fetchedClients = snapshot.docs.map((doc) {
+        return ClienData.fromMap(doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      for (var client in fetchedClients) {
+        double lastDues = await traderService.fetchLastDues(client.codeIdClien);
+        clientDues[client.codeIdClien] = lastDues; // حفظ المستحقات الأخيرة
+
+        List<Map<String, dynamic>> allDues =
+            await traderService.fetchAllDues(client.codeIdClien);
+        clientAllData[client.codeIdClien] = allDues; // حفظ جميع المستحقات
+      }
+
+      setState(() {
+        clients = fetchedClients;
+        isLoading = false;
+      });
+
+      showToast(S().data_requested_from_firebase_successfully);
+    } catch (e) {
+      showToast('${S().error_fetching_clients} $e');
+      print('${S().error_fetching_clients} $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -135,12 +171,7 @@ class _TradersAccountState extends State<TradersAccount> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                        color: Colors.amber,
-                        //    height: 100,
-                        // 454545
-                        child: Text('هذا لتحويله الى بحث',
-                            textAlign: TextAlign.center)),
+                    Container(color: Colors.amber, width: 300),
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
@@ -174,10 +205,12 @@ class _TradersAccountState extends State<TradersAccount> {
                               );
                             },
                             trailing: Text(
-                              '\$${S().dues}: ${dues.toStringAsFixed(2)}',
+                              //  '${S().dues}: ${dues.toStringAsFixed(2)}\$',
+                              dues.toStringAsFixed(2),
                               textDirection: TextDirection.ltr,
+                              textAlign: TextAlign.end,
                               style: TextStyle(
-                                  color: Colors.amber,
+                                  color: dues > -1 ? Colors.green : Colors.red,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             ),

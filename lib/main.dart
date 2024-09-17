@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:panel_control/pages/auth/register_page.dart';
+
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +38,15 @@ void main() async {
       storageBucket: "panel-control-company-zaher.appspot.com",
     ),
   );
+
+  // تفعيل التخزين المؤقت عند بدء التطبيق
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  firestore.settings = const Settings(
+    persistenceEnabled: true, // تفعيل التخزين المؤقت
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+  );
 /*
+ 
 
 
 python3 update_translations.py
@@ -49,17 +60,12 @@ http://localhost:56330/240009001200040029/invoices/0912174824
 
 الوغو الغاء اشارة حماية الملكية
 
-
-
 اعادة الرفع بستخدام هذه الاكواد فقط
 flutter clean
 flutter build web --web-renderer html --release
 firebase deploy
 
-  ///9997 , 999 تحتاج حفظ البيانات لوكال موبيل وويب
-  ///9998 يعني الويب فقط نحتاج حفظ البيانات في الداتا بيس لوكال
-  ///9999
-تخفيف عدد القراءات من الفايربيس
+
 
 
 عمل صفحة كشف حساب لكل تاجر ماهي البضاعة التي قام بسحبها
@@ -166,7 +172,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.system;
-  Locale _locale = const Locale('en');
+  Locale _locale = const Locale('ar');
 
   @override
   void initState() {

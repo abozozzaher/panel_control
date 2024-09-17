@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 import 'dart:convert';
 
 import '../model/clien.dart';
-
+/*
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._internal();
   factory DatabaseHelper() => instance;
@@ -170,6 +170,7 @@ class DatabaseHelper {
     print('ssss6 : $id');
   }
 
+// لم اعد استخدم ماكتبة حفظ البيانات التاجر في قاعدة البيانات المحلية
 // لحفظ معلومات من التاجر
   Future<Database> _openDatabaseTraders() async {
     return openDatabase(
@@ -181,6 +182,13 @@ class DatabaseHelper {
       },
       version: 1,
     );
+  }
+
+  Future<void> deleteDatabaseTraders() async {
+    final dbPath = await getDatabasesPath();
+    final databasePath = join(dbPath, 'traders_database.db');
+    await databaseFactory.deleteDatabase(databasePath);
+    print(databasePath);
   }
 
   Future<List<Map<String, dynamic>>> checkClientsInDatabaseTraders() async {
@@ -198,3 +206,5 @@ class DatabaseHelper {
     print('Data saved traders : $clientData');
   }
 }
+
+*/

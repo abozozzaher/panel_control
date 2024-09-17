@@ -47,6 +47,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "afternoon": MessageLookupByLibrary.simpleMessage("بعد الظهر"),
         "an_error_occurred_while_adding":
             MessageLookupByLibrary.simpleMessage("حدث خطأ أثناء الإضافة"),
+        "an_error_occurred_while_adding_data":
+            MessageLookupByLibrary.simpleMessage(
+                "حدث خطأ أثناء إضافة البيانات:"),
         "application_management_page":
             MessageLookupByLibrary.simpleMessage("صفحة إدارة التطبيقات"),
         "are_you_sure_you_want_to_record_the_data_and_view_the_pdf_file":
@@ -60,6 +63,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "burnt_brown": MessageLookupByLibrary.simpleMessage("بني محروق"),
         "button": MessageLookupByLibrary.simpleMessage("زر"),
         "camel": MessageLookupByLibrary.simpleMessage("جملي"),
+        "camera_permission_granted": MessageLookupByLibrary.simpleMessage(
+            "تم منح إذن الوصول إلى الكاميرا"),
         "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "check_out_my_invoice":
             MessageLookupByLibrary.simpleMessage("تفقد فاتورتي"),
@@ -92,6 +97,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "data_pro_invoice_saved_successfully":
             MessageLookupByLibrary.simpleMessage(
                 "تم حفظ نموذج بيانات الفاتورة بنجاح"),
+        "data_requested_from_firebase_successfully":
+            MessageLookupByLibrary.simpleMessage(
+                "تم طلب البيانات من Firebase بنجاح"),
+        "data_will_be_recorded_when_internet_connection_is_restored":
+            MessageLookupByLibrary.simpleMessage(
+                "سيتم تسجيل البيانات عند استعادة الاتصال بالإنترنت."),
         "date": MessageLookupByLibrary.simpleMessage("تاريخ"),
         "details": MessageLookupByLibrary.simpleMessage("تفاصيل"),
         "download_a_copy_of_the_invoice_in_pdf":
@@ -118,6 +129,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "error": MessageLookupByLibrary.simpleMessage("خطأ"),
         "error_404": MessageLookupByLibrary.simpleMessage("خطأ 404"),
         "error_code": MessageLookupByLibrary.simpleMessage("كود خطأ"),
+        "error_fetching_clients":
+            MessageLookupByLibrary.simpleMessage("خطأ جلب العملاء:"),
         "error_occurred": MessageLookupByLibrary.simpleMessage("حدث خطأ"),
         "evening": MessageLookupByLibrary.simpleMessage("مسائي"),
         "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(
@@ -135,8 +148,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الاسم الكامل (بالعربية)"),
         "full_name_english":
             MessageLookupByLibrary.simpleMessage("الاسم الكامل (بالإنجليزية)"),
+        "get_data_from_phone_base": MessageLookupByLibrary.simpleMessage(
+            "احصل على بيانات من قاعدة الهاتف"),
         "go_to_page":
             MessageLookupByLibrary.simpleMessage("انتقل إلى الصفحة الرئيسية"),
+        "got_data_from_firebase": MessageLookupByLibrary.simpleMessage(
+            "تم الحصول على بيانات من Firebase"),
         "grye": MessageLookupByLibrary.simpleMessage("فضي"),
         "habl": MessageLookupByLibrary.simpleMessage("حبلة"),
         "has_already_been_scanned":
@@ -220,10 +237,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("يرجى ملء جميع الحقول"),
         "please_select_a_color":
             MessageLookupByLibrary.simpleMessage("يرجى اختيار اللون."),
+        "please_select_different_months":
+            MessageLookupByLibrary.simpleMessage("يرجى تحديد أشهر مختلفة."),
+        "please_select_months_to_see_the_products":
+            MessageLookupByLibrary.simpleMessage(
+                "يرجى تحديد الأشهر لعرض المنتجات."),
         "polyester": MessageLookupByLibrary.simpleMessage("بوليستر"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("الدين السابق"),
         "price": MessageLookupByLibrary.simpleMessage("السعر"),
         "pro_invoice": MessageLookupByLibrary.simpleMessage("فاتورة أولية"),
+        "pro_invoice_details":
+            MessageLookupByLibrary.simpleMessage("تفاصيل الفاتورة الاحترافية"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("تفاصيل المنتج"),
         "product_id": MessageLookupByLibrary.simpleMessage("Id المنتج"),
@@ -253,6 +277,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_months": MessageLookupByLibrary.simpleMessage("اختر الأشهر"),
         "select_operation_type":
             MessageLookupByLibrary.simpleMessage("اختر نوع العملية"),
+        "selected_months_have_no_data": MessageLookupByLibrary.simpleMessage(
+            "الأشهر المحددة لا تحتوي على بيانات."),
         "send": MessageLookupByLibrary.simpleMessage("إرسال"),
         "shanta": MessageLookupByLibrary.simpleMessage("شنطة"),
         "shift": MessageLookupByLibrary.simpleMessage("وردية"),
@@ -301,7 +327,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "value_added_successfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة القيمة بنجاح"),
         "view_invoice": MessageLookupByLibrary.simpleMessage("عرض الفاتورة"),
-        "visit_our_website_and_search_fornmore_modern_designs_and_models":
+        "visit_our_website_and_search_for_more_modern_designs_and_models":
             MessageLookupByLibrary.simpleMessage(
                 "قم بزيارة موقعنا وابحث عن تصاميم ونماذج حديثة"),
         "weight": MessageLookupByLibrary.simpleMessage("الوزن"),
@@ -312,6 +338,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "yarn_number": MessageLookupByLibrary.simpleMessage("نمرة الغزل"),
         "yarn_supplier": MessageLookupByLibrary.simpleMessage("مورد الغزل"),
         "yarn_type": MessageLookupByLibrary.simpleMessage("نوع الغزل"),
+        "you_are_directed_to_the_invoice":
+            MessageLookupByLibrary.simpleMessage("تم توجيهك إلى الفاتورة"),
         "you_have_some_items_marked_as_sold_out":
             MessageLookupByLibrary.simpleMessage(
                 "لديك بعض العناصر التي تم تحديدها على أنها بيعت:")

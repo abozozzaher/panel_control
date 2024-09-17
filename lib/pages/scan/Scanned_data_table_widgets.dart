@@ -13,11 +13,6 @@ class ScanDataTableWidgets {
     final provider = Provider.of<ScanItemProvider>(context);
     final codeDetailes = provider.codeDetails;
 
-    // تأكد من أن البيانات تصل هنا بشكل صحيح
-    print('Code Details: $codeDetailes'); // التحقق من البيانات هنا
-
-    print('Current Time: ${DateTime.now()}');
-    // print('Last Saved Time: ${lastSaved}');
     return Container(
       color: Colors.grey,
       child: SingleChildScrollView(

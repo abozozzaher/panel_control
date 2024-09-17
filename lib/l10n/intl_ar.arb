@@ -187,7 +187,7 @@
     "terms_and_conditions": "ضمان الجودة: تضمن الشركة جودة المنتجات النسيجية (شريط نسجي) لمدة 7 أيام من تاريخ خروجها من المصنع، بشرط إثبات أن البضاعة صادرة من مصنعنا. في حالة وجود اي مشاكل تتعلق بالجودة، يجب الإبلاغ عنها فورًا وخلال فترة الضمان. استثناءات الضمان: لا تتحمل الشركة اي مسؤولية عن الأضرار الناتجة عن سوء الاستخدام، التخزين غير المناسب، أو التعديلات التي تتم على المنتج بعد تسليمه. يشمل ذلك اي تعديل أو تغيير في المنتج يتم بعد استلامه من قبل العميل. مطالبات الجودة: يحتفظ المصنع بالحق في رفض اي مطالبات تتعلق بالجودة أو المطابقة بعد انتهاء فترة الضمان المذكورة. المطالبات التي يتم تقديمها بعد فترة الضمان لن يتم النظر فيها. التكليف وعروض الأسعار: عروض الأسعار صالحة لمدة 7 أيام من تاريخ الفاتورة. بعد هذه الفترة، تحتفظ الشركة بالحق في تعديل الأسعار وفقًا لتغيرات السوق أو التكاليف. الفاتورة الأولية: يُرجى ملاحظة أن الفاتورة الأولية تعتبر لغرض العرض فقط.",
     "failed_to_load_invoice_details": "فشل في تحميل تفاصيل الفاتورة",
     "download_a_copy_of_the_invoice_in_pdf": "تحميل نسخة من الفاتورة بصيغة PDF",
-    "visit_our_website_and_search_fornmore_modern_designs_and_models": "قم بزيارة موقعنا وابحث عن تصاميم ونماذج حديثة",
+    "visit_our_website_and_search_for_more_modern_designs_and_models": "قم بزيارة موقعنا وابحث عن تصاميم ونماذج حديثة",
     "select_operation_type": "اختر نوع العملية",
     "input": "وارد",
     "output": "صادر",
@@ -205,5 +205,17 @@
     "yarn_added_successfully": "تمت إضافة الخيط بنجاح!",
     "the_invoice_will_be_recorded_in_the_database": "سيتم تسجيل الفاتورة في قاعدة البيانات",
     "data_pro_invoice_saved_successfully": "تم حفظ نموذج بيانات الفاتورة بنجاح",
-    "failed_to_save_data": "فشل حفظ البيانات نموذج الفاتورة :"
+    "failed_to_save_data": "فشل حفظ البيانات نموذج الفاتورة :",
+    "get_data_from_phone_base": "احصل على بيانات من قاعدة الهاتف",
+    "error_fetching_clients": "خطأ جلب العملاء:",
+    "got_data_from_firebase": "تم الحصول على بيانات من Firebase",
+    "you_are_directed_to_the_invoice": "تم توجيهك إلى الفاتورة",
+    "data_requested_from_firebase_successfully": "تم طلب البيانات من Firebase بنجاح",
+    "data_will_be_recorded_when_internet_connection_is_restored": "سيتم تسجيل البيانات عند استعادة الاتصال بالإنترنت.",
+    "an_error_occurred_while_adding_data": "حدث خطأ أثناء إضافة البيانات:",
+    "pro_invoice_details": "تفاصيل الفاتورة الاحترافية",
+    "please_select_months_to_see_the_products": "يرجى تحديد الأشهر لعرض المنتجات.",
+    "selected_months_have_no_data": "الأشهر المحددة لا تحتوي على بيانات.",
+    "please_select_different_months": "يرجى تحديد أشهر مختلفة.",
+    "camera_permission_granted": "تم منح إذن الوصول إلى الكاميرا"
 }

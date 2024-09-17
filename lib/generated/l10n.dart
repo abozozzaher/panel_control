@@ -1910,11 +1910,11 @@ class S {
     );
   }
 
-  /// `Visit our website and search for\nmore modern designs and models`
-  String get visit_our_website_and_search_fornmore_modern_designs_and_models {
+  /// `Visit our website and search for more modern designs and models`
+  String get visit_our_website_and_search_for_more_modern_designs_and_models {
     return Intl.message(
-      'Visit our website and search for\\nmore modern designs and models',
-      name: 'visit_our_website_and_search_fornmore_modern_designs_and_models',
+      'Visit our website and search for more modern designs and models',
+      name: 'visit_our_website_and_search_for_more_modern_designs_and_models',
       desc: '',
       args: [],
     );
@@ -2095,6 +2095,126 @@ class S {
     return Intl.message(
       'Failed to save data:',
       name: 'failed_to_save_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get data from phone base`
+  String get get_data_from_phone_base {
+    return Intl.message(
+      'Get data from phone base',
+      name: 'get_data_from_phone_base',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error fetching clients:`
+  String get error_fetching_clients {
+    return Intl.message(
+      'Error fetching clients:',
+      name: 'error_fetching_clients',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `got data from firebase`
+  String get got_data_from_firebase {
+    return Intl.message(
+      'got data from firebase',
+      name: 'got_data_from_firebase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are directed to the invoice`
+  String get you_are_directed_to_the_invoice {
+    return Intl.message(
+      'You are directed to the invoice',
+      name: 'you_are_directed_to_the_invoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data requested from Firebase successfully`
+  String get data_requested_from_firebase_successfully {
+    return Intl.message(
+      'Data requested from Firebase successfully',
+      name: 'data_requested_from_firebase_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data will be recorded when internet connection is restored.`
+  String get data_will_be_recorded_when_internet_connection_is_restored {
+    return Intl.message(
+      'Data will be recorded when internet connection is restored.',
+      name: 'data_will_be_recorded_when_internet_connection_is_restored',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An error occurred while adding data:`
+  String get an_error_occurred_while_adding_data {
+    return Intl.message(
+      'An error occurred while adding data:',
+      name: 'an_error_occurred_while_adding_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pro Invoice Details`
+  String get pro_invoice_details {
+    return Intl.message(
+      'Pro Invoice Details',
+      name: 'pro_invoice_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select months to see the products.`
+  String get please_select_months_to_see_the_products {
+    return Intl.message(
+      'Please select months to see the products.',
+      name: 'please_select_months_to_see_the_products',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Selected months have no data.`
+  String get selected_months_have_no_data {
+    return Intl.message(
+      'Selected months have no data.',
+      name: 'selected_months_have_no_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select different months.`
+  String get please_select_different_months {
+    return Intl.message(
+      'Please select different months.',
+      name: 'please_select_different_months',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Camera permission granted`
+  String get camera_permission_granted {
+    return Intl.message(
+      'Camera permission granted',
+      name: 'camera_permission_granted',
       desc: '',
       args: [],
     );

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:panel_control/generated/l10n.dart';
+import 'package:panel_control/service/toasts.dart';
 
 import 'exchangeRate_service.dart';
 
@@ -15,7 +17,6 @@ class AccountService {
   String formattedCreatedAt =
       DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(DateTime.now());
   // التاريخ سعر الصرف هل القيمة ايجابية او سلبية
-  ///55555 تخفيف عدد مرات القراءة
   Future<void> saveValueToFirebase(String traderId, double value,
       String invoiceCode, String downloadUrlPdf) async {
     double? exchangeRateTR = await fetchExchangeRateTR();
@@ -44,15 +45,24 @@ class AccountService {
 
     // إعداد المستند الجديد
     String docId = traderAccountCollection.doc().id;
-
-    await traderAccountCollection.doc(docId).set({
-      'value': value,
-      'createdAt': formattedCreatedAt,
-      'docId': docId,
-      'exchangeRate': '$exchangeRateTR TRY',
-      'invoiceCode': invoiceCode,
-      'downloadUrlPdf': downloadUrlPdf,
-      'dues': newDues, // تخزين المجموع الجديد
-    });
+    try {
+      await traderAccountCollection.doc(docId).set({
+        'value': value,
+        'createdAt': formattedCreatedAt,
+        'docId': docId,
+        'exchangeRate': '$exchangeRateTR TRY',
+        'invoiceCode': invoiceCode,
+        'downloadUrlPdf': downloadUrlPdf,
+        'dues': newDues, // تخزين المجموع الجديد
+      });
+      // التحقق من حالة الشبكة
+      bool isOnline = await isNetworkAvailable();
+      if (!isOnline) {
+        showToast(
+            S().data_will_be_recorded_when_internet_connection_is_restored);
+      }
+    } catch (error) {
+      showToast('${S().an_error_occurred_while_adding_data} $error');
+    }
   }
 }

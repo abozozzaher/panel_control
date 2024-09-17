@@ -68,7 +68,6 @@ Future<void> saveDataProInv(
       // 'createdAt': DateFormat('yyyy-MM-dd HH:mm:ss', 'en')
     });
     showToast(S().data_pro_invoice_saved_successfully);
-    print("Data saved successfully");
   } catch (e) {
     showToast('${S().failed_to_save_data} $e');
     print("Failed to save data: $e");
