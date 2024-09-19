@@ -87,12 +87,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm_yarn_data":
             MessageLookupByLibrary.simpleMessage("تأكيد بيانات الخيط"),
         "cotton": MessageLookupByLibrary.simpleMessage("قطن"),
+        "could_not_launch_url":
+            MessageLookupByLibrary.simpleMessage("لا يمكن إطلاق عنوان URL"),
         "custom": MessageLookupByLibrary.simpleMessage("مخصص"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة العميل بنجاح"),
         "customer_balance": MessageLookupByLibrary.simpleMessage("رصيد العميل"),
         "customer_list": MessageLookupByLibrary.simpleMessage("قائمة العملاء"),
-        "dark_green": MessageLookupByLibrary.simpleMessage("عسكري"),
+        "dark_green": MessageLookupByLibrary.simpleMessage("زيتي"),
         "data": MessageLookupByLibrary.simpleMessage("التاريخ"),
         "data_pro_invoice_saved_successfully":
             MessageLookupByLibrary.simpleMessage(
@@ -139,7 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "فشل حفظ البيانات نموذج الفاتورة :"),
         "failed_to_upload_image":
             MessageLookupByLibrary.simpleMessage("فشل في رفع الصورة"),
-        "falcons_red": MessageLookupByLibrary.simpleMessage("حمري"),
+        "falcons_red": MessageLookupByLibrary.simpleMessage("حمريي"),
         "final_total": MessageLookupByLibrary.simpleMessage("الإجمالي النهائي"),
         "first_name": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
         "forgot_password":
@@ -247,7 +249,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "price": MessageLookupByLibrary.simpleMessage("السعر"),
         "pro_invoice": MessageLookupByLibrary.simpleMessage("فاتورة أولية"),
         "pro_invoice_details":
-            MessageLookupByLibrary.simpleMessage("تفاصيل الفاتورة الاحترافية"),
+            MessageLookupByLibrary.simpleMessage("تفاصيل الفاتورة الأولية"),
         "product_details":
             MessageLookupByLibrary.simpleMessage("تفاصيل المنتج"),
         "product_id": MessageLookupByLibrary.simpleMessage("Id المنتج"),

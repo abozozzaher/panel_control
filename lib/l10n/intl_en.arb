@@ -215,5 +215,6 @@
     "please_select_months_to_see_the_products": "Please select months to see the products.",
     "selected_months_have_no_data": "Selected months have no data.",
     "please_select_different_months": "Please select different months.",
-    "camera_permission_granted": "Camera permission granted"
+    "camera_permission_granted": "Camera permission granted",
+    "could_not_launch_url": "Could not launch Url"
 }

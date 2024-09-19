@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panel_control/generated/l10n.dart';
 import 'package:panel_control/service/toasts.dart';
 
+import '../../data/dataBase.dart';
 import '../../data/data_lists.dart';
 import 'DropdownButton.dart';
 import 'SelectedMonthsDialog.dart'; // Assuming you are using localization strings
@@ -19,7 +21,7 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
-  // final DatabaseHelper databaseHelper = DatabaseHelper();
+  final DatabaseHelper databaseHelper = DatabaseHelper();
   final DataLists dataLists = DataLists();
 
   List<String> selectedMonths = [];
@@ -36,6 +38,7 @@ class _InventoryState extends State<Inventory> {
 
 // تعديل دالة الفاتش
   ///9998
+
   Future<void> fetchProductsData(List<String> months) async {
     try {
       Map<String, Map<String, dynamic>> allProducts = {};
@@ -49,57 +52,169 @@ class _InventoryState extends State<Inventory> {
       }
 
       // إذا كان التطبيق يعمل على الويب، نفذ عملية الفاتش مباشرة
-      for (String month in months) {
-        QuerySnapshot snapshot = await FirebaseFirestore.instance
-            .collection('products')
-            .doc('productsForAllMonths')
-            .collection(month)
-            .where('sale_status', isEqualTo: false)
-            .get();
-        List<Map<String, dynamic>> monthProducts = snapshot.docs
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
+      if (kIsWeb) {
+        for (String month in months) {
+          Query query = FirebaseFirestore.instance
+              .collection('products')
+              .doc('productsForAllMonths')
+              .collection(month)
+              .where('sale_status', isEqualTo: false);
 
-        if (monthProducts.isNotEmpty && headers.isEmpty) {
-          headers = [
-            (S().type),
-            (S().color),
-            (S().width),
-            (S().yarn_number),
-            (S().quantity),
-            (S().length),
-            (S().total_weight),
-            (S().scanned)
-          ];
-        }
-
-        for (var product in monthProducts) {
-          String key =
-              '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}';
-
-          if (!allProducts.containsKey(key)) {
-            // لم يتم العثور على المنتج في قاعدة البيانات، لذا احضره من Firebase وقم بحفظه في SQLite
-            allProducts[key] = {
-              'yarn_number': product['yarn_number'],
-              'type': product['type'],
-              'color': product['color'],
-              'width': product['width'],
-              'total_weight': 0.0,
-              'quantity': 0,
-              'length': 0,
-              'scanned_data': 0,
-            };
+          // تطبيق الفلاتر بناءً على القيم المختارة من القوائم المنسدلة
+          if (selectedType != null) {
+            query = query.where('type', isEqualTo: selectedType);
+          }
+          if (selectedColor != null) {
+            query = query.where('color', isEqualTo: selectedColor);
+          }
+          if (selectedWidth != null) {
+            query = query.where('width', isEqualTo: selectedWidth);
+          }
+          if (selectedYarnNumber != null) {
+            query = query.where('yarn_number', isEqualTo: selectedYarnNumber);
+          }
+          if (selectedQuantity != null) {
+            query = query.where('quantity', isEqualTo: selectedQuantity);
+          }
+          if (selectedLength != null) {
+            query = query.where('length', isEqualTo: selectedLength);
           }
 
-          allProducts[key]!['total_weight'] +=
-              double.tryParse(product['total_weight'].toString()) ?? 0.0;
-          allProducts[key]!['quantity'] += product['quantity'] is int
-              ? product['quantity']
-              : int.tryParse(product['quantity'].toString()) ?? 0;
-          allProducts[key]!['length'] += product['length'] is int
-              ? product['length']
-              : int.tryParse(product['length'].toString()) ?? 0;
-          allProducts[key]!['scanned_data'] += 1;
+          QuerySnapshot snapshot = await query.get();
+          List<Map<String, dynamic>> monthProducts = snapshot.docs
+              .map((doc) => doc.data() as Map<String, dynamic>)
+              .toList();
+
+          if (monthProducts.isNotEmpty && headers.isEmpty) {
+            headers = [
+              (S().type),
+              (S().color),
+              (S().width),
+              (S().yarn_number),
+              (S().quantity),
+              (S().length),
+              (S().total_weight),
+              (S().scanned)
+            ];
+          }
+
+          for (var product in monthProducts) {
+            String key =
+                '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}';
+
+            if (!allProducts.containsKey(key)) {
+              // لم يتم العثور على المنتج في قاعدة البيانات، لذا احضره من Firebase وقم بحفظه في SQLite
+              allProducts[key] = {
+                'yarn_number': product['yarn_number'],
+                'type': product['type'],
+                'color': product['color'],
+                'width': product['width'],
+                'total_weight': 0.0,
+                'quantity': 0,
+                'length': 0,
+                'scanned_data': 0,
+              };
+
+              // تخزين المنتج في SQLite مباشرة إذا كان على الويب
+              databaseHelper.saveProductToDatabaseInventory(
+                  allProducts[key]!, key);
+            }
+
+            allProducts[key]!['total_weight'] +=
+                double.tryParse(product['total_weight'].toString()) ?? 0.0;
+            allProducts[key]!['quantity'] += product['quantity'] is int
+                ? product['quantity']
+                : int.tryParse(product['quantity'].toString()) ?? 0;
+            allProducts[key]!['length'] += product['length'] is int
+                ? product['length']
+                : int.tryParse(product['length'].toString()) ?? 0;
+            allProducts[key]!['scanned_data'] += 1;
+          }
+        }
+      } else {
+        // إذا لم يكن على الويب، تحقق من وجود البيانات في SQLite
+        List<Map<String, dynamic>> existingProducts =
+            await databaseHelper.checkProductsInDatabaseInventory(keysToCheck);
+        existingProducts.forEach((product) {
+          allProducts[product['id']] = product;
+        });
+
+        for (String month in months) {
+          Query query = FirebaseFirestore.instance
+              .collection('products')
+              .doc('productsForAllMonths')
+              .collection(month)
+              .where('sale_status', isEqualTo: false);
+
+          // تطبيق الفلاتر بناءً على القيم المختارة من القوائم المنسدلة
+          if (selectedType != null) {
+            query = query.where('type', isEqualTo: selectedType);
+          }
+          if (selectedColor != null) {
+            query = query.where('color', isEqualTo: selectedColor);
+          }
+          if (selectedWidth != null) {
+            query = query.where('width', isEqualTo: selectedWidth);
+          }
+          if (selectedYarnNumber != null) {
+            query = query.where('yarn_number', isEqualTo: selectedYarnNumber);
+          }
+          if (selectedQuantity != null) {
+            query = query.where('quantity', isEqualTo: selectedQuantity);
+          }
+          if (selectedLength != null) {
+            query = query.where('length', isEqualTo: selectedLength);
+          }
+
+          QuerySnapshot snapshot = await query.get();
+          List<Map<String, dynamic>> monthProducts = snapshot.docs
+              .map((doc) => doc.data() as Map<String, dynamic>)
+              .toList();
+
+          if (monthProducts.isNotEmpty && headers.isEmpty) {
+            headers = [
+              (S().type),
+              (S().color),
+              (S().width),
+              (S().yarn_number),
+              (S().quantity),
+              (S().length),
+              (S().total_weight),
+              (S().scanned)
+            ];
+          }
+
+          for (var product in monthProducts) {
+            String key =
+                '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}';
+
+            if (!allProducts.containsKey(key)) {
+              // لم يتم العثور على المنتج في قاعدة البيانات، لذا احضره من Firebase وقم بحفظه في SQLite
+              allProducts[key] = {
+                'yarn_number': product['yarn_number'],
+                'type': product['type'],
+                'color': product['color'],
+                'width': product['width'],
+                'total_weight': 0.0,
+                'quantity': 0,
+                'length': 0,
+                'scanned_data': 0,
+              };
+
+              databaseHelper.saveProductToDatabaseInventory(
+                  allProducts[key]!, key);
+            }
+
+            allProducts[key]!['total_weight'] +=
+                double.tryParse(product['total_weight'].toString()) ?? 0.0;
+            allProducts[key]!['quantity'] += product['quantity'] is int
+                ? product['quantity']
+                : int.tryParse(product['quantity'].toString()) ?? 0;
+            allProducts[key]!['length'] += product['length'] is int
+                ? product['length']
+                : int.tryParse(product['length'].toString()) ?? 0;
+            allProducts[key]!['scanned_data'] += 1;
+          }
         }
       }
 
@@ -108,7 +223,7 @@ class _InventoryState extends State<Inventory> {
         columnHeaders = headers;
       });
     } catch (e) {
-      showToast('Error fetching products: 301');
+      showToast('Error fetching products: #301');
       print('Error fetching products: $e');
     }
   }
@@ -127,10 +242,9 @@ class _InventoryState extends State<Inventory> {
       });
     }
 
+//111 هنا الخطا لا يتطابق المعلومات حسب المنسدلة
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S().products_table, textAlign: TextAlign.center),
-      ),
+      appBar: AppBar(title: Text(S().products_table)),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

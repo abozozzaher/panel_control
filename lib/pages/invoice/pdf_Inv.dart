@@ -159,7 +159,7 @@ pw.Widget _buildHeader(pw.Context context, Uint8List imageLogo, String linkUrl,
                       crossAxisCount: 2,
                       children: [
                         pw.Text(S().invoice),
-                        pw.Text(invoiceCode),
+                        pw.Text('INV-$invoiceCode'),
                         pw.Text(S().data),
                         pw.Text(_formatDate(DateTime.now())),
                       ],

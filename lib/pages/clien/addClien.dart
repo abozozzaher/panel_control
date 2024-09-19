@@ -33,6 +33,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
   String? addressEnglish;
   String? email;
   String? phoneNumber;
+  bool work = true;
   final fullNameArabicController = TextEditingController();
   final fullNameEnglishController = TextEditingController();
   final addressArabicController = TextEditingController();
@@ -247,6 +248,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                                 phoneNumber: phoneNumber!,
                                 createdAt: DateTime.now(),
                                 codeIdClien: clienId,
+                                work: work,
                               );
 
                               // عرض مربع حوار لتأكيد البيانات

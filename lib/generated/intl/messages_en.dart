@@ -84,6 +84,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm_yarn_data":
             MessageLookupByLibrary.simpleMessage("Confirm Yarn Data"),
         "cotton": MessageLookupByLibrary.simpleMessage("Cotton"),
+        "could_not_launch_url":
+            MessageLookupByLibrary.simpleMessage("Could not launch Url"),
         "custom": MessageLookupByLibrary.simpleMessage("Custom"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("Customer added successfully"),

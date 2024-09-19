@@ -2219,6 +2219,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Could not launch Url`
+  String get could_not_launch_url {
+    return Intl.message(
+      'Could not launch Url',
+      name: 'could_not_launch_url',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

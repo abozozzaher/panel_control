@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../data/dataBase.dart';
 
 class TraderService {
-//  final DatabaseHelper databaseHelper = DatabaseHelper();
+  final DatabaseHelper databaseHelper = DatabaseHelper();
 
 // لجلب الدين المستحق تم تسجيله فقط في اخر مستند
   Future<double> fetchLastDues(String codeIdClien) async {

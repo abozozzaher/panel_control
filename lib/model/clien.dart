@@ -12,20 +12,21 @@ class ClienData {
   String phoneNumber;
   DateTime createdAt;
   String codeIdClien;
+  bool? work;
 
-  ClienData({
-    required this.fullNameArabic,
-    required this.fullNameEnglish,
-    required this.country,
-    required this.state,
-    required this.city,
-    required this.addressArabic,
-    required this.addressEnglish,
-    required this.email,
-    required this.phoneNumber,
-    required this.createdAt,
-    required this.codeIdClien,
-  });
+  ClienData(
+      {required this.fullNameArabic,
+      required this.fullNameEnglish,
+      required this.country,
+      required this.state,
+      required this.city,
+      required this.addressArabic,
+      required this.addressEnglish,
+      required this.email,
+      required this.phoneNumber,
+      required this.createdAt,
+      required this.codeIdClien,
+      this.work});
 
   // تحويل البيانات إلى شكل يمكن رفعه إلى Firebase
   Map<String, dynamic> toMap() {
@@ -44,6 +45,7 @@ class ClienData {
       'phoneNumber': phoneNumber,
       'createdAt': formattedCreatedAt,
       'codeIdClien': codeIdClien,
+      'work': work,
     };
   }
 
@@ -61,6 +63,7 @@ class ClienData {
       createdAt:
           DateFormat('yyyy-MM-dd HH:mm:ss', 'en').parse(data['createdAt']),
       codeIdClien: data['codeIdClien'],
+      work: data['work']!.toString() == 'true' ? true : false,
     );
   }
 }

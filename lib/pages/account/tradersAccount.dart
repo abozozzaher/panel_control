@@ -20,7 +20,7 @@ class TradersAccount extends StatefulWidget {
 
 class _TradersAccountState extends State<TradersAccount> {
   final TraderService traderService = TraderService();
-// final DatabaseHelper databaseHelper = DatabaseHelper();
+  final DatabaseHelper databaseHelper = DatabaseHelper();
 
   List<ClienData> clients = [];
   bool isLoading = true;
@@ -35,11 +35,12 @@ class _TradersAccountState extends State<TradersAccount> {
 
   ///9998
   Future<void> fetchClientsFromFirebase() async {
-    /*
     if (kIsWeb) {
       try {
-        QuerySnapshot snapshot =
-            await FirebaseFirestore.instance.collection('cliens').get();
+        QuerySnapshot snapshot = await FirebaseFirestore.instance
+            .collection('cliens')
+            .where('work', isEqualTo: true)
+            .get();
         List<ClienData> fetchedClients = snapshot.docs.map((doc) {
           return ClienData.fromMap(doc.data() as Map<String, dynamic>);
         }).toList();
@@ -94,8 +95,10 @@ class _TradersAccountState extends State<TradersAccount> {
             isLoading = false;
           });
         } else {
-          QuerySnapshot snapshot =
-              await FirebaseFirestore.instance.collection('cliens').get();
+          QuerySnapshot snapshot = await FirebaseFirestore.instance
+              .collection('cliens')
+              .where('work', isEqualTo: true)
+              .get();
           List<ClienData> clientsFromFirebase = snapshot.docs.map((doc) {
             return ClienData.fromMap(doc.data() as Map<String, dynamic>);
           }).toList();
@@ -119,6 +122,7 @@ class _TradersAccountState extends State<TradersAccount> {
             isLoading = false;
           });
         }
+        showToast(S().data_requested_from_firebase_successfully);
       } catch (e) {
         showToast('${S().error_fetching_clients} $e');
         print('${S().error_fetching_clients} $e');
@@ -127,36 +131,6 @@ class _TradersAccountState extends State<TradersAccount> {
           isLoading = false;
         });
       }
-    }
-    */
-    try {
-      QuerySnapshot snapshot =
-          await FirebaseFirestore.instance.collection('cliens').get();
-      List<ClienData> fetchedClients = snapshot.docs.map((doc) {
-        return ClienData.fromMap(doc.data() as Map<String, dynamic>);
-      }).toList();
-
-      for (var client in fetchedClients) {
-        double lastDues = await traderService.fetchLastDues(client.codeIdClien);
-        clientDues[client.codeIdClien] = lastDues; // حفظ المستحقات الأخيرة
-
-        List<Map<String, dynamic>> allDues =
-            await traderService.fetchAllDues(client.codeIdClien);
-        clientAllData[client.codeIdClien] = allDues; // حفظ جميع المستحقات
-      }
-
-      setState(() {
-        clients = fetchedClients;
-        isLoading = false;
-      });
-
-      showToast(S().data_requested_from_firebase_successfully);
-    } catch (e) {
-      showToast('${S().error_fetching_clients} $e');
-      print('${S().error_fetching_clients} $e');
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 

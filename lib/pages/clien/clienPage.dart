@@ -14,12 +14,12 @@ class ClienPage extends StatelessWidget {
   ClienPage({required this.client, required this.dues, required this.allData});
 
   // دالة لتحميل الفاتورة
-  Future<void> _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  Future<void> _launchURL(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     } else {
-      showToast('Could not launch $url');
-      throw 'Could not launch $url';
+      showToast('${S().could_not_launch_url} : #207 $url');
+      throw '${S().could_not_launch_url} : $url';
     }
   }
 
@@ -90,9 +90,12 @@ class ClienPage extends StatelessWidget {
                     clienDataAll['value'] < 0 ? clienDataAll['value'] : null;
                 final dues = clienDataAll['dues'];
                 final invoiceCode = clienDataAll['invoiceCode'];
-                final downloadUrlPdf = clienDataAll['downloadUrlPdf'];
-                String linkUrl =
-                    "https://admin.bluedukkan.com/${client.codeIdClien}/invoices/$invoiceCode";
+                //  final downloadUrlPdf = clienDataAll['downloadUrlPdf'];
+                final Uri downloadUrlPdf =
+                    Uri.parse(clienDataAll['downloadUrlPdf']);
+                final Uri linkUrl = Uri.parse(
+                    "https://admin.bluedukkan.com/${client.codeIdClien}/invoices/$invoiceCode");
+                //   String linkUrl =                    "https://admin.bluedukkan.com/${client.codeIdClien}/invoices/$invoiceCode";
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -137,8 +140,7 @@ class ClienPage extends StatelessWidget {
                         flex: 2,
                         child: InkWell(
                           onTap: () {
-                            if (invoiceCode != 'No invoice' &&
-                                downloadUrlPdf != null) {
+                            if (invoiceCode != 'No invoice') {
                               showToast(S().you_are_directed_to_the_invoice);
                               _launchURL(linkUrl);
                             } else {
@@ -146,8 +148,7 @@ class ClienPage extends StatelessWidget {
                             }
                           },
                           onLongPress: () {
-                            if (invoiceCode != 'No invoice' &&
-                                downloadUrlPdf != null) {
+                            if (invoiceCode != 'No invoice') {
                               showToast(S().you_are_directed_to_the_invoice);
                               _launchURL(downloadUrlPdf);
                             } else {

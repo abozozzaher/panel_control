@@ -374,7 +374,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
     String productUrl =
         "https://admin.bluedukkan.com/$englishYearMonth/$englishProductId"; // Replace with your product URL
 
-    final ttfTr = await rootBundle.load("assets/fonts/Beiruti.ttf");
+    final ttfTr = await rootBundle.load('assets/fonts/Beiruti.ttf');
     final fontBe = pw.Font.ttf(ttfTr);
     final fontRo = pw.Font.ttf(
         await rootBundle.load('assets/fonts/Tajawal/Tajawal-Bold.ttf'));

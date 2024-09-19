@@ -88,8 +88,8 @@
     "black": "أسود",
     "brown": "بني",
     "camel": "جملي",
-    "falcons_red": "حمري",
-    "dark_green": "عسكري",
+    "falcons_red": "حمريي",
+    "dark_green": "زيتي",
     "grye": "فضي",
     "navy_blue": "كحلي",
     "burnt_brown": "بني محروق",
@@ -213,9 +213,10 @@
     "data_requested_from_firebase_successfully": "تم طلب البيانات من Firebase بنجاح",
     "data_will_be_recorded_when_internet_connection_is_restored": "سيتم تسجيل البيانات عند استعادة الاتصال بالإنترنت.",
     "an_error_occurred_while_adding_data": "حدث خطأ أثناء إضافة البيانات:",
-    "pro_invoice_details": "تفاصيل الفاتورة الاحترافية",
+    "pro_invoice_details": "تفاصيل الفاتورة الأولية",
     "please_select_months_to_see_the_products": "يرجى تحديد الأشهر لعرض المنتجات.",
     "selected_months_have_no_data": "الأشهر المحددة لا تحتوي على بيانات.",
     "please_select_different_months": "يرجى تحديد أشهر مختلفة.",
-    "camera_permission_granted": "تم منح إذن الوصول إلى الكاميرا"
+    "camera_permission_granted": "تم منح إذن الوصول إلى الكاميرا",
+    "could_not_launch_url": "لا يمكن إطلاق عنوان URL"
 }

@@ -1,16 +1,18 @@
+import 'package:panel_control/service/toasts.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 import 'dart:convert';
 
 import '../model/clien.dart';
-/*
+
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._internal();
   factory DatabaseHelper() => instance;
   DatabaseHelper._internal();
 
   static Database? _database;
+  // الكود من هنا الى الاخير لا يوجد له استخدام
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
@@ -91,6 +93,7 @@ class DatabaseHelper {
     if (maps.isNotEmpty) {
       return jsonDecode(maps.first['data'] as String);
     }
+
     return null;
   }
 
@@ -101,6 +104,8 @@ class DatabaseHelper {
       where: "code = ?",
       whereArgs: [code],
     );
+    showToast('Deleted code details for code: #401 $code');
+
     print('Deleted code details for code: $code');
   }
 
@@ -111,9 +116,12 @@ class DatabaseHelper {
       where: "code = ?",
       whereArgs: [code],
     );
+    showToast('Deleted scanned data for code: #400 $code');
+
     print('Deleted scanned data for code: $code');
   }
 
+  /// حتى هنا لا يوجد له اي اي اي استخدام للحذف
 // لكشف المخزون تخزين البيانات في قاعدة البيانات المحلية فقط في الموبيل
   Future<Database> _openDatabaseInventory() async {
     // فتح قاعدة البيانات
@@ -165,9 +173,9 @@ class DatabaseHelper {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    showToast('Data saved: #404 $productData');
+
     print('Data saved: $productData');
-    print('ssss5 : $productData');
-    print('ssss6 : $id');
   }
 
 // لم اعد استخدم ماكتبة حفظ البيانات التاجر في قاعدة البيانات المحلية
@@ -203,8 +211,8 @@ class DatabaseHelper {
       clientData.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    showToast('Data saved traders : #402 $clientData');
+
     print('Data saved traders : $clientData');
   }
 }
-
-*/

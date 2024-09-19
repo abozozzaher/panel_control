@@ -28,7 +28,7 @@ class ProductPage extends StatelessWidget {
             if (await canLaunchUrl(url)) {
               await launchUrl(url);
             } else {
-              showToast('Could not launch Url $url');
+              showToast('${S().could_not_launch_url} #203 $url');
               throw 'Could not launch $url';
             }
           },

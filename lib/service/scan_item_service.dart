@@ -4,11 +4,12 @@ import 'package:just_audio/just_audio.dart';
 import 'package:panel_control/service/toasts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../data/dataBase.dart';
 import '../generated/l10n.dart';
 
 class ScanItemService {
   final AudioPlayer audioPlayer = AudioPlayer();
-//  final DatabaseHelper _databaseHelper = DatabaseHelper();
+  final DatabaseHelper databaseHelper = DatabaseHelper();
 
   Future<void> requestCameraPermission() async {
     var status = await Permission.camera.status;
@@ -61,6 +62,7 @@ class ScanItemService {
     }
   }
 
+  ///9999
   Future<List<Map<String, dynamic>?>?> fetchDataFromFirebaseForInvoice(
       String url) async {
     try {
