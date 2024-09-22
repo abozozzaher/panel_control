@@ -27,8 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "تم رفض الوصول. ليس لديك الدور المطلوب."),
         "account": MessageLookupByLibrary.simpleMessage("حساب"),
-        "account_page": MessageLookupByLibrary.simpleMessage("صفحة الحساب"),
         "add": MessageLookupByLibrary.simpleMessage("إضافة"),
+        "add_account": MessageLookupByLibrary.simpleMessage("اضافة رصيد"),
         "add_clien": MessageLookupByLibrary.simpleMessage("إضافة عميل"),
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("إضافة بيانات العميل"),

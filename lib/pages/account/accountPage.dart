@@ -31,8 +31,7 @@ class _AccountPagesState extends State<AccountPages> {
     final trader = Provider.of<TraderProvider>(context).trader;
 
     return Scaffold(
-      appBar:
-          AppBar(title: Text(S().account_page), centerTitle: true, actions: [
+      appBar: AppBar(title: Text(S().add_account), centerTitle: true, actions: [
         IconButton(
             onPressed: () {
               context.go('/');
@@ -100,7 +99,7 @@ class _AccountPagesState extends State<AccountPages> {
                 ? Center(child: Text(S().no_trader_selected))
                 : ElevatedButton(
                     onPressed: () {
-                      double value = _selectedOperation == 'Plus'
+                      double? value = _selectedOperation == 'Plus'
                           ? double.tryParse('+${controllerPlus.text}') ?? 0.00
                           : double.tryParse('-${controllerMinus.text}') ?? 0.00;
 
@@ -121,7 +120,7 @@ class _AccountPagesState extends State<AccountPages> {
                                     color: _selectedOperation == 'Plus'
                                         ? Colors.greenAccent
                                         : Colors.redAccent,
-                                    child: Text('${S().account} : \$ ${value}'),
+                                    child: Text('${S().account} : \$ $value'),
                                   ),
                                 ],
                               ),
@@ -158,7 +157,7 @@ class _AccountPagesState extends State<AccountPages> {
                                         onPressed: () {
                                           String invoiceCode = 'No invoice';
                                           String downloadUrlPdf = 'No url';
-
+                                          print('wwww');
                                           accountService
                                               .saveValueToFirebase(
                                                   trader.codeIdClien,
@@ -175,6 +174,7 @@ class _AccountPagesState extends State<AccountPages> {
                                           }).catchError((error) {
                                             showToast(
                                                 '${S().an_error_occurred_while_adding} : $error');
+                                            print('ss11 $error');
                                             Navigator.of(context).pop();
                                           });
                                         },

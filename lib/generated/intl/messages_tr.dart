@@ -27,8 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Erişim engellendi.Gerekli rolünüz yok."),
         "account": MessageLookupByLibrary.simpleMessage("account"),
-        "account_page": MessageLookupByLibrary.simpleMessage("Account page"),
         "add": MessageLookupByLibrary.simpleMessage("Eklemek"),
+        "add_account": MessageLookupByLibrary.simpleMessage("Add Account"),
         "add_clien": MessageLookupByLibrary.simpleMessage("add Clien"),
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("Add customer data"),

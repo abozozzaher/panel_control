@@ -1780,11 +1780,11 @@ class S {
     );
   }
 
-  /// `Account page`
-  String get account_page {
+  /// `Add Account`
+  String get add_account {
     return Intl.message(
-      'Account page',
-      name: 'account_page',
+      'Add Account',
+      name: 'add_account',
       desc: '',
       args: [],
     );
@@ -2225,6 +2225,16 @@ class S {
     return Intl.message(
       'Could not launch Url',
       name: 'could_not_launch_url',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `print`
+  String get print {
+    return Intl.message(
+      'print',
+      name: 'print',
       desc: '',
       args: [],
     );

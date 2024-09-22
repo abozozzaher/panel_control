@@ -27,8 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Access Denied. You do not have the required role."),
         "account": MessageLookupByLibrary.simpleMessage("account"),
-        "account_page": MessageLookupByLibrary.simpleMessage("Account page"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
+        "add_account": MessageLookupByLibrary.simpleMessage("Add Account"),
         "add_clien": MessageLookupByLibrary.simpleMessage("add Clien"),
         "add_customer_data":
             MessageLookupByLibrary.simpleMessage("Add customer data"),
@@ -246,6 +246,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "polyester": MessageLookupByLibrary.simpleMessage("Polyester"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("Previous Debt"),
         "price": MessageLookupByLibrary.simpleMessage("Price"),
+        "print": MessageLookupByLibrary.simpleMessage("print"),
         "pro_invoice": MessageLookupByLibrary.simpleMessage("Pro invoice"),
         "pro_invoice_details":
             MessageLookupByLibrary.simpleMessage("Pro Invoice Details"),

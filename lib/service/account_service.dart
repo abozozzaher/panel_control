@@ -37,7 +37,7 @@ class AccountService {
     if (lastDuesSnapshot.docs.isNotEmpty) {
       final lastDuesDoc = lastDuesSnapshot.docs.first;
 
-      currentDues = lastDuesDoc.data()['dues'] ?? 0;
+      currentDues = (lastDuesDoc.data()['dues'] ?? 0).toDouble();
     }
 
     // حساب المجموع الجديد

@@ -46,6 +46,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // زر إضافة عميل
                 Expanded(
@@ -65,7 +66,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                 ),
 
-                SizedBox(width: 16), // مساحة بين الأزرار
+                SizedBox(width: 6), // مساحة بين الأزرار
                 // زر إدخال حساب
                 Expanded(
                   child: ElevatedButton(
@@ -79,11 +80,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ),
                       );
                     },
-                    child: Text(S().account_page,
-                        textAlign: TextAlign.center, maxLines: 1),
+                    child: Text(S().add_account, textAlign: TextAlign.center),
                   ),
                 ),
-                SizedBox(width: 16), // مساحة بين الأزرار
+                SizedBox(width: 6), // مساحة بين الأزرار
                 // زر إدخال الخيط
                 Expanded(
                   child: ElevatedButton(
