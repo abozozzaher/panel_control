@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:panel_control/service/invoice_service.dart';
 
 import '../../../generated/l10n.dart';
+import '../../../service/invoice_service.dart';
 import '../../../service/trader_service.dart';
 
 DataRow rowForPreviousDebts(
@@ -16,12 +16,12 @@ DataRow rowForPreviousDebts(
 
   return DataRow(
     cells: [
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
       DataCell(
         Center(
             child: Text(
@@ -45,10 +45,10 @@ DataRow rowForPreviousDebts(
             future: traderService.fetchLastDues(codeIdClien),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator
+                return const CircularProgressIndicator
                     .adaptive(); // يمكن عرض مؤشر تحميل أثناء انتظار البيانات
               } else if (snapshot.hasError) {
-                return Text('Error'); // عرض رسالة خطأ في حالة وجود خطأ
+                return const Text('Error'); // عرض رسالة خطأ في حالة وجود خطأ
               } else {
                 double lastDues = snapshot.data ?? 0.0;
                 previousDebtsNotifier.value = lastDues;

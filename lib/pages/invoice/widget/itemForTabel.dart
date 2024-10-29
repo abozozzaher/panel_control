@@ -11,7 +11,7 @@ DataRow itemForTabel(
     int index,
     Map<String, Map<String, dynamic>> aggregatedData,
     grandTotalPrice,
-    _selectedItem,
+    selectedItem,
     ValueChanged<bool?> onChanged) {
   return DataRow(
     cells: [
@@ -63,8 +63,8 @@ DataRow itemForTabel(
       DataCell(Center(
         child: TextField(
           controller: invoiceProvider.getPriceController(groupKey),
-          style:
-              TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              color: Colors.redAccent, fontWeight: FontWeight.bold),
           keyboardType: TextInputType.number,
           textDirection: TextDirection.ltr,
           textAlign: TextAlign.center,
@@ -76,7 +76,7 @@ DataRow itemForTabel(
                 double.tryParse(itemData['total_weight'].toString()) ?? 0.00;
 
             double totalPrice =
-                _selectedItem[index] ? price * totalWeight : price * quantity;
+                selectedItem[index] ? price * totalWeight : price * quantity;
             // حفظ السعر الكلي في البروفايدر
             invoiceProvider.setPrice(groupKey, totalPrice);
 
@@ -84,7 +84,7 @@ DataRow itemForTabel(
                 totalPrice.toString();
             grandTotalPrice = invoiceProvider.calculateGrandTotalPrice();
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             prefixText: '\$',
             hintText: '0.00',
           ),
@@ -98,13 +98,13 @@ DataRow itemForTabel(
 
             return Text(
               '\$ ${totalPrice.toStringAsFixed(2)}',
-              style: TextStyle(color: Colors.redAccent),
+              style: const TextStyle(color: Colors.redAccent),
             );
           },
         ),
       )),
     ],
-    selected: _selectedItem[index],
+    selected: selectedItem[index],
     onSelectChanged: onChanged,
   );
 }

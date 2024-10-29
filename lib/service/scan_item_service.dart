@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:panel_control/service/toasts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../data/dataBase.dart';
 import '../generated/l10n.dart';
+import 'toasts.dart';
 
 class ScanItemService {
   final AudioPlayer audioPlayer = AudioPlayer();

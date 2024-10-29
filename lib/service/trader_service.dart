@@ -38,7 +38,7 @@ class TraderService {
         .get();
 
     List<Map<String, dynamic>> allData = allDataSnapshot.docs.map((doc) {
-      return doc.data() as Map<String, dynamic>;
+      return doc.data();
     }).toList();
 
     return allData;

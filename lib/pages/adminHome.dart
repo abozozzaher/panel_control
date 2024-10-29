@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:panel_control/pages/account/accountPage.dart';
 
 import '../generated/l10n.dart';
 import '../service/app_drawer.dart';
+import 'account/accountPage.dart';
 import 'account/tradersAccount.dart';
 import 'clien/addClien.dart';
 import 'inventory/Inventory.dart';
@@ -66,7 +66,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                 ),
 
-                SizedBox(width: 6), // مساحة بين الأزرار
+                const SizedBox(width: 6), // مساحة بين الأزرار
                 // زر إدخال حساب
                 Expanded(
                   child: ElevatedButton(
@@ -83,7 +83,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     child: Text(S().add_account, textAlign: TextAlign.center),
                   ),
                 ),
-                SizedBox(width: 6), // مساحة بين الأزرار
+                const SizedBox(width: 6), // مساحة بين الأزرار
                 // زر إدخال الخيط
                 Expanded(
                   child: ElevatedButton(
@@ -103,7 +103,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               ],
             ),
 
-            SizedBox(height: 16), // مساحة بين الصفوف
+            const SizedBox(height: 16), // مساحة بين الصفوف
 
             // زر إضافة فاتورة
             Row(
@@ -125,7 +125,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ],
             ),
-            SizedBox(height: 16), // مساحة بين الصفوف
+            const SizedBox(height: 16), // مساحة بين الصفوف
 
             // زر حساب مجموع المخزن
             Row(
@@ -147,7 +147,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ],
             ),
-            SizedBox(height: 16), // مساحة بين الصفوف
+            const SizedBox(height: 16), // مساحة بين الصفوف
 
             // زر اظهار حساب كل تاجر
             Row(
@@ -168,7 +168,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ],
             ),
-            SizedBox(height: 16), // مساحة بين الصفوف
+            const SizedBox(height: 16), // مساحة بين الصفوف
 
             // زر عمل فاتورة اولية
             Row(

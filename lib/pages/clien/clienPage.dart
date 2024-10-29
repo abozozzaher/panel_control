@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import 'package:url_launcher/url_launcher.dart'; // تأكد من إضافة هذه الحزمة في pubspec.yaml
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:ui' as ui;
 
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
+import '../../service/excel.dart';
 import '../../service/toasts.dart';
 
 class ClienPage extends StatelessWidget {
@@ -11,7 +14,11 @@ class ClienPage extends StatelessWidget {
   final List<Map<String, dynamic>> allData;
   final double dues;
 
-  ClienPage({required this.client, required this.dues, required this.allData});
+  const ClienPage(
+      {super.key,
+      required this.client,
+      required this.dues,
+      required this.allData});
 
   // دالة لتحميل الفاتورة
   Future<void> _launchURL(Uri url) async {
@@ -29,16 +36,28 @@ class ClienPage extends StatelessWidget {
       appBar: AppBar(
           title: Text(client.fullNameArabic, textAlign: TextAlign.center)),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          dues < 0
-              ? Container(
-                  alignment: Alignment.center,
-                  height: 30,
-                  color: dues < 1 ? Colors.redAccent : Colors.greenAccent,
-                  child: Text('\$${dues.toStringAsFixed(2)}',
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.ltr))
-              : Container(),
+          Container(
+              alignment: Alignment.center,
+              height: 30,
+              color: dues < 0 ? Colors.redAccent : Colors.greenAccent,
+              child: Text('\$${dues.toStringAsFixed(2)}',
+                  textAlign: TextAlign.center,
+                  textDirection: ui.TextDirection.ltr)),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                saveDataToExcel(allData, client);
+              },
+              icon: Icon(Icons.shuffle_outlined),
+              label: Text(S().download_data_in_excel_format),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50), // عرض الزر بشكل كامل
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
             child: Row(
@@ -48,27 +67,27 @@ class ClienPage extends StatelessWidget {
                     flex: 2,
                     child: Text(S().data,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold))),
+                        style: const TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
                     child: Text(S().input,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold))),
+                        style: const TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
                     child: Text(S().output,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold))),
+                        style: const TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
                     child: Text(S().dues,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold))),
+                        style: const TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: 2,
                     child: Text(S().invoice_code,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold))),
+                        style: const TextStyle(fontWeight: FontWeight.bold))),
               ],
             ),
           ),
@@ -90,12 +109,10 @@ class ClienPage extends StatelessWidget {
                     clienDataAll['value'] < 0 ? clienDataAll['value'] : null;
                 final dues = clienDataAll['dues'];
                 final invoiceCode = clienDataAll['invoiceCode'];
-                //  final downloadUrlPdf = clienDataAll['downloadUrlPdf'];
                 final Uri downloadUrlPdf =
                     Uri.parse(clienDataAll['downloadUrlPdf']);
                 final Uri linkUrl = Uri.parse(
                     "https://admin.bluedukkan.com/${client.codeIdClien}/invoices/$invoiceCode");
-                //   String linkUrl =                    "https://admin.bluedukkan.com/${client.codeIdClien}/invoices/$invoiceCode";
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -105,8 +122,10 @@ class ClienPage extends StatelessWidget {
                     children: [
                       Expanded(
                           flex: 2,
-                          child: Text(clienDataAll['createdAt'],
-                              textDirection: TextDirection.ltr,
+                          child: Text(
+                              DateFormat('dd/MM/yyyy').format(
+                                  DateTime.parse(clienDataAll['createdAt'])),
+                              textDirection: ui.TextDirection.ltr,
                               textAlign: TextAlign.center)),
                       Expanded(
                           flex: 2,
@@ -114,9 +133,9 @@ class ClienPage extends StatelessWidget {
                               positiveValue != null
                                   ? '+${positiveValue.toStringAsFixed(2)}'
                                   : '',
-                              textDirection: TextDirection.ltr,
+                              textDirection: ui.TextDirection.ltr,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold))),
                       Expanded(
@@ -125,17 +144,18 @@ class ClienPage extends StatelessWidget {
                               negativeValue != null
                                   ? negativeValue.toStringAsFixed(2)
                                   : '',
-                              textDirection: TextDirection.ltr,
+                              textDirection: ui.TextDirection.ltr,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold))),
                       Expanded(
                           flex: 2,
                           child: Text(dues.toStringAsFixed(2),
-                              textDirection: TextDirection.ltr,
+                              textDirection: ui.TextDirection.ltr,
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold))),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold))),
                       Expanded(
                         flex: 2,
                         child: InkWell(
@@ -157,9 +177,9 @@ class ClienPage extends StatelessWidget {
                           },
                           child: Text(
                             invoiceCode,
-                            textDirection: TextDirection.ltr,
+                            textDirection: ui.TextDirection.ltr,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.blue,
                               decoration: TextDecoration.underline,
                             ),

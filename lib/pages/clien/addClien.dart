@@ -1,13 +1,14 @@
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:panel_control/service/toasts.dart';
 import 'dart:ui' as ui;
 
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../service/app_drawer.dart';
+import '../../service/toasts.dart';
 import '../../service/upperCase.dart'; // لتوليد الكود الموحد من تاريخ اليوم
 
 class ClienEntryPage extends StatefulWidget {
@@ -85,11 +86,18 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
           leading: isMobile
               ? null
               : IconButton(
-                  icon: Icon(Icons.arrow_back), // أيقونة الرجوع
+                  icon: const Icon(Icons.arrow_back), // أيقونة الرجوع
                   onPressed: () {
                     Navigator.pop(context); // لتفعيل الرجوع عند الضغط على الزر
                   },
-                )),
+                ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  context.go('/');
+                },
+                icon: const Icon(Icons.home))
+          ]),
       drawer: AppDrawer(
           toggleTheme: widget.toggleTheme, toggleLocale: widget.toggleLocale),
       body: Center(
@@ -101,9 +109,10 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
               children: [
                 Text(
                     '${S().todays_date} : ${convertArabicToEnglish(todayDate)}'),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text('${S().clien_id} :  $clienId',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
                     textDirection: ui.TextDirection.rtl),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -226,7 +235,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                           },
                         ),
 
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         // زر لإضافة البيانات
                         ElevatedButton(
                           onPressed: () {
@@ -301,7 +310,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(height: 5, width: 5),
+                                          const SizedBox(height: 5, width: 5),
                                           Expanded(
                                             child: TextButton(
                                               style: TextButton.styleFrom(
@@ -358,7 +367,7 @@ class _ClienEntryPageState extends State<ClienEntryPage> {
                           },
                           child: Text(S().add_clien),
                         ),
-                        SizedBox(height: 40),
+                        const SizedBox(height: 40),
                       ],
                     ),
                   ),

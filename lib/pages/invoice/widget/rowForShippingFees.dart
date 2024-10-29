@@ -6,15 +6,76 @@ DataRow rowForShippingFees(
     double grandTotalPriceTaxs,
     TextEditingController shippingFeeController,
     String Function(String text) convertArabicToEnglish,
-    ValueNotifier<double> shippingFeesNotifier) {
+    ValueNotifier<double> shippingFeesNotifier,
+    TextEditingController shippingCompanyNameController,
+    TextEditingController shippingTrackingNumberController,
+    TextEditingController packingBagsNumberController) {
   return DataRow(
     cells: [
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      DataCell(Text(S().shipping_information)),
+      DataCell(Center(
+        child: SizedBox(
+          width: 100,
+          child: TextField(
+            controller: shippingCompanyNameController,
+            textDirection: TextDirection.ltr,
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: S()
+                  .shipping_company_name, // النص الظاهر فوق الحقل عند التفاعل
+              hintText:
+                  S().enter_shipping_company_name, // النص التوضيحي داخل الحقل
+            ),
+            onChanged: (value) {
+              //   setState(() {});
+            },
+          ),
+        ),
+      )),
+      DataCell(Center(
+        child: SizedBox(
+          width: 100,
+          child: TextField(
+            controller: shippingTrackingNumberController,
+            textDirection: TextDirection.ltr,
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: S().shipping_tracking_number,
+              // النص الظاهر فوق الحقل عند التفاعل
+              hintText: S().enter_shipping_tracking_number,
+              // النص التوضيحي داخل الحقل
+            ),
+            onChanged: (value) {
+              //   setState(() {});
+            },
+          ),
+        ),
+      )),
+      DataCell(Center(
+        child: SizedBox(
+          width: 100,
+          child: TextField(
+            controller: packingBagsNumberController,
+            textDirection: TextDirection.ltr,
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: S().packing_bags_number,
+              // النص الظاهر فوق الحقل عند التفاعل
+              hintText: S().enter_packing_bags_number,
+              // النص التوضيحي داخل الحقل
+            ),
+            onChanged: (value) {
+              //   setState(() {});
+            },
+          ),
+        ),
+      )),
+
       DataCell(
           Center(child: Text(S().shipping_fees, textAlign: TextAlign.center))),
 
@@ -41,7 +102,7 @@ DataRow rowForShippingFees(
             },
             decoration: InputDecoration(
               prefixText: '\$',
-              hintText: '0.00',
+              hintText: S().enter_shipping_fees,
             ),
           ),
         ),

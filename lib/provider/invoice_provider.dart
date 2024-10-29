@@ -158,7 +158,7 @@ class InvoiceProvider with ChangeNotifier {
   }
 
   // خريطة لتخزين الأسعار حسب المجموعة
-  Map<String, double> _prices = {};
+  final Map<String, double> _prices = {};
 
   // دالة لتحديث السعر المرتبط بالمجموعة
   void setPrice(String groupKey, double price) {
@@ -171,7 +171,7 @@ class InvoiceProvider with ChangeNotifier {
     return _prices[groupKey] ?? 0.00;
   }
 
-  Map<String, bool> _selectionState = {}; // لتخزين حالة التحديد
+  final Map<String, bool> _selectionState = {}; // لتخزين حالة التحديد
 
   // الطريقة لتحديث حالة التحديد
   void updateSelectionState(String key, bool isSelected) {

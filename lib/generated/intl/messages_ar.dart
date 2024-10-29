@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "PDF_download_link":
+            MessageLookupByLibrary.simpleMessage("رابط تحميل PDF"),
         "abaya": MessageLookupByLibrary.simpleMessage("عباية"),
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
@@ -45,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "administration_page":
             MessageLookupByLibrary.simpleMessage("صفحة الإدارة"),
         "afternoon": MessageLookupByLibrary.simpleMessage("بعد الظهر"),
+        "amount": MessageLookupByLibrary.simpleMessage("مبلغ"),
         "an_error_occurred_while_adding":
             MessageLookupByLibrary.simpleMessage("حدث خطأ أثناء الإضافة"),
         "an_error_occurred_while_adding_data":
@@ -56,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "هل أنت متأكد أنك تريد تسجيل البيانات وعرض ملف PDF؟"),
         "available": MessageLookupByLibrary.simpleMessage("متوفر"),
+        "bags": MessageLookupByLibrary.simpleMessage("أكياس"),
         "black": MessageLookupByLibrary.simpleMessage("أسود"),
         "blue_textiles":
             MessageLookupByLibrary.simpleMessage("المنسوجات الزرقاء"),
@@ -110,6 +114,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "download_a_copy_of_the_invoice_in_pdf":
             MessageLookupByLibrary.simpleMessage(
                 "تحميل نسخة من الفاتورة بصيغة PDF"),
+        "download_data_in_excel_format":
+            MessageLookupByLibrary.simpleMessage("تحميل البيانات في شكل اكسل"),
         "dues": MessageLookupByLibrary.simpleMessage("المستحقات"),
         "duplicate_code": MessageLookupByLibrary.simpleMessage("كود مكرر"),
         "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
@@ -123,6 +129,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("أدخل قيمة مخصصة"),
         "enter_new_item":
             MessageLookupByLibrary.simpleMessage("أدخل عنصرًا جديدًا"),
+        "enter_packing_bags_number":
+            MessageLookupByLibrary.simpleMessage("أدخل عدد أكياس التعبئة"),
+        "enter_shipping_company_name":
+            MessageLookupByLibrary.simpleMessage("أدخل اسم شركة الشحن"),
+        "enter_shipping_fees":
+            MessageLookupByLibrary.simpleMessage("أدخل رسوم الشحن"),
+        "enter_shipping_tracking_number":
+            MessageLookupByLibrary.simpleMessage("أدخل رقم التتبع"),
         "enter_value_minus":
             MessageLookupByLibrary.simpleMessage("أدخل قيمة ناقص"),
         "enter_value_plus":
@@ -135,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("خطأ جلب العملاء:"),
         "error_occurred": MessageLookupByLibrary.simpleMessage("حدث خطأ"),
         "evening": MessageLookupByLibrary.simpleMessage("مسائي"),
+        "export_to_excel":
+            MessageLookupByLibrary.simpleMessage("تصدير إلى اكسل"),
         "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(
             "فشل في تحميل تفاصيل الفاتورة"),
         "failed_to_save_data": MessageLookupByLibrary.simpleMessage(
@@ -164,7 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "id": MessageLookupByLibrary.simpleMessage("ID"),
         "image_uploaded_successfully":
             MessageLookupByLibrary.simpleMessage("تم رفع الصورة بنجاح"),
-        "input": MessageLookupByLibrary.simpleMessage("وارد"),
+        "input": MessageLookupByLibrary.simpleMessage("إدخال"),
         "invalid_code_scanned_and_removed":
             MessageLookupByLibrary.simpleMessage(
                 "تم مسح كود غير صالح وتمت إزالته"),
@@ -179,6 +195,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invoice_to": MessageLookupByLibrary.simpleMessage("الفاتورة إلى"),
         "item": MessageLookupByLibrary.simpleMessage("عنصر"),
         "last_name": MessageLookupByLibrary.simpleMessage("الاسم الأخير"),
+        "last_saved_pdf":
+            MessageLookupByLibrary.simpleMessage("اخر PDF تم حفظه"),
         "length": MessageLookupByLibrary.simpleMessage("الطول"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "logout": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
@@ -209,10 +227,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد فاتورة متاحة"),
         "no_invoice_id_provided":
             MessageLookupByLibrary.simpleMessage("لم يتم تقديم رقم الفاتورة"),
+        "no_pdf_url_found":
+            MessageLookupByLibrary.simpleMessage("No PDF URL found."),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("لم يتم اختيار تاجر"),
         "ok": MessageLookupByLibrary.simpleMessage("حسنًا"),
-        "output": MessageLookupByLibrary.simpleMessage("صادر"),
+        "output": MessageLookupByLibrary.simpleMessage("إخراج"),
+        "packing_bags_number":
+            MessageLookupByLibrary.simpleMessage("عدد أكياس التعبئة"),
         "page": MessageLookupByLibrary.simpleMessage("صفحة"),
         "page_not_found":
             MessageLookupByLibrary.simpleMessage("الصفحة غير موجودة"),
@@ -247,6 +269,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "polyester": MessageLookupByLibrary.simpleMessage("بوليستر"),
         "previous_debt": MessageLookupByLibrary.simpleMessage("الدين السابق"),
         "price": MessageLookupByLibrary.simpleMessage("السعر"),
+        "print": MessageLookupByLibrary.simpleMessage("طباعة"),
         "pro_invoice": MessageLookupByLibrary.simpleMessage("فاتورة أولية"),
         "pro_invoice_details":
             MessageLookupByLibrary.simpleMessage("تفاصيل الفاتورة الأولية"),
@@ -257,7 +280,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "propylene": MessageLookupByLibrary.simpleMessage("بولي بروبيلين"),
         "quantity": MessageLookupByLibrary.simpleMessage("الكمية"),
         "register": MessageLookupByLibrary.simpleMessage("تسجيل"),
+        "reprint_item":
+            MessageLookupByLibrary.simpleMessage("إعادة طباعة الباركود"),
         "riza": MessageLookupByLibrary.simpleMessage("رزا"),
+        "roll": MessageLookupByLibrary.simpleMessage("رول"),
         "sablah": MessageLookupByLibrary.simpleMessage("سبلة"),
         "sale_status": MessageLookupByLibrary.simpleMessage("حالة البيع"),
         "save_and_send_data":
@@ -284,9 +310,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "send": MessageLookupByLibrary.simpleMessage("إرسال"),
         "shanta": MessageLookupByLibrary.simpleMessage("شنطة"),
         "shift": MessageLookupByLibrary.simpleMessage("وردية"),
+        "shipping_company_name":
+            MessageLookupByLibrary.simpleMessage("اسم شركة الشحن"),
         "shipping_fees": MessageLookupByLibrary.simpleMessage("رسوم الشحن"),
+        "shipping_information":
+            MessageLookupByLibrary.simpleMessage("معلومات الشحن"),
+        "shipping_tracking_number":
+            MessageLookupByLibrary.simpleMessage("رقم تتبع الشحن"),
         "show_full_repository_content":
             MessageLookupByLibrary.simpleMessage("عرض محتوى المستودع بالكامل"),
+        "show_yarn_table":
+            MessageLookupByLibrary.simpleMessage("عرض جدول الغزل"),
         "sold": MessageLookupByLibrary.simpleMessage("تم البيع"),
         "sub_total": MessageLookupByLibrary.simpleMessage("المجموع الفرعي"),
         "switch_to_quantity":
@@ -316,12 +350,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_length": MessageLookupByLibrary.simpleMessage("إجمالي الطول"),
         "total_price": MessageLookupByLibrary.simpleMessage("السعر الإجمالي"),
         "total_quantity": MessageLookupByLibrary.simpleMessage("إجمالي الكمية"),
+        "total_roll": MessageLookupByLibrary.simpleMessage("إجمالي الرول"),
+        "total_unit": MessageLookupByLibrary.simpleMessage("إجمالي الوحدة"),
         "total_weight": MessageLookupByLibrary.simpleMessage("إجمالي الوزن"),
         "trader_name": MessageLookupByLibrary.simpleMessage("اسم التاجر"),
         "traders_accounts":
             MessageLookupByLibrary.simpleMessage("حسابات التجار"),
         "translate": MessageLookupByLibrary.simpleMessage("ترجمة"),
         "type": MessageLookupByLibrary.simpleMessage("النوع"),
+        "type_of_operation":
+            MessageLookupByLibrary.simpleMessage("نوع العملية"),
         "unit": MessageLookupByLibrary.simpleMessage("وحدة"),
         "user": MessageLookupByLibrary.simpleMessage("مستخدم"),
         "user_data_not_found": MessageLookupByLibrary.simpleMessage(

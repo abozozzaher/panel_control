@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:panel_control/model/clien.dart';
-import 'package:panel_control/service/toasts.dart';
+import '../model/clien.dart';
+import 'toasts.dart';
 
 import '../data/data_lists.dart';
 import '../provider/invoice_provider.dart';
@@ -120,7 +120,7 @@ class InvoiceService {
     }
 
     // تعيين البيانات المنفصلة للحفظ
-    this.separateData = allSeparateData;
+    separateData = allSeparateData;
     return aggregatedData;
   }
 
@@ -136,7 +136,14 @@ class InvoiceService {
       double previousDebts,
       double shippingFees,
       String? invoiceCode,
-      String downloadUrlPdf) async {
+      String downloadUrlPdf,
+      String shippingCompanyName,
+      String shippingTrackingNumber,
+      String packingBagsNumber,
+      double totalWeight,
+      int totalQuantity,
+      int totalLength,
+      int totalScannedData) async {
     // قائمة لجمع جميع الأسعار
     final totalLinePrices = aggregatedData.keys.map((groupKey) {
       return invoiceProvider.getPrice(groupKey);
@@ -174,13 +181,20 @@ class InvoiceService {
         'taxs': taxs,
         'previousDebts': previousDebts,
         'shippingFees': shippingFees,
+        'shippingCompanyName': shippingCompanyName,
+        'shippingTrackingNumber': shippingTrackingNumber,
+        'packingBagsNumber': packingBagsNumber,
+        "totalWeight": totalWeight,
+        "totalQuantity": totalQuantity,
+        "totalLength": totalLength,
+        "totalScannedData": totalScannedData,
         'createdAt':
             DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(DateTime.now()),
         'downloadUrlPdf': downloadUrlPdf,
         'invoiceCode': invoiceCode,
         'trader': trader.toMap(),
       });
-      separateData.values.forEach((innerMap) {
+      for (var innerMap in separateData.values) {
         final productId = innerMap['product_id'];
 
         final monthFolder =
@@ -194,7 +208,7 @@ class InvoiceService {
         productDocument.update({
           'sale_status': true, // or any other status you want to update
         });
-      });
+      }
 
       List<String> selectedIds = invoiceProvider.selectionState.keys
           .where((id) => invoiceProvider.selectionState[id] == true)
@@ -209,7 +223,7 @@ class InvoiceService {
     } catch (e) {
       showToast('Error saving data to Firestore: $e');
       print('Error saving data to Firestore: $e');
-      throw e; // أعيد الخطأ للتعامل معه لاحقًا
+      rethrow; // أعيد الخطأ للتعامل معه لاحقًا
     }
   }
 }

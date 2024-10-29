@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class YarnData {
@@ -27,8 +28,8 @@ class YarnData {
       required this.goodsPrice});
 
   Map<String, dynamic> toMap(double? exchangeRateTR) {
-    String formattedCreatedAt =
-        DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(createdAt);
+    // String formattedCreatedAt =        DateFormat('yyyy-MM-dd HH:mm:ss', 'en').format(createdAt);
+    Timestamp formattedCreatedAt = Timestamp.fromDate(createdAt);
 
     return {
       'yarn_number': yarnNumber,

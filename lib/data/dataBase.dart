@@ -1,4 +1,4 @@
-import 'package:panel_control/service/toasts.dart';
+import '../service/toasts.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

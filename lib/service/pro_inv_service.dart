@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:panel_control/service/toasts.dart';
+import 'toasts.dart';
 
 import '../generated/l10n.dart';
 import '../model/clien.dart';
@@ -7,16 +7,22 @@ import '../model/clien.dart';
 DateTime now = DateTime.now();
 ////0000
 Future<void> saveDataProInv(
-    List<Map<String, dynamic>> tableDataList,
-    double finalTotal,
-    ClienData? trader,
-    double totalPrices,
-    double taxWthiPrice,
-    String tax,
-    double dues,
-    double shippingFees,
-    String invoiceCode,
-    String downloadUrlPdf) async {
+  List<Map<String, dynamic>> tableDataList,
+  double finalTotal,
+  ClienData? trader,
+  double totalPrices,
+  double taxWthiPrice,
+  String tax,
+  double dues,
+  double shippingFees,
+  String invoiceCode,
+  String downloadUrlPdf,
+  String shippingCompanyName,
+  String shippingTrackingNumber,
+  String packingBagsNumber,
+  double totalWeightSum,
+  double totalUnitSum,
+) async {
   // استخراج البيانات من tableDataList
   final tableData = tableDataList.map((productData) {
     return [
@@ -51,6 +57,11 @@ Future<void> saveDataProInv(
       'dues': dues.toStringAsFixed(2),
       'shippingFees': shippingFees.toStringAsFixed(2),
       'downloadUrlPdf': downloadUrlPdf,
+      'shippingCompanyName': shippingCompanyName,
+      'shippingTrackingNumber': shippingTrackingNumber,
+      'packingBagsNumber': packingBagsNumber,
+      'totalWeightSum': totalWeightSum.toStringAsFixed(0),
+      'totalUnitSum': totalUnitSum.toStringAsFixed(0),
       'products': tableData
           .map((product) => {
                 'type': product[0],

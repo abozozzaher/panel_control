@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "PDF_download_link":
+            MessageLookupByLibrary.simpleMessage("PDF Download Link"),
         "abaya": MessageLookupByLibrary.simpleMessage("Abaya"),
         "access_denied_you_do_not_have_the_required_role":
             MessageLookupByLibrary.simpleMessage(
@@ -43,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "administration_page":
             MessageLookupByLibrary.simpleMessage("Administration page"),
         "afternoon": MessageLookupByLibrary.simpleMessage("Afternoon"),
+        "amount": MessageLookupByLibrary.simpleMessage("Amount"),
         "an_error_occurred_while_adding": MessageLookupByLibrary.simpleMessage(
             "An error occurred while adding"),
         "an_error_occurred_while_adding_data":
@@ -54,6 +57,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Are you sure you want to record the data and view the PDF file ?"),
         "available": MessageLookupByLibrary.simpleMessage("Available"),
+        "bags": MessageLookupByLibrary.simpleMessage("Bags"),
         "black": MessageLookupByLibrary.simpleMessage("Black"),
         "blue_textiles": MessageLookupByLibrary.simpleMessage("Blue textiles"),
         "brown": MessageLookupByLibrary.simpleMessage("Brown"),
@@ -109,6 +113,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "download_a_copy_of_the_invoice_in_pdf":
             MessageLookupByLibrary.simpleMessage(
                 "Download a copy of the invoice in PDF"),
+        "download_data_in_excel_format": MessageLookupByLibrary.simpleMessage(
+            "Download data in Excel format"),
         "dues": MessageLookupByLibrary.simpleMessage("Dues"),
         "duplicate_code":
             MessageLookupByLibrary.simpleMessage("Duplicate Code"),
@@ -122,6 +128,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter Custom Value"),
         "enter_new_item":
             MessageLookupByLibrary.simpleMessage("Enter new item"),
+        "enter_packing_bags_number":
+            MessageLookupByLibrary.simpleMessage("Enter Packing bags number"),
+        "enter_shipping_company_name":
+            MessageLookupByLibrary.simpleMessage("Enter shipping company name"),
+        "enter_shipping_fees":
+            MessageLookupByLibrary.simpleMessage("Enter Shipping Fees"),
+        "enter_shipping_tracking_number":
+            MessageLookupByLibrary.simpleMessage("Enter tracking number"),
         "enter_value_minus":
             MessageLookupByLibrary.simpleMessage("Enter value Minus"),
         "enter_value_plus":
@@ -135,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "error_occurred":
             MessageLookupByLibrary.simpleMessage("error occurred"),
         "evening": MessageLookupByLibrary.simpleMessage("Evening"),
+        "export_to_excel":
+            MessageLookupByLibrary.simpleMessage("Export to Excel"),
         "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(
             "Failed to load invoice details"),
         "failed_to_save_data":
@@ -178,6 +194,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "invoice_to": MessageLookupByLibrary.simpleMessage("Invoice to"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
         "last_name": MessageLookupByLibrary.simpleMessage("Last Name"),
+        "last_saved_pdf":
+            MessageLookupByLibrary.simpleMessage("Last saved PDF URL"),
         "length": MessageLookupByLibrary.simpleMessage("Length"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
@@ -208,10 +226,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No invoice available"),
         "no_invoice_id_provided":
             MessageLookupByLibrary.simpleMessage("No Invoice ID provided"),
+        "no_pdf_url_found":
+            MessageLookupByLibrary.simpleMessage("No PDF URL found."),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "output": MessageLookupByLibrary.simpleMessage("Output"),
+        "packing_bags_number":
+            MessageLookupByLibrary.simpleMessage("Packing Bags Number"),
         "page": MessageLookupByLibrary.simpleMessage("Page"),
         "page_not_found":
             MessageLookupByLibrary.simpleMessage("Page not found"),
@@ -258,7 +280,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "propylene": MessageLookupByLibrary.simpleMessage("Propylene"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "reprint_item": MessageLookupByLibrary.simpleMessage("Reprint item"),
         "riza": MessageLookupByLibrary.simpleMessage("Riza"),
+        "roll": MessageLookupByLibrary.simpleMessage("Roll"),
         "sablah": MessageLookupByLibrary.simpleMessage("Siblings"),
         "sale_status": MessageLookupByLibrary.simpleMessage("Sale Status"),
         "save_and_send_data":
@@ -272,7 +296,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "scanned": MessageLookupByLibrary.simpleMessage("Scanned"),
         "scanned_data_length":
             MessageLookupByLibrary.simpleMessage("Scanned Data Length"),
-        "search_client": MessageLookupByLibrary.simpleMessage("Search Client"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_all": MessageLookupByLibrary.simpleMessage("Select All"),
         "select_an_option":
@@ -287,9 +310,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "send": MessageLookupByLibrary.simpleMessage("Send"),
         "shanta": MessageLookupByLibrary.simpleMessage("bag"),
         "shift": MessageLookupByLibrary.simpleMessage("Shift"),
+        "shipping_company_name":
+            MessageLookupByLibrary.simpleMessage("Shipping Company Name"),
         "shipping_fees": MessageLookupByLibrary.simpleMessage("Shipping Fees"),
+        "shipping_information":
+            MessageLookupByLibrary.simpleMessage("Shipping information"),
+        "shipping_tracking_number":
+            MessageLookupByLibrary.simpleMessage("Shipping Tracking Number"),
         "show_full_repository_content": MessageLookupByLibrary.simpleMessage(
             "Show full repository content"),
+        "show_yarn_table":
+            MessageLookupByLibrary.simpleMessage("Show yarn table"),
         "sold": MessageLookupByLibrary.simpleMessage("Sold"),
         "sub_total": MessageLookupByLibrary.simpleMessage("Sub Total"),
         "switch_to_quantity":
@@ -321,12 +352,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "total_price": MessageLookupByLibrary.simpleMessage("Total Price"),
         "total_quantity":
             MessageLookupByLibrary.simpleMessage("Total Quantity"),
+        "total_roll": MessageLookupByLibrary.simpleMessage("total Roll"),
+        "total_unit": MessageLookupByLibrary.simpleMessage("total Unit"),
         "total_weight": MessageLookupByLibrary.simpleMessage("Total Weight"),
         "trader_name": MessageLookupByLibrary.simpleMessage("trader Name"),
         "traders_accounts":
             MessageLookupByLibrary.simpleMessage("Traders Accounts"),
         "translate": MessageLookupByLibrary.simpleMessage("translate"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
+        "type_of_operation":
+            MessageLookupByLibrary.simpleMessage("Type of operation"),
         "unit": MessageLookupByLibrary.simpleMessage("Unit"),
         "user": MessageLookupByLibrary.simpleMessage("user"),
         "user_data_not_found":

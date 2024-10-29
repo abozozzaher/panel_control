@@ -7,6 +7,11 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../generated/l10n.dart';
+import '../../service/toasts.dart';
 
 String yearMonth = DateFormat('yyyy-MM').format(DateTime.now());
 
@@ -70,7 +75,7 @@ Future<String> uploadImageToStorage(
 
   Reference storageReference = FirebaseStorage.instance
       .ref()
-      .child('productsImage/$englishYearMonth/$day/${englishProductId}.jpg');
+      .child('productsImage/$englishYearMonth/$day/$englishProductId.jpg');
   SettableMetadata metadata = SettableMetadata(contentType: 'image/jpeg');
 
   UploadTask uploadTask;
@@ -96,4 +101,26 @@ Future<String> uploadImageToStorage(
 
   await uploadTask;
   return await storageReference.getDownloadURL();
+}
+
+// حفظ رابط الملف في SharedPreferences
+Future<void> saveFileUrl(String url) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('pdfFileUrl', url); // حفظ الرابط تحت مفتاح 'pdfFileUrl'
+}
+
+// استرجاع رابط الملف من SharedPreferences
+Future<String?> getFileUrl() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('pdfFileUrl'); // استرجاع الرابط المحفوظ
+}
+
+// فتح رابط الـ PDF في المتصفح أو عارض PDF
+Future<void> openPdf(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    showToast('${S().could_not_launch_url} : #208 $url');
+    throw '${S().could_not_launch_url} : $url';
+  }
 }

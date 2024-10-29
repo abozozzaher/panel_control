@@ -6,6 +6,8 @@ import '../../generated/l10n.dart';
 class AcceptedDialo extends StatelessWidget {
   final DataLists dataLists = DataLists();
 
+  AcceptedDialo({super.key});
+
   @override
   Widget build(BuildContext context) {
     //  final invoiceProvider = Provider.of<InvoiceProvider>(context);
@@ -13,7 +15,7 @@ class AcceptedDialo extends StatelessWidget {
 
     return AlertDialog(
       title: Text('${S().confirm}   ${S().item}', textAlign: TextAlign.center),
-      content: Container(
+      content: const SizedBox(
         width: 500,
         height: 400,
         child: SingleChildScrollView(

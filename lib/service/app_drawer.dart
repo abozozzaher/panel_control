@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../generated/l10n.dart';
 import 'auth_service.dart';
@@ -17,26 +16,7 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
 //  final String version = 'Version 2024.09.23';
-
-  String version = '';
-
-  @override
-  void initState() {
-    super.initState();
-    loadVersion();
-  }
-
-  Future<void> loadVersion() async {
-    String data = await rootBundle.loadString('panel_control/README.md');
-    // ابحث عن رقم الإصدار في النص المحمل
-    final versionMatch =
-        RegExp(r'## Version\s+(\d+\.\d+\.\d+)').firstMatch(data);
-    if (versionMatch != null) {
-      setState(() {
-        version = versionMatch.group(1) ?? 'Unknown';
-      });
-    }
-  }
+  String version = 'V2.0.1';
 
   // رقم الإصدار
   @override
@@ -86,13 +66,11 @@ class _AppDrawerState extends State<AppDrawer> {
                 await AuthService().logout(context);
               },
             ),
-          Spacer(), // يملأ المساحة المتبقية
+          const Spacer(), // يملأ المساحة المتبقية
 
           // رقم الإصدار
-          Text(
-            version.isNotEmpty ? 'Version $version' : 'Loading...',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
+          Text('Version $version',
+              style: const TextStyle(fontSize: 16, color: Colors.grey)),
         ],
       ),
     );

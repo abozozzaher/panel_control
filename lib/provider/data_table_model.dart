@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 //للمسح لا يوجد لها استخدم
 class TableDataProvider with ChangeNotifier {
-  List<DataRow> _confirmedRows = [];
+  final List<DataRow> _confirmedRows = [];
   DataRow? _temporaryRow;
 
   List<DataRow> get confirmedRows => _confirmedRows;

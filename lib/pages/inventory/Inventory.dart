@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:panel_control/generated/l10n.dart';
-import 'package:panel_control/service/toasts.dart';
 
 import '../../data/dataBase.dart';
 import '../../data/data_lists.dart';
+import '../../generated/l10n.dart';
+import '../../service/toasts.dart';
 import 'DropdownButton.dart';
+import 'Excel_Inventory.dart';
 import 'SelectedMonthsDialog.dart'; // Assuming you are using localization strings
 
 class Inventory extends StatefulWidget {
@@ -38,6 +39,17 @@ class _InventoryState extends State<Inventory> {
 
 // تعديل دالة الفاتش
   ///9998
+  String formatNumber(double num) {
+    if (num >= 1000000000) {
+      return (num / 1000000000).toStringAsFixed(0) + 'B'; // مليار
+    } else if (num >= 1000000) {
+      return (num / 1000000).toStringAsFixed(0) + 'M'; // مليون
+    } else if (num >= 1000) {
+      return (num / 1000).toStringAsFixed(0) + 'k'; // ألف
+    } else {
+      return num.toStringAsFixed(1); // أقل من ألف
+    }
+  }
 
   Future<void> fetchProductsData(List<String> months) async {
     try {
@@ -93,6 +105,7 @@ class _InventoryState extends State<Inventory> {
               (S().yarn_number),
               (S().quantity),
               (S().length),
+              (S().total_length),
               (S().total_weight),
               (S().scanned)
             ];
@@ -100,7 +113,7 @@ class _InventoryState extends State<Inventory> {
 
           for (var product in monthProducts) {
             String key =
-                '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}';
+                '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}-${product['length']}';
 
             if (!allProducts.containsKey(key)) {
               // لم يتم العثور على المنتج في قاعدة البيانات، لذا احضره من Firebase وقم بحفظه في SQLite
@@ -109,9 +122,10 @@ class _InventoryState extends State<Inventory> {
                 'type': product['type'],
                 'color': product['color'],
                 'width': product['width'],
+                'length': product['length'],
                 'total_weight': 0.0,
                 'quantity': 0,
-                'length': 0,
+                'total_length': 0.0,
                 'scanned_data': 0,
               };
 
@@ -120,14 +134,23 @@ class _InventoryState extends State<Inventory> {
                   allProducts[key]!, key);
             }
 
+            // حساب الطول * الكمية
+            double totalLength = (product['length'] is int
+                    ? product['length']
+                    : int.tryParse(product['length'].toString()) ?? 0) *
+                (product['quantity'] is int
+                    ? product['quantity']
+                    : int.tryParse(product['quantity'].toString()) ?? 0);
+            // تحديث البيانات المحسوبة
             allProducts[key]!['total_weight'] +=
                 double.tryParse(product['total_weight'].toString()) ?? 0.0;
             allProducts[key]!['quantity'] += product['quantity'] is int
                 ? product['quantity']
                 : int.tryParse(product['quantity'].toString()) ?? 0;
-            allProducts[key]!['length'] += product['length'] is int
-                ? product['length']
-                : int.tryParse(product['length'].toString()) ?? 0;
+            allProducts[key]!['total_length'] += totalLength;
+            // حفظ الطول المختصر
+            allProducts[key]!['formatted_length'] =
+                formatNumber(allProducts[key]!['total_length']);
             allProducts[key]!['scanned_data'] += 1;
           }
         }
@@ -135,9 +158,9 @@ class _InventoryState extends State<Inventory> {
         // إذا لم يكن على الويب، تحقق من وجود البيانات في SQLite
         List<Map<String, dynamic>> existingProducts =
             await databaseHelper.checkProductsInDatabaseInventory(keysToCheck);
-        existingProducts.forEach((product) {
+        for (var product in existingProducts) {
           allProducts[product['id']] = product;
-        });
+        }
 
         for (String month in months) {
           Query query = FirebaseFirestore.instance
@@ -186,7 +209,7 @@ class _InventoryState extends State<Inventory> {
 
           for (var product in monthProducts) {
             String key =
-                '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}';
+                '${product['yarn_number']}-${product['type']}-${product['color']}-${product['width']}-${product['length']}';
 
             if (!allProducts.containsKey(key)) {
               // لم يتم العثور على المنتج في قاعدة البيانات، لذا احضره من Firebase وقم بحفظه في SQLite
@@ -195,24 +218,34 @@ class _InventoryState extends State<Inventory> {
                 'type': product['type'],
                 'color': product['color'],
                 'width': product['width'],
+                'length': product['length'],
                 'total_weight': 0.0,
                 'quantity': 0,
-                'length': 0,
+                'total_length': 0.0,
                 'scanned_data': 0,
               };
 
+              // تخزين المنتج في SQLite مباشرة إذا كان على الويب
               databaseHelper.saveProductToDatabaseInventory(
                   allProducts[key]!, key);
             }
 
+            // حساب الطول * الكمية
+            double totalLength = (product['length'] is int
+                    ? product['length']
+                    : int.tryParse(product['length'].toString()) ?? 0) *
+                (product['quantity'] is int
+                    ? product['quantity']
+                    : int.tryParse(product['quantity'].toString()) ?? 0);
             allProducts[key]!['total_weight'] +=
                 double.tryParse(product['total_weight'].toString()) ?? 0.0;
             allProducts[key]!['quantity'] += product['quantity'] is int
                 ? product['quantity']
                 : int.tryParse(product['quantity'].toString()) ?? 0;
-            allProducts[key]!['length'] += product['length'] is int
-                ? product['length']
-                : int.tryParse(product['length'].toString()) ?? 0;
+            allProducts[key]!['total_length'] += totalLength;
+            // حفظ الطول المختصر
+            allProducts[key]!['formatted_length'] =
+                formatNumber(allProducts[key]!['total_length']);
             allProducts[key]!['scanned_data'] += 1;
           }
         }
@@ -257,8 +290,18 @@ class _InventoryState extends State<Inventory> {
                 child: Text(S().select_months, textAlign: TextAlign.center),
               ),
             ),
+            // إضافة زر لتنزيل ملف Excel
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  exportToExcel(columnHeaders, aggregatedData);
+                }, // هنا وظيفة التصدير
+                child: Text(S().export_to_excel, textAlign: TextAlign.center),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -364,7 +407,8 @@ class _InventoryState extends State<Inventory> {
                       columns: columnHeaders.map((header) {
                         return DataColumn(
                           label: Text(header,
-                              style: TextStyle(color: Colors.greenAccent)),
+                              style:
+                                  const TextStyle(color: Colors.greenAccent)),
                         );
                       }).toList(),
                       rows: aggregatedData.entries.map((entry) {
@@ -406,6 +450,12 @@ class _InventoryState extends State<Inventory> {
                             DataCell(Center(
                               child: Text(
                                   '${DataLists().translateType(itemData['length'].toString())} Mt',
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.ltr),
+                            )),
+                            DataCell(Center(
+                              child: Text(
+                                  '${DataLists().translateType(itemData['formatted_length'].toString())} Mt',
                                   textAlign: TextAlign.center,
                                   textDirection: TextDirection.ltr),
                             )),

@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Uint8List? _webImage;
   String? _errorMessage;
   bool _loading = false; // تعيين متغير للتحقق من تحميل الصورة
-  bool work = true;
+  bool work = false;
   bool admin = false;
 
   Future<void> _pickImage() async {

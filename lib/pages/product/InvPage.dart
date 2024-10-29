@@ -11,7 +11,8 @@ class InvoicePage extends StatefulWidget {
   final String? codeIdClien;
   final String? invoiceCode;
 
-  InvoicePage({required this.codeIdClien, required this.invoiceCode});
+  const InvoicePage(
+      {super.key, required this.codeIdClien, required this.invoiceCode});
 
   @override
   State<InvoicePage> createState() => _InvoicePageState();
@@ -24,6 +25,18 @@ class _InvoicePageState extends State<InvoicePage> {
 
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
+  }
+
+  String formatNumber(double num) {
+    if (num >= 1000000000) {
+      return (num / 1000000000).toStringAsFixed(1) + 'B'; // مليار
+    } else if (num >= 1000000) {
+      return (num / 1000000).toStringAsFixed(1) + 'M'; // مليون
+    } else if (num >= 1000) {
+      return (num / 1000).toStringAsFixed(1) + 'k'; // ألف
+    } else {
+      return num.toStringAsFixed(1); // أقل من ألف
+    }
   }
 
   @override
@@ -237,7 +250,7 @@ class _InvoicePageState extends State<InvoicePage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 70,
                                     child: RichText(
                                         text: TextSpan(
@@ -379,7 +392,7 @@ class _InvoicePageState extends State<InvoicePage> {
                                         textDirection: TextDirection.ltr,
                                         maxLines: 1))),
                               ]);
-                            }).toList(),
+                            }),
                           ],
                         ),
                       ),
@@ -387,7 +400,7 @@ class _InvoicePageState extends State<InvoicePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(width: 30),
+                          const SizedBox(width: 30),
                           // رسالة الشكر في نهاية الفاتورة
                           Expanded(
                             flex: 2,
@@ -421,86 +434,159 @@ class _InvoicePageState extends State<InvoicePage> {
                           // اجمالي الفاتورة
                           Expanded(
                             flex: 1,
-                            child: DefaultTextStyle(
-                              style: const TextStyle(fontSize: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('${S().sub_total} :'),
-                                      Text(
-                                          _formatCurrency(
-                                              data['grandTotalPrice']),
-                                          textDirection: TextDirection.ltr),
-                                    ],
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().sub_total} :'),
+                                    Text(
+                                        _formatCurrency(
+                                            data['grandTotalPrice']),
+                                        textDirection: TextDirection.ltr),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().tax} :'),
+                                    Text(
+                                        '${(data['taxs'] * 100).toStringAsFixed(1)}%',
+                                        textDirection: TextDirection.ltr),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().shipping_fees}:'),
+                                    Text(_formatCurrency(data['shippingFees']),
+                                        textDirection: TextDirection.ltr),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(data['previousDebts'] == 0
+                                        ? '${S().no_dues} :'
+                                        : data['previousDebts'] > -1
+                                            ? '${S().previous_debt} :'
+                                            : '${S().customer_balance} :'),
+                                    Text(_formatCurrency(data['previousDebts']),
+                                        textDirection: TextDirection.ltr),
+                                  ],
+                                ),
+                                const Divider(color: Colors.blueGrey),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().final_total} :',
+                                        style: const TextStyle(
+                                            color: Colors.teal,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(_formatCurrency(data['finalTotal']),
+                                        style: const TextStyle(
+                                            color: Colors.teal,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                        textDirection: TextDirection.ltr),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Center(
+                                    child: Text(
+                                  S().shipping_information,
+                                  style: const TextStyle(
+                                    color: Colors.teal,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('${S().tax} :'),
-                                      Text(
-                                          '${(data['taxs'] * 100).toStringAsFixed(1)}%',
-                                          textDirection: TextDirection.ltr),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('${S().shipping_fees}:'),
-                                      Text(
-                                          _formatCurrency(data['shippingFees']),
-                                          textDirection: TextDirection.ltr),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(data['previousDebts'] == 0
-                                          ? '${S().no_dues} :'
-                                          : data['previousDebts'] > -1
-                                              ? '${S().previous_debt} :'
-                                              : '${S().customer_balance} :'),
-                                      Text(
-                                          _formatCurrency(
-                                              data['previousDebts']),
-                                          textDirection: TextDirection.ltr),
-                                    ],
-                                  ),
-                                  const Divider(color: Colors.blueGrey),
-                                  DefaultTextStyle(
-                                    style: const TextStyle(
-                                        color: Colors.teal,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('${S().final_total} :',
-                                            style: const TextStyle(
-                                                color: Colors.teal,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold)),
-                                        Text(
-                                            _formatCurrency(data['finalTotal']),
-                                            textDirection: TextDirection.ltr),
-                                      ],
+                                )),
+                                Divider(color: Colors.blueGrey),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().shipping_company_name} :'),
+                                    Text(data['shippingCompanyName']),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().shipping_tracking_number} :'),
+                                    Text(data['shippingTrackingNumber']),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().packing_bags_number} :'),
+                                    Text(
+                                        '${data['packingBagsNumber']} ${S().bags}'),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().total_weight} :'),
+                                    Text(
+                                      '${data['totalWeight']} kg',
+                                      textDirection: TextDirection.ltr,
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().total_unit} :'),
+                                    Text(
+                                        '${data['totalScannedData'].toStringAsFixed(0)} ${S().unit}'),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().total_roll} :'),
+                                    Text(
+                                        '${data['totalQuantity']} ${S().roll}'),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().total_length} :'),
+                                    Text(
+                                      '${formatNumber(data['totalLength'])} MT',
+                                      textDirection: TextDirection.ltr,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(width: 30),
+                          const SizedBox(width: 30),
                         ],
                       ),
                       const SizedBox(height: 50),

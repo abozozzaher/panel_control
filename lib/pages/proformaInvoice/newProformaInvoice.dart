@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:panel_control/pages/clien/traderDropdownForInvoice.dart';
 import 'package:provider/provider.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
@@ -9,6 +8,7 @@ import '../../provider/invoice_provider.dart';
 import '../../provider/trader_provider.dart';
 import '../../service/invoice_service.dart';
 import '../clien/addClien.dart';
+import '../clien/traderDropdownForInvoice.dart';
 import 'dataTabelFetcherForProInv.dart';
 
 class NewProformaInvoiceAdd extends StatefulWidget {
@@ -53,7 +53,7 @@ class _NewProformaInvoiceAddState extends State<NewProformaInvoiceAdd> {
             onPressed: () {
               context.go('/');
             },
-            icon: Icon(Icons.home))
+            icon: const Icon(Icons.home))
       ]),
       body: SingleChildScrollView(
         child: Column(
@@ -62,9 +62,9 @@ class _NewProformaInvoiceAddState extends State<NewProformaInvoiceAdd> {
           children: [
             Text('${S().invoice_code}: $invoiceCode'),
             // بيانات التاجر منسدلة اختيار التاجر
-            SizedBox(height: 20),
-            TraderDropdownForInvoice(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+            const TraderDropdownForInvoice(),
+            const SizedBox(height: 20),
             // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
             trader == null
                 ? // زر إضافة عميل

@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:panel_control/pages/auth/register_page.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,6 +14,7 @@ import 'generated/l10n.dart';
 
 import 'pages/adminHome.dart';
 import 'pages/auth/login_page.dart';
+import 'pages/auth/register_page.dart';
 import 'pages/home_page.dart';
 import 'pages/addNewProduct/NewItem.dart';
 import 'pages/product/InvPage.dart';
@@ -50,18 +50,18 @@ python3 update_translations.py
 flutter pub run intl_utils:generate
 
 
-http://localhost:56330/pro-invoices/0919014024
+http://localhost:62665/pro-invoices/1014230224
 
-http://localhost:56330/240009001200040029/invoices/0912174824
+http://localhost:62665/240010000200190031/invoices/1014230224
 
-تجريب رقم الاصدار هل يظهر بشكل صحيح
-اضافة رمز الشحن واسم شركة النقل
-اسم ملف ال pdf المحفوظ في الفايربيس للفاتورة والفاتورة الاولية
-اضافة خيار اعادة ظباعة الباركود مرا اخرى واظهار الباركودات التي تم ظباعتها حسب اسم العامل
+
+
 
 
 عمل صفحة يقوم العامل بادخال مدة الانتاج اليومي واقوم بتحديد الساعات المتاحة التي يظهر فيها اضافة 
+وعمل صفحة اكسل لتنزيل بيانات العامل
 ومن داخل الصفحة احدد من هم العمال في كل وردة وفي حال كان العامل ضمن ورديته يفتح له نافذة لاضافة بيانات العمل في ساعة نهاية الدوام
+
 
 اضافة في منسدلة التجار بحث للبحث عن اسم تاجر
 ويكون البحث لمت له فقط لعشر خيارات لتوفير عدد القراءات من الفايربيس
@@ -70,7 +70,6 @@ http://localhost:56330/240009001200040029/invoices/0912174824
 تعديل بيانات المخزون عمل صفحة تساعدني في تعديل البيانات وطبع جديد
 
 
-عمل جدول لعرض بيانات الخيط المدخل
 
 
 
@@ -82,6 +81,7 @@ flutter build apk
 flutter build appbundle
 build/app/outputs/bundle/release
 build/app/outputs/apk/release
+لتحديث الكود نسخ ملف ال lib بدون ملف الماين لاني مفاتيح الفايربيس مختلفة
 
 
 
@@ -122,6 +122,9 @@ add novigator. push . context.go('/'); اريد بناء هذا الشكل
 اضافة نقريتين للخروج
 عمل رول وتاكيد من صلاحية الوصول وعمل روابط بشكل افضل للصفحات
 
+في صفحة العميل تنزيل بياناته##
+اصلاح التنسيق في صفحة الاكسل تبع العميل وعمل عامود للحساب وعمل تحديد تاريخ التنزيل
+عمل شرط في صفحة العميل ان يظهر البيانات حسب التاريخ او كل الاوقات ثم تحميل البيانات بتفصيل في  اكسل
 
 
 اضافة شرط في حال كان الكود ممسوح بقائمة ثانية يعطي تنبيه ولا يضاف الى الجدول الا واحد (عمل هذا الشرط لاحقا)
@@ -154,9 +157,9 @@ Future<bool> _checkLoginStatus() async {
 }
 
 class MyApp extends StatefulWidget {
-  final bool isLoggedIn;
+  final bool? isLoggedIn;
 
-  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({super.key, this.isLoggedIn});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -244,7 +247,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   late final GoRouter _router = GoRouter(
-    initialLocation: widget.isLoggedIn ? '/' : '/login',
+    initialLocation: widget.isLoggedIn! ? '/' : '/login',
     routes: [
       GoRoute(
         path: '/',
@@ -294,7 +297,7 @@ class _MyAppState extends State<MyApp> {
           future: checkUserRole(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(
+              return const Scaffold(
                   body: Center(child: CircularProgressIndicator.adaptive()));
             }
             if (snapshot.data == true) {
@@ -309,7 +312,7 @@ class _MyAppState extends State<MyApp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(S().access_denied_you_do_not_have_the_required_role),
-                      SizedBox(height: 20), // لإضافة مسافة بين النص والزر
+                      const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       ElevatedButton(
                         onPressed: () {
                           // الانتقال إلى الصفحة الرئيسية
@@ -331,7 +334,7 @@ class _MyAppState extends State<MyApp> {
           future: checkUserRole(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(
+              return const Scaffold(
                   body: Center(child: CircularProgressIndicator.adaptive()));
             }
             if (snapshot.data == true) {
@@ -346,7 +349,7 @@ class _MyAppState extends State<MyApp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(S().access_denied_you_do_not_have_the_required_role),
-                      SizedBox(height: 20), // لإضافة مسافة بين النص والزر
+                      const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       ElevatedButton(
                         onPressed: () {
                           // الانتقال إلى الصفحة الرئيسية
@@ -368,7 +371,7 @@ class _MyAppState extends State<MyApp> {
           future: checkUserRoleAdmin(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(
+              return const Scaffold(
                   body: Center(child: CircularProgressIndicator.adaptive()));
             }
             if (snapshot.data == true) {
@@ -383,7 +386,7 @@ class _MyAppState extends State<MyApp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(S().access_denied_you_do_not_have_the_required_role),
-                      SizedBox(height: 20), // لإضافة مسافة بين النص والزر
+                      const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       ElevatedButton(
                         onPressed: () {
                           // الانتقال إلى الصفحة الرئيسية

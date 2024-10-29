@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:panel_control/service/trader_service.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../model/clien.dart';
+import '../../../service/trader_service.dart';
 
 DataRow duesForProInv(
     ClienData? trader, ValueNotifier<double> previousDebtsController) {
   return DataRow(
     cells: [
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
       DataCell(
         Center(
             child: Text(
@@ -26,7 +26,7 @@ DataRow duesForProInv(
           textAlign: TextAlign.center,
           style: TextStyle(
               color: previousDebtsController.value == 0
-                  ? Colors.black
+                  ? Colors.green
                   : previousDebtsController.value < 1
                       ? Colors.redAccent
                       : Colors.green),
@@ -38,7 +38,7 @@ DataRow duesForProInv(
             future: TraderService().fetchLastDues(trader!.codeIdClien),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator.adaptive();
+                return const CircularProgressIndicator.adaptive();
               } else if (snapshot.hasError) {
                 return Text(S().error);
               } else {
@@ -48,7 +48,7 @@ DataRow duesForProInv(
                 return Text('\$${lastDues.toStringAsFixed(2)}',
                     style: TextStyle(
                         color: lastDues == 0
-                            ? Colors.black
+                            ? Colors.green
                             : lastDues < 0
                                 ? Colors.redAccent
                                 : Colors.green,
@@ -71,7 +71,7 @@ DataRow duesForProInv(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                       color: value == 0
-                          ? Colors.black
+                          ? Colors.green
                           : value < -1
                               ? Colors.redAccent
                               : Colors.green),
@@ -82,7 +82,7 @@ DataRow duesForProInv(
           ),
         ),
       ),
-      DataCell(Text('')),
+      const DataCell(Text('')),
     ],
   );
 }

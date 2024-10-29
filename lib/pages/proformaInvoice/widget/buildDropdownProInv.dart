@@ -37,7 +37,7 @@ Widget buildDropdownProInv(
           value: item[0],
           child: Center(child: Text(item[1])),
         );
-      }).toList(),
+      }),
       DropdownMenuItem<String>(
         value: "Add New",
         child: Center(child: Text(S().add_new_item)),
@@ -69,28 +69,28 @@ Future<String?> _showAddItemDialog(BuildContext context) async {
             children: [
               Expanded(
                   child: TextButton(
-                      child: Text(S().cancel,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
                       style: TextButton.styleFrom(
                           backgroundColor: Colors.redAccent),
                       onPressed: () {
                         Navigator.of(context).pop();
-                      })),
+                      },
+                      child: Text(S().cancel,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black)))),
               const SizedBox(height: 5, width: 5),
               Expanded(
                 child: TextButton(
-                  child: Text(S().add,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
                   style:
                       TextButton.styleFrom(backgroundColor: Colors.greenAccent),
                   onPressed: () {
                     Navigator.of(context).pop(newItem);
                   },
+                  child: Text(S().add,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
                 ),
               ),
             ],

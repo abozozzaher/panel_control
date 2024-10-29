@@ -20,7 +20,7 @@ import 'widget/taxForProInv.dart';
 class DataTabelFetcherForProInv extends StatefulWidget {
   final String? invoiceCode;
 
-  DataTabelFetcherForProInv(this.invoiceCode);
+  const DataTabelFetcherForProInv(this.invoiceCode, {super.key});
 
   @override
   _DataTabelFetcherForProInvState createState() =>
@@ -51,6 +51,11 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
   TextEditingController allQuantityController = TextEditingController();
   TextEditingController taxController = TextEditingController();
   TextEditingController shippingController = TextEditingController();
+  TextEditingController shippingCompanyNameController = TextEditingController();
+  TextEditingController shippingTrackingNumberController =
+      TextEditingController();
+  TextEditingController packingBagsNumberController = TextEditingController();
+
   ValueNotifier<double> previousDebtsController = ValueNotifier<double>(0.0);
 
   int lineCounter = 1;
@@ -81,6 +86,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
   void initState() {
     super.initState();
     loadDefaultValues();
+    priceController.text = '2.65'; // القيمة الافتراضية
   }
 
   Future<void> loadDefaultValues() async {
@@ -120,6 +126,15 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
 
     double totalUnit = (double.tryParse(allQuantity ?? '0') ?? 0) /
         (double.tryParse(selectedQuantity ?? '0') ?? 0);
+
+    // حساب مجموع 'totalWeight' لكل صف في الجدول
+    double totalWeightSum = tableData.fold(0.0, (sum, rowData) {
+      return sum + (rowData['totalWeight'] ?? 0.0);
+    });
+    // حساب مجموع 'totalUnit' لكل صف في الجدول
+    double totalUnitSum = tableData.fold(0.0, (sum, rowData) {
+      return sum + (rowData['totalUnit'] ?? 0.0);
+    });
 
     String totalPrice = (price * (double.tryParse(allQuantity.toString()) ?? 0))
         .toStringAsFixed(2);
@@ -214,6 +229,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                       ),
                     ],
                   ),
+
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -229,8 +245,8 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                             ? S().switch_to_quantity
                             : S().switch_to_weight),
                       ),
-                      SizedBox(width: 10),
-                      Container(
+                      const SizedBox(width: 10),
+                      SizedBox(
                         width: 100,
                         child: TextField(
                           controller: allQuantityController,
@@ -251,8 +267,8 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                           },
                         ),
                       ),
-                      SizedBox(width: 10),
-                      Container(
+                      const SizedBox(width: 10),
+                      SizedBox(
                         width: 100,
                         child: TextField(
                           controller: priceController,
@@ -271,10 +287,12 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                           },
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
+                            price =
+                                double.tryParse(priceController.text) ?? 0.0;
                             tableData.add({
                               'type': selectedType,
                               'color': selectedColor,
@@ -285,12 +303,10 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                               'allQuantity': allQuantity,
                               'price': price,
                               'totalPrice': price *
-                                  (double.tryParse(allQuantity.toString()) ??
-                                      0),
+                                  (double.tryParse(allQuantity.toString()) ?? 0)
                             });
                             allQuantityController.clear();
-                            priceController.clear();
-
+                            priceController.text = '2.65';
                             selectedType =
                                 types!.isNotEmpty ? types![0][0] : null;
                             selectedWeight =
@@ -310,6 +326,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                       ),
                     ],
                   ),
+
                   DataTable(
                     columns: columns,
                     rows: [
@@ -396,7 +413,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                                   textDirection: TextDirection.ltr,
                                   maxLines: 1))),
                           DataCell(IconButton(
-                            icon: Icon(Icons.delete),
+                            icon: const Icon(Icons.delete),
                             onPressed: () {
                               setState(() {
                                 tableData.remove(rowData);
@@ -404,14 +421,20 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                             },
                           )),
                         ]);
-                      }).toList(),
+                      }),
 
                       // إضافة صفوف الحسابات
                       subTotalPriceForProInv(totalPrices),
 
                       taxForProInv(tax, taxController),
                       shippingFeesForProInv(
-                          totalPricesAndTaxAndShippingFee, shippingController),
+                          totalPricesAndTaxAndShippingFee,
+                          shippingController,
+                          shippingCompanyNameController,
+                          shippingTrackingNumberController,
+                          packingBagsNumberController,
+                          totalWeightSum,
+                          totalUnitSum),
 
                       duesForProInv(trader, previousDebtsController),
 
@@ -419,7 +442,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                         setState(() {});
                       }),
                     ],
-                    headingRowColor: MaterialStateProperty.resolveWith(
+                    headingRowColor: WidgetStateProperty.resolveWith(
                         (states) => Colors.amberAccent),
                   ),
                   ElevatedButton.icon(
@@ -433,7 +456,12 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                           tax,
                           shippingFees,
                           previousDebtsController.value,
-                          finalTotal);
+                          finalTotal,
+                          shippingCompanyNameController.text,
+                          shippingTrackingNumberController.text,
+                          packingBagsNumberController.text,
+                          totalWeightSum,
+                          totalUnitSum);
                       setState(() {
                         selectedType = null;
                         selectedColor = null;
@@ -445,14 +473,18 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                         priceController.clear();
                         taxController.clear();
                         shippingController.clear();
+                        shippingCompanyNameController.clear();
+                        shippingTrackingNumberController.clear();
+                        packingBagsNumberController.clear();
+
                         tableData.clear();
                       });
                       context.go('/');
                     },
                     label: Text(S().add_proforma_invoice),
-                    icon: Icon(Icons.print_outlined),
+                    icon: const Icon(Icons.print_outlined),
                   ),
-                  SizedBox(height: 50)
+                  const SizedBox(height: 50)
                 ],
               ),
             ),

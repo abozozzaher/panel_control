@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:panel_control/generated/l10n.dart';
+
+import '../../generated/l10n.dart';
 
 Future<List<String>> showMultiSelectDialog(BuildContext context,
     List<String> options, List<String> selectedValues) async {

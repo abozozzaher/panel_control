@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:panel_control/service/toasts.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/dataBase.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
 import '../../provider/trader_provider.dart';
+import '../../service/toasts.dart';
 
 class TraderDropdownForInvoice extends StatefulWidget {
+  const TraderDropdownForInvoice({super.key});
+
   @override
   State<TraderDropdownForInvoice> createState() =>
       _TraderDropdownForInvoiceState();
@@ -110,10 +112,10 @@ class _TraderDropdownForInvoiceState extends State<TraderDropdownForInvoice> {
     return Consumer<TraderProvider>(
       builder: (context, provider, child) {
         if (isLoading) {
-          return CircularProgressIndicator.adaptive();
+          return const CircularProgressIndicator.adaptive();
         }
 
-        return Container(
+        return SizedBox(
           width: 300,
           child: DropdownButton<String>(
               hint: Center(child: Text(S().select_client)),

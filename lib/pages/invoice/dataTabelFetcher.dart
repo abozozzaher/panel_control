@@ -18,8 +18,8 @@ import 'widget/tabelBuild.dart';
 class DataTabelFetcher extends StatefulWidget {
   final String? invoiceCode; // Define a class variable to store the invoiceCode
 
-  DataTabelFetcher(
-      this.invoiceCode); // Store the invoiceCode in the class variable
+  const DataTabelFetcher(this.invoiceCode,
+      {super.key}); // Store the invoiceCode in the class variable
 
   @override
   _DataTabelFetcherState createState() => _DataTabelFetcherState();
@@ -34,6 +34,10 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
   TextEditingController taxController = TextEditingController();
   TextEditingController previousDebtController = TextEditingController();
   TextEditingController shippingFeeController = TextEditingController();
+  TextEditingController shippingCompanyNameController = TextEditingController();
+  TextEditingController shippingTrackingNumberController =
+      TextEditingController();
+  TextEditingController packingBagsNumberController = TextEditingController();
 
   final ValueNotifier<double> taxsNotifier =
       ValueNotifier<double>(0.0); // الضريبة
@@ -70,7 +74,8 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
               future: invoiceService.fetchData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator.adaptive());
+                  return const Center(
+                      child: CircularProgressIndicator.adaptive());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('${S().error}: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
@@ -96,8 +101,10 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                     // Accumulate totals
                     totalWeight += itemData['total_weight'] as double;
                     totalQuantity += itemData['quantity'] as int;
-                    totalLength += itemData['length'] as int;
+                    totalLength +=
+                        itemData['length'] * itemData['quantity'] as int;
                     totalScannedData += itemData['scanned_data'] as int;
+
                     return itemForTabel(
                       itemData,
                       invoiceProvider,
@@ -141,7 +148,10 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                         grandTotalPriceTaxs,
                         shippingFeeController,
                         convertArabicToEnglish,
-                        shippingFeesNotifier),
+                        shippingFeesNotifier,
+                        shippingCompanyNameController,
+                        shippingTrackingNumberController,
+                        packingBagsNumberController),
                   );
 // Add a row for previousDebts الدين السابق
                   dataRows.add(rowForPreviousDebts(
@@ -160,6 +170,7 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                   dataRows.add(rowForAllTotals(totalAllMoney, () {
                     setState(() {});
                   }));
+
                   return tableBuilld(
                       columns,
                       dataRows,
@@ -170,8 +181,15 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                       grandTotalPrice,
                       previousDebtsNotifier,
                       shippingFeesNotifier,
+                      shippingCompanyNameController,
+                      shippingTrackingNumberController,
+                      packingBagsNumberController,
                       taxsNotifier,
-                      widget.invoiceCode);
+                      widget.invoiceCode,
+                      totalWeight,
+                      totalQuantity,
+                      totalLength,
+                      totalScannedData);
                 } else {
                   return Center(
                       child:
@@ -187,6 +205,9 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
     taxController.dispose();
     previousDebtController.dispose();
     shippingFeeController.dispose();
+    shippingCompanyNameController.dispose();
+    shippingTrackingNumberController.dispose();
+    packingBagsNumberController.dispose();
     super.dispose();
   }
 }

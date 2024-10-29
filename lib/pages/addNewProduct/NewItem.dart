@@ -3,16 +3,15 @@ import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:panel_control/service/toasts.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../generated/l10n.dart';
 import '../../service/app_drawer.dart';
 import '../../data/data_lists.dart';
 import '../../service/dropdownWidget.dart';
+import '../../service/toasts.dart';
 import 'generate_and_print_pdf.dart';
 import 'helper.dart';
 
@@ -259,16 +258,16 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 const SizedBox(height: 5, width: 5),
                 Expanded(
                   child: TextButton(
-                    child: Text(
-                      S().cancel,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
                     style:
                         TextButton.styleFrom(backgroundColor: Colors.redAccent),
                     onPressed: () {
                       Navigator.of(context).pop(); // Close dialog
                     },
+                    child: Text(
+                      S().cancel,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
                   ),
                 ),
               ],
@@ -322,7 +321,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text('${S().product_id}  :  $englishProductId',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                     textDirection: ui.TextDirection.rtl),
                 const SizedBox(height: 10),
                 if (selectedImage != null || webImage != null)
@@ -332,7 +331,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                           width: 200, height: 200),
                 const SizedBox(height: 10),
                 ElevatedButton.icon(
-                  icon: Icon(Icons.camera_alt_outlined),
+                  icon: const Icon(Icons.camera_alt_outlined),
                   onPressed: pickImage,
                   label: Text(S().pick_image),
                 ),
@@ -459,9 +458,24 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.save_as_outlined),
-                  label: Text('${S().print} ${S().item}'),
-                  onPressed: () {},
+                  icon: const Icon(Icons.replay_sharp),
+                  label: Text(S().reprint_item),
+                  onPressed: () async {
+                    // استرجاع رابط الـ PDF المحفوظ
+                    String? lastSavedUrl = await getFileUrl();
+
+                    if (lastSavedUrl != null) {
+                      await openPdf(lastSavedUrl); // فتح رابط الـ PDF
+
+                      // قم باستخدام الرابط حسب حاجتك، مثلاً فتحه في المتصفح أو إعادة طباعته
+                      showToast('${S().last_saved_pdf}: $lastSavedUrl');
+                      print('${S().last_saved_pdf}: $lastSavedUrl');
+                      // يمكنك إضافة كود لطباعة الرابط هنا
+                    } else {
+                      showToast(S().no_pdf_url_found);
+                      print(S().no_pdf_url_found);
+                    }
+                  },
                 ),
               ],
             ),

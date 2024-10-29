@@ -53,7 +53,7 @@ Widget buildDropdown(
                       ),
                     ),
                   );
-                }).toList(),
+                }),
                 DropdownMenuItem(
                   value: 'add_new',
                   child: Center(child: Text(S().add_new_item)),
@@ -92,7 +92,7 @@ void showAddNewDialog(
   Function(String) onItemAdded,
   isNumeric,
 ) {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
 
   showDialog(
     context: context,
@@ -100,7 +100,7 @@ void showAddNewDialog(
       return AlertDialog(
         title: Text(S().add_new_item, textAlign: TextAlign.center),
         content: TextField(
-          controller: _controller,
+          controller: controller,
           textDirection: TextDirection.ltr,
           textAlign: TextAlign.center,
           keyboardType: isNumeric
@@ -119,7 +119,7 @@ void showAddNewDialog(
           TextButton(
             child: Text(S().add),
             onPressed: () {
-              final newItem = _controller.text.trim();
+              final newItem = controller.text.trim();
               if (newItem.isNotEmpty) {
                 onItemAdded(newItem);
                 Navigator.of(context).pop();

@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:panel_control/generated/l10n.dart';
-import 'package:panel_control/service/toasts.dart';
+import '../../generated/l10n.dart';
+import '../../service/toasts.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../provider/invoice_provider.dart';
 
 class DialogInvoice extends StatefulWidget {
+  const DialogInvoice({super.key});
+
   @override
   _DialogInvoiceState createState() => _DialogInvoiceState();
 }
@@ -65,11 +68,11 @@ class _DialogInvoiceState extends State<DialogInvoice> {
           ? Center(
               child: Column(
               children: [
-                CircularProgressIndicator.adaptive(),
+                const CircularProgressIndicator.adaptive(),
                 Text(S().no_data_found)
               ],
             ))
-          : Container(
+          : SizedBox(
               width: 300, // adjust the width to your needs
               height: 200,
               child: SingleChildScrollView(
@@ -78,7 +81,7 @@ class _DialogInvoiceState extends State<DialogInvoice> {
                   children: items.map((item) {
                     final itemId = item['codeSales'] as String;
                     return CheckboxListTile(
-                      title: Text(item['codeSales']),
+                      title: Text(item['trader_name']),
                       value: selectionState[itemId] ?? false,
                       onChanged: (isChecked) {
                         setState(() {

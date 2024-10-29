@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../data/data_lists.dart';
 import '../../provider/user_provider.dart';
+import 'helper.dart';
 
 Future<void> generateAndPrintPDF(
     BuildContext context,
@@ -43,11 +44,8 @@ Future<void> generateAndPrintPDF(
 
   DateTime now = DateTime.now();
 
-  String englishDataTime = now.year.toString() +
-      ' - ' +
-      now.month.toString().padLeft(2, '0') +
-      ' - ' +
-      now.day.toString().padLeft(2, '0');
+  String englishDataTime =
+      '${now.year} - ${now.month.toString().padLeft(2, '0')} - ${now.day.toString().padLeft(2, '0')}';
   final profileImage = pw.MemoryImage(
     (await rootBundle.load('assets/img/logo.png')).buffer.asUint8List(),
   );
@@ -59,11 +57,7 @@ Future<void> generateAndPrintPDF(
   pdf.addPage(
     pw.Page(
       pageFormat: PdfPageFormat.a6.copyWith(
-        marginBottom: 5.0,
-        marginLeft: 5.0,
-        marginTop: 5.0,
-        marginRight: 5.0,
-      ),
+          marginBottom: 5.0, marginLeft: 5.0, marginTop: 5.0, marginRight: 5.0),
       build: (pw.Context context) {
         return pw.Column(
           //    crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -358,6 +352,8 @@ Future<void> generateAndPrintPDF(
   // الحصول على رابط لتنزيل الملف من Firebase Storage
   final docmentQRUrlPdf = await storageRef.getDownloadURL();
 
+// حفظ رابط الـ PDF في SharedPreferences
+  await saveFileUrl(docmentQRUrlPdf);
   // Save data to Firestore
   FirebaseFirestore.instance.collection('products').doc(documentPath).set({
     'type': selectedType,

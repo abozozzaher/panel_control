@@ -8,12 +8,12 @@ DataRow rowTax(
     ValueNotifier<double> taxsNotifier) {
   return DataRow(
     cells: [
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
-      DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
+      const DataCell(Center(child: Text(''))),
       DataCell(
           Center(child: Text('${S().tax} :', textAlign: TextAlign.center))),
       DataCell(
@@ -21,7 +21,7 @@ DataRow rowTax(
           child: TextField(
             controller: taxController,
             keyboardType: TextInputType.number,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
             textDirection: TextDirection.ltr,
             textAlign: TextAlign.center,
             onChanged: (text) {
@@ -33,8 +33,8 @@ DataRow rowTax(
                 taxsNotifier.value = 0.00;
               }
             },
-            decoration: InputDecoration(
-              prefixText: '\%',
+            decoration: const InputDecoration(
+              prefixText: '%',
               hintText: '0.0',
             ),
           ),
@@ -47,7 +47,7 @@ DataRow rowTax(
             builder: (context, value, child) {
               return Text(
                 '${value.toStringAsFixed(2)}%',
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),

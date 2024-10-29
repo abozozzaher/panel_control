@@ -1,7 +1,8 @@
 // data_lists.dart
 
 // قائمة الأنواع
-import 'package:panel_control/generated/l10n.dart';
+
+import '../generated/l10n.dart';
 
 class DataLists {
   List<List<String>> types = [
@@ -76,6 +77,7 @@ class DataLists {
   ];
 
   List<List<String>> yarnSupplier = [
+    ['Kasım', 'Kasım güllü'],
     ['Haron', 'Haron'],
     ['Malih', 'Malih'],
     ['Onder', 'Onder'],

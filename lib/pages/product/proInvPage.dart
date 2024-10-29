@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:panel_control/service/toasts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/data_lists.dart';
 import '../../generated/l10n.dart';
+import '../../service/toasts.dart';
 
 class ProInvoicePage extends StatefulWidget {
   final String? invoiceCode;
 
-  const ProInvoicePage({Key? key, required this.invoiceCode}) : super(key: key);
+  const ProInvoicePage({super.key, required this.invoiceCode});
 
   @override
   State<ProInvoicePage> createState() => _ProInvoicePageState();
@@ -18,7 +18,7 @@ class ProInvoicePage extends StatefulWidget {
 
 class _ProInvoicePageState extends State<ProInvoicePage> {
   String _formatCurrency(String amount) {
-    return '\$${amount}';
+    return '\$$amount';
   }
 
   @override
@@ -232,7 +232,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 70,
                                     child: RichText(
                                         text: TextSpan(
@@ -381,7 +381,7 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(width: 30),
+                          const SizedBox(width: 30),
                           // رسالة الشكر في نهاية الفاتورة
                           Expanded(
                             flex: 2,
@@ -414,73 +414,124 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                           // اجمالي الفاتورة
                           Expanded(
                             flex: 1,
-                            child: DefaultTextStyle(
-                              style: const TextStyle(fontSize: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('${S().sub_total} :'),
-                                      Text(_formatCurrency(data['totalPrices']),
-                                          textDirection: TextDirection.ltr),
-                                    ],
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().sub_total} :'),
+                                    Text(_formatCurrency(data['totalPrices']),
+                                        textDirection: TextDirection.ltr)
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().tax} :'),
+                                    Text('${(data['tax'])}%',
+                                        textDirection: TextDirection.ltr)
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().shipping_fees}:'),
+                                    Text(_formatCurrency(data['shippingFees']),
+                                        textDirection: TextDirection.ltr),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().customer_balance} :'),
+                                    Text('\$${data['dues']}',
+                                        textDirection: TextDirection.ltr),
+                                  ],
+                                ),
+                                const Divider(color: Colors.blueGrey),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().final_total} :',
+                                        style: const TextStyle(
+                                            color: Colors.teal,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(_formatCurrency(data['finalTotal']),
+                                        style: const TextStyle(
+                                            color: Colors.teal,
+                                            fontWeight: FontWeight.bold),
+                                        textDirection: TextDirection.ltr),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Center(
+                                    child: Text(
+                                  S().shipping_information,
+                                  style: const TextStyle(
+                                    color: Colors.teal,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('${S().tax} :'),
-                                      Text('${(data['tax'])}%',
-                                          textDirection: TextDirection.ltr)
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('${S().shipping_fees}:'),
-                                      Text(
-                                          _formatCurrency(data['shippingFees']),
-                                          textDirection: TextDirection.ltr),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('${S().customer_balance} :'),
-                                      Text('\$${data['dues']}',
-                                          textDirection: TextDirection.ltr),
-                                    ],
-                                  ),
-                                  const Divider(color: Colors.blueGrey),
-                                  DefaultTextStyle(
-                                    style: const TextStyle(
-                                        color: Colors.teal,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('${S().final_total} :'),
-                                        Text(
-                                            _formatCurrency(data['finalTotal']),
-                                            textDirection: TextDirection.ltr),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                )),
+                                Divider(color: Colors.blueGrey),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().shipping_company_name} :'),
+                                    Text(data['shippingCompanyName']),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().shipping_tracking_number} :'),
+                                    Text(data['shippingTrackingNumber']),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().packing_bags_number} :'),
+                                    Text(
+                                        '${data['packingBagsNumber']} ${S().bags}'),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().total_weight} :'),
+                                    Text('${data['totalWeightSum']} kg'),
+                                  ],
+                                ),
+                                SizedBox(height: 3),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${S().total_unit} :'),
+                                    Text('${data['totalUnitSum']} ${S().unit}'),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(width: 30),
+                          const SizedBox(width: 30),
                         ],
                       ),
                       const SizedBox(height: 50),

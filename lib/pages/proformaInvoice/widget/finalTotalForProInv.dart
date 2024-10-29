@@ -4,27 +4,27 @@ import '../../../generated/l10n.dart';
 
 DataRow finalTotalForProInv(double finalTotal, onPressed) {
   return DataRow(cells: [
-    DataCell(Text('')),
-    DataCell(Text('')),
-    DataCell(Text('')),
-    DataCell(Text('')),
-    DataCell(Text('')),
-    DataCell(Text('')),
-    DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
     DataCell(Center(
         child: Text(S().final_total,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.redAccent, fontWeight: FontWeight.bold)))),
     DataCell(Center(
         child: ElevatedButton(
-            child: Text(S().click_to_calculate), onPressed: onPressed))),
+            onPressed: onPressed, child: Text(S().click_to_calculate)))),
     DataCell(Center(
         child: Text('\$${finalTotal.toStringAsFixed(2)}',
-            style:
-                TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.redAccent, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
             textDirection: TextDirection.ltr,
             maxLines: 1))),
-    DataCell(Text('')),
+    const DataCell(Text('')),
   ]);
 }

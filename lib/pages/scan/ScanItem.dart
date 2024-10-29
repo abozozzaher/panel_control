@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:panel_control/model/user.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:go_router/go_router.dart';
 import '../../generated/l10n.dart';
+import '../../model/user.dart';
 import '../../provider/scan_item_provider.dart';
 import '../../provider/user_provider.dart';
 import '../../service/app_drawer.dart';
@@ -197,15 +197,22 @@ class _ScanItemQrState extends State<ScanItemQr> {
         }
       }
     }
-    // حساب إجمالي الامتار
+    // حساب إجمالي الأطوال بناءً على الطول والكمية
     for (var data in provider.codeDetails.values) {
-      if (data.containsKey('length')) {
+      if (data.containsKey('length') && data.containsKey('quantity')) {
         var length = data['length'];
-        if (length is int) {
-          totalLength += length;
-        } else if (length is String) {
-          totalLength += int.tryParse(length) ?? 0;
-        }
+        var quantity = data['quantity'];
+
+        // التأكد من أن كل من الطول والكمية أرقام صحيحة
+        int lengthValue = (length is int)
+            ? length
+            : (length is String ? int.tryParse(length) ?? 0 : 0);
+        int quantityValue = (quantity is int)
+            ? quantity
+            : (quantity is String ? int.tryParse(quantity) ?? 0 : 0);
+
+        // حساب إجمالي الطول بضرب الطول في الكمية
+        totalLength += lengthValue * quantityValue;
       }
     }
 
@@ -376,22 +383,27 @@ class _ScanItemQrState extends State<ScanItemQr> {
     String codeSales = scanItemService.generateCodeSales();
 
     List<String> formattedScannedData = [];
+    String additionalText = ''; // نص إضافي ليتم عرضه لاحقاً
 
     final int totalQuantity = provider.codeDetails.values
         .map((data) => data['quantity'] is int
             ? data['quantity']
-            : ((int.tryParse(data['quantity'].toString()) ?? 0) as int))
+            : (int.tryParse(data['quantity'].toString()) ?? 0))
         .fold(0, (sum, item) => sum + (item as int));
 
-    final int totalLength = provider.codeDetails.values
-        .map((data) => data['length'] is int
-            ? data['length']
-            : ((int.tryParse(data['length'].toString()) ?? 0) as int))
-        .fold(0, (sum, item) => sum + (item as int));
+    final int totalLength = provider.codeDetails.values.map((data) {
+      int length = data['length'] is int
+          ? data['length']
+          : (int.tryParse(data['length'].toString()) ?? 0);
+      int quantity = data['quantity'] is int
+          ? data['quantity']
+          : (int.tryParse(data['quantity'].toString()) ?? 0);
+      return length * quantity; // ضرب الطول في الكمية
+    }).fold(0, (sum, item) => sum + item);
 
     final double totalWeight = provider.codeDetails.values
         .map((data) => double.tryParse(data['total_weight'].toString()) ?? 0.0)
-        .fold(0, (sum, item) => sum + (item as double));
+        .fold(0, (sum, item) => sum + (item));
 
     for (var code in provider.scannedData) {
       if (code.startsWith('https://admin.bluedukkan.com/')) {
@@ -402,6 +414,33 @@ class _ScanItemQrState extends State<ScanItemQr> {
         formattedScannedData.add(formattedCode);
       }
     }
+    // عرض مربع حوار لإدخال نص إضافي
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController additionalTextController =
+            TextEditingController();
+        return AlertDialog(
+          title: Text('أدخل نص إضافي', textAlign: TextAlign.center),
+          content: TextField(
+            controller: additionalTextController,
+            decoration: InputDecoration(
+              labelText: 'أدخل النص هنا',
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                additionalText = additionalTextController.text;
+                Navigator.of(context).pop(); // إغلاق مربع الحوار
+              },
+            ),
+          ],
+        );
+      },
+    );
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -416,6 +455,8 @@ class _ScanItemQrState extends State<ScanItemQr> {
               Text('${S().total_quantity} : $totalQuantity ${S().pcs}'),
               Text(
                   '${S().scanned_data_length} : ${formattedScannedData.length}'),
+              if (additionalText.isNotEmpty)
+                Text('${S().trader_name}: $additionalText'),
             ],
           ),
           actions: [
@@ -459,6 +500,7 @@ class _ScanItemQrState extends State<ScanItemQr> {
                           .set({
                         'createdAt': DateFormat('yyyy-MM-dd HH:mm:ss', 'en')
                             .format(DateTime.now()),
+                        'trader_name': additionalText,
                         'codeSales': codeSales,
                         'totalWeight': totalWeight,
                         'totalLength': totalLength,

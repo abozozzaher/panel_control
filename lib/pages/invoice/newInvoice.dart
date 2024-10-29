@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:panel_control/pages/invoice/dataTabelFetcher.dart';
 import 'package:provider/provider.dart';
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
@@ -9,6 +8,7 @@ import '../../provider/invoice_provider.dart';
 import '../../provider/trader_provider.dart';
 import '../../service/invoice_service.dart';
 import '../clien/traderDropdownForInvoice.dart';
+import 'dataTabelFetcher.dart';
 import 'dialosForCodeScannSalers.dart';
 
 class InvoiceNewAdd extends StatefulWidget {
@@ -23,7 +23,7 @@ class InvoiceNewAdd extends StatefulWidget {
 }
 
 class _InvoiceNewAddState extends State<InvoiceNewAdd> {
-  final DialogInvoice dialogInvoice = DialogInvoice();
+  final DialogInvoice dialogInvoice = const DialogInvoice();
 //  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   String? invoiceCode;
@@ -54,7 +54,7 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
             onPressed: () {
               context.go('/');
             },
-            icon: Icon(Icons.home))
+            icon: const Icon(Icons.home))
       ]),
       body: SingleChildScrollView(
         child: Padding(
@@ -64,9 +64,9 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
             children: [
               Text('${S().invoice_code}: $invoiceCode'),
               // بيانات التاجر منسدلة اختيار التاجر
-              SizedBox(height: 20),
-              TraderDropdownForInvoice(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+              const TraderDropdownForInvoice(),
+              const SizedBox(height: 20),
               // مندسلة الطلبات التي تم مسحها من قبل العامل
               trader == null
                   ? Center(child: Text(S().no_trader_selected))
@@ -74,12 +74,12 @@ class _InvoiceNewAddState extends State<InvoiceNewAdd> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (context) => DialogInvoice(),
+                          builder: (context) => const DialogInvoice(),
                         );
                       },
-                      icon: Icon(Icons.list),
+                      icon: const Icon(Icons.list),
                       label: Text(S().select_items)),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // الجدول الذي يعرض بيانات الكود التي تم اختيارة من الخيار السابق
               DataTabelFetcher(invoiceCode),
             ],

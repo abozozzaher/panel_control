@@ -1700,16 +1700,6 @@ class S {
     );
   }
 
-  /// `Search Client`
-  String get search_client {
-    return Intl.message(
-      'Search Client',
-      name: 'search_client',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Add to Table`
   String get add_to_table {
     return Intl.message(
@@ -2235,6 +2225,216 @@ class S {
     return Intl.message(
       'print',
       name: 'print',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shipping information`
+  String get shipping_information {
+    return Intl.message(
+      'Shipping information',
+      name: 'shipping_information',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shipping Company Name`
+  String get shipping_company_name {
+    return Intl.message(
+      'Shipping Company Name',
+      name: 'shipping_company_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter shipping company name`
+  String get enter_shipping_company_name {
+    return Intl.message(
+      'Enter shipping company name',
+      name: 'enter_shipping_company_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shipping Tracking Number`
+  String get shipping_tracking_number {
+    return Intl.message(
+      'Shipping Tracking Number',
+      name: 'shipping_tracking_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter tracking number`
+  String get enter_shipping_tracking_number {
+    return Intl.message(
+      'Enter tracking number',
+      name: 'enter_shipping_tracking_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `total Unit`
+  String get total_unit {
+    return Intl.message(
+      'total Unit',
+      name: 'total_unit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `total Roll`
+  String get total_roll {
+    return Intl.message(
+      'total Roll',
+      name: 'total_roll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Roll`
+  String get roll {
+    return Intl.message(
+      'Roll',
+      name: 'roll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Packing Bags Number`
+  String get packing_bags_number {
+    return Intl.message(
+      'Packing Bags Number',
+      name: 'packing_bags_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Packing bags number`
+  String get enter_packing_bags_number {
+    return Intl.message(
+      'Enter Packing bags number',
+      name: 'enter_packing_bags_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bags`
+  String get bags {
+    return Intl.message(
+      'Bags',
+      name: 'bags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Shipping Fees`
+  String get enter_shipping_fees {
+    return Intl.message(
+      'Enter Shipping Fees',
+      name: 'enter_shipping_fees',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reprint item`
+  String get reprint_item {
+    return Intl.message(
+      'Reprint item',
+      name: 'reprint_item',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last saved PDF URL`
+  String get last_saved_pdf {
+    return Intl.message(
+      'Last saved PDF URL',
+      name: 'last_saved_pdf',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No PDF URL found.`
+  String get no_pdf_url_found {
+    return Intl.message(
+      'No PDF URL found.',
+      name: 'no_pdf_url_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PDF Download Link`
+  String get PDF_download_link {
+    return Intl.message(
+      'PDF Download Link',
+      name: 'PDF_download_link',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount`
+  String get amount {
+    return Intl.message(
+      'Amount',
+      name: 'amount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export to Excel`
+  String get export_to_excel {
+    return Intl.message(
+      'Export to Excel',
+      name: 'export_to_excel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show yarn table`
+  String get show_yarn_table {
+    return Intl.message(
+      'Show yarn table',
+      name: 'show_yarn_table',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download data in Excel format`
+  String get download_data_in_excel_format {
+    return Intl.message(
+      'Download data in Excel format',
+      name: 'download_data_in_excel_format',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type of operation`
+  String get type_of_operation {
+    return Intl.message(
+      'Type of operation',
+      name: 'type_of_operation',
       desc: '',
       args: [],
     );
