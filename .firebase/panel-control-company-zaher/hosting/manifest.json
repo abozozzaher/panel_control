@@ -1,6 +1,6 @@
 {
-    "name": "panel_control",
-    "short_name": "panel_control",
+    "name": "blue Textile",
+    "short_name": "demo_textile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

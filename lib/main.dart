@@ -46,6 +46,28 @@ void main() async {
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
 /*
+
+معلومات الدخول في تطبيق dev panel
+ await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyDrbyKolk5_AlFQkgPNN8QGpacFqaFk_2o",
+      appId: "1:1022115105451:android:5cc9044a7c287e159c45ee",
+      messagingSenderId: "1022115105451",
+      projectId: "dev-panel-control",
+      storageBucket: "dev-panel-control.appspot.com",
+    ),
+  );
+معلومات الدخول في تطبيق الاصلي panel
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyDrLjc_ax6-uQPZIJePY_48HUc-ksNwYxU",
+      appId: "1:905049367219:android:597318802a22c8d44b86c6",
+      messagingSenderId: "905049367219",
+      projectId: "panel-control-company-zaher",
+      storageBucket: "panel-control-company-zaher.appspot.com",
+    ),
+  );
+
 python3 update_translations.py
 flutter pub run intl_utils:generate
 
@@ -55,6 +77,11 @@ http://localhost:62665/pro-invoices/1014230224
 http://localhost:62665/240010000200190031/invoices/1014230224
 
 
+
+تفعيل نظام يعمل بدون اتصال بلانترنت
+تفعبل طباعة الباركود عبر Raspberry pi
+اصلاح مشكلة في التحديث الاخير بنسبة لعرض الفوتير في الويب لا تظهر البيانات بسبب ان يتطلب بيانات لم تكون قد قمت بتسجيلها في الفاير بيس سابقاً 
+الخانة التي تحت الحساب النهائي وهي معلومات الشحن والتفاصيل
 
 
 
@@ -72,7 +99,7 @@ http://localhost:62665/240010000200190031/invoices/1014230224
 
 
 
-
+لتحديث الكود نسخ ملف ال lib بدون ملف الماين لاني مفاتيح الفايربيس مختلفة
 اعادة الرفع بستخدام هذه الاكواد فقط
 flutter clean
 flutter build web --web-renderer html --release
@@ -81,7 +108,6 @@ flutter build apk
 flutter build appbundle
 build/app/outputs/bundle/release
 build/app/outputs/apk/release
-لتحديث الكود نسخ ملف ال lib بدون ملف الماين لاني مفاتيح الفايربيس مختلفة
 
 
 

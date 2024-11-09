@@ -237,5 +237,6 @@
     "export_to_excel":"Export to Excel",
     "show_yarn_table":"Show yarn table",
     "download_data_in_excel_format": "Download data in Excel format",
-    "type_of_operation":"Type of operation"
+    "type_of_operation":"Type of operation",
+    "excel_file_saved":"Excel file saved at"
 }

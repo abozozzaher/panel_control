@@ -149,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("خطأ جلب العملاء:"),
         "error_occurred": MessageLookupByLibrary.simpleMessage("حدث خطأ"),
         "evening": MessageLookupByLibrary.simpleMessage("مسائي"),
+        "excel_file_saved":
+            MessageLookupByLibrary.simpleMessage("تم حفظ ملف اكسل في"),
         "export_to_excel":
             MessageLookupByLibrary.simpleMessage("تصدير إلى اكسل"),
         "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(

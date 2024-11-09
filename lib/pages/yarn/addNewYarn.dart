@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
@@ -8,9 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
-import 'dart:html' as html;
 
 import '../../data/data_lists.dart';
+
 import '../../generated/l10n.dart';
 import '../../model/YarnData.dart';
 import '../../provider/user_provider.dart';
@@ -18,6 +15,8 @@ import '../../service/app_drawer.dart';
 import '../../service/dropdownWidget.dart';
 import '../../service/exchangeRate_service.dart';
 import '../../service/toasts.dart';
+import '../../excel_fille/save_file_mobile.dart'
+    if (dart.library.html) '../../excel_fille/save_file_web.dart';
 
 class AddYarn extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -162,25 +161,10 @@ class _AddYarnState extends State<AddYarn> {
     final List<int> bytes = workbook.saveAsStream();
     workbook.dispose();
 
-    // حفظ الملف في بيئة الويب
-    if (kIsWeb) {
-      // إنشاء رابط لتحميل الملف
-      final blob = html.Blob([Uint8List.fromList(bytes)],
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      final url = html.Url.createObjectUrlFromBlob(blob);
-      final anchor = html.AnchorElement(href: url)
-        ..setAttribute('download', 'yarn_data_$formattedDateXlsx.xlsx')
-        ..click();
-      html.Url.revokeObjectUrl(url);
-    } else {
-      // إذا كنت تستخدم تطبيق جوال، يمكنك كتابة الكود لحفظ الملف هنا
-      final String path =
-          '/path/to/save/excel_file_$formattedDateXlsx.xlsx'; // استبدل بمسار الحفظ المناسب
-      final File file = File(path);
-      await file.writeAsBytes(bytes, flush: true);
-      print('Excel file saved at $path');
-      showToast('Excel file saved at $path');
-    }
+    final fileName = 'yarn_data_$formattedDateXlsx.xlsx';
+
+    await saveAndLaunchFile(bytes, fileName);
+    showToast('${S().excel_file_saved} $fileName');
   }
 
   @override

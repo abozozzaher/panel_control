@@ -237,5 +237,6 @@
     "export_to_excel":"تصدير إلى اكسل",
     "show_yarn_table":"عرض جدول الغزل",
     "download_data_in_excel_format": "تحميل البيانات في شكل اكسل",
-    "type_of_operation":"نوع العملية"
+    "type_of_operation":"نوع العملية",
+    "excel_file_saved":"تم حفظ ملف اكسل في"
 }

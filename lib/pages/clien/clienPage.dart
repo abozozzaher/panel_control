@@ -6,7 +6,7 @@ import 'dart:ui' as ui;
 
 import '../../generated/l10n.dart';
 import '../../model/clien.dart';
-import '../../service/excel.dart';
+import '../../excel_fille/excelClienPage.dart';
 import '../../service/toasts.dart';
 
 class ClienPage extends StatelessWidget {
@@ -49,7 +49,7 @@ class ClienPage extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             child: ElevatedButton.icon(
               onPressed: () {
-                saveDataToExcel(allData, client);
+                saveDataToExcelClienPage(allData, client);
               },
               icon: Icon(Icons.shuffle_outlined),
               label: Text(S().download_data_in_excel_format),

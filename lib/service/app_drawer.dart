@@ -16,7 +16,7 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
 //  final String version = 'Version 2024.09.23';
-  String version = 'V2.0.1';
+  String version = 'V2.0.3';
 
   // رقم الإصدار
   @override

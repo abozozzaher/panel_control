@@ -252,15 +252,13 @@ class _ScanItemQrState extends State<ScanItemQr> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            kIsWeb
-                ? Container()
-                : SizedBox(
-                    height: 300,
-                    child: QRView(
-                      key: qrKey,
-                      onQRViewCreated: _onQRViewCreated,
-                    ),
-                  ),
+            SizedBox(
+              height: 300,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              ),
+            ),
             Container(
               color: Colors.red,
               height: 100, // لتحديد ارتفاع ثابت

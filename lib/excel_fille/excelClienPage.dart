@@ -1,18 +1,17 @@
-import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
-import 'package:syncfusion_flutter_xlsio/xlsio.dart';
-
-import 'dart:io';
 
 import '../data/data_lists.dart';
 import '../generated/l10n.dart';
 import '../model/clien.dart';
-import 'toasts.dart';
 
-Future<void> saveDataToExcel(
+import '../service/toasts.dart';
+
+import 'save_file_mobile.dart' if (dart.library.html) 'save_file_web.dart';
+
+Future<void> saveDataToExcelClienPage(
     List<Map<String, dynamic>> allData, ClienData client) async {
   final now = DateTime.now();
   final formattedDateXlsx = '${now.day}-${now.month}-${now.year}';
@@ -29,11 +28,11 @@ Future<void> saveDataToExcel(
 
 // تطبيق التنسيق على كل عمود في السطر الأول دون دمج
   for (int i = 1; i <= 27; i++) {
-    final Range range =
+    final xlsio.Range range =
         sheet.getRangeByIndex(1, i); // تحديد الخلية في السطر الأول لكل عمود
     range.cellStyle.backColor = '#FFFF00'; // تحديد لون الخلفية
-    range.cellStyle.hAlign = HAlignType.center; // محاذاة أفقية
-    range.cellStyle.vAlign = VAlignType.center; // محاذاة عمودية
+    range.cellStyle.hAlign = xlsio.HAlignType.center; // محاذاة أفقية
+    range.cellStyle.vAlign = xlsio.VAlignType.center; // محاذاة عمودية
     range.cellStyle.bold = true;
   }
 
@@ -206,22 +205,10 @@ Future<void> saveDataToExcel(
   // حفظ الملف
   final List<int> bytes = workbook.saveAsStream();
   workbook.dispose();
+  final fileName = 'client_page_$formattedDateXlsx.xlsx';
 
-  if (kIsWeb) {
-    final blob = html.Blob([Uint8List.fromList(bytes)],
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.AnchorElement(href: url)
-      ..setAttribute('download', 'client_page_$formattedDateXlsx.xlsx')
-      ..click();
-    html.Url.revokeObjectUrl(url);
-  } else {
-    final String path = '/path/to/save/excel_file_$formattedDateXlsx.xlsx';
-    final File file = File(path);
-    await file.writeAsBytes(bytes, flush: true);
-    print('Excel file saved at $path');
-    showToast('Excel file saved at $path');
-  }
+  await saveAndLaunchFile(bytes, fileName);
+  showToast('${S().excel_file_saved} $fileName');
 }
 
 // دالة استرجاع بيانات aggregatedData

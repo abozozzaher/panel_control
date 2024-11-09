@@ -1,7 +1,11 @@
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
-import 'dart:html' as html;
 
 import '../../data/data_lists.dart';
+
+import '../../excel_fille/save_file_mobile.dart'
+    if (dart.library.html) '../../excel_fille/save_file_web.dart';
+import '../../generated/l10n.dart';
+import '../../service/toasts.dart';
 
 Future<void> exportToExcel(List<String> columnHeaders,
     Map<String, Map<String, dynamic>> aggregatedData) async {
@@ -50,13 +54,8 @@ Future<void> exportToExcel(List<String> columnHeaders,
 
   final List<int> bytes = workbook.saveAsStream();
   workbook.dispose();
+  final fileName = 'products_all_data_$formattedDateXlsx.xlsx';
 
-  // تنزيل الملف على الويب
-  final blob = html.Blob([bytes],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  final url = html.Url.createObjectUrlFromBlob(blob);
-  final anchor = html.AnchorElement(href: url)
-    ..setAttribute('download', 'products_all_data$formattedDateXlsx.xlsx')
-    ..click();
-  html.Url.revokeObjectUrl(url);
+  await saveAndLaunchFile(bytes, fileName);
+  showToast('${S().excel_file_saved} $fileName');
 }

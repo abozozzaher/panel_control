@@ -149,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "error_occurred":
             MessageLookupByLibrary.simpleMessage("error occurred"),
         "evening": MessageLookupByLibrary.simpleMessage("Evening"),
+        "excel_file_saved":
+            MessageLookupByLibrary.simpleMessage("Excel file saved at"),
         "export_to_excel":
             MessageLookupByLibrary.simpleMessage("Export to Excel"),
         "failed_to_load_invoice_details": MessageLookupByLibrary.simpleMessage(

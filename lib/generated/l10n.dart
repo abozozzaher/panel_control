@@ -2439,6 +2439,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Excel file saved at`
+  String get excel_file_saved {
+    return Intl.message(
+      'Excel file saved at',
+      name: 'excel_file_saved',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
