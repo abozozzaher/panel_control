@@ -66,7 +66,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 await AuthService().logout(context);
               },
             ),
-          const Spacer(), // يملأ المساحة المتبقية
+          // const Spacer(), // يملأ المساحة المتبقية
 
           // رقم الإصدار
           Text('Version $version',
