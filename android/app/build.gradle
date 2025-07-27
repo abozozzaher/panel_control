@@ -30,7 +30,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.panel_control"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35  // ✅ تم التحديث إلى Android 15 (API 35)
+    // compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -43,8 +44,10 @@ android {
         applicationId = "com.panel_control"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        minSdk = 21              // ✅ تم تحديد الحد الأدنى للإصدار
+        targetSdk = 35           // ✅ تم تحديد الهدف إلى Android 15 (API 35)
+        // minSdk = flutter.minSdkVersion
+        // targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }
