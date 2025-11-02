@@ -216,7 +216,6 @@
     "please_select_different_months": "Please select different months.",
     "camera_permission_granted": "Camera permission granted",
     "could_not_launch_url": "Could not launch Url",
-    "print": "print",
     "shipping_information": "Shipping information",
     "shipping_company_name": "Shipping Company Name",
     "enter_shipping_company_name": "Enter shipping company name",
@@ -238,5 +237,10 @@
     "show_yarn_table":"Show yarn table",
     "download_data_in_excel_format": "Download data in Excel format",
     "type_of_operation":"Type of operation",
-    "excel_file_saved":"Excel file saved at"
+    "excel_file_saved":"Excel file saved at",
+    "print" : "print",
+    "nylon":"Nylon",
+    "curtain": "Curtain",
+    "elastic": "Elastic",
+    "version":"version : 3.0.0"
 }

@@ -79,14 +79,14 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
   }
 
   double get finalTotal {
-    return tax + shippingFees - previousDebtsController.value;
+    return (previousDebtsController.value) - (tax + shippingFees);
   }
 
   @override
   void initState() {
     super.initState();
     loadDefaultValues();
-    priceController.text = '2.65'; // القيمة الافتراضية
+    priceController.text = '';
   }
 
   Future<void> loadDefaultValues() async {
@@ -98,7 +98,7 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
     length = dataLists.length;
     setState(() {
       selectedType = types!.isNotEmpty ? types![0][0] : null;
-      selectedWeight = weights!.isNotEmpty ? weights![0][0] : null;
+      selectedWeight = weights!.isNotEmpty ? weights![2][0] : null;
       selectedColor = colors!.isNotEmpty ? colors![0][0] : null;
       selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
       selectedLength = length!.isNotEmpty ? length![2][0] : null;
@@ -306,11 +306,13 @@ class _DataTabelFetcherForProInvState extends State<DataTabelFetcherForProInv> {
                                   (double.tryParse(allQuantity.toString()) ?? 0)
                             });
                             allQuantityController.clear();
-                            priceController.text = '2.65';
+
+                            priceController.text = '';
+
                             selectedType =
                                 types!.isNotEmpty ? types![0][0] : null;
                             selectedWeight =
-                                weights!.isNotEmpty ? weights![0][0] : null;
+                                weights!.isNotEmpty ? weights![2][0] : null;
                             selectedColor =
                                 colors!.isNotEmpty ? colors![0][0] : null;
                             selectedYarnNumber = yarnNumbers!.isNotEmpty

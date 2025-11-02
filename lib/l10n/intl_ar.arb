@@ -188,6 +188,8 @@
     "select_operation_type": "اختر نوع العملية",
     "input": "إدخال",
     "output": "إخراج",
+    "input": "إدخال",
+    "output": "إخراج",
     "enter_value_plus": "أدخل قيمة زائد",
     "enter_value_minus": "أدخل قيمة ناقص",
     "this_value_will_be_added_to_the_customers_account": "ستتم إضافة هذه القيمة إلى حساب العميل",
@@ -216,7 +218,6 @@
     "please_select_different_months": "يرجى تحديد أشهر مختلفة.",
     "camera_permission_granted": "تم منح إذن الوصول إلى الكاميرا",
     "could_not_launch_url": "لا يمكن إطلاق عنوان URL",
-    "print": "طباعة",
     "shipping_information": "معلومات الشحن",
     "shipping_company_name": "اسم شركة الشحن",
     "enter_shipping_company_name": "أدخل اسم شركة الشحن",
@@ -238,5 +239,9 @@
     "show_yarn_table":"عرض جدول الغزل",
     "download_data_in_excel_format": "تحميل البيانات في شكل اكسل",
     "type_of_operation":"نوع العملية",
-    "excel_file_saved":"تم حفظ ملف اكسل في"
+    "excel_file_saved":"تم حفظ ملف اكسل في",
+    "print": "طباعة",
+    "nylon":"نيلون",
+    "curtain": "ستائر",
+    "elastic": "مطاط"
 }

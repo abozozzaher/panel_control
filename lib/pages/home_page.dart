@@ -106,6 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       label: Text('${S().scan} ${S().error}'),
                     ),
 */
+                const SizedBox(height: 20),
+                Text(S().version),
               ],
             ),
           ),

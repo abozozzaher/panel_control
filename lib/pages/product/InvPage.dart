@@ -13,7 +13,6 @@ class InvoicePage extends StatefulWidget {
 
   const InvoicePage(
       {super.key, required this.codeIdClien, required this.invoiceCode});
-
   @override
   State<InvoicePage> createState() => _InvoicePageState();
 }
@@ -250,6 +249,7 @@ class _InvoicePageState extends State<InvoicePage> {
                                   ),
                                 ),
                                 Expanded(
+                                    child: SizedBox(
                                   child: SizedBox(
                                     height: 70,
                                     child: RichText(
@@ -301,7 +301,7 @@ class _InvoicePageState extends State<InvoicePage> {
                                           ),
                                         ])),
                                   ),
-                                ),
+                                )),
                               ],
                             ),
                           ),
@@ -401,6 +401,7 @@ class _InvoicePageState extends State<InvoicePage> {
                         //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const SizedBox(width: 30),
+                          const SizedBox(width: 30),
                           // رسالة الشكر في نهاية الفاتورة
                           Expanded(
                             flex: 2,
@@ -424,7 +425,9 @@ class _InvoicePageState extends State<InvoicePage> {
                                   ),
                                 ),
                                 Text(
-                                  'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
+                                  // *** العنوان التعديل
+                                  // 'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
+                                  'شركة زاهر  للمنسوجات ذات محدودة المسؤولية \n${S().company_payment_info}\nسوريا حلب الشيخ نجار  الفئة  الثانية\nشارع رقم 208 غرب دوار شهد',
                                   style: const TextStyle(
                                       fontSize: 12, wordSpacing: 5),
                                 ),
@@ -477,8 +480,8 @@ class _InvoicePageState extends State<InvoicePage> {
                                     Text(data['previousDebts'] == 0
                                         ? '${S().no_dues} :'
                                         : data['previousDebts'] > -1
-                                            ? '${S().previous_debt} :'
-                                            : '${S().customer_balance} :'),
+                                            ? '${S().customer_balance} :'
+                                            : '${S().previous_debt} :'),
                                     Text(_formatCurrency(data['previousDebts']),
                                         textDirection: TextDirection.ltr),
                                   ],
@@ -586,6 +589,7 @@ class _InvoicePageState extends State<InvoicePage> {
                               ],
                             ),
                           ),
+                          const SizedBox(width: 30),
                           const SizedBox(width: 30),
                         ],
                       ),

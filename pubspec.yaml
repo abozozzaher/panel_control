@@ -17,8 +17,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 
-# هنا نقوم بتحديث رقم الاصدار يكفي +4
-version: 1.0.0+3
+# هنا نقوم بتحديث رقم الاصدار يكفي +5
+version: 1.0.0+4
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -34,41 +34,45 @@ dependencies:
     sdk: flutter
   flutter_web_plugins: 
     sdk: flutter   
-  cupertino_icons: ^1.0.6
-  firebase_core: ^2.30.1
-  cloud_firestore: ^4.17.5
-  firebase_auth: ^4.19.4
-  firebase_storage: ^11.7.4
-  provider: ^6.1.2
-  image_picker: ^1.1.2
+  cupertino_icons: ^1.0.8    
+  firebase_core: ^4.2.0          # كان ^2.30.1 → تم التحديث
+  cloud_firestore: ^6.0.3        # كان ^4.17.5 → تم التحديث
+  firebase_auth: ^6.1.1          # كان ^4.19.4 → تم التحديث
+  firebase_storage: ^13.0.3      # كان ^11.7.4 → تم التحديث
+  provider: ^6.1.5+1
+  image_picker: ^1.2.0           # كان ^1.1.2 → تم التحديث
   flutter_localizations:
     sdk: flutter
   intl: any
-  intl_utils: ^2.8.7
+  intl_utils: ^2.8.7             # نفس الإصدار (لم يتغير)
   intl_translation: ^0.20.0
-  shared_preferences: ^2.2.3
-  cached_network_image: ^3.3.1
+  shared_preferences: ^2.5.3
+  cached_network_image: ^3.4.1   # كان ^3.3.1 → تم التحديث
   double_back_to_close_app: ^2.1.0
-  sqflite: ^2.3.3+1
-  pdf: ^3.11.0
-  printing: ^5.13.1
+  sqflite: ^2.4.2                # كان ^2.3.3+1 → تم التحديث
+  pdf: ^3.11.3                   # كان ^3.11.0 → تم التحديث
+  printing: ^5.14.2              # كان ^5.13.1 → تم التحديث
   qr_flutter: ^4.1.0
-  flutter_launcher_icons: ^0.13.1
-  file_picker: ^8.0.5
-  url_launcher: ^6.3.0
-  go_router: ^14.2.0
-  permission_handler: ^11.3.1
-  qr_code_scanner: ^1.0.0
-  just_audio: ^0.9.39
+  flutter_launcher_icons: ^0.14.4 # كان ^0.13.1 → تم التحديث
+  file_picker: ^10.3.3           # كان ^8.0.5 → تم التحديث
+  url_launcher: ^6.3.2           # كان ^6.3.0 → تم التحديث
+  go_router: ^16.3.0
+  permission_handler: ^12.0.1    # كان ^11.3.1 → تم التحديث
+  just_audio: ^0.10.5            # كان ^0.9.39 → تم التحديث
   path: any
-  fluttertoast: ^8.2.8
-  country_state_city_pro: ^0.0.6
-  http: ^1.2.2
-  share_plus: ^10.0.0
-  flutter_image_compress: ^2.3.0
-  syncfusion_flutter_xlsio: ^27.1.53
+  fluttertoast: ^9.0.0           # كان ^8.2.8 → تم التحديث
+  country_state_city_pro: ^0.0.6 # نفس الإصدار
+  http: ^1.5.0                   # كان ^1.2.2 → تم التحديث
+  share_plus: ^12.0.1            # كان ^10.0.0 → تم التحديث
+  flutter_image_compress: ^2.4.0 # كان ^2.3.0 → تم التحديث
+  syncfusion_flutter_xlsio: ^31.2.4 #syncfusion_flutter_xlsio: ^27.1.53
   path_provider: ^2.0.1
   open_file: ^3.0.1
+  qr_code_scanner_plus: ^2.0.14
+
+  #qr_code_scanner:    git:      url: https://github.com/juliuscanute/qr_code_scanner.git
+
+
 
 dev_dependencies:
   flutter_test:
@@ -137,6 +141,7 @@ flutter:
     - assets/store/
     - assets/sliders/
     - assets/sound/
+    - assets/fonts/
   fonts:
     - family: Beiruti
       fonts:

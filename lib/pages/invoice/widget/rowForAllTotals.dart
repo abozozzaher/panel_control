@@ -20,9 +20,9 @@ DataRow rowForAllTotals(double totalAllMoney, VoidCallback onPressed) {
         Center(
             child: Text(
           '\$ ${totalAllMoney.toStringAsFixed(2)}',
-          style: const TextStyle(
+          style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.redAccent,
+              color: totalAllMoney > 1 ? Colors.greenAccent : Colors.redAccent,
               fontSize: 18),
         )),
       ),

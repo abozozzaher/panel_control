@@ -45,7 +45,7 @@ void main() async {
     persistenceEnabled: true, // تفعيل التخزين المؤقت
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
-/*
+  /*
 
 معلومات الدخول في تطبيق dev panel
  await Firebase.initializeApp(
@@ -73,6 +73,7 @@ flutter pub run intl_utils:generate
 
 
 http://localhost:62665/pro-invoices/1014230224
+http://localhost:62665/pro-invoices/1014230224
 
 http://localhost:62665/240010000200190031/invoices/1014230224
 
@@ -84,12 +85,12 @@ http://localhost:62665/240010000200190031/invoices/1014230224
 الخانة التي تحت الحساب النهائي وهي معلومات الشحن والتفاصيل
 
 
-تعديل سعر التوب الافتراضي من 2.65 الى 2.80
-تعديل القيمة الافتراضية للتعبئة
 
 عمل صفحة يقوم العامل بادخال مدة الانتاج اليومي واقوم بتحديد الساعات المتاحة التي يظهر فيها اضافة 
 وعمل صفحة اكسل لتنزيل بيانات العامل
+وعمل صفحة اكسل لتنزيل بيانات العامل
 ومن داخل الصفحة احدد من هم العمال في كل وردة وفي حال كان العامل ضمن ورديته يفتح له نافذة لاضافة بيانات العمل في ساعة نهاية الدوام
+
 
 
 اضافة في منسدلة التجار بحث للبحث عن اسم تاجر
@@ -101,6 +102,7 @@ http://localhost:62665/240010000200190031/invoices/1014230224
 
 
 
+لتحديث الكود نسخ ملف ال lib بدون ملف الماين لاني مفاتيح الفايربيس مختلفة
 لتحديث الكود نسخ ملف ال lib بدون ملف الماين لاني مفاتيح الفايربيس مختلفة
 اعادة الرفع بستخدام هذه الاكواد فقط
 flutter clean
@@ -153,6 +155,9 @@ add novigator. push . context.go('/'); اريد بناء هذا الشكل
 في صفحة العميل تنزيل بياناته##
 اصلاح التنسيق في صفحة الاكسل تبع العميل وعمل عامود للحساب وعمل تحديد تاريخ التنزيل
 عمل شرط في صفحة العميل ان يظهر البيانات حسب التاريخ او كل الاوقات ثم تحميل البيانات بتفصيل في  اكسل
+في صفحة العميل تنزيل بياناته##
+اصلاح التنسيق في صفحة الاكسل تبع العميل وعمل عامود للحساب وعمل تحديد تاريخ التنزيل
+عمل شرط في صفحة العميل ان يظهر البيانات حسب التاريخ او كل الاوقات ثم تحميل البيانات بتفصيل في  اكسل
 
 
 اضافة شرط في حال كان الكود ممسوح بقائمة ثانية يعطي تنبيه ولا يضاف الى الجدول الا واحد (عمل هذا الشرط لاحقا)
@@ -168,11 +173,13 @@ add novigator. push . context.go('/'); اريد بناء هذا الشكل
       providers: [
         ChangeNotifierProvider<UserProvider>(create: (_) => userProvider),
         ChangeNotifierProvider<ScanItemProvider>(
-            create: (_) => ScanItemProvider()),
+          create: (_) => ScanItemProvider(),
+        ),
         ChangeNotifierProvider<TraderProvider>(create: (_) => TraderProvider()),
         ChangeNotifierProvider(create: (_) => InvoiceProvider()),
         ChangeNotifierProvider<TableDataProvider>(
-            create: (_) => TableDataProvider()),
+          create: (_) => TableDataProvider(),
+        ),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),
@@ -236,7 +243,9 @@ class _MyAppState extends State<MyApp> {
   void _saveThemeMode() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
-        'themeMode', _themeMode == ThemeMode.dark ? 'dark' : 'light');
+      'themeMode',
+      _themeMode == ThemeMode.dark ? 'dark' : 'light',
+    );
   }
 
   void _saveLocale() async {
@@ -279,10 +288,8 @@ class _MyAppState extends State<MyApp> {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => MyHomePage(
-          toggleTheme: _toggleTheme,
-          toggleLocale: _toggleLocale,
-        ),
+        builder: (context, state) =>
+            MyHomePage(toggleTheme: _toggleTheme, toggleLocale: _toggleLocale),
       ),
       GoRoute(
         path: '/pro-invoices/:invoiceCode',
@@ -296,10 +303,7 @@ class _MyAppState extends State<MyApp> {
         builder: (context, state) {
           final monthFolder = state.pathParameters['monthFolder'];
           final productId = state.pathParameters['productId'];
-          return ProductPage(
-            monthFolder: monthFolder,
-            productId: productId,
-          );
+          return ProductPage(monthFolder: monthFolder, productId: productId);
         },
       ),
       GoRoute(
@@ -308,7 +312,9 @@ class _MyAppState extends State<MyApp> {
           final codeIdClien = state.pathParameters['codeIdClien'];
           final invoiceCode = state.pathParameters['invoiceCode'];
           return InvoicePage(
-              codeIdClien: codeIdClien, invoiceCode: invoiceCode);
+            codeIdClien: codeIdClien,
+            invoiceCode: invoiceCode,
+          );
         },
       ),
       GoRoute(
@@ -326,7 +332,8 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Scaffold(
-                  body: Center(child: CircularProgressIndicator.adaptive()));
+                body: Center(child: CircularProgressIndicator.adaptive()),
+              );
             }
             if (snapshot.data == true) {
               return AddNewItemScreen(
@@ -340,6 +347,7 @@ class _MyAppState extends State<MyApp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(S().access_denied_you_do_not_have_the_required_role),
+                      const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       ElevatedButton(
                         onPressed: () {
@@ -363,7 +371,8 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Scaffold(
-                  body: Center(child: CircularProgressIndicator.adaptive()));
+                body: Center(child: CircularProgressIndicator.adaptive()),
+              );
             }
             if (snapshot.data == true) {
               return ScanItemQr(
@@ -377,6 +386,7 @@ class _MyAppState extends State<MyApp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(S().access_denied_you_do_not_have_the_required_role),
+                      const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       ElevatedButton(
                         onPressed: () {
@@ -400,7 +410,8 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Scaffold(
-                  body: Center(child: CircularProgressIndicator.adaptive()));
+                body: Center(child: CircularProgressIndicator.adaptive()),
+              );
             }
             if (snapshot.data == true) {
               return AdminHomePage(
@@ -414,6 +425,7 @@ class _MyAppState extends State<MyApp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(S().access_denied_you_do_not_have_the_required_role),
+                      const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       const SizedBox(height: 20), // لإضافة مسافة بين النص والزر
                       ElevatedButton(
                         onPressed: () {
@@ -442,47 +454,44 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        Provider<FirebaseAuth>(
-          create: (_) => FirebaseAuth.instance,
-        ),
-      ],
+      providers: [Provider<FirebaseAuth>(create: (_) => FirebaseAuth.instance)],
       child: MaterialApp.router(
         title: S().blue_textiles,
         theme: ThemeData(
           brightness: Brightness.light,
           fontFamily: 'Beiruti',
           appBarTheme: const AppBarTheme(
-              color: Colors.transparent,
-              iconTheme: IconThemeData(color: Colors.black87),
-              titleTextStyle: TextStyle(color: Colors.black87, fontSize: 20),
-              centerTitle: true),
+            //  color: Colors.transparent,
+            //  iconTheme: IconThemeData(color: Colors.black87),
+            //  titleTextStyle: TextStyle(color: Colors.black87, fontSize: 20),
+            centerTitle: true,
+          ),
           colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.blueGrey, // لاستخدام تدرجات الرمادي
+            //   primarySwatch: Colors.blueGrey, // لاستخدام تدرجات الرمادي
             brightness: Brightness.light,
           ).copyWith(
-            primary: Colors.black87, // اللون الرئيسي هو الأسود
-            secondary: Colors.white70, // اللون الثانوي هو الأبيض
-            surface: Colors.white70, // لون الأسطح (مثل الـCard) هو الأبيض
-          ),
+              //   primary: Colors.black87, // اللون الرئيسي هو الأسود
+              //   secondary: Colors.white70, // اللون الثانوي هو الأبيض
+              //  surface: Colors.white70, // لون الأسطح (مثل الـCard) هو الأبيض
+              ),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: 'Beiruti',
           appBarTheme: const AppBarTheme(
-            color: Colors.transparent, // لون شريط التطبيق
-            iconTheme: IconThemeData(color: Colors.white70),
-            titleTextStyle: TextStyle(color: Colors.white70, fontSize: 20),
+            //  color: Colors.transparent, // لون شريط التطبيق
+            //   iconTheme: IconThemeData(color: Colors.white70),
+            //  titleTextStyle: TextStyle(color: Colors.white70, fontSize: 20),
             centerTitle: true,
           ),
           colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.grey, // لاستخدام تدرجات الرمادي
+            //  primarySwatch: Colors.grey, // لاستخدام تدرجات الرمادي
             brightness: Brightness.dark,
           ).copyWith(
-            primary: Colors.white70, // اللون الرئيسي هو الأبيض
-            secondary: Colors.black87, // اللون الثانوي هو الأسود
-            surface: Colors.black87, // لون الأسطح (مثل الـCard) هو الأسود
-          ),
+              //  primary: Colors.white70, // اللون الرئيسي هو الأبيض
+              //  secondary: Colors.black87, // اللون الثانوي هو الأسود
+              //  surface: Colors.black87, // لون الأسطح (مثل الـCard) هو الأسود
+              ),
         ),
         themeMode: _themeMode,
         locale: _locale,

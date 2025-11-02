@@ -121,7 +121,7 @@ Future<void> generateAndPrintPDF(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Text(
-                        'Ürün Bilgisi',
+                        'Product Information',
                         style: pw.TextStyle(
                             font: fontBe,
                             fontSize: 18,
@@ -140,7 +140,7 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('ID Kodu : ', style: pw.TextStyle(font: fontBe)),
+                      pw.Text('ID Codu : ', style: pw.TextStyle(font: fontBe)),
                       pw.Text(
                         englishProductId,
                         textDirection: pw.TextDirection.rtl,
@@ -157,7 +157,7 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Tip : ', style: pw.TextStyle(font: fontBe)),
+                      pw.Text('Type : ', style: pw.TextStyle(font: fontBe)),
                       pw.Text(
                         DataLists().translateType('$selectedType'.toString()),
                         textDirection: pw.TextDirection.rtl,
@@ -174,7 +174,7 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Renk : ', style: pw.TextStyle(font: fontBe)),
+                      pw.Text('Colour : ', style: pw.TextStyle(font: fontBe)),
                       pw.Text(
                         DataLists().translateType('$selectedColor'.toString()),
                         textDirection: pw.TextDirection.rtl,
@@ -191,7 +191,7 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Genişlik : ', style: pw.TextStyle(font: fontBe)),
+                      pw.Text('Width : ', style: pw.TextStyle(font: fontBe)),
                       pw.Text(
                         '$selectedWidth' 'mm',
                         textDirection: pw.TextDirection.rtl,
@@ -207,7 +207,7 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Ağırlık : ', style: pw.TextStyle(font: fontBe)),
+                      pw.Text('Weight : ', style: pw.TextStyle(font: fontBe)),
                       pw.Text(
                         '$selectedWeight'
                         'g'
@@ -227,7 +227,7 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('İplik Density : ',
+                      pw.Text('Yarn Density : ',
                           style: pw.TextStyle(font: fontBe)),
                       pw.Text(
                         '$selectedYarnNumber'
@@ -245,10 +245,13 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Uzunluk : ', style: pw.TextStyle(font: fontBe)),
+                      pw.Text('Length : ', style: pw.TextStyle(font: fontBe)),
                       pw.Text(
                         '$selectedLength'
-                        'MT',
+                        'MT'
+                        '/'
+                        '${(double.parse(selectedLength.toString()) * double.parse(selectedQuantity.toString())) / 1000}'
+                        'K MT',
                         //  textDirection: pw.TextDirection.rtl,
                         style: pw.TextStyle(font: fontRo),
                       ),
@@ -262,7 +265,7 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Adet : ', style: pw.TextStyle(font: fontBe)),
+                      pw.Text('Piece : ', style: pw.TextStyle(font: fontBe)),
                       pw.Text(
                         '$selectedQuantity'
                         'Pcs',
@@ -279,7 +282,7 @@ Future<void> generateAndPrintPDF(
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text('Tarih : ', style: pw.TextStyle(font: fontBe)),
+                      pw.Text('Date : ', style: pw.TextStyle(font: fontBe)),
                       pw.Text(englishDataTime,
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(font: fontRo)),
@@ -309,14 +312,16 @@ Future<void> generateAndPrintPDF(
             pw.Divider(thickness: 0.2),
             pw.Center(
               child: pw.Text(
-                'ZAHİR LOJİSTİK TEKSTİL SANAYİ VE TİCARET LİMİTED ŞİRKETİ',
+                'شركة زاهر  للمنسوجات ذات محدودة المسؤولية ',
+                textDirection: pw.TextDirection.rtl,
                 style: pw.TextStyle(
                     font: fontBe, fontSize: 8, fontWeight: pw.FontWeight.bold),
               ),
             ),
             pw.Center(
               child: pw.Text(
-                'Türkiye Gaziantep Sanayi MAH. 60092',
+                ' سوريا حلب الشيخ نجار  الفئة  الثانية ',
+                textDirection: pw.TextDirection.rtl,
                 style: pw.TextStyle(
                   fontSize: 6,
                   font: fontBe,
@@ -326,9 +331,10 @@ Future<void> generateAndPrintPDF(
             ),
             pw.Center(
               child: pw.Text(
-                'Made in Türkiye',
+                'صنع في سوريا',
+                textDirection: pw.TextDirection.rtl,
                 style: pw.TextStyle(
-                  fontSize: 6,
+                  fontSize: 8,
                   font: fontBe,
                   fontWeight: pw.FontWeight.normal,
                 ),

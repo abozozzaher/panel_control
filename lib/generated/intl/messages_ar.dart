@@ -93,6 +93,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cotton": MessageLookupByLibrary.simpleMessage("قطن"),
         "could_not_launch_url":
             MessageLookupByLibrary.simpleMessage("لا يمكن إطلاق عنوان URL"),
+        "curtain": MessageLookupByLibrary.simpleMessage("ستائر"),
         "custom": MessageLookupByLibrary.simpleMessage("مخصص"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("تمت إضافة العميل بنجاح"),
@@ -119,6 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dues": MessageLookupByLibrary.simpleMessage("المستحقات"),
         "duplicate_code": MessageLookupByLibrary.simpleMessage("كود مكرر"),
         "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
+        "elastic": MessageLookupByLibrary.simpleMessage("مطاط"),
         "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
         "email_sent":
             MessageLookupByLibrary.simpleMessage("تم إرسال البريد الإلكتروني"),
@@ -233,6 +235,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No PDF URL found."),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("لم يتم اختيار تاجر"),
+        "nylon": MessageLookupByLibrary.simpleMessage("نيلون"),
         "ok": MessageLookupByLibrary.simpleMessage("حسنًا"),
         "output": MessageLookupByLibrary.simpleMessage("إخراج"),
         "packing_bags_number":

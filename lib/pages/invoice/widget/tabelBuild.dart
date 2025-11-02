@@ -126,7 +126,7 @@ Directionality tableBuilld(
                   final packingBagsNumber = packingBagsNumberController.text;
 
                   final total =
-                      (grandTotalPriceTaxs + shippingFees) - previousDebts;
+                      (previousDebts) - (grandTotalPriceTaxs + shippingFees);
 
                   // إنشاء وعرض ملف الـ PDF
                   await generatePdf(

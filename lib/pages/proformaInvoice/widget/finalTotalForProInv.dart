@@ -11,20 +11,30 @@ DataRow finalTotalForProInv(double finalTotal, onPressed) {
     const DataCell(Text('')),
     const DataCell(Text('')),
     const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
+    const DataCell(Text('')),
     DataCell(Center(
         child: Text(S().final_total,
-            style: const TextStyle(
-                color: Colors.redAccent, fontWeight: FontWeight.bold)))),
+            style: TextStyle(
+                color: finalTotal > 1 ? Colors.greenAccent : Colors.redAccent,
+                fontWeight: FontWeight.bold)))),
     DataCell(Center(
         child: ElevatedButton(
             onPressed: onPressed, child: Text(S().click_to_calculate)))),
     DataCell(Center(
         child: Text('\$${finalTotal.toStringAsFixed(2)}',
-            style: const TextStyle(
-                color: Colors.redAccent, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: finalTotal > 1 ? Colors.greenAccent : Colors.redAccent,
+                fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
             textDirection: TextDirection.ltr,
             maxLines: 1))),
+    const DataCell(Text('')),
     const DataCell(Text('')),
   ]);
 }

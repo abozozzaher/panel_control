@@ -450,7 +450,9 @@ pw.Widget _contentFooter(
               ),
             ),
             pw.Text(
-              'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
+              // *** العنوان التعديل
+              // 'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
+              'شركة زاهر  للمنسوجات ذات محدودة المسؤولية \n${S().company_payment_info}\nسوريا حلب الشيخ نجار  الفئة  الثانية\nشارع رقم 208 غرب دوار شهد',
               style:
                   pw.TextStyle(fontSize: 8, lineSpacing: 5, font: fontBeiruti),
             ),
@@ -528,8 +530,8 @@ pw.Widget _contentFooter(
                   pw.Text(dues == 0
                       ? '${S().no_dues} :'
                       : dues > -1
-                          ? '${S().previous_debt} :'
-                          : '${S().customer_balance} :'),
+                          ? '${S().customer_balance} :'
+                          : '${S().previous_debt} :'),
                   pw.Text(_formatCurrency(dues)),
                 ],
               ),

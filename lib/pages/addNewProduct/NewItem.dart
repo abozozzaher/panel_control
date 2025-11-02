@@ -78,7 +78,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
       selectedType = types!.isNotEmpty ? types![0][0] : null;
       selectedColor = colors!.isNotEmpty ? null : null;
       selectedWidth = widths!.isNotEmpty ? widths![6][0] : null;
-      selectedWeight = weights!.isNotEmpty ? weights![0][0] : null;
+      selectedWeight = weights!.isNotEmpty ? weights![2][0] : null;
       selectedYarnNumber = yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
       selectedShift = shift!.isNotEmpty ? shift![0][0] : null;
       selectedLength = length!.isNotEmpty ? length![2][0] : null;
@@ -207,7 +207,6 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
 
                       String englishYearMonth =
                           convertArabicToEnglishForMonth(yearMonth);
-
                       // Generate and print PDF
                       await generateAndPrintPDF(
                           context,
@@ -233,7 +232,7 @@ class _AddNewItemScreenState extends State<AddNewItemScreen> {
                         selectedWidth =
                             widths!.isNotEmpty ? widths![6][0] : null;
                         selectedWeight =
-                            weights!.isNotEmpty ? weights![0][0] : null;
+                            weights!.isNotEmpty ? weights![2][0] : null;
                         selectedYarnNumber =
                             yarnNumbers!.isNotEmpty ? yarnNumbers![1][0] : null;
                         selectedShift = shift!.isNotEmpty ? shift![0][0] : null;

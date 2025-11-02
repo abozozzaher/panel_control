@@ -2220,16 +2220,6 @@ class S {
     );
   }
 
-  /// `print`
-  String get print {
-    return Intl.message(
-      'print',
-      name: 'print',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Shipping information`
   String get shipping_information {
     return Intl.message(
@@ -2445,6 +2435,56 @@ class S {
     return Intl.message(
       'Excel file saved at',
       name: 'excel_file_saved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `print`
+  String get print {
+    return Intl.message(
+      'print',
+      name: 'print',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nylon`
+  String get nylon {
+    return Intl.message(
+      'Nylon',
+      name: 'nylon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Curtain`
+  String get curtain {
+    return Intl.message(
+      'Curtain',
+      name: 'curtain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Elastic`
+  String get elastic {
+    return Intl.message(
+      'Elastic',
+      name: 'elastic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `version : 3.0.0`
+  String get version {
+    return Intl.message(
+      'version : 3.0.0',
+      name: 'version',
       desc: '',
       args: [],
     );

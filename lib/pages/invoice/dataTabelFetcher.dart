@@ -162,9 +162,8 @@ class _DataTabelFetcherState extends State<DataTabelFetcher> {
                       previousDebtsNotifier,
                       trader.codeIdClien,
                       invoiceService));
-                  final totalAllMoney = grandTotalPriceTaxs +
-                      shippingFeesNotifier.value -
-                      previousDebtsNotifier.value;
+                  final totalAllMoney = (previousDebtsNotifier.value) -
+                      (grandTotalPriceTaxs + shippingFeesNotifier.value);
 
                   // Add a row for all totals قيمة الفاتورة
                   dataRows.add(rowForAllTotals(totalAllMoney, () {

@@ -90,6 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cotton": MessageLookupByLibrary.simpleMessage("Cotton"),
         "could_not_launch_url":
             MessageLookupByLibrary.simpleMessage("Could not launch Url"),
+        "curtain": MessageLookupByLibrary.simpleMessage("Curtain"),
         "custom": MessageLookupByLibrary.simpleMessage("Custom"),
         "customer_added_successfully":
             MessageLookupByLibrary.simpleMessage("Customer added successfully"),
@@ -119,6 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "duplicate_code":
             MessageLookupByLibrary.simpleMessage("Duplicate Code"),
         "edit": MessageLookupByLibrary.simpleMessage("edit"),
+        "elastic": MessageLookupByLibrary.simpleMessage("Elastic"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "email_sent": MessageLookupByLibrary.simpleMessage("email sent"),
         "enter_code": MessageLookupByLibrary.simpleMessage("Enter Code"),
@@ -232,6 +234,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No PDF URL found."),
         "no_trader_selected":
             MessageLookupByLibrary.simpleMessage("No trader selected"),
+        "nylon": MessageLookupByLibrary.simpleMessage("Nylon"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "output": MessageLookupByLibrary.simpleMessage("Output"),
         "packing_bags_number":
@@ -370,6 +373,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("User data not found"),
         "value_added_successfully":
             MessageLookupByLibrary.simpleMessage("Value added successfully"),
+        "version": MessageLookupByLibrary.simpleMessage("version : 3.0.0"),
         "view_invoice": MessageLookupByLibrary.simpleMessage("View Invoice"),
         "visit_our_website_and_search_for_more_modern_designs_and_models":
             MessageLookupByLibrary.simpleMessage(

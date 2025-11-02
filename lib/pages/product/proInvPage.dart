@@ -404,7 +404,9 @@ class _ProInvoicePageState extends State<ProInvoicePage> {
                                   ),
                                 ),
                                 Text(
-                                  'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
+                                  // *** العنوان التعديل
+                                  // 'ZAHiR LOJiSTiK TEKSTiL SANAYi VE TiCARET LiMiTED ŞiRKETi\n${S().company_payment_info}\nSANAYİ MAH. 60092 NOLU CAD. NO: 43 ŞEHİTKAMİL / GAZİANTEP\n 9961355399 ZIP CODE: 27110',
+                                  'شركة زاهر  للمنسوجات ذات محدودة المسؤولية \n${S().company_payment_info}\nسوريا حلب الشيخ نجار  الفئة  الثانية\nشارع رقم 208 غرب دوار شهد',
                                   style: const TextStyle(
                                       fontSize: 12, wordSpacing: 5),
                                 ),
